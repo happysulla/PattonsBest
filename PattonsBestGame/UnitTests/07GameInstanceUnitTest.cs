@@ -2142,9 +2142,9 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myIsExplosion != right.myIsExplosion");
             return false;
          }
-         if (left.myIsBailout != right.myIsBailout)
+         if (left.myIsCrewBail != right.myIsCrewBail)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myIsBailout != right.myIsBailout");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myIsCrewBail != right.myIsCrewBail");
             return false;
          }
          if (left.myIsBrewUp != right.myIsBrewUp)

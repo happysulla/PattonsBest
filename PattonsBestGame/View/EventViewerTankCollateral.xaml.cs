@@ -373,7 +373,7 @@ namespace Pattons_Best
             }
             else
             {
-               Label buLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "No" };
+               Label buLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Yes" };
                myGrid.Children.Add(buLabel);
                Grid.SetRow(buLabel, rowNum);
                Grid.SetColumn(buLabel, 2);

@@ -15,7 +15,7 @@ namespace Pattons_Best
       public string myCause = "";
       public bool myIsAmbush = false;
       public bool myIsExplosion = false;
-      public bool myIsBailout = false;
+      public bool myIsCrewBail = false;
       public bool myIsBrewUp = false;
       public ShermanDeath(IMapItem eu)
       {

@@ -4047,7 +4047,7 @@ namespace Pattons_Best
                      }
                      else if (dieRoll < 100)
                      {
-                        gi.Sherman.IsThrownTrack = true;
+                        gi.Sherman.IsThrownTrack = true;  // Get_MovingResultSherman()
                         return "Thrown Track";
                      }
                      else
@@ -4068,7 +4068,7 @@ namespace Pattons_Best
                      }
                      else if (dieRoll < 100)
                      {
-                        gi.Sherman.IsThrownTrack = true;
+                        gi.Sherman.IsThrownTrack = true;   // Get_MovingResultSherman()
                         return "Thrown Track";
                      }
                      else
@@ -4089,7 +4089,7 @@ namespace Pattons_Best
                      }
                      else if (dieRoll < 100)
                      {
-                        gi.Sherman.IsThrownTrack = true;
+                        gi.Sherman.IsThrownTrack = true;  // Get_MovingResultSherman()
                         return "Thrown Track";
                      }
                      else

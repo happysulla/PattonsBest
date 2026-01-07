@@ -211,9 +211,14 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): callback=null");
             return false;
          }
+         if (null == myGameInstance.Death)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myGameInstance.Death=null");
+            return false;
+         }
+         ShermanDeath death = myGameInstance.Death;
          //--------------------------------------------------
          myCallback = callback;
-         myState = E0481Enum.TANK_EXPLOSION_ROLL;
          myMaxRowCountWound = 0;
          myMaxRowCountRescue = 0;
          myRollResultRowNum = 0;
@@ -235,13 +240,14 @@ namespace Pattons_Best
                return false;
             }
             myGridRowWounds[i] = new GridRowWound(cm);
-            myGridRowWounds[i].myWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, cm, true, false, false);
+            myGridRowWounds[i].myWoundModifier = 0;
+            myGridRowWounds[i].myWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, cm, !death.myIsCrewBail, false, false); // crew bail happens on choice without fire
             if (TableMgr.FN_ERROR == myGridRowWounds[i].myWoundModifier)
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetWoundsModifier() return false for myWoundModifier");
                return false;
             }
-            myGridRowWounds[i].myBailoutWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, cm, true, true, false);
+            myGridRowWounds[i].myBailoutWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, cm, !death.myIsCrewBail, true, false);
             if (TableMgr.FN_ERROR == myGridRowWounds[i].myBailoutWoundModifier)
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetWoundsModifier() return false for myBailoutWoundModifier");
@@ -260,24 +266,23 @@ namespace Pattons_Best
          }
          myMaxRowCountWound = i;
          //--------------------------------------------------
-         if (null == myGameInstance.Death)
+         myState = E0481Enum.WOUNDS_ROLL;
+         if (false == death.myIsCrewBail)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myGameInstance.Death=null");
-            return false;
-         }
-         ShermanDeath death = myGameInstance.Death;
-         myGridRowExplodes[0] = new GridRowExplode(myGameInstance.Sherman);
-         myGridRowExplodes[0].myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, death.myEnemyUnit, death.myHitLocation);
-         if (TableMgr.FN_ERROR == myGridRowExplodes[0].myExplosionModifier)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetExplosionModifier() returned error");
-            return false;
-         }
-         myToBrewNumber = TableMgr.GetBrewUpNumber(myGameInstance);
-         if (myToBrewNumber < 0)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): 0 > myToBrewNumber=" + myToBrewNumber);
-            return false;
+            myState = E0481Enum.TANK_EXPLOSION_ROLL;
+            myGridRowExplodes[0] = new GridRowExplode(myGameInstance.Sherman);
+            myGridRowExplodes[0].myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, death.myEnemyUnit, death.myHitLocation);
+            if (TableMgr.FN_ERROR == myGridRowExplodes[0].myExplosionModifier)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetExplosionModifier() returned error");
+               return false;
+            }
+            myToBrewNumber = TableMgr.GetBrewUpNumber(myGameInstance);
+            if (myToBrewNumber < 0)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): 0 > myToBrewNumber=" + myToBrewNumber);
+               return false;
+            }
          }
          //--------------------------------------------------
          if (false == UpdateGrid())
@@ -1087,6 +1092,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
             return;
          }
+         if (null == myGameInstance.Death)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance.Death=null");
+            return;
+         }
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
@@ -1269,7 +1279,10 @@ namespace Pattons_Best
                   lastReport.Notes.Add(sb1.ToString()); // ShowDieResults(): BAILOUT_WOUNDS_ROLL
                }
                //--------------------------------------
-               myState = E0481Enum.BAILOUT_WOUNDS_ROLL_SHOW;
+               if( true == myGameInstance.Death.myIsCrewBail )
+                  myState = E0481Enum.END;
+               else
+                  myState = E0481Enum.BAILOUT_WOUNDS_ROLL_SHOW;
                for (int k = 0; k < myMaxRowCountWound; k++)
                {
                   if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollBailoutWound)

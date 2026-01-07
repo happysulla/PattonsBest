@@ -5627,7 +5627,7 @@ namespace Pattons_Best
          }
          //--------------------------------------------------
          GameAction outAction = GameAction.Error;
-         if ( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) // Show_BattleSetupResults() - (AmbushRandomEvent=GamePhase) ==> BattleRoundSequence_RoundStart 
+         if ( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase ) // Show_BattleSetupResults() - (AmbushRandomEvent=GamePhase) ==> BattleRoundSequence_RoundStart 
          {
             Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_BattleSetupResults(): Enemy Reinforcements added new units during Ambush e=" + myGameInstance.EventActive );
             outAction = GameAction.BattleRoundSequenceRoundStart;   // Show_BattleSetupResults() - (AmbushRandomEvent=GamePhase) ==> Enemy Reinforcements added new units during Ambush ==> start round
@@ -5692,6 +5692,8 @@ namespace Pattons_Best
                else
                   removals.Add(advanceFireMarker);
             }
+            foreach (IMapItem mi in removals)
+               myGameInstance.BattleStacks.Remove(mi);
             //--------------------------------------------------
             if (GameAction.BattleResolveAdvanceFire != outAction)
             {
@@ -5703,8 +5705,6 @@ namespace Pattons_Best
             //--------------------------------------------------
             if (0 == enemyCount)
                outAction = GameAction.BattleEmpty;   // Show_BattleSetupResults()
-            foreach (IMapItem mi in removals)
-               myGameInstance.BattleStacks.Remove(mi);
          }
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######Show_BattleSetupResults() :");

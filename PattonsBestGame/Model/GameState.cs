@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Xps.Packaging;
 using System.Xml.Linq;
 using Windows.ApplicationModel.Appointments.DataProvider;
 using static Pattons_Best.EventViewerAmmoSetup;
@@ -5720,6 +5721,7 @@ namespace Pattons_Best
             return false;
          }
          gi.GamePhase = GamePhase.Battle;
+         gi.BattlePhase = BattlePhase.Ambush;
          gi.MinSinceLastCheck += 15;
          AdvanceTime(lastReport, 15);     // StartBattle() called by Resolve_BattleCheckRoll()
          Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Start_Battle(): +15 for starting battle -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
@@ -6114,8 +6116,8 @@ namespace Pattons_Best
                   {
                      gi.RoundsOfCombat++;  // ambush round occurs
                      Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
-                     gi.BattlePhase = BattlePhase.Ambush;
-                     if( EnumScenario.Counterattack == lastReport.Scenario) // GameStateBattle.PerformAction(BattleAmbushRoll) - indicate a counterattack ambush
+                     gi.BattlePhase = BattlePhase.Ambush;  // GameStateBattle.PerformAction(BattleAmbushRoll)
+                     if ( EnumScenario.Counterattack == lastReport.Scenario) // GameStateBattle.PerformAction(BattleAmbushRoll) - indicate a counterattack ambush
                         gi.IsCounterattackAmbush = true;
                   }
                   else
@@ -6129,7 +6131,7 @@ namespace Pattons_Best
                   if( (BattlePhase.Ambush == gi.BattlePhase) || (true == gi.IsCounterattackAmbush) )
                   {
                      Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleEmpty): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmbushRandomEvent");
-                     gi.BattlePhase = BattlePhase.AmbushRandomEvent;
+                     gi.BattlePhase = BattlePhase.AmbushRandomEvent;  // GameStateBattle.PerformAction(BattleEmpty)
                      if (EnumScenario.Advance == lastReport.Scenario)
                         SetCommand(gi, action, GameAction.BattleRandomEventRoll, "e039a");
                      else if (EnumScenario.Battle == lastReport.Scenario)           
@@ -6184,7 +6186,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRandomEvent:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleRandomEvent): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmbushRandomEvent");
-                  gi.BattlePhase = BattlePhase.AmbushRandomEvent;
+                  gi.BattlePhase = BattlePhase.AmbushRandomEvent;  // GameStateBattle.PerformAction(BattleRandomEvent)
                   if (EnumScenario.Advance == lastReport.Scenario)
                      SetCommand(gi, action, GameAction.BattleRandomEventRoll, "e039a");
                   else if (EnumScenario.Battle == lastReport.Scenario)
@@ -8341,6 +8343,9 @@ namespace Pattons_Best
          {
             if ("Commander_Bail" == crewAction.Name)
             {
+               IMapItem mi = new MapItem("ThrownTrack", 1.0, "c106ThrownTrack", new Territory());
+               gi.Death = new ShermanDeath(mi);
+               gi.Death.myIsCrewBail = true;
                outAction = GameAction.BattleRoundSequenceShermanBail;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): Exiting------------ bp=" + gi.BattlePhase.ToString() + " cp=" + gi.CrewActionPhase.ToString());
                return true;
@@ -10878,7 +10883,7 @@ namespace Pattons_Best
       {
          //-------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
-         gi.BattlePhase = BattlePhase.Ambush;
+         gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefingResetDay()
          gi.CrewActionPhase = CrewActionPhase.Movement;
          gi.MovementEffectOnSherman = "unit";
          gi.MovementEffectOnEnemy = "unit";

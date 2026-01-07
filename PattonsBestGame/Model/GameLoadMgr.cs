@@ -5898,7 +5898,7 @@ namespace Pattons_Best
          death.myCause = sCause;
          death.myIsAmbush = isAmbush;
          death.myIsExplosion = isExplosion;
-         death.myIsBailout = isBailout;
+         death.myIsCrewBail = isBailout;
          death.myIsBrewUp = isBrewUp;
          //----------------------------------
          reader.Read(); // get past </ShermanDeath> tag
@@ -10007,7 +10007,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(IsBailout) returned null");
             return false;
          }
-         elem.SetAttribute("value", death.myIsBailout.ToString());
+         elem.SetAttribute("value", death.myIsCrewBail.ToString());
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {

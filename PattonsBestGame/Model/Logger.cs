@@ -183,7 +183,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD_PREP);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);
-         //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
+         SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_START_BATTLE);
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          //SetOn(LogEnum.LE_SHOW_RESET_ROUND);

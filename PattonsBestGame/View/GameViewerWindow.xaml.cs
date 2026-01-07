@@ -1381,13 +1381,13 @@ namespace Pattons_Best
          aXmlDocument.LoadXml("<Options></Options>");
          if (null == aXmlDocument.DocumentElement)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): aXmlDocument.DocumentElement=null");
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_Options(): aXmlDocument.DocumentElement=null");
             return null;
          }
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_Options(): root is null");
             return null;
          }
          aXmlDocument.DocumentElement.SetAttribute("count", options.Count.ToString());
@@ -1397,7 +1397,7 @@ namespace Pattons_Best
             XmlElement? optionElem = aXmlDocument.CreateElement("Option");
             if (null == optionElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): CreateElement(Option) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Serialize_Options(): CreateElement(Option) returned null");
                return null;
             }
             optionElem.SetAttribute("Name", option.Name);
@@ -1405,13 +1405,12 @@ namespace Pattons_Best
             XmlNode? optionNode = root.AppendChild(optionElem);
             if (null == optionNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): AppendChild(optionNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Serialize_Options(): AppendChild(optionNode) returned null");
                return null;
             }
          }
          //--------------------------------
          return aXmlDocument.OuterXml;
-
       }
       private bool SerializeGameFeats(GameFeats feats)
       {
@@ -1467,6 +1466,8 @@ namespace Pattons_Best
             return false;
          }
          string filename = GameFeats.theGameFeatDirectory + "feats.xml";
+         if (File.Exists(filename))
+            File.Delete(filename);
          FileStream? writer = null;
          //-----------------------------------------
          try
@@ -1495,7 +1496,7 @@ namespace Pattons_Best
          CultureInfo currentCulture = CultureInfo.CurrentCulture;
          System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          XmlDocument aXmlDocument = new XmlDocument();
-         aXmlDocument.LoadXml("<GameStatistics></GameStatistics>");
+         aXmlDocument.LoadXml("<GameStatistics> </GameStatistics>");
          if (null == aXmlDocument.DocumentElement)
          {
             Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): aXmlDocument.DocumentElement=null");
@@ -1528,6 +1529,8 @@ namespace Pattons_Best
          }
          //-----------------------------------------
          string filenameFull = GameStatistics.theGameStatisticsDirectory + filename + ".xml";
+         if (File.Exists(filenameFull))
+            File.Delete(filenameFull);
          FileStream? writer = null;
          //-----------------------------------------
          try
