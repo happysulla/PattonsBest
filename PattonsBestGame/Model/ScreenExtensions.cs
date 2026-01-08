@@ -71,7 +71,7 @@ namespace Pattons_Best
          return monitorName;
       }
       //-----------------------------------------------------------------------------------
-      public static Screen GetScreenFromPoint(System.Drawing.Point mousePoint)
+      public static Screen? GetScreenFromPoint(System.Drawing.Point mousePoint)
       {
          System.Drawing.Rectangle ret;
          int numScreens = System.Windows.Forms.Screen.AllScreens.Length;

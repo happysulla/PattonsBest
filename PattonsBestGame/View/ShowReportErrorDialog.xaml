@@ -26,13 +26,13 @@
          </TextBlock>
       </StackPanel>
       <TextBlock  x:Name="myTextBlock" Grid.Row="1" TextWrapping="Wrap" Width="Auto" Padding="10">
-         1.) If the game hangs, you may be able to recover by selecting  <Bold>Edit | Revert to Daybreak</Bold> menu. This menu option is only available after the first turn.
+         1.) If the game hangs, attempt to recover by selecting  <Bold>Edit | Revert to ...</Bold> menu.
          <LineBreak/><LineBreak/>
-         2.) If you discover an error, save a copy of the latest log file. The log files are automatically saved in the <Bold>Logs</Bold> directory with latest time tag representing the last game played.
+         2.) If you discover an error, save a copy of the latest log file. The log files are automatically saved in the <Bold>C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Logs</Bold> directory with latest time tag representing the last game played. <Italic>username</Italic> is the login name. AppData is a hidden directory that must be unhidden to view.
          <LineBreak/><LineBreak/>
-         3.) Attempt to save the game state using the <Bold>File | Save As...</Bold> menu. 
-         <LineBreak/><LineBreak/>
-         4.) Send version number, description of problem, screen shot, log file, and game file in email to <Bold>happysulla@gmail.com</Bold>.
+         3.) Attempt to save the game state using the <Bold>File | Save As...</Bold> menu. Files are saved by default in <Bold>C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Games</Bold> directory.
+         <LineBreak/><LineBreak/>   
+         4.) Send description of problem, screen shot, log file, and game file in email to <Bold>happysulla@gmail.com</Bold>.
       </TextBlock>
       <StackPanel Name="myStackPanelButtons" Grid.Row="2" Grid.ColumnSpan="1"  Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="5,5,5,5" >
          <Button x:Name="myButtonOK" HorizontalAlignment="Center" Width="70" Height="30" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="14" Click="ButtonOk_Click" IsDefault="True">OK</Button>

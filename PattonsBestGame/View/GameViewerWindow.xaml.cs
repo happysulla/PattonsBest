@@ -4772,7 +4772,7 @@ namespace Pattons_Best
          switch (menuitem.Name)
          {
             case "Loader_Load":
-               mi = new MapItem(menuitem.Name, 1.0, "c54LLoad", t);
+               mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RepairMainGun":
@@ -4790,7 +4790,6 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c59LChangeGunLoad", t);
                MenuItemCrewActionClickRemoveGunnerRepair();
                MenuItemCrewActionClickRemoveGunnerFire();
-               MenuItemCrewActionClickRemoveGunnerRotateAndFire();
                MenuItemCrewActionClickRemoveCommanderDirectFire();
                break;
             case "Loader_RestockReadyRack":
@@ -4821,7 +4820,6 @@ namespace Pattons_Best
                if ((false == isGunnerTrainedInHvss) || (null == myGameInstance.ShermanHvss))
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
-                  MenuItemCrewActionClickRemoveGunnerRotateAndFire();
                   MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
@@ -4830,7 +4828,6 @@ namespace Pattons_Best
                if ((false == isGunnerTrainedInHvss) || (null == myGameInstance.ShermanHvss))
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
-                  MenuItemCrewActionClickRemoveGunnerRotateAndFire();
                   MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
@@ -4839,7 +4836,6 @@ namespace Pattons_Best
                if ((false == isGunnerTrainedInHvss) || (null == myGameInstance.ShermanHvss))
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
-                  MenuItemCrewActionClickRemoveGunnerRotateAndFire();
                   MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
@@ -4848,7 +4844,6 @@ namespace Pattons_Best
                if ((false == isGunnerTrainedInHvss) || (null == myGameInstance.ShermanHvss) )
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
-                  MenuItemCrewActionClickRemoveGunnerRotateAndFire();
                   MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
@@ -4857,7 +4852,6 @@ namespace Pattons_Best
                if ((false == isGunnerTrainedInHvss) || (null == myGameInstance.ShermanHvss))
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
-                  MenuItemCrewActionClickRemoveGunnerRotateAndFire();
                   MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
@@ -4982,6 +4976,7 @@ namespace Pattons_Best
          Canvas.SetTop(newButton, mi.Location.Y);
          Canvas.SetZIndex(newButton, 900);
          //--------------------------------------
+         MenuItemCrewActionSetLoad();
          GameAction outaction = GameAction.BattleRoundSequenceCrewOrders;
          myGameEngine.PerformAction(ref myGameInstance, ref outaction, 0);
       }
@@ -5028,17 +5023,13 @@ namespace Pattons_Best
                      {
                         myTankButtons.Remove(oldButton);
                         myCanvasTank.Children.Remove(oldButton);
-                        return;
+                        break;
                      }
                   }
-                  Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickRemoveGunnerFire(): unable to find button with name=" + mi.Name);
-                  return;
+                  break;
                }
             }
          }
-      }
-      private void MenuItemCrewActionClickRemoveGunnerRotateAndFire()
-      {
          foreach (IMapItem crewaction in myGameInstance.CrewActions) // This menu is created on each crew action - Remove Gunner_RepairGun if load does anything other than Repair
          {
             if ("Gunner_RotateFireMainGun" == crewaction.Name)
@@ -5047,18 +5038,17 @@ namespace Pattons_Best
                if (null != mi)
                {
                   myGameInstance.CrewActions.Remove(mi);
-                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickRemoveGunnerRotateAndFire(): -----------------removing ca=" + crewaction.Name);
+                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickRemoveGunnerFire(): -----------------removing ca=" + crewaction.Name);
                   foreach (Button oldButton in myTankButtons)     // Remove existing Button
                   {
                      if (oldButton.Name == mi.Name)
                      {
                         myTankButtons.Remove(oldButton);
                         myCanvasTank.Children.Remove(oldButton);
-                        return;
+                        break;
                      }
                   }
-                  Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickRemoveGunnerRotateAndFire(): unable to find button with name=" + mi.Name);
-                  return;
+                  break;
                }
             }
          }
@@ -5087,6 +5077,76 @@ namespace Pattons_Best
                   return;
                }
             }
+         }
+      }
+      private void MenuItemCrewActionSetLoad()
+      {
+         //----------------------------------------------
+         bool isGunnerFiring = false;
+         bool isLoaderLoading = false;
+         foreach (IMapItem crewaction in myGameInstance.CrewActions) // This menu is created on each crew action - Remove Gunner_RepairGun if load does anything other than Repair
+         {
+            if (("Gunner_FireMainGun" == crewaction.Name) || ("Gunner_RotateFireMainGun" == crewaction.Name))
+               isGunnerFiring = true;
+            if ("Loader_Load" == crewaction.Name)
+               isLoaderLoading = true;
+         }
+         //----------------------------------------------
+         if (true == isLoaderLoading)
+         {
+            foreach (IMapItem crewaction in myGameInstance.CrewActions) // This menu is created on each crew action - Remove Gunner_RepairGun if load does anything other than Repair
+            {
+               if ("Loader_Load" == crewaction.Name)
+               {
+                  IMapItem? ca = myGameInstance.CrewActions.Find(crewaction.Name);
+                  if (null != ca)
+                  {
+                     myGameInstance.CrewActions.Remove(ca);
+                     Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionSetLoad(): -----------------removing ca=" + crewaction.Name);
+                     foreach (Button oldButton in myTankButtons)     // Remove existing Button
+                     {
+                        if (oldButton.Name == ca.Name)
+                        {
+                           myTankButtons.Remove(oldButton);
+                           myCanvasTank.Children.Remove(oldButton);
+                           break;
+                        }
+                     }
+                     break;
+                  }
+               }
+            }
+            //----------------------------------------------
+            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionSetLoad(): lastReport=null");
+               return;
+            }
+            string tType = lastReport.TankCardNum.ToString();
+            //----------------------------------------------
+            string tName = "LoaderAction";
+            ITerritory? t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickLoad(): t=null for " + tName + " tType=" + tType);
+               return;
+            }
+            IMapItem mi;
+            if (true == isGunnerFiring)
+               mi = new MapItem("Loader_Load", 1.0, "c54LLoadNoSpot", t);
+            else
+               mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
+            myGameInstance.CrewActions.Add(mi);
+            ContextMenu menu = myContextMenuCrewActions["Loader"];
+            System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = "Loader_Load", Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+            MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
+            myTankButtons.Add(newButton);
+            myCanvasTank.Children.Add(newButton);
+            Canvas.SetLeft(newButton, mi.Location.X);
+            Canvas.SetTop(newButton, mi.Location.Y);
+            Canvas.SetZIndex(newButton, 900);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickLoad(): adding new button=" + mi.Name); // LE_SHOW_ORDERS_MENU
          }
       }
       private void MenuItemCrewActionClickBail()
@@ -5119,6 +5179,51 @@ namespace Pattons_Best
             Canvas.SetTop(newButton, mi.Location.Y);
             Canvas.SetZIndex(newButton, 900);
             Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickBail(): adding new button=" + mi.Name + " for crewmember=" + crewmember); // LE_SHOW_ORDERS_MENU
+         }
+      }
+      private void MenuItemCrewActionClickLoad()
+      {
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickLoad(): lastReport=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //----------------------------------------------
+         bool isGunnerFiring = false;
+         bool isLoaderLoading = false;
+         foreach (IMapItem crewaction in myGameInstance.CrewActions) // This menu is created on each crew action - Remove Gunner_RepairGun if load does anything other than Repair
+         {
+            if (("Gunner_FireMainGun" == crewaction.Name) || ("Gunner_RotateFireMainGun" == crewaction.Name))
+               isGunnerFiring = true;
+            if ("Loader_Load" == crewaction.Name)
+               isLoaderLoading = true;
+         }
+         //----------------------------------------------
+         if (true == isLoaderLoading)
+         {
+            string tName = "LoaderAction";
+            ITerritory? t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickLoad(): t=null for " + tName + " tType=" + tType);
+               return;
+            }
+            IMapItem mi;
+            if (true == isGunnerFiring)
+               mi = new MapItem("Loader_Load", 1.0, "c54LLoadNoSpot", t);
+            else
+               mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
+            myGameInstance.CrewActions.Add(mi);
+            System.Windows.Controls.Button newButton = new Button { Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+            MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
+            myTankButtons.Add(newButton);
+            myCanvasTank.Children.Add(newButton);
+            Canvas.SetLeft(newButton, mi.Location.X);
+            Canvas.SetTop(newButton, mi.Location.Y);
+            Canvas.SetZIndex(newButton, 900);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickLoad(): adding new button=" + mi.Name ); // LE_SHOW_ORDERS_MENU
          }
       }
       private void MenuItemAmmoReloadClick(object sender, RoutedEventArgs e)

@@ -8419,12 +8419,15 @@ namespace Pattons_Best
          //----------------------------------------------------
          bool isDriverDefaultNeeded = true;
          bool isLoaderDefaultNeeded = true;
+         bool isGunnerFiring = true;
          foreach (IMapItem crewAction in gi.CrewActions)
          {
             if (true == crewAction.Name.Contains("Driver"))
                isDriverDefaultNeeded = false;
             if (true == crewAction.Name.Contains("Loader"))
                isLoaderDefaultNeeded = false;
+            if (("Gunner_FireMainGun" == crewAction.Name) || ("Gunner_RotateFireMainGun" == crewAction.Name))
+               isGunnerFiring = true;
          }
          //----------------------------------------------------
          ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
@@ -8460,7 +8463,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): t=null for tName=LoaderAction");
                return false;
             }
-            IMapItem mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
+            IMapItem mi;
+            if (true == isGunnerFiring)
+               mi = new MapItem("Loader_Load", 1.0, "c54LLoadNoSpot", t);
+            else
+               mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
             gi.CrewActions.Add(mi);
             Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetDefaultCrewActions(): +++++++++++++++adding ca=" + mi.Name);
          }
