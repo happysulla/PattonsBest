@@ -8,9 +8,11 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
+using Button = System.Windows.Controls.Button;
 
 namespace Pattons_Best
 {
@@ -118,6 +120,14 @@ namespace Pattons_Best
             {
                if( false == dialog.IsVisible )
                   dialog.Show();
+               var currentMonitor = Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(dialog).Handle); // Get the current monitor the main window is on.
+               var source = PresentationSource.FromVisual(dialog); // Find out if our WPF app is being scaled by the monitor
+               double dpiScaling = (source != null && source.CompositionTarget != null ? source.CompositionTarget.TransformFromDevice.M11 : 1);
+               System.Drawing.Rectangle workArea = currentMonitor.WorkingArea; // Get the available area of the monitor
+               var workAreaWidth = (int)Math.Floor(workArea.Width * dpiScaling);
+               var workAreaHeight = (int)Math.Floor(workArea.Height * dpiScaling);
+               dialog.Left = (((workAreaWidth - (dialog.Width * dpiScaling)) / 2) + (workArea.Left * dpiScaling)); // Move the window to the center by setting the top and left coordinates.
+               dialog.Top = (((workAreaHeight - (dialog.Height * dpiScaling)) / 2) + (workArea.Top * dpiScaling));
                dialog.Activate(); // bring to top
                dialog.Focus();
                return true;

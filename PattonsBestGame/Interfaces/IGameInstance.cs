@@ -142,6 +142,7 @@ namespace Pattons_Best
       int NumCollateralDamage { set; get; }
       //------------------------------------------------
       int TankReplacementNumber { set; get; }
+      int Fuel { set; get; }
       int VictoryPtsTotalCampaign { get; set; }
       int PromotionPointNum { get; set; }
       int PromotionDay { get; set; }

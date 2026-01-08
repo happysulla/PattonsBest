@@ -45,7 +45,6 @@ namespace Pattons_Best
          //---------------------
          "SingleDayScenario",
          "GameEndsOnCommanderDeath",
-         "FuelOption",
          //---------------------
          "SkipTutorial0",
          "SkipTutorial1",

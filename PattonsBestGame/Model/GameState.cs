@@ -3848,6 +3848,9 @@ namespace Pattons_Best
                   lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
                   lastReport.MainGunHE -= dieRoll * 2;
                   lastReport.Ammo30CalibreMG -= dieRoll;
+                  gi.Fuel -= dieRoll;
+                  if( gi.Fuel < 0 )
+                     gi.Fuel = 0; 
                   Logger.Log(LogEnum.LE_SHOW_TIME_GAME, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): sunsetHour=" + lastReport.SunsetHour.ToString() + " min=" + lastReport.SunsetMin.ToString() + " time=" + TableMgr.GetTime(lastReport));
                   break;
                case GameAction.MorningBriefingDeployment:
@@ -5216,6 +5219,7 @@ namespace Pattons_Best
                      if(gi.DieResults[key][0]<8)
                      {
                         action = GameAction.MovementAmmoLoad;
+                        gi.Fuel = 35; // when resupply, fuel set to 35
                      }
                      else
                      {
@@ -5541,9 +5545,13 @@ namespace Pattons_Best
       }
       private bool EnterMoveBoardArea(IGameInstance gi, GameAction action)
       {
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "EnterMoveBoardArea(): gi.MapItemMoves.Clear()");
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Enter_MoveBoardArea(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.IsShermanAdvancingOnMoveBoard = false;
+         //--------------------------------------
+         gi.Fuel -= 2;
+         if( gi.Fuel < 0)
+            gi.Fuel = 0;
          //--------------------------------------
          if (null == gi.EnteredArea)
          {
@@ -5557,7 +5565,7 @@ namespace Pattons_Best
             {
                if (true == mi1.Name.Contains("Strength"))
                {
-                  SetCommand(gi, action, GameAction.MovementBattleCheckRoll, "e032"); // EnterMoveBoardArea()
+                  SetCommand(gi, action, GameAction.MovementBattleCheckRoll, "e032"); // Enter_MoveBoardArea()
                   return true;
                }
             }

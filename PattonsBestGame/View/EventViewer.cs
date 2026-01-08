@@ -1164,9 +1164,11 @@ namespace Pattons_Best
                   sbE010.Append(Utilities.GetTime(report.SunsetHour, report.SunsetMin));
                   myTextBlock.Inlines.Add(new Run(sbE010.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
                   int heLost = firstDieResult * 2;
-                  sbE010 = new StringBuilder(" HE Expended = " + heLost.ToString() + "   and   .30MG expended = " + firstDieResult.ToString());
+                  sbE010 = new StringBuilder("HE Expended = " + heLost.ToString() + "   and   .30MG expended = " + firstDieResult.ToString());
+                  myTextBlock.Inlines.Add(new Run(sbE010.ToString()));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  sbE010 = new StringBuilder("Fuel Units Expended = " + firstDieResult.ToString() );
                   myTextBlock.Inlines.Add(new Run(sbE010.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -5112,6 +5114,13 @@ namespace Pattons_Best
                   }
                   b.IsEnabled = isStrengthCheck;
                }
+               else if ("Enter" == content)
+               {
+                  if( 1 < gi.Fuel )
+                     b.IsEnabled = true;
+                  else
+                     b.IsEnabled = false;
+               }
                else if ("Strike" == content)
                {
                   if ((false == SetButtonAirStrike(gi, lastReport, b)))
@@ -5123,7 +5132,7 @@ namespace Pattons_Best
                else if ("Resupply" == content)
                {
                   int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-                  if( (totalAmmo < card.myNumMainGunRound) || (lastReport.Ammo30CalibreMG < 30) )
+                  if( (totalAmmo < card.myNumMainGunRound) || (lastReport.Ammo30CalibreMG < 30) || (gi.Fuel < 25) )
                      b.IsEnabled = true;
                   else
                      b.IsEnabled = false;
@@ -5133,7 +5142,7 @@ namespace Pattons_Best
                if ("Resupply" == content) 
                {
                   int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-                  if ( (Utilities.NO_RESULT == gi.DieResults[key][0]) && ((totalAmmo < card.myNumMainGunRound) || (lastReport.Ammo30CalibreMG < 30)))
+                  if ( (Utilities.NO_RESULT == gi.DieResults[key][0]) && ((totalAmmo < card.myNumMainGunRound) || (lastReport.Ammo30CalibreMG < 30) || (gi.Fuel < 25)))
                      b.IsEnabled = true;
                   else
                      b.IsEnabled = false;

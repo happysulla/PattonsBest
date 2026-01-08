@@ -151,6 +151,12 @@ namespace Pattons_Best
                }
                myStatusBar.Items.Add(labelWeather);
                myStatusBar.Items.Add(imgWeather);
+               //--------------------------------------------
+               myStatusBar.Items.Add(new Separator());
+               Label labelFuel = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = gi.Fuel.ToString() };
+               Image imgFuel = new Image { Source = MapItem.theMapImages.GetBitmapImage("Fuel"), Width = 25, Height = 30 };
+               myStatusBar.Items.Add(labelFuel);
+               myStatusBar.Items.Add(imgFuel);
                //----------------------------------------
                myStatusBar.Items.Add(new Separator());
                int minLeft = TableMgr.GetTimeRemaining(lastReport);

@@ -70,7 +70,6 @@ namespace Pattons_Best
             }
             myScrollViewerBanner.Content = myTextBlockDisplay;
             myTextBlockDisplay.MouseLeftButtonDown += Window_MouseLeftButtonDown;
-            myTextBlockDisplay.MouseLeave += TextBlockDisplay_MouseLeave;
             myKey = key;
          }
          catch (Exception e)
@@ -92,15 +91,6 @@ namespace Pattons_Best
       }
       private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
-         //var currentMonitor = Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle); // Get the current monitor the main window is on.
-         //var source = PresentationSource.FromVisual(this); // Find out if our WPF app is being scaled by the monitor
-         //double dpiScaling = (source != null && source.CompositionTarget != null ? source.CompositionTarget.TransformFromDevice.M11 : 1);
-         //System.Drawing.Rectangle workArea = currentMonitor.WorkingArea; // Get the available area of the monitor
-         //var workAreaWidth = (int)Math.Floor(workArea.Width * dpiScaling);
-         //var workAreaHeight = (int)Math.Floor(workArea.Height * dpiScaling);
-         //this.Left = (((workAreaWidth - (this.Width * dpiScaling)) / 2) + (workArea.Left * dpiScaling)); // Move the window to the center by setting the top and left coordinates.
-         //this.Top = (((workAreaHeight - (this.Height * dpiScaling)) / 2) + (workArea.Top * dpiScaling));
-         //-------------------------------
          myOffsetInBannerWindow = e.GetPosition(this);
          myIsDragging = true;
          e.Handled = true;
@@ -122,18 +112,13 @@ namespace Pattons_Best
       {
          myIsDragging = false;
       }
-      private void TextBlockDisplay_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-      {
-         myIsDragging = false;
-      }
       private void myCheckBoxFont_Clicked(object sender, RoutedEventArgs e)
       {
          theIsCheckBoxChecked = !theIsCheckBoxChecked;
          myIsReopen = true;
          Close();
       }
-
-      private void myBannerDialog_LostFocus(object sender, RoutedEventArgs e)
+      private void WindowLostFocus(object sender, RoutedEventArgs e)
       {
          myIsDragging = false;
       }
