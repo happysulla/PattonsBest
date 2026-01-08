@@ -197,7 +197,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_CREW_RETURN);
          //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
          //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
-         //SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
+         SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
          SetOn(LogEnum.LE_SHOW_PROMOTION);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
@@ -213,7 +213,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE);
          SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
          SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF);
-         //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
+         SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK);
          SetOn(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS);
          //SetOn(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS);
@@ -231,7 +231,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ROTATION);
          //-------------------------------
-         //SetOn(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER);
+         SetOn(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER);
          //SetOn(LogEnum.LE_VIEW_MIM);
          //SetOn(LogEnum.LE_VIEW_MIM_ADD);
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);

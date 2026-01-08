@@ -1543,7 +1543,7 @@ namespace Pattons_Best
          }
          else
          {
-            SetCommand(gi, action, GameAction.PreparationsDeploymentRoll, "e011");  // Reset_ToPrepareForBattle()
+            SetCommand(gi, action, GameAction.PreparationsDeploymentRoll, "e011");  // PrepareFor_BattleSetState()
          }
          return true;
       }
@@ -4529,18 +4529,15 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.PreparationsReadyRackEnd:
-                  if (EnumScenario.Counterattack == lastReport.Scenario)
+                  if( false == PrepareForBattle(gi))
                   {
-                     SetCommand(gi, action, GameAction.DieRollActionNone, "e011a"); // GameStateBattlePrep.PerformAction(PreparationsReadyRackEnd) -->  Deployment - Counterattack Scenario
-                     if (false == SetDeployment(gi, 0))
-                     {
-                        returnStatus = "Set_Deployment() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsReadyRackEnd): " + returnStatus);
-                     }
+                     returnStatus = "PrepareFor_Battle() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsReadyRackEnd): " + returnStatus);
                   }
-                  else
+                  else if (false == PrepareForBattleSetState(gi, ref action))  // GameStateBattlePrep.PerformAction(PreparationsReadyRackEnd)
                   {
-                     SetCommand(gi, action, GameAction.PreparationsDeploymentRoll, "e011");  // GameStateBattlePrep.PerformAction(PreparationsReadyRackEnd)
+                     returnStatus = "PrepareFor_BattleSetState() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsCrewReplaced): " + returnStatus);
                   }
                   break;
                case GameAction.PreparationsDeploymentRoll:
@@ -7134,10 +7131,10 @@ namespace Pattons_Best
                         returnStatus = "gi.GetCrewMemberByRole() returned null";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction): gi.GetCrewMemberByRole() returned null" + returnStatus);
                      }
-                     else if(true == cm.IsUnconscious) // unconscious men may become conscious at beginning of each Crew Action Phase
+                     else if (true == cm.IsUnconscious) // unconscious men may become conscious at beginning of each Crew Action Phase
                      {
                         int dr = Utilities.RandomGenerator.Next(1, 11);
-                        if( dr < 6 )
+                        if (dr < 6)
                         {
                            cm.IsUnconscious = false;
                            cm.IsIncapacitated = false;
@@ -7145,12 +7142,20 @@ namespace Pattons_Best
                         }
                      }
                   }
-                  //-----------------------------------------------
-                  gi.CrewActionPhase = CrewActionPhase.Movement;
-                  if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
+                  if (false == SetDefaultCrewActions(gi))
                   {
-                     returnStatus = "Conduct_CrewAction() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction): " + returnStatus);
+                     returnStatus = "SetDefaultCrewActions() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceConductCrewAction): " + returnStatus);
+                  }
+                  else
+                  {
+                     //-----------------------------------------------
+                     gi.CrewActionPhase = CrewActionPhase.Movement;
+                     if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
+                     {
+                        returnStatus = "Conduct_CrewAction() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequencePivotLeft:
@@ -7270,7 +7275,7 @@ namespace Pattons_Best
                      gi.IsMalfunctionedMainGun = true;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanFiringMainGunEnd) - due to missed target
                      Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanFiringMainGunEnd): Missed Target and Main Gun Malfunctioned dr=" + gi.DieResults[key][0].ToString());
                   }
-                  if (false == gi.FireAndReloadGun())  // BattleRoundSequenceShermanFiringMainGunEnd
+                  if (false == gi.FireAndReloadGun())  // BattleRoundSequenceShermanFiringMainGunEnd - due to missed target
                   {
                      returnStatus = "gi.Fire_AndReloadGun() returned false for a=" + action.ToString();
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanFiringMainGunEnd): " + returnStatus);
@@ -7334,7 +7339,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_LoadMainGunEnd): " + returnStatus);
                   }
                   break;
-               case GameAction.BattleRoundSequenceShermanToHitRollNothing:
+               case GameAction.BattleRoundSequenceShermanToHitRollNothing: // - nothing to hit
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      //dieRoll = 98; // <CGS> TEST - Sherman To Hit Roll
@@ -7345,10 +7350,10 @@ namespace Pattons_Best
                   {
                      if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
                      {
-                        gi.IsMalfunctionedMainGun = true; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing)
+                        gi.IsMalfunctionedMainGun = true; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing) - nothing to hit
                         Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing): Main Gun Malfunctioned dr=" + gi.DieResults[key][0].ToString());
                      }
-                     if (false == gi.FireAndReloadGun()) // BattleRoundSequenceShermanToHitRollNothing
+                     if (false == gi.FireAndReloadGun()) // BattleRoundSequenceShermanToHitRollNothing - nothing to hit
                      {
                         returnStatus = "gi.Fire_AndReloadGun() returned false for a=" + action.ToString();
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing): " + returnStatus);
@@ -7389,9 +7394,9 @@ namespace Pattons_Best
                   if (false == GetShermanMgTargets(gi, "Aa"))
                   {
                      returnStatus = "GetShermanMgTargets() returned faulse";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireAaMg): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_FireAaMg): " + returnStatus);
                   }
-                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequenceFireAaMg): " + Utilities.PrintMgState(gi));
+                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequence_FireAaMg): " + Utilities.PrintMgState(gi));
                   break;
                case GameAction.BattleRoundSequenceFireBowMg:
                   action = GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
@@ -8455,7 +8460,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMemberByRole(Loader) returned null");
             return false;
          }
-         if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
+         if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated) ) // SetDefaultCrewActions() - if not incapacitated
          {
             ITerritory? t = Territories.theTerritories.Find("LoaderAction", tType);
             if (null == t)
@@ -9953,7 +9958,10 @@ namespace Pattons_Best
          }
          //---------------------------------------------------------------
          if (toKillNum < dieRoll) // No Effect
+         {
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): mmmmmmmmmmmmmmmmmmmmmmmmmmmmm (toKillNum" + toKillNum.ToString() + " ) < (dieRoll=" + dieRoll.ToString() + ")");
             return true;
+         }
          Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
          switch (hit.myAmmoType) // kill the unit
          {

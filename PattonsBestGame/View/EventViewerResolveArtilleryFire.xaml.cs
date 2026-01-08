@@ -169,26 +169,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveArtilleryFire(): stack=null");
             return false;
          }
-         myArtilleryCount = 0;
-         if( (BattlePhase.Ambush == myGameInstance.BattlePhase) || (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) )
-         {
-            myArtilleryCount = 1;
-         }
-         else // initial artillery firing entering area
-         {
-            foreach (IMapItem mi in stack1.MapItems)
-            {
-               if (true == mi.Name.Contains("Artillery"))
-                  myArtilleryCount++;
-            }
-         }
-         //--------------------------------------------------
          IMapItems removals = new MapItems();
          foreach (IMapItem mi in stack1.MapItems)
          {
             if (true == mi.Name.Contains("Artillery"))
                removals.Add(mi);
          }
+         myArtilleryCount = Math.Max( removals.Count, 1 ); // there is at least one artillery attack - more during battle setup prior to ambush phase
          foreach (IMapItem mi in removals)
             myGameInstance.MoveStacks.Remove(mi);
          //--------------------------------------------------

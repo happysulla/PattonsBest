@@ -413,7 +413,7 @@ namespace Pattons_Best
                EventViewerBattleSetup battleSetupMgr = new EventViewerBattleSetup(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleSetupMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleSetupMgr.CtorError=true");
-               else if (false == battleSetupMgr.SetupBattle(ShowBattleSetupResults))
+               else if (false == battleSetupMgr.SetupBattle(ShowBattleActivationResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SetupBattle() returned false");
                break;
             case GameAction.BattleResolveAdvanceFire:
@@ -5613,7 +5613,7 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowBattleSetupResults()
+      public bool ShowBattleActivationResults()
       {
          if (null == myGameInstance)
          {
@@ -5634,6 +5634,7 @@ namespace Pattons_Best
          }
          else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase) // Show_BattleSetupResults() - (RandomEvent=GamePhase) ==> BattleRoundSequenceBackToSpotting 
          {
+            // EventViewerBattleSetup class already handled MG Advance Fire hitting units appearing
             outAction = GameAction.BattleRoundSequenceBackToSpotting;  // Show_BattleSetupResults() - (RandomEvent=GamePhase) ==> BattleRoundSequenceBackToSpotting 
          }
          else                                                               // Battle Setup phase
@@ -6030,12 +6031,12 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowEnemyActionResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_EnemyActionResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowEnemyActionResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_EnemyActionResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -6071,7 +6072,7 @@ namespace Pattons_Best
             }
          }
          //--------------------------------------------------
-         StringBuilder sb11 = new StringBuilder("     ######ShowEnemyActionResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######Show_EnemyActionResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -6083,12 +6084,12 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowFriendlyActionResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_FriendlyActionResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowFriendlyActionResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_FriendlyActionResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -6106,7 +6107,7 @@ namespace Pattons_Best
             outAction = GameAction.BattleRoundSequenceRandomEvent;
          }
          //--------------------------------------------------
-         StringBuilder sb11 = new StringBuilder("     ######ShowEnemyActionResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######Show_FriendlyActionResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -6522,7 +6523,7 @@ namespace Pattons_Best
                               if (true == crewAction.Name.Contains("Gunner_RotateFireMainGun"))
                                  isGunnerFiring = true;
                            }
-                           if ( (true == isLoaderLoading) && (true == isGunnerFiring) ) // do not show ammo orders screen if gunner is not firing or loader is not loading
+                           if ( (true == isLoaderLoading) || (true == isGunnerFiring) ) // do not show ammo orders screen if gunner is not firing or loader is not loading
                               action = GameAction.BattleRoundSequenceAmmoOrders;
                            else
                               action = GameAction.BattleRoundSequenceConductCrewAction; // skip ammo orders

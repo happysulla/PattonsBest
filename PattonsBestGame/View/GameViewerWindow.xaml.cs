@@ -2259,7 +2259,7 @@ namespace Pattons_Best
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankGunLoad(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankGunLoad(): report=null");
             return false;
          }
          string tType = report.TankCardNum.ToString();
@@ -2292,14 +2292,14 @@ namespace Pattons_Best
                         continue;
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankGunLoad(): reached default gunload=" + gunload);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankGunLoad(): reached default gunload=" + gunload);
                      return false;
                }
                string tName = "GunLoad" + gunload;
                ITerritory? t = Territories.theTerritories.Find(tName, tType);
                if (null == t)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + tName + " tType=" + tType);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankGunLoad(): cannot find tName=" + tName + " tType=" + tType);
                   return false;
                }
                PointCollection points = new PointCollection();
@@ -2323,7 +2323,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): EXCEPTION THROWN a=" + action.ToString() + "\n" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankGunLoad(): EXCEPTION THROWN a=" + action.ToString() + "\n" + e.ToString());
             return false;
          }
          return true;
@@ -4168,7 +4168,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDown_PolygonHatches(): lastReport=null");
             return;
          }
          string tType = lastReport.TankCardNum.ToString();
@@ -4176,13 +4176,13 @@ namespace Pattons_Best
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): clickedPolygon=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDown_PolygonHatches(): clickedPolygon=null");
             return;
          }
          ITerritory? newT = Territories.theTerritories.Find(clickedPolygon.Name, tType);
          if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): t=null for " + clickedPolygon.Name.ToString() + " tType=" + tType);
+            Logger.Log(LogEnum.LE_ERROR, "MouseDown_PolygonHatches(): t=null for " + clickedPolygon.Name.ToString() + " tType=" + tType);
             return;
          }
          IMapItem? gunLoad = null;
@@ -4200,8 +4200,8 @@ namespace Pattons_Best
          double delta = gunLoad.Zoom * Utilities.theMapItemOffset;
          gunLoad.Location.X = newT.CenterPoint.X - delta;
          gunLoad.Location.Y = newT.CenterPoint.Y - delta;
-         Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "MouseDownPolygonGunLoad(): gunLoad=" + gunLoad.Name + " loc=" + gunLoad.Location.ToString() + " t=" + newT.Name + " tLoc=" + newT.CenterPoint.ToString());
-         GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders; //888
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "MouseDown_PolygonHatches(): gunLoad=" + gunLoad.Name + " loc=" + gunLoad.Location.ToString() + " t=" + newT.Name + " tLoc=" + newT.CenterPoint.ToString());
+         GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders; //  MouseDown_PolygonHatches()
          if (GamePhase.Preparations == myGameInstance.GamePhase)
             outAction = GameAction.PreparationsGunLoadSelect;
          else if (BattlePhase.BackToSpotting == myGameInstance.BattlePhase)
@@ -4215,7 +4215,7 @@ namespace Pattons_Best
       }
       private void MouseDownPolygonAmmoActions(object sender, MouseButtonEventArgs e)
       {
-         GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders;
+         GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders; // MouseDownPolygonAmmoActions()
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownEllipseSpottingLoader(object sender, MouseButtonEventArgs e)
