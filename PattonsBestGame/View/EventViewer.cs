@@ -504,6 +504,17 @@ namespace Pattons_Best
                if (false == OpenEvent(gi, gi.EventDisplayed))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
+            case GameAction.EveningDebriefingRatingImprovementEnd:
+               Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+               if ( (null != myAfterActionDialog) && (true == optionSingleDayGame.IsEnabled) )
+               {
+                  myAfterActionDialog.Close();
+                  myAfterActionDialog = null;
+               }
+               gi.IsGridActive = false;
+               if (false == OpenEvent(gi, gi.EventActive))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
+               break;
             case GameAction.EndGameLost:
             case GameAction.EndGameWin:
             default:
