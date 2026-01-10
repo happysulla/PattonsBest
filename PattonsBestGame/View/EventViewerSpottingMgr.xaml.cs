@@ -164,15 +164,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): lastReport=null");
             return false;
          }
-         TankCard card = new TankCard(lastReport.TankCardNum);
          Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "Perform_Spotting(): crew=" + lastReport.Commander.Name);
-         //--------------------------------------------------
-         bool isMainGunBeingFired = false;
-         foreach (IMapItem crewaction in myGameInstance.CrewActions) // Loader may not spot if main gun is being fired
-         {
-            if (("Gunner_FireMainGun" == crewaction.Name) || ("Gunner_RotateFireMainGun" == crewaction.Name))
-               isMainGunBeingFired = true;
-         }
          //--------------------------------------------------
          myCallback = callback;
          myState = E0472Enum.SELECT_CREWMAN;
@@ -193,13 +185,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): cm=null for name=" + crewmember);
                return false;
             }
-            //---------------------------------------
-            bool isButtonUp = true;
-            foreach (IMapItem mi in myGameInstance.Hatches) // Loader and Driver have default actions
-            {
-               if (true == mi.Name.Contains(cm.Role))
-                  isButtonUp = false;
-            }
+            if (true == cm.IsIncapacitated)
+               continue;
             //---------------------------------------
             List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, cm);
             if (null == spottedTerritories)
@@ -224,56 +211,7 @@ namespace Pattons_Best
             }
             if ( 0 < spottedTerritories.Count)
             {
-               bool isCrewMemberAdded = true;
-               foreach (IMapItem crewaction in myGameInstance.CrewActions)
-               {
-                  if (("Loader" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
-                  {
-                     if ( (("Loader_Load" != crewaction.Name) && ("Loader_FireAaMg" != crewaction.Name) && ("Loader_FireSubMg" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeLoader) && (true == isButtonUp)) || (true== isMainGunBeingFired) )
-                     {
-                        isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
-                     }
-                     break;
-                  }
-                  else  if (("Driver" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
-                  {
-                     if (("Driver_Stop" != crewaction.Name) && ((true == myGameInstance.IsBrokenPeriscopeDriver) && (true == isButtonUp)))
-                     {
-                        isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
-                     }
-                     break;
-                  }
-                  else if ( ("Gunner" == cm.Role)  && (true == crewaction.Name.Contains(cm.Role)) )
-                  {
-                     if ((("Gunner_FireCoaxialMg" != crewaction.Name) && ("Gunner_ThrowGrenade" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeGunner) && (true == isButtonUp)))
-                     {
-                        isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
-                     }
-                     break;
-                  }
-                  else if ( ("Assistant" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
-                  {
-                     if (("Assistant_FireBowMg" != crewaction.Name) || ((true == myGameInstance.IsBrokenPeriscopeAssistant) && (true == isButtonUp)))
-                     {
-                        isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
-                     }
-                     break;
-                  }
-                  else if ( ("Commander" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
-                  {
-                     if ((("Commander_Move" != crewaction.Name) && ("Commander_MainGunFire" != crewaction.Name) && ("Commander_MGFire" != crewaction.Name) && ("Commander_ThrowGrenade" != crewaction.Name) && ("Commander_FireAaMg" != crewaction.Name) && ("Commander_FireSubMg" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeCommander) && (true == isButtonUp) && (false == card.myIsVisionCupola)))
-                     {
-                        isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
-                     }
-                     break;
-                  }
-               }
-               if( true == isCrewMemberAdded )
+               if( true == myGameInstance.IsCrewMemberSpotting( cm.Role, lastReport) )
                   myAssignables.Add(cm);
             }
          }

@@ -345,8 +345,11 @@ namespace Pattons_Best
                foreach (IMapItem mapItem in stack.MapItems)
                {
                   if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) ) // remove enemy KIA units
+                  {
                      removals.Add(mapItem);
-                  if( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // EventViewerEnemyAction.UpdateEndState() - remove all units that left the board
+                     Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "EventViewerEnemyAction.UpdateEndState(): remove eu=" + mapItem.Name);
+                  }
+                  if ( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // EventViewerEnemyAction.UpdateEndState() - remove all units that left the board
                   {
                      mapItem.EnemyAcquiredShots.Remove("Sherman");
                      myGameInstance.Sherman.EnemyAcquiredShots.Remove(mapItem.Name);
@@ -1540,25 +1543,29 @@ namespace Pattons_Best
                   if ( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
-                     if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))
-                        myGameInstance.Sherman.EnemyAcquiredShots[mi.Name]++;
-                     else
-                        myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0;
-                     Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
                      myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
                      if (TableMgr.FN_ERROR == myGridRows[i].myModifierToHitYourTank)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberModifierForYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
+                     //-------------------------------------
                      myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetEnemyToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                      if (TableMgr.FN_ERROR == myGridRows[i].myToHitNumberYourTank)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
+                     //-------------------------------------
+                     if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))
+                        myGameInstance.Sherman.EnemyAcquiredShots[mi.Name]++;
+                     else
+                        myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0;
+                     Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
+                     //-------------------------------------
                      myGridRows[i].myDieRollFire = NO_FIRE; // not firing at other tanks... only firing at your tank
-                     if( true == mi.IsTurret )
+                     //-------------------------------------
+                     if ( true == mi.IsTurret )
                      {
                         if (false == mi.SetMapItemRotationTurret(myGameInstance.Sherman))
                         {
@@ -1589,10 +1596,11 @@ namespace Pattons_Best
                //----------------------------------------
                if ( (true == enemyAction.Contains("Move") ) && (false == mi.IsThrownTrack) )
                {
-                  if (EnumSpottingResult.HIDDEN == mi.Spotting) // Hidden units that move become unspotted
+                  if ( (EnumSpottingResult.HIDDEN == mi.Spotting)  || (EnumSpottingResult.SPOTTED == mi.Spotting) )// Hidden units that move become unspotted
+                  {
                      mi.Spotting = EnumSpottingResult.UNSPOTTED;
-                  if (EnumSpottingResult.SPOTTED == mi.Spotting) // Spotted units that move become unspotted
-                     mi.Spotting = EnumSpottingResult.UNSPOTTED;
+                     mi.IsSpotted = false;
+                  }
                   mi.IsMoved = true;
                   mi.IsHullDown = false;
                   mi.IsBuilding = false;

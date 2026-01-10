@@ -176,6 +176,7 @@ namespace Pattons_Best
       int GetReadyRackReload(string ammoType);
       int GetReadyRackTotalLoad();
       bool SetReadyRackReload(string name, int value);
+      bool IsCrewMemberSpotting(string role, IAfterActionReport lastReport);
       //------------------------------------------------
       bool IsDaylightLeft(IAfterActionReport report);
       bool IsTaskForceInStartArea(out bool isStartArea);

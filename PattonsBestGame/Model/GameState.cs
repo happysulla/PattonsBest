@@ -1106,12 +1106,12 @@ namespace Pattons_Best
          }
          if (null == lastReport.Commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Loader_SpotSet: lastReport.Commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "SpottingPhase_Begin(): lastReport.Commander=null");
             return false;
          }
          //-------------------------------------
          bool isUnidentifiedUnit = false;
-         foreach (IStack stackR in gi.BattleStacks) // remove spotting 
+         foreach (IStack stackR in gi.BattleStacks) // deteremine if there are unidentified units on the Battle Board
          {
             foreach (IMapItem mi in stackR.MapItems)
             {
@@ -1128,7 +1128,7 @@ namespace Pattons_Best
          {
             if ( 1 < gi.RoundsOfCombat ) 
             {
-               if (false == gi.IsLoaderSpotThisTurn)
+               if (false == gi.IsLoaderSpotThisTurn) 
                {
                   gi.IsLoaderSpotThisTurn = true;
                   IMapItems removals = new MapItems();
@@ -1146,7 +1146,8 @@ namespace Pattons_Best
                   foreach (IMapItem removal in removals)
                      gi.BattleStacks.Remove(removal);
                   //------------------------------------
-                  if ((true == lastReport.Loader.IsButtonedUp) && (false == lastReport.Loader.IsIncapacitated))
+                  bool isLoaderAbleToSpotThisRound = gi.IsCrewMemberSpotting("Loader", lastReport);
+                  if ((true == lastReport.Loader.IsButtonedUp) && (false == lastReport.Loader.IsIncapacitated) && (true == isLoaderAbleToSpotThisRound))
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "SpottingPhase_Begin(): loader is button up - perform PreparationsLoaderSpot");
                      outAction = GameAction.PreparationsLoaderSpot;
@@ -1175,9 +1176,9 @@ namespace Pattons_Best
                      gi.BattleStacks.Remove(removal);
                   //-------------------------------------
                   TankCard card = new TankCard(lastReport.TankCardNum);
-                  if ((true == lastReport.Commander.IsButtonedUp) && (false == card.myIsVisionCupola) && (false == lastReport.Commander.IsIncapacitated))
+                  bool isCommanderAbleToSpotThisRound = gi.IsCrewMemberSpotting("Commander", lastReport);
+                  if ((true == lastReport.Commander.IsButtonedUp) && (false == card.myIsVisionCupola) && (false == lastReport.Commander.IsIncapacitated) && (true == isCommanderAbleToSpotThisRound))
                   {
-
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "SpottingPhase_Begin(): commander is button up - perform Preparations_CommanderSpotSet");
                      outAction = GameAction.PreparationsCommanderSpot;
                      SetCommand(gi, outAction, GameAction.DieRollActionNone, "e016");
@@ -1427,6 +1428,13 @@ namespace Pattons_Best
          foreach (IMapItem removal in removals)
             gi.BattleStacks.Remove(removal);
          //---------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PrepareFor_Battle(): lastReport=null");
+            return false;
+         }
+         //---------------------------------
          gi.AdvancingEnemies.Clear();
          //---------------------------------
          gi.IsHatchesActive = false;
@@ -1447,6 +1455,32 @@ namespace Pattons_Best
          gi.IsEnemyAdvanceComplete = false;
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
+         //---------------------------------
+         if ( (0 < lastReport.AmmoPeriscope) && (true == gi.IsBrokenPeriscopeGunner) )
+         {
+            gi.IsBrokenPeriscopeGunner = false;
+            lastReport.AmmoPeriscope--;
+         }
+         if ( (0 < lastReport.AmmoPeriscope) && (true == gi.IsBrokenPeriscopeLoader))
+         {
+            gi.IsBrokenPeriscopeLoader = false;
+            lastReport.AmmoPeriscope--;
+         }
+         if ( (0 < lastReport.AmmoPeriscope ) && (true == gi.IsBrokenPeriscopeDriver))
+         {
+            gi.IsBrokenPeriscopeDriver = false;
+            lastReport.AmmoPeriscope--;
+         }
+         if ( (0 < lastReport.AmmoPeriscope) && (true == gi.IsBrokenPeriscopeCommander))
+         {
+            gi.IsBrokenPeriscopeCommander = false;
+            lastReport.AmmoPeriscope--;
+         }
+         if ( (0 < lastReport.AmmoPeriscope) && (true == gi.IsBrokenPeriscopeAssistant))
+         {
+            gi.IsBrokenPeriscopeAssistant = false;
+            lastReport.AmmoPeriscope--;
+         }
          //---------------------------------
          gi.Sherman.RotationOffsetHull = 0.0;
          gi.Sherman.RotationTurret = 0.0;
@@ -4825,6 +4859,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.PreparationsFinalSkip:
+                  theIs1stEnemyStrengthCheckTerritory = true; // at the end of each battle, get one free enemy strength check
                   if (false == PerformAutoBattlePreparationsSetup(gi, ref action))
                   {
                      returnStatus = "Perform_BattlePreparationsSetup() returned false";
@@ -4832,7 +4867,6 @@ namespace Pattons_Best
                   }
                   else if ((GameAction.MovementStartAreaSet == action) || (GameAction.MovementStartAreaRestart == action) || (GameAction.MovementStartAreaRestartAfterBattle == action))
                   {
-                     theIs1stEnemyStrengthCheckTerritory = true; // do not do enemy strength check on first area which is the start area
                      if (false == MovementPhaseRestart(gi, lastReport, action))
                      {
                         returnStatus = "MovementPhaseRestart() returned false";
@@ -4984,29 +5018,36 @@ namespace Pattons_Best
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e020");
                   break;
                case GameAction.MovementEnemyStrengthCheckTerritory:
-                  if ( (false == theIs1stEnemyStrengthCheckTerritory) && (false == gi.IsAirStrikePending) )// MovementEnemyStrengthCheckTerritory
+                  if ( false == theIs1stEnemyStrengthCheckTerritory ) // MovementEnemyStrengthCheckTerritory
                   {
-                     gi.MinSinceLastCheck += 15;
-                     AdvanceTime(lastReport, 15);       // MovementEnemyStrengthCheckTerritory - when not first check
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory): +15  -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
-                     if (false == gi.IsDaylightLeft(lastReport))  // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory) 
+                     if(false == gi.IsAirStrikePending)
                      {
-                        gi.GamePhase = GamePhase.EveningDebriefing;
-                        GameFeat featChange11;
-                        if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange11))  // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory)
+                        gi.MinSinceLastCheck += 15;
+                        AdvanceTime(lastReport, 15);       // MovementEnemyStrengthCheckTerritory - when not first check
+                        Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory): +15  -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                        if (false == gi.IsDaylightLeft(lastReport))  // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory) 
                         {
-                           returnStatus = "theInGameFeats.Get_FeatChange() returned false";
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory): " + returnStatus);
-                        }
-                        if (false == String.IsNullOrEmpty(featChange11.Key))
-                        {
-                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory):  Change=" + featChange11.ToString());
-                           action = GameAction.EveningDebriefingShowFeat; // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory)
-                           SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
+                           gi.GamePhase = GamePhase.EveningDebriefing;
+                           GameFeat featChange11;
+                           if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange11))  // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory)
+                           {
+                              returnStatus = "theInGameFeats.Get_FeatChange() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory): " + returnStatus);
+                           }
+                           if (false == String.IsNullOrEmpty(featChange11.Key))
+                           {
+                              Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory):  Change=" + featChange11.ToString());
+                              action = GameAction.EveningDebriefingShowFeat; // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory)
+                              SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
+                           }
+                           else
+                           {
+                              SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
+                           }
                         }
                         else
                         {
-                           SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
+                           SetCommand(gi, action, GameAction.MovementEnemyStrengthCheckTerritoryRoll, "e021");
                         }
                      }
                      else
@@ -5020,7 +5061,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementEnemyStrengthCheckTerritoryRoll:
-                  theIs1stEnemyStrengthCheckTerritory = false;
+                  theIs1stEnemyStrengthCheckTerritory = false; // MovementEnemyStrengthCheckTerritoryRoll - free check over
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == SetEnemyStrengthCounter(gi, dieRoll)) // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritoryRoll)
@@ -5220,6 +5261,10 @@ namespace Pattons_Best
                      {
                         action = GameAction.MovementAmmoLoad;
                         gi.Fuel = 35; // when resupply, fuel set to 35
+                        lastReport.Ammo50CalibreMG = 6;
+                        lastReport.AmmoSmokeBomb = 14;
+                        lastReport.AmmoSmokeGrenade = 6;
+                        lastReport.AmmoPeriscope = 6;
                      }
                      else
                      {
@@ -5384,13 +5429,12 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     gi.GamePhase = GamePhase.Preparations;
-                     int hoursElapsed = (int)Math.Floor(dieRoll * 0.5) + 1;
-                     int minsElapsed = hoursElapsed * 60;
-                     gi.MinSinceLastCheck = 0;
-                     lastReport.SunriseHour += hoursElapsed;
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +" + minsElapsed.ToString() + " for counterattack time -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     int hoursElapsed = (int)Math.Floor(gi.DieResults[key][0] * 0.5) + 1;
                      gi.DieResults[key][0] = Utilities.NO_RESULT;
+                     gi.MinSinceLastCheck = 0;
+                     gi.GamePhase = GamePhase.Preparations;
+                     lastReport.SunriseHour += hoursElapsed;
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +" + (hoursElapsed * 60).ToString() + " for counterattack time -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
                      bool isCrewmanReplaced;
                      if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "PrepareFor_BattleSetState()"))  // GameAction.MovementCounterattackEllapsedTimeRoll(Movement_CounterattackEllapsedTimeRoll) - TODO: Check feats process
                      {
@@ -5853,7 +5897,7 @@ namespace Pattons_Best
       private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report, GameAction action)
       {
          //--------------------------------------------------------------
-         theIs1stEnemyStrengthCheckTerritory = true;
+         theIs1stEnemyStrengthCheckTerritory = true; // MovementPhaseRestart()
          SetCommand(gi, action, GameAction.MovementStartAreaSetRoll, "e018");
          //--------------------------------------------------------------
          gi.EnemyStrengthCheckTerritory = null;
@@ -6437,7 +6481,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleShermanKilled:
-                  gi.ClearCrewActions("GameStateBattle.PerformAction(BattleShermanKilled)");   // GameStateBattle.PerformAction(BattleShermanKilled)
+                  gi.ClearCrewActions("GameStateBattle.PerformAction(Battle_ShermanKilled)");   // GameStateBattle.PerformAction(Battle_ShermanKilled)
                   break;
                case GameAction.UpdateTankExplosion:
                case GameAction.UpdateTankBrewUp: 
@@ -6684,9 +6728,9 @@ namespace Pattons_Best
                   return returnStatus;
                case GameAction.BattleRoundSequenceAmmoOrders:
                   gi.IsHatchesActive = false;
-                  if (false == SetDefaultCrewActions(gi))
+                  if (false == SetDefaultCrewActions(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmmoOrders)
                   {
-                     returnStatus = "SetDefaultCrewActions() returned false";
+                     returnStatus = "Set_DefaultCrewActions() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmmoOrders): " + returnStatus);
                   }
                   else
@@ -7150,9 +7194,9 @@ namespace Pattons_Best
                         }
                      }
                   }
-                  if (false == SetDefaultCrewActions(gi))
+                  if (false == SetDefaultCrewActions(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceConductCrewAction)
                   {
-                     returnStatus = "SetDefaultCrewActions() returned false";
+                     returnStatus = "Set_DefaultCrewActions() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceConductCrewAction): " + returnStatus);
                   }
                   else
@@ -7191,7 +7235,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMovementRoll:
                   if (false == MoveSherman(gi, ref action, dieRoll))
                   {
-                     returnStatus = "MoveSherman() returned false";
+                     returnStatus = "Move_Sherman() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -7306,11 +7350,20 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSherman_FiringMainGunEnd): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceShermanMissesLastShot:
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.FiredAmmoType = gi.GetGunLoadType();  // used in EventViewer.UpdateEventContentToGetToHit()
+                  if (false == FireMainGunAtEnemyUnitsMissed(gi, action, dieRoll)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanMissesLastShot)
+                  {
+                     returnStatus = "Fire_MainGunAtEnemyUnits() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanMissesLastShot): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleRoundSequenceShermanSkipRateOfFire:
                   if (null == gi.TargetMainGun)
                   {
                      returnStatus = "gi.TargetMainGun=null for a=" + action.ToString();
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanSkipRateOfFire): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanSkipRateOfFire): " + returnStatus);
                   }
                   else
                   {
@@ -7577,8 +7630,11 @@ namespace Pattons_Best
                   {
                      foreach (IMapItem mapItem in stack.MapItems)
                      {
-                        if (true == mapItem.IsKilled)
+                        if ((true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) )  // PerformAction(BattleRoundSequence_FireMachineGunRollEnd)
+                        {
                            shermanRemovals.Add(mapItem);
+                           Logger.Log(LogEnum.LE_ERROR, "Resolve_ToKillEnemyUnit(): PerformAction(BattleRoundSequence_FireMachineGunRollEnd) Sherman Kills eu=" + mapItem.Name);
+                        }
                      }
                   }
                   foreach (IMapItem mi in shermanRemovals)
@@ -8184,7 +8240,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleShermanKilled:
-                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(BattleShermanKilled)"); // GameStateBattleRoundSequence.PerformAction(BattleShermanKilled)
+                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(Battle_ShermanKilled)"); // GameStateBattleRoundSequence.PerformAction(Battle_ShermanKilled)
                   break;
                case GameAction.UpdateTankExplosion:
                case GameAction.UpdateTankBrewUp:
@@ -8424,7 +8480,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_DefaultCrewActions(): lastReport=null");
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -8432,7 +8488,7 @@ namespace Pattons_Best
          //----------------------------------------------------
          bool isDriverDefaultNeeded = true;
          bool isLoaderDefaultNeeded = true;
-         bool isGunnerFiring = true;
+         bool isGunnerFiring = false;
          foreach (IMapItem crewAction in gi.CrewActions)
          {
             if (true == crewAction.Name.Contains("Driver"))
@@ -8446,34 +8502,34 @@ namespace Pattons_Best
          ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if( null == driver )
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMemberByRole(Driver) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_DefaultCrewActions(): gi.GetCrewMemberByRole(Driver) returned null");
             return false;
          }
-         if ( (true == isDriverDefaultNeeded) && (false == driver.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
+         if ( (true == isDriverDefaultNeeded) && (false == driver.IsIncapacitated)) // Set_DefaultCrewActions() - if not incapacitated
          {
             ITerritory? t = Territories.theTerritories.Find("DriverAction", tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): t=null for tName=DriverAction");
+               Logger.Log(LogEnum.LE_ERROR, "Set_DefaultCrewActions(): t=null for tName=DriverAction");
                return false;
             }
             IMapItem mi = new MapItem("Driver_Stop", 1.0, "c61DStop", t);
             gi.CrewActions.Add(mi);
-            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetDefaultCrewActions(): ++++++++++++++++adding ca=" + mi.Name);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_DefaultCrewActions(): ++++++++++++++++adding ca=" + mi.Name);
          }
          //----------------------------------------------------
          ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMemberByRole(Loader) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_DefaultCrewActions(): gi.GetCrewMemberByRole(Loader) returned null");
             return false;
          }
-         if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated) ) // SetDefaultCrewActions() - if not incapacitated
+         if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated)) // Set_DefaultCrewActions() - if not incapacitated
          {
             ITerritory? t = Territories.theTerritories.Find("LoaderAction", tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): t=null for tName=LoaderAction");
+               Logger.Log(LogEnum.LE_ERROR, "Set_DefaultCrewActions(): t=null for tName=LoaderAction");
                return false;
             }
             IMapItem mi;
@@ -8482,7 +8538,7 @@ namespace Pattons_Best
             else
                mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
             gi.CrewActions.Add(mi);
-            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetDefaultCrewActions(): +++++++++++++++adding ca=" + mi.Name);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_DefaultCrewActions(): +++++++++++++++adding ca=" + mi.Name);
          }
          return true;
       }
@@ -8946,11 +9002,13 @@ namespace Pattons_Best
             //DieRoller.WhiteDie = 1; // <CGS> TEST - AdvanceRetreat - Cause Movement
             gi.DieResults[key][0] = dieRoll;
             gi.DieRollAction = GameAction.DieRollActionNone;
+            if( (DieRoller.BlueDie < 4) && (0 < gi.Fuel) )
+               gi.Fuel--;
             gi.MovementEffectOnSherman = TableMgr.GetMovingResultSherman(gi, dieRoll);
             gi.MovementEffectOnEnemy = TableMgr.GetMovingResultEnemy(gi);
             if ("ERROR" == gi.MovementEffectOnEnemy)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): GetMovingResultEnemy() returned ERROR");
+               Logger.Log(LogEnum.LE_ERROR, "Move_Sherman(): GetMovingResultEnemy() returned ERROR");
                return false;
             }
             else
@@ -8959,7 +9017,7 @@ namespace Pattons_Best
                {
                   if (false == MoveShermanMoveEnemyUnits(gi))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): MoveShermanMoveEnemyUnits(gi) returned false for a=" + outAction.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "Move_Sherman(): MoveShermanMoveEnemyUnits(gi) returned false for a=" + outAction.ToString());
                      return false;
                   }
                }
@@ -8967,7 +9025,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "MoveSherman(): gi.MapItemMoves.Clear()");
+            Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Move_Sherman(): gi.MapItemMoves.Clear()");
             gi.MapItemMoves.Clear();
             gi.ShermanAdvanceOrRetreatEnemies.Clear(); // any previous round units moved off board are not saved
             gi.IsShermanAdvancingOnMoveBoard = false;
@@ -9002,7 +9060,7 @@ namespace Pattons_Best
                bool isInjuredCrewmanReplaced;
                if(false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced, "Move_Sherman()")) // Move_Sherman() - instead of AdvanceRetreat
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): Replace_InjuredCrewmen() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Move_Sherman(): Replace_InjuredCrewmen() returned false");
                   return false;
                }
                if (true == isInjuredCrewmanReplaced) // Generate MorningBriefing_AssignCrewRating when image clicked which allows replacing crew
@@ -9013,7 +9071,7 @@ namespace Pattons_Best
                {
                   if (false == MoveShermanAdvanceOrRetreat(gi, ref outAction)) // Move_Sherman() - no enemy left when Sherman moves
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): MoveSherman_AdvanceOrRetreat() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Move_Sherman(): MoveSherman_AdvanceOrRetreat() returned false");
                      return false;
                   }
                }
@@ -9022,7 +9080,7 @@ namespace Pattons_Best
             {
                if (false == EnemiesFacingCheck(gi, ref outAction))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): EnemyFacingCheck() returned false for a=" + outAction.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Move_Sherman(): EnemyFacingCheck() returned false for a=" + outAction.ToString());
                   return false;
                }
             }
@@ -9445,7 +9503,6 @@ namespace Pattons_Best
          bool isCriticalHit = false;
          if (dieRoll < 4)
             isCriticalHit = true;
-         Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "Fire_MainGunAtEnemyUnits(): ?????????????????? Main Gun Malfunctioned dr=" + dieRoll.ToString());
          if (97 < dieRoll)
          {
             gi.IsMalfunctionedMainGun = true; // Fire_MainGunAtEnemyUnits() - due to BattleRoundSequence_ShermanToHitRoll - enemy hit
@@ -9561,6 +9618,67 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool FireMainGunAtEnemyUnitsMissed(IGameInstance gi, GameAction action, int dieRoll)
+      {
+         string key = gi.EventActive;
+         if (null == gi.TargetMainGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnitsMissed(): Target=null");
+            return false;
+         }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnitsMissed(): lastReport=null");
+            return false;
+         }
+         //---------------------------------------------------------------
+         if (true == gi.TargetMainGun.IsVehicle)
+         {
+            string facingOfTarget = TableMgr.GetShermanFireDirection(gi, gi.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
+            if ("ERROR" == facingOfTarget)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnitsMissed(): GetEnemyFireDirection() returned error");
+               return false;
+            }
+            if ("Front" == facingOfTarget)
+            {
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=TRUE");
+               gi.IsShermanFiringAtFront = true; // Sherman is firing at front of target
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=FALSE");
+               gi.IsShermanFiringAtFront = false; // Sherman is firing at front of target
+            }
+         }
+         //---------------------------------------------------------------
+         string gunLoadType = gi.GetGunLoadType();
+         if (false == gi.FireAndReloadGun()) // Fire_MainGunAtEnemyUnitsMissed() - gi.ShermanTypeOfFire get reset in FireAndReloadGun
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnitsMissed(): Fire_AndReloadGun() returned false");
+            return false;
+         }
+         //---------------------------------------------------------------
+         if (97 < dieRoll)
+         {
+            gi.IsMalfunctionedMainGun = true; // Fire_MainGunAtEnemyUnitsMissed() - due to BattleRoundSequence_ShermanToHitRoll - enemy hit
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "Fire_MainGunAtEnemyUnitsMissed(): Enemy Hit but MMMMMMMMMMMMMMMMMMM Main Gun Malfunctioned dr=" + dieRoll.ToString());
+            dieRoll = 1000; // force a miss
+         }
+         //---------------------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "Fire_MainGunAtEnemyUnitsMissed(): Miss Target - Main Gun NO ROF Follow Up");
+         if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
+         {
+            gi.IsMalfunctionedMainGun = true;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanMissesLastShot) - due to missed target
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "Fire_MainGunAtEnemyUnitsMissed(): Missed Target and Main Gun Malfunctioned dr=" + gi.DieResults[key][0].ToString());
+         }
+         if ((true == gi.TargetMainGun.Name.Contains("LW")) || (true == gi.TargetMainGun.Name.Contains("MG")) || (true == gi.TargetMainGun.Name.Contains("Pak")) || (true == gi.TargetMainGun.Name.Contains("ATG")))
+            SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToKillRoll, "e053d"); // resolve attack
+         else
+            SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToKillRoll, "e053e"); // resolve attack
+         return true;
+      }
       private bool ResolveToKillEnemyUnit(IGameInstance gi, ref GameAction outAction, int dieRoll)
       {
          string key = gi.EventActive;
@@ -9593,7 +9711,7 @@ namespace Pattons_Best
                return false;
             }
          }
-         else if( true == hit.myIsImmobilization)
+         else if (true == hit.myIsImmobilization)
          {
             hit.myHitLocation = "Thrown Track";
             gi.TargetMainGun.IsThrownTrack = true;
@@ -9624,7 +9742,7 @@ namespace Pattons_Best
                }
                else
                {
-                  if ( 9 < gi.DieResults[key][0] )
+                  if (9 < gi.DieResults[key][0])
                   {
                      hit.myHitLocation = "Thrown Track";
                      if (true == gi.TargetMainGun.Name.Contains("Truck"))
@@ -9692,7 +9810,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool ResolveToKillEnemyUnitKill(IGameInstance gi, ref GameAction outAction, int dieRoll) 
+      private bool ResolveToKillEnemyUnitKill(IGameInstance gi, ref GameAction outAction, int dieRoll)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -9731,7 +9849,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): vs Infantry target -- AUTO KILL - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                if (true == hit.myIsCriticalHit)
                   GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
-               if ( false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+               if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                   return false;
@@ -9759,7 +9877,7 @@ namespace Pattons_Best
                {
                   toKillNum = TableMgr.GetShermanToKill75HeVehicleBaseNumber(gi, gi.TargetMainGun, hit);
                   Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 1-vehicle=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString());
-                  if ( (TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum) )
+                  if ((TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum))
                   {
                      if (TableMgr.NO_CHANCE == toKillNum)
                         Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 HE No Chance - NC NC NC NC NC NC NC NC NC NC");
@@ -9896,7 +10014,7 @@ namespace Pattons_Best
                      }
                      return true;
                   }
-                  else if ( (TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum) )
+                  else if ((TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum))
                   {
                      if (TableMgr.NO_CHANCE == toKillNum)
                         Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill():76L  Hvap No Chance - NC NC NC NC NC NC NC NC NC NC");
@@ -9922,7 +10040,7 @@ namespace Pattons_Best
                {
                   toKillNum = TableMgr.GetShermanToKill76HeVehicleBaseNumber(gi, gi.TargetMainGun, hit);
                   Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 6-vehicle=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString());
-                  if ( (TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum) )
+                  if ((TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum))
                   {
                      if (TableMgr.NO_CHANCE == toKillNum)
                         Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill():76L  Hvap No Chance - NC NC NC NC NC NC NC NC NC NC");
@@ -11229,7 +11347,7 @@ namespace Pattons_Best
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
          }
          //----------------------------------------------------------
-         else if ( ((true == gi.IsCommanderKilled) || ( TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn) ) && (true == optionCommanderDeath.IsEnabled) )
+         else if ( ((true == gi.IsCommanderKilled) || ( TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn) ) && (false == optionCommanderDeath.IsEnabled) )
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
             if (true == gi.IsCommanderKilled)
@@ -11242,11 +11360,6 @@ namespace Pattons_Best
          else if ((189 < gi.Day) || (true == optionSingleDayGame.IsEnabled)) // ends on day 190 -- or if this is a single day game
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! optionSingleDay=" + optionSingleDayGame.IsEnabled.ToString() + " or 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
-            GameStatistic statMaxCrewRatingWin = gi.Statistics.Find("MaxCrewRatingWin");
-            statMaxCrewRatingWin.Value = crewRating;
-            GameStatistic statMinCrewRatingWin = gi.Statistics.Find("MinCrewRatingWin");
-            statMinCrewRatingWin.Value = crewRating;
             if ((false == optionSingleDayGame.IsEnabled) && (189 < gi.Day))
                GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
             //-------------------------------------------------------------
@@ -11272,6 +11385,16 @@ namespace Pattons_Best
          //----------------------------------------------------------
          if (GamePhase.EndGame == gi.GamePhase)
          {
+            int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
+            GameStatistic crewRatingStat = gi.Statistics.Find("CrewRating");
+            crewRatingStat.Value = crewRating;
+            if(GameAction.EndGameWin == action)
+            {
+               GameStatistic statMaxCrewRatingWin = gi.Statistics.Find("MaxCrewRatingWin");
+               statMaxCrewRatingWin.Value = crewRating;
+               GameStatistic statMinCrewRatingWin = gi.Statistics.Find("MinCrewRatingWin");
+               statMinCrewRatingWin.Value = crewRating;
+            }
             if (false == optionSingleDayGame.IsEnabled)
                GameEngine.theInGameFeats.AddOne("EndCampaignGame");
             GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
@@ -11329,6 +11452,9 @@ namespace Pattons_Best
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
             case GameAction.UpdateBattleBoard: // Do not log event
+               break;
+            case GameAction.UpdateEventViewerActive:
+               gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
             case GameAction.EndGameShowFeats:
                SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");

@@ -302,9 +302,10 @@ namespace Pattons_Best
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
-                  if (true == mapItem.IsKilled)
+                  if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) )
                   {
                      removals.Add(mapItem);
+                     Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "EventViewerResolveAdvanceFire.UpdateEndState(): killed eu=" + mapItem.Name);
                      if (true == mapItem.IsEnemyUnit())
                         myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem); // EventViewerResolveArtilleryFire.UpdateEndState() 
                   }

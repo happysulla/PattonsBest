@@ -678,22 +678,22 @@ namespace Pattons_Best
                   Canvas.SetLeft(imgTrack, 0);
                   Canvas.SetTop(imgTrack, 0);
                }
-               if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (true == mi.IsSpotted)) // if Spotted now or previous round
+               if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("SPG")))
                {
-                  if ( (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("SPG") ) )
+                  if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (true == mi.IsSpotted)) // if Spotted now or previous round
                   {
                      Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OSPOT") };
                      g.Children.Add(overlay);
                   }
-               }
-               if (EnumSpottingResult.HIDDEN == mi.Spotting)
-               {
-                  Image overlay1 = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OHIDE") };
-                  RotateTransform rotateTransform = new RotateTransform();
-                  overlay1.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = -(mi.RotationHull + mi.RotationOffsetHull);
-                  overlay1.RenderTransform = rotateTransform;
-                  g.Children.Add(overlay1);
+                  else if (EnumSpottingResult.HIDDEN == mi.Spotting)
+                  {
+                     Image overlay1 = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OHIDE") };
+                     RotateTransform rotateTransform = new RotateTransform();
+                     overlay1.RenderTransformOrigin = new Point(0.5, 0.5);
+                     rotateTransform.Angle = -(mi.RotationHull + mi.RotationOffsetHull);
+                     overlay1.RenderTransform = rotateTransform;
+                     g.Children.Add(overlay1);
+                  }
                }
                //-------------------------------
                if (true == mi.IsHeHit) 

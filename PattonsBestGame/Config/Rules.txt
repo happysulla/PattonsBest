@@ -174,7 +174,7 @@ The Movement Sequence is performed on the Movement Board using the following ste
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Operations"
 r4.51	"<Bold>r4.51 Mark Start Area</Bold>
 <LineBreak/><LineBreak/>
-Around the edge of the Movement Board, there are 10 areas number 1-10. Roll 1D to determine which of the ten is the start area for this scenario. Also, mark the area with a Start Area marker.
+Around the edge of the Movement Board, there are 10 areas number 1-10. Roll 1D to determine which of the ten is the start area for this scenario. Also, mark the area with a Start Area marker. 
 Place the Task Force marker representing your friendly forces on that area.
 <LineBreak/><LineBreak/>
                     <InlineUIContainer><Image Name='c33StartArea'  Height='100' Width='100'></Image></InlineUIContainer>           

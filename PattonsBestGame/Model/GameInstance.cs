@@ -668,6 +668,69 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "ClearCrewActions(): "+ caller +  ": --------------------removing ca=" + mi.Name);
          }
       }
+      public bool IsCrewMemberSpotting(string role, IAfterActionReport lastReport)
+      {
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //-------------------------------------------
+         bool isButtonUp = true;
+         foreach (IMapItem mi in this.Hatches) 
+         {
+            if (true == mi.Name.Contains(role))
+               isButtonUp = false;
+         }
+         //-------------------------------------------
+         bool isMainGunBeingFired = false;
+         foreach (IMapItem crewaction in this.CrewActions) // Loader may not spot if main gun is being fired
+         {
+            if (("Gunner_FireMainGun" == crewaction.Name) || ("Gunner_RotateFireMainGun" == crewaction.Name))
+               isMainGunBeingFired = true;
+         }
+         //-------------------------------------------
+         foreach (IMapItem crewaction in this.CrewActions)
+         {
+            if (("Loader" == role) && (true == crewaction.Name.Contains(role)))
+            {
+               if ((("Loader_Load" != crewaction.Name) && ("Loader_FireAaMg" != crewaction.Name) && ("Loader_FireSubMg" != crewaction.Name)) || ((true == this.IsBrokenPeriscopeLoader) && (true == isButtonUp)) || (true == isMainGunBeingFired))
+               {
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Is_CrewMemberSpotting():  isCrewMemberAdded=FALSE for cm=" + role + " crewaction=" + crewaction.Name);
+                  return false;
+               }
+            }
+            else if (("Driver" == role) && (true == crewaction.Name.Contains(role)))
+            {
+               if (("Driver_Stop" != crewaction.Name) && ((true == this.IsBrokenPeriscopeDriver) && (true == isButtonUp)))
+               {
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Is_CrewMemberSpotting():  isCrewMemberAdded=FALSE for cm=" + role + " crewaction=" + crewaction.Name);
+                  return false;
+               }
+            }
+            else if (("Gunner" == role) && (true == crewaction.Name.Contains(role)))
+            {
+               if ((("Gunner_FireCoaxialMg" != crewaction.Name) && ("Gunner_ThrowGrenade" != crewaction.Name)) || ((true == this.IsBrokenPeriscopeGunner) && (true == isButtonUp)))
+               {
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Is_CrewMemberSpotting():  isCrewMemberAdded=FALSE for cm=" + role + " crewaction=" + crewaction.Name);
+                  return false;
+               }
+            }
+            else if (("Assistant" == role) && (true == crewaction.Name.Contains(role)))
+            {
+               if (("Assistant_FireBowMg" != crewaction.Name) || ((true == this.IsBrokenPeriscopeAssistant) && (true == isButtonUp)))
+               {
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Is_CrewMemberSpotting():  isCrewMemberAdded=FALSE for cm=" + role + " crewaction=" + crewaction.Name);
+                  return false;
+               }
+            }
+            else if (("Commander" == role) && (true == crewaction.Name.Contains(role)))
+            {
+               if ((("Commander_Move" != crewaction.Name) && ("Commander_MainGunFire" != crewaction.Name) && ("Commander_MGFire" != crewaction.Name) && ("Commander_ThrowGrenade" != crewaction.Name) && ("Commander_FireAaMg" != crewaction.Name) && ("Commander_FireSubMg" != crewaction.Name)) || ((true == this.IsBrokenPeriscopeCommander) && (true == isButtonUp) && (false == card.myIsVisionCupola)))
+               {
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Is_CrewMemberSpotting():  isCrewMemberAdded=FALSE for cm=" + role + " crewaction=" + crewaction.Name);
+                  return false;
+               }
+            }
+         }
+         return true;
+      }
       //---------------------------------------------------------------
       public string GetGunLoadType()
       {

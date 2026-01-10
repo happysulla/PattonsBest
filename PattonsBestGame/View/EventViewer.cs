@@ -2895,9 +2895,8 @@ namespace Pattons_Best
                sbEndWon.Append("'");
                myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
                Image? imgEndGameWon = null;
-               int randnum = Utilities.RandomGenerator.Next(10);
-               randnum = 8; // <cgs> TEST
-               switch (randnum)
+               int randnumWon = Utilities.RandomGenerator.Next(10);
+               switch (randnumWon)
                {
                   case 0:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
@@ -2966,7 +2965,6 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                Image? imgEndGameLost = null;
                int randnumLost = Utilities.RandomGenerator.Next(9);
-               randnumLost = 6; // <cgs> TEST
                switch (randnumLost)
                {
                   case 0:
@@ -4597,17 +4595,17 @@ namespace Pattons_Best
          }
          string key = gi.EventActive;
          //----------------------------------------
-         IAfterActionReport? report = gi.Reports.GetLast();
-         if (null == report)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentVictoryPointTotal():  gi.Reports.GetLast()");
             return false;
          }
+         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
          //----------------------------------------
          StringBuilder sbe101 = new StringBuilder();
          sbe101.Append("Engagement Victory Points: ");
-         sbe101.Append(report.VictoryPtsTotalEngagement.ToString());
-         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
          if( false == optionSingleDayGame.IsEnabled )
          {
             sbe101.Append("\nCampaign Victory Points: ");
@@ -4618,13 +4616,59 @@ namespace Pattons_Best
          if (true == gi.IsCommanderKilled)
          {
             sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!");
-            imge101 = new Image { Name = "CampaignOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
+            imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
             myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("                                    "));
          }
-         else if ( 0 >= report.VictoryPtsTotalEngagement )
+         else if (TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn) 
+         {
+            sbe101.Append("\n\nYou as the commander are seriously wounded and sent home. Engagement Lost!");
+            imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("HospitalShip") };
+            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                    "));
+         }
+         else if (0 < lastReport.Commander.WoundDaysUntilReturn) 
+         {
+            sbe101.Append("\n\nYou as the commander are wounded and out of action. Engagement Lost!");
+            imge101 = new Image { Name = "EngagementOver", Width = 300, Height = 95, Source = MapItem.theMapImages.GetBitmapImage("Ambulance") };
+            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                "));
+         }
+         else if (null != gi.Death)
+         {
+            if(true == gi.Death.myIsCrewBail)
+            {
+               sbe101.Append("\n\nYour crew bailed. Engagement Lost!");
+               imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("c204Bail") };
+            }
+            else if (true == gi.Death.myIsBrewUp)
+            {
+               sbe101.Append("\n\nYour Sherman was destroyed in brew up. Engagement Lost!");
+               imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("ShermanBrewup") };
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+               bmi.EndInit();
+               imge101 = new Image { Name = "EngagementOver", Source = bmi, Width = 200, Height = 200 };
+               ImageBehavior.SetAnimatedSource(imge101, bmi);
+            }
+            else
+            {
+               sbe101.Append("\n\nYour Sherman was destroyed by enemy fire. Engagement Lost!");
+               imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 128, Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage") };
+            }
+            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                    "));
+         }
+         else if (lastReport.VictoryPtsTotalEngagement <= 0 )
          {
             sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost!");
             imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
@@ -5854,7 +5898,7 @@ namespace Pattons_Best
          }
          else if (null != myGameInstance.Death)
          {
-            outAction = GameAction.BattleShermanKilled;
+            outAction = GameAction.BattleShermanKilled; // Show_AmbushResults()
          }
          else
          {
@@ -6056,7 +6100,7 @@ namespace Pattons_Best
          }
          else if (null != myGameInstance.Death)
          {
-            outAction = GameAction.BattleShermanKilled;
+            outAction = GameAction.BattleShermanKilled;  // Show_EnemyActionResults()
          }
          else
          {
@@ -6109,7 +6153,7 @@ namespace Pattons_Best
          }
          else if (null != myGameInstance.Death)
          {
-            outAction = GameAction.BattleShermanKilled;
+            outAction = GameAction.BattleShermanKilled; // Show_FriendlyActionResults()
          }
          else
          {
@@ -6634,10 +6678,10 @@ namespace Pattons_Best
                            break;
                         case "Continue53b":
                            if( 0 < myGameInstance.ShermanHits.Count )
-                              action = GameAction.BattleRoundSequenceShermanSkipRateOfFire; // If sherman misses, do same thing as skip ROF if there are previous hits
+                              action = GameAction.BattleRoundSequenceShermanMissesLastShot; // If sherman misses, do same thing as skip ROF if there are previous hits
                            else
                               action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd; // Miss target after hitting
-                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, myGameInstance.DieResults["e053b"][0]);
                            break;
                         case "BattleRoundSequenceShermanHit":
                            action = GameAction.BattleRoundSequenceShermanToHitRoll;
@@ -6726,7 +6770,7 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingAssignCrewRating;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "CampaignOver":
+                        case "EngagementOver":
                            action = GameAction.EveningDebriefingVictoryPointsCalculated;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;

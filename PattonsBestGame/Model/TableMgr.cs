@@ -1657,7 +1657,10 @@ namespace Pattons_Best
       public static ITerritory? SetNewTerritoryShermanMove(IMapItem sherman, IMapItem mi, string originalMove)
       {
          if (EnumSpottingResult.HIDDEN == mi.Spotting)
+         {
             mi.Spotting = EnumSpottingResult.UNSPOTTED;
+            mi.IsSpotted = false;
+         }
          ITerritory oldT = mi.TerritoryCurrent;
          string? newTerritoryName = null;
          double rotation = sherman.RotationHull;
@@ -2340,14 +2343,14 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): unknown enemyUnit=" + mi.Name);
             return toKillNum;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): lastReport=null");
             return toKillNum;
          }
          //----------------------------------------------------
@@ -2406,7 +2409,7 @@ namespace Pattons_Best
                      toKillNum = 61;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance | Battle - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): Advance | Battle - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
@@ -2457,21 +2460,28 @@ namespace Pattons_Best
                      toKillNum = 51;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Counterattack - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): Counterattack - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): reached default scenario=" + lastReport.Scenario);
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): reached default scenario=" + lastReport.Scenario);
             return FN_ERROR;
          }
          //------------------------------------
-         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
-         if (numSmokeMarkers < 0)
+         string tname = "B" + sector.ToString() + range.ToString(); // half the to hit number by the number of smoke counters in this hex
+         IStack? stack = gi.BattleStacks.Find(tname);
+         if (null == stack)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
-            return FN_ERROR;
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank():  stack=null for " + tname);
+            return -10000;
+         }
+         int numSmokeMarkers = 0;
+         foreach (IMapItem smoke in stack.MapItems)
+         {
+            if (true == smoke.Name.Contains("Smoke"))
+               numSmokeMarkers++;
          }
          if (0 < numSmokeMarkers)
          {
@@ -4476,8 +4486,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
                return "ERROR";
          }
-         if (true == mi.IsKilled)
+         if (true == mi.IsKilled) // Set_FriendlyActionResult()
          {
+            Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "Set_FriendlyActionResult(): killed eu=" + mi.Name + " dr=" + dieRoll.ToString());
             if (false == gi.KillEnemy(lastReport, mi, false))
             {
                Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): KillEnemy() returned error");

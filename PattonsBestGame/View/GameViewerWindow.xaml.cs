@@ -149,6 +149,28 @@ namespace Pattons_Best
          GameEngine.theStartingFeats.SetGameFeatThreshold();
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  feats=" + GameEngine.theInGameFeats.ToString() + "\n Sfeats=" + GameEngine.theStartingFeats.ToString());
          //---------------------------------------------------------------
+         if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): Deserialize_GameStatistics(theSingleDayStatistics) returned false");
+            CtorError = true;
+            return;
+         }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  single day stats=" + GameEngine.theSingleDayStatistics.ToString());
+         if (false == DeserializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): Deserialize_GameStatistics(theCampaignStatistics) returned false");
+            CtorError = true;
+            return;
+         }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  campaign stats=" + GameEngine.theCampaignStatistics.ToString());
+         if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theTotalStatistics) returned false");
+            CtorError = true;
+            return;
+         }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  total stats=" + GameEngine.theTotalStatistics.ToString());
+         //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeRoadsFromXml() returned false");
@@ -859,7 +881,7 @@ namespace Pattons_Best
             {
                if (false == gi.Sherman.IsThrownTrack)
                {
-                  if (false == gi.Sherman.IsBoggedDown) // bogged tanks can only attempt to free themselves by ordering reverse.
+                  if ((false == gi.Sherman.IsBoggedDown) && (0 < gi.Fuel) ) // bogged tanks can only attempt to free themselves by ordering reverse.
                   {
                      menuItem1 = new MenuItem();
                      menuItem1.Name = "Driver_Forward";
@@ -889,7 +911,7 @@ namespace Pattons_Best
                   }
                   else // if bogged down, allow attempt to reverse
                   {
-                     if (false == gi.Sherman.IsAssistanceNeeded) // if assistenance is needed, the tank is stuck and cannot free itself
+                     if ( (false == gi.Sherman.IsAssistanceNeeded) && (0 < gi.Fuel) ) // if assistenance is needed, the tank is stuck and cannot free itself
                      {
                         menuItem1 = new MenuItem();
                         menuItem1.Name = "Driver_Reverse";
@@ -897,6 +919,8 @@ namespace Pattons_Best
                         menuItem1.Click += MenuItemCrewActionClick;
                         myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
                      }
+                     if (0 == gi.Fuel)
+                        gi.Sherman.IsAssistanceNeeded = true;
                   }
                }
             }
@@ -2008,7 +2032,7 @@ namespace Pattons_Best
             {
                if (true == img.Name.Contains("TankMat"))
                   continue;
-               if ((true == gi.Sherman.IsKilled) && (true == img.Name.Contains("TankKilled")))
+               if ((true == gi.Sherman.IsKilled) && (true == img.Name.Contains("TankKilled"))) // UpdateCanvasTank()
                   continue;
                elements.Add(ui);
             }
@@ -3176,11 +3200,6 @@ namespace Pattons_Best
          Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
          if( true == optionSingleDayGame.IsEnabled)
          {
-            if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theSingleDayStatistics) returned false");
-               return false;
-            }
             Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
             UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theSingleDayStatistics);
             Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
@@ -3196,11 +3215,6 @@ namespace Pattons_Best
          }
          else
          {
-            if (false == DeserializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theCampaignStatistics) returned false");
-               return false;
-            }
             Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
             UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theCampaignStatistics);
             Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
@@ -3215,16 +3229,13 @@ namespace Pattons_Best
             }
          }
          //-------------------------------
-         if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theTotalStatistics) returned false");
-            return false;
-         }
          Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
          UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theTotalStatistics);
          Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
+         GameStatistic stat0NumGamesAfter = GameEngine.theSingleDayStatistics.Find("NumGames");
+         GameStatistic stat1NumGamesAfter = GameEngine.theCampaignStatistics.Find("NumGames"); 
          GameStatistic stat2NumGames = GameEngine.theTotalStatistics.Find("NumGames");
-         if (1 < stat2NumGames.Value)
+         if ((stat0NumGamesAfter.Value != stat2NumGames.Value) && (stat1NumGamesAfter.Value != stat2NumGames.Value)) 
          {
             myTextBoxMarquee.Inlines.Add(new LineBreak());
             myTextBoxMarquee.Inlines.Add(new LineBreak());
@@ -3313,11 +3324,22 @@ namespace Pattons_Best
          {
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Games = " + numGames.Value.ToString()) { FontWeight = FontWeights.Bold });
-            int winRatio = 0;
-            if (0 < numWins.Value)
-               winRatio = (int)Math.Round(100.0 * ((double)numGames.Value / (double)numWins.Value));
+            int winRatio = (int)Math.Round(100.0 * ((double)numWins.Value) / (double)numGames.Value);
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("% Wins = " + winRatio.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            GameStatistic maxCrewRatingWin = statistics.Find("MaxCrewRatingWin");
+            if (0 < maxCrewRatingWin.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Max Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
+            if (0 < minCrewRatingWin.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold });
+            }
             //-------------------------------------
             tb.Inlines.Add(new LineBreak());
             average = numDays.Value / numGames.Value;
@@ -3377,7 +3399,21 @@ namespace Pattons_Best
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("End Date = " + TableMgr.GetDate(myGameInstance.Day-1)) { FontWeight = FontWeights.Bold });
             //-------------------------------------
-            if ( 1 < numDays.Value )
+            if (0 < numWins.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Game Won!") { FontWeight = FontWeights.Bold });
+            }
+            else
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Game Lost!") { FontWeight = FontWeights.Bold });
+            }
+            GameStatistic crewRating = statistics.Find("CrewRating");
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Crew Rating = " + crewRating.Value.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            if (1 < numDays.Value)
             {
                tb.Inlines.Add(new LineBreak());
                tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold });
@@ -3500,18 +3536,6 @@ namespace Pattons_Best
          {
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Max Rounds of Combat = " + maxRoundsOfCombat.Value.ToString()) { FontWeight = FontWeights.Bold });
-         }
-         GameStatistic maxCrewRatingWin = statistics.Find("MaxCrewRatingWin");
-         if (0 < maxCrewRatingWin.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Max Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold });
-         }
-         GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
-         if (0 < minCrewRatingWin.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          //-------------------------------------
          tb.Inlines.Add(new LineBreak());
