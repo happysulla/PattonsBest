@@ -3281,7 +3281,9 @@ namespace Pattons_Best
             else if (true == stat.Key.Contains("Min"))
             {
                GameStatistic statMin = totalStatistics.Find(stat.Key);
-               if ( (0 == statMin.Value) || (stat.Value < statMin.Value ) )
+               if (0 == statMin.Value)
+                  statMin.Value = 1000000;
+               if ( stat.Value < statMin.Value )
                   statMin.Value = stat.Value;
             }
          }
@@ -3300,6 +3302,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatsText(): numDays=0");
             return false;
          }
+         Option optionSingleDayGame = myGameInstance.Options.Find("SingleDayScenario");
          GameStatistic numWins = statistics.Find("NumWins");
          GameStatistic numOfBattles = statistics.Find("NumOfBattles");
          GameStatistic numOfKilledCrewman = statistics.Find("NumOfKilledCrewman");
@@ -3326,7 +3329,19 @@ namespace Pattons_Best
             tb.Inlines.Add(new Run("Games = " + numGames.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground=brushFont });
             int winRatio = (int)Math.Round(100.0 * ((double)numWins.Value) / (double)numGames.Value);
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("% Wins = " + winRatio.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("% Wins = " + winRatio.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            if (true == optionSingleDayGame.IsEnabled)
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsSingleDayGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Max Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            else
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsCampaignGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Max Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
             //-------------------------------------
             GameStatistic maxCrewRatingWin = statistics.Find("MaxCrewRatingWin");
             if (0 < maxCrewRatingWin.Value)
@@ -3346,7 +3361,7 @@ namespace Pattons_Best
             tb.Inlines.Add(new Run("Average Days per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             //-------------------------------------
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("------------------------------"));
+            tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
             if (0 < numLostTanks)
             {
                tb.Inlines.Add(new LineBreak());
@@ -3402,12 +3417,25 @@ namespace Pattons_Best
             if (0 < numWins.Value)
             {
                tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Game Won!") { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new Run("Game Won!") { FontWeight = FontWeights.Bold, Foreground = brushFont });
             }
             else
             {
                tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Game Lost!") { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new Run("Game Lost!") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            if( true == optionSingleDayGame.IsEnabled)
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsSingleDayGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+
+            }
+            else
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsCampaignGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             }
             GameStatistic crewRating = statistics.Find("CrewRating");
             tb.Inlines.Add(new LineBreak());
@@ -3420,7 +3448,7 @@ namespace Pattons_Best
             }
             //-------------------------------------
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("------------------------------"));
+            tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
             if ( 0 < numLostTanks )
             {
                tb.Inlines.Add(new LineBreak());
@@ -3456,7 +3484,7 @@ namespace Pattons_Best
          }
          //-------------------------------------
          tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------"));
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
          GameStatistic numPurpleHearts = statistics.Find("NumPurpleHearts");
          if (0 < numPurpleHearts.Value)
          {
@@ -3506,7 +3534,7 @@ namespace Pattons_Best
          }
          //-------------------------------------
          tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------"));
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
          GameStatistic maxDayBetweenCombat = statistics.Find("MaxDayBetweenCombat");
          if (1 < maxDayBetweenCombat.Value)
          {
@@ -3539,7 +3567,7 @@ namespace Pattons_Best
          }
          //-------------------------------------
          tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------"));
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
          foreach (GameStatistic kill in statistics)
          {
             StringBuilder sb = new StringBuilder();
@@ -3558,7 +3586,7 @@ namespace Pattons_Best
             }
          }
          tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------"));
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
          foreach (GameStatistic kill in statistics)
          {
             StringBuilder sb = new StringBuilder();

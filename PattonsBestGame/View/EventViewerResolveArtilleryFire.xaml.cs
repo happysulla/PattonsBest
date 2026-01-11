@@ -22,7 +22,7 @@ namespace Pattons_Best
       public delegate bool EndResolveArtilleryFireCallback();
       private const int NUM_OF_ROWS = 30;
       private const int STARTING_ASSIGNED_ROW = 6;
-      private const int PREVIOUSLY_KIA = 100;
+      private const int PREVIOUSLY_KIA = 120;
       public enum E0464Enum
       {
          ROLL_ARTILLERY_FIRE,

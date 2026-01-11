@@ -9424,21 +9424,21 @@ namespace Pattons_Best
             node = reportNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalTerritory) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalTerritory) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("VictoryPtsTotalEngagement");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalEngagement) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPts_TotalEngagement) returned false");
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsTotalEngagement.ToString());
             node = reportNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalEngagement) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalEngagement) returned false");
                return false;
             }
             //------------------------------------------

@@ -4613,6 +4613,19 @@ namespace Pattons_Best
             return false;
          }
          Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         if (true == optionSingleDayGame.IsEnabled)
+         {
+            lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory;
+            GameStatistic statMaxPointsSingleDayGame = gi.Statistics.Find("MaxPointsSingleDayGame");
+            if (statMaxPointsSingleDayGame.Value < lastReport.VictoryPtsTotalEngagement)
+               statMaxPointsSingleDayGame.Value = lastReport.VictoryPtsTotalEngagement;
+         }
+         else
+         {
+            GameStatistic statMaxPointsSingleDayGame = gi.Statistics.Find("MaxPointsCampaignGame");
+            if (statMaxPointsSingleDayGame.Value < gi.VictoryPtsTotalCampaign)
+               statMaxPointsSingleDayGame.Value = gi.VictoryPtsTotalCampaign;
+         }
          //----------------------------------------
          StringBuilder sbe101 = new StringBuilder();
          sbe101.Append("Engagement Victory Points: ");

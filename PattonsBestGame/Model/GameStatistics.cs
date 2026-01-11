@@ -112,7 +112,9 @@ namespace Pattons_Best
          "MaxEnemiesInOneBattle",
          "MaxRoundsOfCombat",
          "MaxCrewRatingWin",
-         "MinCrewRatingWin"
+         "MinCrewRatingWin",
+         "MaxPointsSingleDayGame",
+         "MaxPointsCampaignGame"
       };
       [NonSerialized] public static string theGameStatisticsDirectory = "";
       public static string GetStatisticMessage(GameStatistic stat)

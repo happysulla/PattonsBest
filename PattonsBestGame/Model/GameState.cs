@@ -4308,10 +4308,7 @@ namespace Pattons_Best
             gi.ReadyRacks.Add(rr1);
             totalAmmoCount += count;
             //--------------------------------------------------
-            if (4 == card.myMaxReadyRackCount)
-               count = 1;
-            else
-               count = 2;
+            count = 1;
             tName = "ReadyRackHbci" + count.ToString();
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
@@ -7191,6 +7188,22 @@ namespace Pattons_Best
                            cm.IsUnconscious = false;
                            cm.IsIncapacitated = false;
                            cm.SetBloodSpots(0);
+                           if( false == String.IsNullOrEmpty(gi.SwitchedCrewMemberRole) )
+                           {
+                              if (false == gi.SwitchMembers("Assistant")) // return assistant back to original position if moved
+                              {
+                                 returnStatus = "gi.SwitchMembers() returned false";
+                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction): gi.GetCrewMemberByRole() returned null" + returnStatus);
+                              }
+                           }
+                           foreach (IMapItem ca in gi.CrewActions)
+                           {
+                              if (cm.Name == ca.Name)
+                              {
+                                 gi.CrewActions.Remove(ca);
+                                 break;
+                              }
+                           }
                         }
                      }
                   }
@@ -11395,16 +11408,19 @@ namespace Pattons_Best
                GameStatistic statMinCrewRatingWin = gi.Statistics.Find("MinCrewRatingWin");
                statMinCrewRatingWin.Value = crewRating;
             }
-            if (false == optionSingleDayGame.IsEnabled)
-               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+            //----------------------------
             GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
             if (statMaxRollsForAirSupport.Value < gi.MaxRollsForAirSupport)
                statMaxRollsForAirSupport.Value = gi.MaxRollsForAirSupport;
             gi.MaxRollsForAirSupport = 0;
+            //----------------------------
             GameStatistic statMaxRollsForArtillerySupport = gi.Statistics.Find("MaxRollsForArtillerySupport");
             if (statMaxRollsForArtillerySupport.Value < gi.MaxRollsForArtillerySupport)
                statMaxRollsForArtillerySupport.Value = gi.MaxRollsForArtillerySupport;
-            gi.MaxRollsForArtillerySupport = 0;        
+            gi.MaxRollsForArtillerySupport = 0;
+            //----------------------------
+            if ( false == optionSingleDayGame.IsEnabled )
+               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
          }
          //----------------------------------------------------------
          GameStatistic statMaxDayBetweenCombat = gi.Statistics.Find("MaxDayBetweenCombat");
