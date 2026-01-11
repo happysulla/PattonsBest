@@ -2189,7 +2189,7 @@ namespace Pattons_Best
                {
                   if (true == gi.IsEnemyAdvanceComplete)
                   {
-                     Image imge046 = new Image { Name = "Continue047", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c36Light") };
+                     Image imge046 = new Image { Name = "Continue047", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c36GermanStrength") };
                      myTextBlock.Inlines.Add(new Run("                                            "));
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge046));
                      myTextBlock.Inlines.Add(new LineBreak());

@@ -7371,6 +7371,7 @@ namespace Pattons_Best
                      returnStatus = "Fire_MainGunAtEnemyUnits() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanMissesLastShot): " + returnStatus);
                   }
+                  gi.DieResults["e053b"][0] = Utilities.NO_RESULT;
                   break;
                case GameAction.BattleRoundSequenceShermanSkipRateOfFire:
                   if (null == gi.TargetMainGun)
