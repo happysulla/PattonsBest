@@ -7265,7 +7265,7 @@ namespace Pattons_Best
          //action = GameAction.TestingStartPreparations;     // <CGS> TEST - skip morning briefing and crew/ammo setup
          //action = GameAction.TestingStartMovement;         // <CGS> TEST - start with movement - skip battle prep phase
          //action = GameAction.TestingStartBattle;           // <CGS> TEST - skip the movement portion - begin with battle setup
-         //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+         //action = GameAction.TestingStartAmbush;           // <CGS> TEST - skip battle setup
          myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
          return true;
       }
