@@ -56,6 +56,7 @@ namespace Pattons_Best
       private readonly List<Button> myMoveButtons = new List<Button>();
       private readonly List<Button> myBattleButtons = new List<Button>();
       private readonly List<Button> myTankButtons = new List<Button>();
+      private bool myIsInitialAmmoReloadButtonCreated = false;
       private int myTankCardNum = 1;
       private Dictionary<string, Polyline> myRoads = new Dictionary<string, Polyline>();
       //---------------------------------------------------------------------
@@ -2436,7 +2437,7 @@ namespace Pattons_Best
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankAmmoOrders(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): report=null");
             return false;
          }
          TankCard tankCard = new TankCard(report.TankCardNum);
@@ -2475,14 +2476,14 @@ namespace Pattons_Best
                      continue;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankAmmoOrders(): reached default gunload=" + gunload);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): reached default gunload=" + gunload);
                   return false;
             }
             string tName = "GunLoad" + gunload;
             ITerritory? t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankAmmoOrders(): cannot find tName=" + tName + " tType=" + tType);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): cannot find tName=" + tName + " tType=" + tType);
                return false;
             }
             PointCollection points = new PointCollection();
@@ -2506,6 +2507,37 @@ namespace Pattons_Best
          //------------------------------------------------
          if ( (BattlePhase.MarkAmmoReload == gi.BattlePhase) && (null != gunLoadMapItem) )
          {
+            StringBuilder sb0 = new StringBuilder("UpdateCanvas_TankAmmoOrders(): ");
+            IMapItem? ammoReLoadMapItem = null;
+            foreach (IMapItem mi in gi.GunLoads) // The context menu is assigned to the GunLoad Button
+            {
+               if (true == mi.Name.Contains("AmmoReload"))
+                  ammoReLoadMapItem = mi;
+            }
+            //------------------------------------------------------------
+            Option optionAutoSetAmmoLoad = gi.Options.Find("AutoSetAmmoLoad");
+            if ((true == optionAutoSetAmmoLoad.IsEnabled) && (false == myIsInitialAmmoReloadButtonCreated))// Automatically place ammo reload in same spot as gun load
+            {
+               if (null == ammoReLoadMapItem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): ammoReLoadMapItem=null");
+                  return false;
+               }
+               ContextMenu menu = myContextMenuGunLoadActions[gunLoadMapItem.TerritoryCurrent.Name];
+               Thickness thickness = new Thickness(0);
+               double size = Utilities.theMapItemSize;
+               SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
+               System.Windows.Controls.Button? newButton = null;
+               Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "UpdateCanvas_TankAmmoOrders(): adding new button=" + ammoReLoadMapItem.Name);
+               newButton = new Button { ContextMenu = menu, Name = ammoReLoadMapItem.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
+               newButton.Click += ClickButtonMapItem;
+               MapItem.SetButtonContent(newButton, ammoReLoadMapItem, true, false); // This sets the image as the button's content
+               myTankButtons.Insert(0,newButton);
+               myCanvasTank.Children.Insert(0,newButton);
+               Canvas.SetLeft(newButton, ammoReLoadMapItem.Location.X);
+               Canvas.SetTop(newButton, ammoReLoadMapItem.Location.Y);
+               Canvas.SetZIndex(newButton, 899);
+            }
             foreach (Button b in myTankButtons)
             {
                if (b.Name == gunLoadMapItem.Name) // find corresponding button - if it exists, set the context menu
@@ -2515,45 +2547,19 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): gunLoadMapItem.Name=" + gunLoadMapItem.Name + " is offboard");
                      return false;
                   }
+                  double offset = gunLoadMapItem.Zoom * Utilities.theMapItemOffset;
+                  if (null != ammoReLoadMapItem)
+                  {
+                     if(ammoReLoadMapItem.TerritoryCurrent.Name == gunLoadMapItem.TerritoryCurrent.Name)
+                        offset -= 3;
+                  }
                   b.ContextMenu = myContextMenuGunLoadActions[gunLoadMapItem.TerritoryCurrent.Name];
+                  gunLoadMapItem.Location.X = gunLoadMapItem.TerritoryCurrent.CenterPoint.X - offset;
+                  gunLoadMapItem.Location.Y = gunLoadMapItem.TerritoryCurrent.CenterPoint.Y - offset;
+                  Canvas.SetLeft(b, gunLoadMapItem.Location.X);
+                  Canvas.SetTop(b, gunLoadMapItem.Location.Y);
+                  Canvas.SetZIndex(b, 900);
                }
-            }
-            //------------------------------------------------------------
-            bool isAmmoReloadButtonCreated = false; // Does AmmoReload button exists?
-            foreach(Button b in myTankButtons)
-            {
-               if (true == b.Name.Contains("AmmoReload"))
-                  isAmmoReloadButtonCreated = true;
-            }
-            //------------------------------------------------------------
-            Option optionAutoSetAmmoLoad = gi.Options.Find("AutoSetAmmoLoad");
-            if ((true == optionAutoSetAmmoLoad.IsEnabled) && (false == isAmmoReloadButtonCreated))// Automatically place ammo reload in same spot as gun load
-            {
-               ContextMenu menu = myContextMenuGunLoadActions[gunLoadMapItem.TerritoryCurrent.Name];
-               Thickness thickness = new Thickness(0);
-               double size = Utilities.theMapItemSize;
-               SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
-               System.Windows.Controls.Button? newButton = null;
-               IMapItem? ammoReLoadMapItem = null;
-               foreach (IMapItem mi in gi.GunLoads) // The context menu is assigned to the GunLoad Button
-               {
-                  if (true == mi.Name.Contains("GunLoadInGun"))
-                     ammoReLoadMapItem = mi;
-               }
-               if( null == ammoReLoadMapItem )
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): ammoReLoadMapItem=null");
-                  return false;
-               }
-               Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + ammoReLoadMapItem.Name);
-               newButton = new Button { ContextMenu = menu, Name = ammoReLoadMapItem.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
-               newButton.Click += ClickButtonMapItem;
-               MapItem.SetButtonContent(newButton, ammoReLoadMapItem, true, false); // This sets the image as the button's content
-               myTankButtons.Add(newButton);
-               myCanvasTank.Children.Add(newButton);
-               Canvas.SetLeft(newButton, ammoReLoadMapItem.Location.X);
-               Canvas.SetTop(newButton, ammoReLoadMapItem.Location.Y);
-               Canvas.SetZIndex(newButton, 900);
             }
          }
          return true;
@@ -4267,6 +4273,8 @@ namespace Pattons_Best
          }
          string tType = lastReport.TankCardNum.ToString();
          //--------------------------------------------
+         myIsInitialAmmoReloadButtonCreated = false;
+         //--------------------------------------------
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
@@ -4287,7 +4295,9 @@ namespace Pattons_Best
          }
          if (null == gunLoad)
          {
-            gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", newT);
+            string miName = "GunLoadInGun" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            gunLoad = new MapItem(miName, 1.0, "c17GunLoad", newT);
             myGameInstance.GunLoads.Add(gunLoad);
          }
          gunLoad.TerritoryCurrent = newT;
@@ -5325,14 +5335,14 @@ namespace Pattons_Best
          MenuItem? menuitem = sender as MenuItem;
          if (null == menuitem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemAmmoReloadClick(): menuitem=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_AmmoReloadClick(): menuitem=null");
             return;
          }
          //--------------------------------------
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_AmmoReloadClick(): lastReport=null");
             return;
          }
          string tType = lastReport.TankCardNum.ToString();
@@ -5340,7 +5350,7 @@ namespace Pattons_Best
          string[] aStringArray = menuitem.Name.Split(new char[] { '_' });
          if (aStringArray.Length < 2)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemAmmoReloadClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray.Length);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_AmmoReloadClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray.Length);
             return;
          }
          string tName = aStringArray[0];
@@ -5348,47 +5358,55 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName + " tType=" + tType);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_AmmoReloadClick(): t=null for " + tName + " tType=" + tType);
             return;
          }
-         ContextMenu menu = myContextMenuGunLoadActions[tName];
          //--------------------------------------
-         IMapItem? gunLoadInGun = null;
+         IMapItem? oldGunLoadMapItem = null;
          foreach (IMapItem mi in myGameInstance.GunLoads)
          {
             if (true == mi.Name.Contains("GunLoadInGun"))
-               gunLoadInGun = mi;
+               oldGunLoadMapItem = mi;
          }
          //--------------------------------------
          List<Button> removalButtons = new List<Button>();
          foreach (IMapItem gunload in myGameInstance.GunLoads) // get rid of existing gunloads for this crew member
          {
-            int i = 1;
-            StringBuilder sb0 = new StringBuilder("MenuItemAmmoReloadClick(): checking mi=");
-            sb0.Append(gunload.Name);
-            sb0.Append(" myTankButtons=[");
             foreach (Button oldButton in myTankButtons)    // Remove existing Button
             {
-               sb0.Append(oldButton.Name);
                if (oldButton.Name == gunload.Name)
                {
-                  sb0.Append("**REMOVE**");
                   removalButtons.Add(oldButton);  // adding button to remove
+                  break;
                }
-               if (myTankButtons.Count != i++ )
-                  sb0.Append(",");
             }
-            sb0.Append("]");
-            Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, sb0.ToString());
          }
-         foreach(Button b in removalButtons)
+         //--------------------------------------
+         StringBuilder sb0 = new StringBuilder("MenuItem_AmmoReloadClick(): myTankButtonsRemoved=[");
+         int count = myTankButtons.Count;
+         foreach (Button b in removalButtons)
          {
+            int i = 1;
+            sb0.Append(b.Name);
+            if (myGameInstance.GunLoads.Count != i++)
+               sb0.Append(",");
             myTankButtons.Remove(b);
             myCanvasTank.Children.Remove(b);
          }
+         sb0.Append("] myTankButtonsRemaining=[");
+         foreach (Button b in myTankButtons)
+         {
+            int i = 1;
+            sb0.Append(b.Name);
+            if (myTankButtons.Count != i++)
+               sb0.Append(",");
+         }
+         sb0.Append("]");
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, sb0.ToString());
+         //--------------------------------------
          myGameInstance.GunLoads.Clear();
          //--------------------------------------
-         int count = 0;
+         ContextMenu menu = myContextMenuGunLoadActions[tName];
          SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
          Thickness thickness = new Thickness(0);
          double size = Utilities.theMapItemSize;
@@ -5401,33 +5419,40 @@ namespace Pattons_Best
             ammoLoad = new MapItem(miName, 1.0, "c30ReadyRackAmmoReload", t);
          else
             ammoLoad = new MapItem(miName, 1.0, "c29AmmoReload", t);
-         myGameInstance.GunLoads.Add(ammoLoad);
-         Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + miName);
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "MenuItem_AmmoReloadClick(): adding new button=" + miName);
          newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
          newButton.Click += ClickButtonMapItem;
          MapItem.SetButtonContent(newButton, ammoLoad, true, false); // This sets the image as the button's content
-         myTankButtons.Add(newButton);
-         myCanvasTank.Children.Add(newButton);
+         myGameInstance.GunLoads.Insert(0, ammoLoad);
+         myTankButtons.Insert(0, newButton);
+         myCanvasTank.Children.Insert(0, newButton);
          Canvas.SetLeft(newButton, ammoLoad.Location.X);
          Canvas.SetTop(newButton, ammoLoad.Location.Y);
-         Canvas.SetZIndex(newButton, 900);
+         Canvas.SetZIndex(newButton, 899);
          //--------------------------------------
-         if( null != gunLoadInGun) // add gun load back
+         if( null != oldGunLoadMapItem) 
          {
-            if (tName == gunLoadInGun.TerritoryCurrent.Name)
-               count++;
-            double gunLoadLocationOffset = count * 3 - (gunLoadInGun.Zoom * Utilities.theMapItemOffset);
-            myGameInstance.GunLoads.Insert(0, gunLoadInGun); // GunLoad must be first entry in MapItems
-            gunLoadInGun.Location.X = gunLoadInGun.TerritoryCurrent.CenterPoint.X + gunLoadLocationOffset;
-            gunLoadInGun.Location.Y = gunLoadInGun.TerritoryCurrent.CenterPoint.Y + gunLoadLocationOffset;
-            Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + gunLoadInGun.Name);
-            newButton = new Button { ContextMenu = myContextMenuGunLoadActions[gunLoadInGun.TerritoryCurrent.Name], Name = gunLoadInGun.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
+            string newGunLoadName = "GunLoadInGun" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem newGunLoadMapItem = new MapItem(newGunLoadName, 1.0, "c17GunLoad", oldGunLoadMapItem.TerritoryCurrent); // replace with new GunLoad mapitem
+            myGameInstance.GunLoads.Add(newGunLoadMapItem);
+            //--------------------------------------
+            int countCounter = 0;
+            if (tName == oldGunLoadMapItem.TerritoryCurrent.Name)
+               countCounter++;
+            double gunLoadLocationOffset = (countCounter * 3) - (newGunLoadMapItem.Zoom * Utilities.theMapItemOffset);
+            newGunLoadMapItem.Location.X = oldGunLoadMapItem.TerritoryCurrent.CenterPoint.X + gunLoadLocationOffset;
+            newGunLoadMapItem.Location.Y = oldGunLoadMapItem.TerritoryCurrent.CenterPoint.Y + gunLoadLocationOffset;
+            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "MenuItem_AmmoReloadClick(): adding new button=" + newGunLoadMapItem.Name);
+            ContextMenu menuGunLoad = myContextMenuGunLoadActions[newGunLoadMapItem.TerritoryCurrent.Name];
+            newButton = new Button { ContextMenu = menuGunLoad, Name = newGunLoadMapItem.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
             newButton.Click += ClickButtonMapItem;
-            MapItem.SetButtonContent(newButton, gunLoadInGun, true, false); // This sets the image as the button's content
+            MapItem.SetButtonContent(newButton, newGunLoadMapItem, true, false); // This sets the image as the button's content
             myTankButtons.Add(newButton);
             myCanvasTank.Children.Add(newButton);
-            Canvas.SetLeft(newButton, gunLoadInGun.Location.X);
-            Canvas.SetTop(newButton, gunLoadInGun.Location.Y);
+            Canvas.SetLeft(newButton, newGunLoadMapItem.Location.X);
+            Canvas.SetTop(newButton, newGunLoadMapItem.Location.Y);
+            Canvas.SetZIndex(newButton, 900);
          }
          //--------------------------------------
          GameAction outaction = GameAction.BattleRoundSequenceAmmoOrders;  // MenuItemAmmoReloadClick()

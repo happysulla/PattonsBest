@@ -759,7 +759,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = this.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetGunLoadTerritory(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_GunLoadTerritory(): lastReport=null");
             return false;
          }
          string tName = "GunLoad" + ammoType;
@@ -770,20 +770,33 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): unable to find territory name=" + tName + " tType=" + tType);
             return false;
          }
-         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "SetGunLoadTerritory(): Setting gun load in t=" + tName + " tType=" + tType);
+         //-------------------------------------
+         int count = 0;
+         foreach (IMapItem mi in this.GunLoads) // if moving to territory with Ammo Reload counter, the GUn Load should be on top
+         {
+            if ((true == mi.Name.Contains("AmmoReload")) && (true == mi.TerritoryCurrent.Name.Contains(ammoType)) )
+               count++;
+         }
+         //-------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Set_GunLoadTerritory(): Moving gun load to t=" + tName + " tType=" + tType + " for GunLoads=" + this.GunLoads.ToString());
          foreach (IMapItem mi in this.GunLoads)
          {
             if (true == mi.Name.Contains("GunLoadInGun"))
             {
-               Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "SetGunLoadTerritory(): mi=" + mi.Name + " t=" + tName + " x=" + mi.Location.X.ToString() + " y=" + mi.Location.Y.ToString());
-               mi.TerritoryCurrent = newT;
-               double offset = mi.Zoom * Utilities.theMapItemOffset;
-               mi.Location.X = newT.CenterPoint.X - offset;
-               mi.Location.Y = newT.CenterPoint.Y - offset;
+               Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Set_GunLoadTerritory(): mi=" + mi.Name + " t=" + tName + " x=" + mi.Location.X.ToString() + " y=" + mi.Location.Y.ToString());
+               string miName = "GunLoadInGun" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               IMapItem gunLoad = new MapItem(miName, 1.0, "c17GunLoad", new Territory()); // replace with new GunLoad mapitem
+               this.GunLoads.Add(gunLoad);
+               gunLoad.TerritoryCurrent = newT;
+               double offset = gunLoad.Zoom * Utilities.theMapItemOffset;
+               gunLoad.Location.X = newT.CenterPoint.X + count * 3 - offset;
+               gunLoad.Location.Y = newT.CenterPoint.Y + count * 3 - offset;
+               this.GunLoads.Remove(mi);
                return true;
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): reached default");
+         Logger.Log(LogEnum.LE_ERROR, "Set_GunLoadTerritory(): reached default");
          return false;
       }
       public string GetAmmoReloadType()
@@ -804,6 +817,7 @@ namespace Pattons_Best
                   return "Hbci";
             }
          }
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Get_AmmoReloadType(): No Ammo Reload Type Found in this.GunLoads=" + this.GunLoads.ToString());
          return "None";
       }
       public bool ReloadGun()
@@ -831,7 +845,7 @@ namespace Pattons_Best
             this.GunLoads.Remove(mi);
          //----------------------------------
          string gunLoadType = this.GetGunLoadType();  // This is the ammo that fired
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Reload_Gun(): Gun Loaded with " + gunLoadType);
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Reload_Gun(): Gun Loaded with " + gunLoadType);
          int ammoCount = 0;
          switch (gunLoadType) // decrease on AAR the type of ammunition used
          {
@@ -849,7 +863,7 @@ namespace Pattons_Best
          int maxReadyRackLoadCount = ammoCount - 1; // this ammo is loaded in the gun - the ready rack must be one less than ammo count
          if (maxReadyRackLoadCount <= readyRackLoadCount) // pull ammo from ready rack if ammo count less to ready rack
          {
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Reload_Gun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoadCount.ToString());
+            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Reload_Gun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoadCount.ToString());
             if (false == this.SetReadyRackReload(gunLoadType, maxReadyRackLoadCount))
             {
                Logger.Log(LogEnum.LE_ERROR, "Reload_Gun(): 2-SetReadyRackReload() returned false");
@@ -877,7 +891,7 @@ namespace Pattons_Best
          }
          //-----------------------------------------------
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Gun Load That Was Fired is " + gunLoad);
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Fire_AndReloadGun(): Gun Load That Was Fired is " + gunLoad);
          switch (gunLoad) // decrease on AAR the type of ammunition used
          {
             case "He": --lastReport.MainGunHE; break;
@@ -891,7 +905,7 @@ namespace Pattons_Best
          }
          //-----------------------------------------------
          string ammoReloadType = this.GetAmmoReloadType(); // This is the ammo loaded into gun after firing
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Loading Gun with this Ammo  ----->" + ammoReloadType + "<-------------");
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Fire_AndReloadGun(): Loading Gun with this Ammo  ----->" + ammoReloadType + "<------------- GunLoads=" + this.GunLoads.ToString());
          int ammoCount = 0;
          switch (ammoReloadType) // get count of what is still available
          {
@@ -904,10 +918,10 @@ namespace Pattons_Best
             default: Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 2-Reached default ammoReloadType=" + ammoReloadType ); return false;
          }
          //-----------------------------------------------
-         if (0 == ammoCount) // if count is zero, the Gun Ammo just fired is same as Reload Counter - shoudl be no ammo markers of any kind
+         if (0 == ammoCount) // if count is zero, the Gun Ammo just fired is same as Reload Counter - should be no ammo markers of any kind
          {
             this.GunLoads.Clear(); // Ready Rack should already be at zero
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Clearing all Gun Load Markers ammoCount=" + ammoCount.ToString());
+            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Fire_AndReloadGun(): Clearing all Gun Load Markers ammoCount=" + ammoCount.ToString());
          }
          else if (0 < ammoCount) // if count is one, there are no reloads left
          {
@@ -920,7 +934,7 @@ namespace Pattons_Best
             int maxReadyRackLoad = ammoCount - 1;
             if (maxReadyRackLoad <= readyRackLoadCount) // pull ammo from ready rack if ammo count equal to ready rack
             {
-               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoad.ToString() );
+               Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Fire_AndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoad.ToString() );
                if (false == this.SetReadyRackReload(ammoReloadType, maxReadyRackLoad))
                {
                   Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 2-SetReadyRackReload() returned false");
@@ -931,7 +945,7 @@ namespace Pattons_Best
             {
                if (true == this.IsReadyRackReload()) // decrease the ready rack by the type of ammunition used
                {
-                  Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Loading from Ready Rack  readyRackLoadCount=" + readyRackLoadCount.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Fire_AndReloadGun(): Loading from Ready Rack  readyRackLoadCount=" + readyRackLoadCount.ToString());
                   if (readyRackLoadCount < 1)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): GetReadyRackReload() returned 1 > load=" + readyRackLoadCount.ToString() + " for gunLoad=" + gunLoad);
@@ -949,7 +963,7 @@ namespace Pattons_Best
          //---------------------------------------
          if (1 == ammoCount) // there is one ammo in the gun tube - there is no reload markers
          {
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): ammoCount=1 Removing AmmoReload Marker");
+            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Fire_AndReloadGun(): ammoCount=1 Removing AmmoReload Marker");
             foreach (IMapItem mi in this.GunLoads) // Remove the ammo reload marker
             {
                if (true == mi.Name.Contains("AmmoReload"))
@@ -968,12 +982,13 @@ namespace Pattons_Best
          {
             if (0 == this.GetReadyRackReload(ammoReloadType))
             {
-               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): readyrack=0 for ammoReloadType=" + ammoReloadType + " causing swithing over to different AmmoReload Marker");
+               Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Fire_AndReloadGun(): readyrack=0 for ammoReloadType=" + ammoReloadType + " causing swithing over to different AmmoReload Marker");
                foreach (IMapItem mi in this.GunLoads)
                {
                   if (true == mi.Name.Contains("ReadyRackAmmoReload"))
                   {
-                     IMapItem ammoLoad = new MapItem("AmmoReload", 1.0, "c29AmmoReload", mi.TerritoryCurrent);
+                     string miName = ammoReloadType + "_AmmoReload" + Utilities.MapItemNum.ToString();
+                     IMapItem ammoLoad = new MapItem(miName, 1.0, "c29AmmoReload", mi.TerritoryCurrent);
                      ammoLoad.Location.X = mi.Location.X;
                      ammoLoad.Location.Y = mi.Location.Y;
                      this.GunLoads.Add(ammoLoad);

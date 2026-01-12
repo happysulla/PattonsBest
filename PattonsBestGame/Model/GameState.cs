@@ -1,31 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.Design;
-using System.Data;
-using System.Diagnostics.Eventing.Reader;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Security.Policy;
 using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Xps.Packaging;
-using System.Xml.Linq;
-using Windows.ApplicationModel.Appointments.DataProvider;
-using static Pattons_Best.EventViewerAmmoSetup;
-using static System.Windows.Forms.AxHost;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 
 namespace Pattons_Best
 {
@@ -1854,7 +1835,7 @@ namespace Pattons_Best
             return false;
          }
          readyRackLoadCount--;
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Minus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString());
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "UpdateReadyRack_Minus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString());
          if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Minus(): SetReadyRackReload() returned false");
@@ -1885,7 +1866,7 @@ namespace Pattons_Best
          else
          {
             readyRackLoadCount++;
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Plus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoAvailable.ToString());
+            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "UpdateReadyRack_Plus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoAvailable.ToString());
             if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): SetReadyRack_Reload() returned false");
@@ -2586,7 +2567,9 @@ namespace Pattons_Best
          }
          //------------------------------------
          gi.GunLoads.Clear();
-         IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
+         string miName = "GunLoadInGun" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         IMapItem gunLoad = new MapItem(miName, 1.0, "c17GunLoad", new Territory());
          gi.GunLoads.Add(gunLoad);
          if (false == gi.SetGunLoadTerritory("He"))
          {
@@ -4604,7 +4587,9 @@ namespace Pattons_Best
                   if (0 < totalAmmo)
                   {
                      SetCommand(gi, action, GameAction.DieRollActionNone, "e013");
-                     IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
+                     string miName = "GunLoadInGun" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     IMapItem gunLoad = new MapItem(miName, 1.0, "c17GunLoad", new Territory());
                      gi.GunLoads.Add(gunLoad);
                      bool isSetGunLoadTerritoryGood = true;
                      if (0 < lastReport.MainGunHE)
@@ -4624,7 +4609,7 @@ namespace Pattons_Best
                         returnStatus = "gi.SetGunLoadTerritory() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): " + returnStatus);
                      }
-                     Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): gunLoad=" + gunLoad.Name + " t=" + gunLoad.TerritoryCurrent.Name);
+                     Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): gunLoad=" + gunLoad.Name + " t=" + gunLoad.TerritoryCurrent.Name + " for GunLoads=" + gi.GunLoads.ToString());
                   }
                   else
                   {
@@ -5983,7 +5968,9 @@ namespace Pattons_Best
          int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
          if (0 < totalAmmo)
          {
-            IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
+            string miName = "GunLoadInGun" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem gunLoad = new MapItem(miName, 1.0, "c17GunLoad", new Territory());
             gi.GunLoads.Add(gunLoad);
             bool isSetGunLoadTerritoryGood = true;
             if (0 < lastReport.MainGunHE)
@@ -6003,7 +5990,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Perform_AutoBattlePreparationsSetup(): gi.SetGunLoadTerritory() returned false");
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "Perform_AutoBattlePreparationsSetup(): gunLoad=" + gunLoad.Name + " t=" + gunLoad.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD, "Perform_AutoBattlePreparationsSetup(): gunLoad=" + gunLoad.Name + " t=" + gunLoad.TerritoryCurrent.Name + " for GunLoads=" + gi.GunLoads.ToString());
          }
          //---------------------------
          gi.BattlePrep.myTurretRotation = gi.Sherman.RotationTurret;
@@ -6791,8 +6778,6 @@ namespace Pattons_Best
                                  ammoLoad = new MapItem(miName, 1.0, "c29AmmoReload", gunLoadMapItem.TerritoryCurrent);
                               }
                               Utilities.MapItemNum++;
-                              ammoLoad.Location.X = gunLoadMapItem.TerritoryCurrent.CenterPoint.X + 3 - (gunLoadMapItem.Zoom * Utilities.theMapItemOffset);
-                              ammoLoad.Location.Y = gunLoadMapItem.TerritoryCurrent.CenterPoint.Y + 3 - (gunLoadMapItem.Zoom * Utilities.theMapItemOffset);
                               gi.GunLoads.Insert(0, ammoLoad);
                            }
                         }

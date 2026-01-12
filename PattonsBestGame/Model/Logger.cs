@@ -39,7 +39,6 @@ namespace Pattons_Best
       LE_SHOW_RETREAT_TO_PREVIOUS_AREA,
       LE_SHOW_ENEMY_ON_MOVE_BOARD,
       LE_SHOW_RESISTANCE,
-      LE_SHOW_GUN_LOAD_PREP,
       LE_SHOW_RANDOM_PT,
       LE_SHOW_ROTATION,
       LE_SHOW_MAPITEM_TANK,
@@ -51,7 +50,6 @@ namespace Pattons_Best
       LE_SHOW_SPOT_MOD,
       LE_SHOW_SPOT_RESULT,
       LE_SHOW_ORDERS_MENU,
-      LE_SHOW_AMMMO_MENU,
       LE_SHOW_SHERMAN_MOVE,
       LE_SHOW_APPEARING_UNITS,
       LE_SHOW_FRIENDLY_ACTION_MOD,
@@ -75,7 +73,7 @@ namespace Pattons_Best
       LE_SHOW_TANK_BUTTONS,
       LE_SHOW_NUM_SHERMAN_SHOTS,
       LE_SHOW_NUM_ENEMY_SHOTS,
-      LE_SHOW_GUN_RELOAD,
+      LE_SHOW_GUN_LOAD,
       LE_SHOW_FIRE_DIRECTION,
       LE_SHOW_IMMOBILIZATION,
       LE_SHOW_KILLED_ENEMY,
@@ -182,7 +180,6 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_RESISTANCE);
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          //SetOn(LogEnum.LE_SHOW_ROTATION);
-         //SetOn(LogEnum.LE_SHOW_GUN_LOAD_PREP);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);
          //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
@@ -197,9 +194,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
          SetOn(LogEnum.LE_SHOW_CREW_RETURN);
-         //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
-         //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
-         SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
+         SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
+         //SetOn(LogEnum.LE_SHOW_GUN_LOAD);
          SetOn(LogEnum.LE_SHOW_PROMOTION);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
@@ -210,7 +206,7 @@ namespace Pattons_Best
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
          SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
-         SetOn(LogEnum.LE_SHOW_MAIN_GUN_BREAK);
+         //SetOn(LogEnum.LE_SHOW_MAIN_GUN_BREAK);
          SetOn(LogEnum.LE_SHOW_MG_BREAK);
          //SetOn(LogEnum.LE_SHOW_MG_FIRE);
          //SetOn(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE);

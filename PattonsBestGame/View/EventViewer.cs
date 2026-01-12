@@ -5593,6 +5593,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("      ######ShowDieResult() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(action.ToString());
          sb11.Append(" dr="); sb11.Append(dieRoll.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
@@ -5647,6 +5648,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######Show_CrewRatingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -5685,6 +5687,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######Show_AmmoLoadResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -5788,6 +5791,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######Show_BattleSetupResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -5896,8 +5900,8 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######Show_SupportingFireResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
-         sb11.Append(" a="); sb11.Append(outAction.ToString());
          sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
@@ -5943,6 +5947,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######ShowAmbushResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -6003,6 +6008,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######Show_CollateralDamageResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -6033,6 +6039,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######ShowSpottingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -6055,6 +6062,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######ShowTankDestroyedResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -6078,6 +6086,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######ShowRatingImproveResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -6099,6 +6108,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######ShowFacingChangeResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -6118,13 +6128,13 @@ namespace Pattons_Best
          }
          GameAction outAction = GameAction.Error;
          //------------------------------------------
-         if (0 < myGameInstance.NumCollateralDamage)
-         {
-            outAction = GameAction.BattleCollateralDamageCheck;
-         }
-         else if (null != myGameInstance.Death)
+         if (null != myGameInstance.Death)
          {
             outAction = GameAction.BattleShermanKilled;  // Show_EnemyActionResults()
+         }
+         else if (0 < myGameInstance.NumCollateralDamage)
+         {
+            outAction = GameAction.BattleCollateralDamageCheck;
          }
          else
          {
@@ -6152,6 +6162,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######Show_EnemyActionResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -6187,6 +6198,7 @@ namespace Pattons_Best
          StringBuilder sb11 = new StringBuilder("     ######Show_FriendlyActionResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" bp="); sb11.Append(myGameInstance.BattlePhase.ToString());
          sb11.Append(" a="); sb11.Append(outAction.ToString());
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
