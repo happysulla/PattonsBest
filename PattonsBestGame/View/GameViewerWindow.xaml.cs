@@ -2515,9 +2515,23 @@ namespace Pattons_Best
                   ammoReLoadMapItem = mi;
             }
             //------------------------------------------------------------
-            Option optionAutoSetAmmoLoad = gi.Options.Find("AutoSetAmmoLoad");
-            if ((true == optionAutoSetAmmoLoad.IsEnabled) && (false == myIsInitialAmmoReloadButtonCreated))// Automatically place ammo reload in same spot as gun load
+            string gunLoadType = gi.GetGunLoadType(); // This is the ammo loaded into gun after firing
+            int ammoCount = 0;
+            switch (gunLoadType) // get count of what is still available
             {
+               case "He": ammoCount = report.MainGunHE; break;
+               case "Ap": ammoCount = report.MainGunAP; break;
+               case "Hvap": ammoCount = report.MainGunHVAP; break;
+               case "Hbci": ammoCount = report.MainGunHBCI; break;
+               case "Wp": ammoCount = report.MainGunWP; break;
+               case "None": ammoCount = 0; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): 2-Reached default ammoReloadType=" + gunLoadType); return false;
+            }
+            //------------------------------------------------------------
+            Option optionAutoSetAmmoLoad = gi.Options.Find("AutoSetAmmoLoad");
+            if ((true == optionAutoSetAmmoLoad.IsEnabled) && (false == myIsInitialAmmoReloadButtonCreated) && (1 < ammoCount)) // Automatically place ammo reload in same spot as gun load if ammo exists 
+            {
+               myIsInitialAmmoReloadButtonCreated = true;
                if (null == ammoReLoadMapItem)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankAmmoOrders(): ammoReLoadMapItem=null");
