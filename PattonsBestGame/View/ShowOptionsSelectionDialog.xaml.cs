@@ -47,6 +47,7 @@ namespace Pattons_Best
          myCheckBoxAutoRollAmmoLoad.ToolTip = "Automatically roll die rolls for Ammo Loads. Setup ammo with default levels.";
          myCheckBoxAutoPreparation.ToolTip = "Use the same setup from previous battle preparations. Only enabled if previous setup performed, and all similar conditions (such as uninjuried crewmen) exists.";
          myCheckBoxAutoRollEnemySetup.ToolTip = "Automatically roll die rolls for sector, terrain, and facing when activating an enemy.";
+         myCheckBoxAutoAmmoLoad.ToolTip = "Automatically assign Ammo Reload to the same box as the Gun Load assignment. User still allowed to change.";
          //-----------------------------
          myCheckBoxAirInterdiction.ToolTip = "Air strikes were rarely used to lay smoke. If that result is rolled, replaced with no enemy movement due to interdiction.";
          myCheckBoxTerrainPointValue.ToolTip = "Increase incentive for attacking strategic areas: Area A = 1 point, Area B = 1 point, Area C = 3 points, Area D = 2 points.";
@@ -384,6 +385,10 @@ namespace Pattons_Best
                break;
             case "myCheckBoxAutoRollBowMg":
                option = myOptions.Find("AutoRollBowMgFire");
+               option.IsEnabled = !option.IsEnabled;
+               break;
+            case "myCheckBoxAutoAmmoLoad":
+               option = myOptions.Find("AutoSetAmmoLoad");
                option.IsEnabled = !option.IsEnabled;
                break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): reached default name=" + cb.Name); return;

@@ -53,6 +53,7 @@
                <CheckBox x:Name="myCheckBoxAutoPreparation"  Content="Use Previous Battle Preparations" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
                <CheckBox x:Name="myCheckBoxAutoRollEnemySetup"  Content="Auto Roll Enemy Setup" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
                <CheckBox x:Name="myCheckBoxAutoRollBowMg"  Content="Auto Roll Bow MG" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
+               <CheckBox x:Name="myCheckBoxAutoAmmoLoad"  Content="Auto Roll Bow MG" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
             </StackPanel>
          </GroupBox>
          <GroupBox x:Name="myGroupBoxGeneralV25No3" Grid.Row="2" Grid.Column="2" Header="Generalv25No3 Choices" FontSize="14"  Margin="10,0,10,0">

@@ -665,6 +665,7 @@ e050	"<Bold>e050 Ammo Reload Order</Bold>
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='AutoSetAmmoLoad' IsEnabled='True' Content='Automatically assign reload to gunload box' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Right click marker or one of blue boxes to show the ammo reload context menu.  Alternatively, or if no blue box is shown, right click on the Gun Load marker to show the context menu.
 <LineBreak/><LineBreak/>

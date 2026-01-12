@@ -14,6 +14,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -1599,7 +1600,7 @@ namespace Pattons_Best
          {
             if (3 != t.Name.Length)
             {
-               Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheckOnBattleBoard(): 3 != t.Name.Length for t=" + t.Name);
+               Logger.Log(LogEnum.LE_ERROR, "Friendly_AdvanceCheckOnBattleBoard(): 3 != t.Name.Length for t=" + t.Name);
                return false;
             }
             string sector = t.Name[1].ToString();
@@ -1682,7 +1683,7 @@ namespace Pattons_Best
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheckOnBattleBoard(): reached default sector=" + sector.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Friendly_AdvanceCheckOnBattleBoard(): reached default sector=" + sector.ToString());
                   return false;
             }
             if (true == isEmptySectorAdjacentToUsControl)
@@ -1693,6 +1694,7 @@ namespace Pattons_Best
             }
          }
          SetCommand(gi, outAction, GameAction.DieRollActionNone, "e046a");
+         Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_ADVANCE, "Friendly_AdvanceCheckOnBattleBoard(): battlestacks=\n=" + gi.BattleStacks.ToString());
          return true;
       }
       protected bool EnemyAdvanceCheckOnBattleBoard(IGameInstance gi, ref GameAction outAction)
@@ -1899,6 +1901,7 @@ namespace Pattons_Best
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -2256,6 +2259,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -3509,6 +3514,7 @@ namespace Pattons_Best
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -3558,7 +3564,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAmmoLoadSkip:
                   if (false == SkipAmmoLoadSetupScreens(gi, ref action))
                   {
-                     returnStatus = "SkipAmmoLoadSetupScreens() returned false";
+                     returnStatus = "Skip_AmmoLoadSetupScreens() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -3966,6 +3972,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -4213,7 +4221,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Skip_AmmoLoadSetupScreens(): lastReport=null");
             return false;
          }
          string tType = lastReport.TankCardNum.ToString();
@@ -4258,7 +4266,7 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "Skip_AmmoLoadSetupScreens(): t=null for " + tName);
             return false;
          }
          string name = "ReadyRackAp" + Utilities.MapItemNum.ToString(); // there is always AP
@@ -4278,7 +4286,7 @@ namespace Pattons_Best
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "Skip_AmmoLoadSetupScreens(): t=null for " + tName);
                return false;
             }
             name = "ReadyRackHvap" + Utilities.MapItemNum.ToString(); 
@@ -4298,7 +4306,7 @@ namespace Pattons_Best
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "Skip_AmmoLoadSetupScreens(): t=null for " + tName);
                return false;
             }
             name = "ReadyRackWp" + Utilities.MapItemNum.ToString(); 
@@ -4313,7 +4321,7 @@ namespace Pattons_Best
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "Skip_AmmoLoadSetupScreens(): t=null for " + tName);
                return false;
             }
             name = "ReadyRackHbci" + Utilities.MapItemNum.ToString(); // there is always AP
@@ -4329,7 +4337,7 @@ namespace Pattons_Best
          t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "Skip_AmmoLoadSetupScreens(): t=null for " + tName);
             return false;
          }
          name = "ReadyRackHe" + Utilities.MapItemNum.ToString();
@@ -4349,6 +4357,7 @@ namespace Pattons_Best
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -4807,6 +4816,7 @@ namespace Pattons_Best
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -5501,6 +5511,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -6162,6 +6174,7 @@ namespace Pattons_Best
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -6444,7 +6457,7 @@ namespace Pattons_Best
                         case "Friendly Advance":
                            if (false == FriendlyAdvanceCheckOnBattleBoard(gi, ref action))
                            {
-                              returnStatus = "FriendlyAdvanceCheckOnBattleBoard() returned false";
+                              returnStatus = "Friendly_AdvanceCheckOnBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                            }
                            break;
@@ -6529,6 +6542,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -6588,6 +6603,7 @@ namespace Pattons_Best
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -6725,10 +6741,10 @@ namespace Pattons_Best
                   return returnStatus;
                case GameAction.BattleRoundSequenceAmmoOrders:
                   gi.IsHatchesActive = false;
-                  if (false == SetDefaultCrewActions(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmmoOrders)
+                  if (false == SetDefaultCrewActions(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmmoOrders)
                   {
                      returnStatus = "Set_DefaultCrewActions() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmmoOrders): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmmoOrders): " + returnStatus);
                   }
                   else
                   {
@@ -6745,6 +6761,41 @@ namespace Pattons_Best
                      }
                      else
                      {
+                        Option optionAutoSetAmmoLoad = gi.Options.Find("AutoSetAmmoLoad");
+                        if ((true == optionAutoSetAmmoLoad.IsEnabled) && ("None" == gi.GetAmmoReloadType()) )// Automatically place ammo reload in same spot as gun load
+                        {
+                           IMapItem? gunLoadMapItem = null;
+                           foreach (IMapItem mi in gi.GunLoads) // The context menu is assigned to the GunLoad Button
+                           {
+                              if (true == mi.Name.Contains("GunLoadInGun"))
+                                 gunLoadMapItem = mi;
+                           }
+                           if( null == gunLoadMapItem )
+                           {
+                              returnStatus = "gunLoadMapItem=null";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmmoOrders): " + returnStatus);
+                           }
+                           else
+                           {
+                              string ammoType = gi.GetGunLoadType(); // Check if Reload Rack as the ammo required 
+                              IMapItem ammoLoad;
+                              string miName;
+                              if (0 < gi.GetReadyRackReload(ammoType))
+                              {
+                                 miName = ammoType + "_ReadyRackAmmoReload" + Utilities.MapItemNum.ToString();
+                                 ammoLoad = new MapItem(miName, 1.0, "c30ReadyRackAmmoReload", gunLoadMapItem.TerritoryCurrent);
+                              }
+                              else
+                              {
+                                 miName = ammoType + "_AmmoReload" + Utilities.MapItemNum.ToString();
+                                 ammoLoad = new MapItem(miName, 1.0, "c29AmmoReload", gunLoadMapItem.TerritoryCurrent);
+                              }
+                              Utilities.MapItemNum++;
+                              ammoLoad.Location.X = gunLoadMapItem.TerritoryCurrent.CenterPoint.X + 3 - (gunLoadMapItem.Zoom * Utilities.theMapItemOffset);
+                              ammoLoad.Location.Y = gunLoadMapItem.TerritoryCurrent.CenterPoint.Y + 3 - (gunLoadMapItem.Zoom * Utilities.theMapItemOffset);
+                              gi.GunLoads.Insert(0, ammoLoad);
+                           }
+                        }
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e050");
                      }
                   }
@@ -8171,7 +8222,7 @@ namespace Pattons_Best
                         case "Friendly Advance":
                            if (false == FriendlyAdvanceCheckOnBattleBoard(gi, ref action))
                            {
-                              returnStatus = "FriendlyAdvanceCheckOnBattleBoard() returned false";
+                              returnStatus = "Friendly_AdvanceCheckOnBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): " + returnStatus);
                            }
                            break;
@@ -8335,6 +8386,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -10766,6 +10819,7 @@ namespace Pattons_Best
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -10921,6 +10975,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -11446,6 +11502,7 @@ namespace Pattons_Best
       {
          string returnStatus = "OK";
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -11519,6 +11576,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -11534,6 +11593,7 @@ namespace Pattons_Best
       {
          string returnStatus = "OK";
          GamePhase previousPhase = gi.GamePhase;
+         BattlePhase previousBattlePhase = gi.BattlePhase;
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
@@ -11611,6 +11671,8 @@ namespace Pattons_Best
          sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());

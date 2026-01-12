@@ -55,6 +55,7 @@ namespace Pattons_Best
       LE_SHOW_SHERMAN_MOVE,
       LE_SHOW_APPEARING_UNITS,
       LE_SHOW_FRIENDLY_ACTION_MOD,
+      LE_SHOW_FRIENDLY_ACTION_ADVANCE,
       LE_SHOW_TO_HIT_MODIFIER,
       LE_SHOW_TO_HIT_ATTACK,
       LE_SHOW_MAIN_GUN_BREAK,
@@ -184,7 +185,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD_PREP);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);
-         SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
+         //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_START_BATTLE);
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          //SetOn(LogEnum.LE_SHOW_RESET_ROUND);
@@ -205,6 +206,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
          //SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD);
+         SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_ADVANCE);
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
          SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
@@ -284,15 +286,15 @@ namespace Pattons_Best
             }
             catch (FileNotFoundException fileException)
             {
-               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + fileException.ToString());
+              System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + fileException.ToString());
             }
             catch (IOException ioException)
             {
-               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + ioException.ToString());
+               System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + ioException.ToString());
             }
             catch (Exception ex)
             {
-               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + ex.ToString());
+               System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + ex.ToString());
             }
             theMutex.ReleaseMutex();
          }

@@ -58,6 +58,7 @@ namespace Pattons_Best
          "AutoPreparation",
          "AutoRollEnemyActivation",
          "AutoRollBowMgFire",
+         "AutoSetAmmoLoad",
          //---------------------
          "AirInterdiction",
          "TerrainPointValue",
