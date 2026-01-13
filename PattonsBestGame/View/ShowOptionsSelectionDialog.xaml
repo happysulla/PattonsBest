@@ -25,7 +25,8 @@
             <StackPanel Name="myStackPanelGameType" Orientation="Horizontal" VerticalAlignment="Center" Margin="5,5,5,5" >
                <RadioButton x:Name="myRadioButtonOriginal" GroupName="GameType" Content="Original" Margin="5,0,5,0"  Padding="4,-4,0,0" Click="StackPanelGameType_Click"/>
                <RadioButton x:Name="myRadioButtonGeneralv25No3" GroupName="GameType" Content="General v25 No3" Margin="5,0,5,0"  Padding="4,-4,0,0" Click="StackPanelGameType_Click"/>
-               <RadioButton x:Name="myRadioButtonOther" GroupName="GameType" Content="General v25 No3 + Other" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameType_Click"/>
+               <RadioButton x:Name="myRadioButtonTactics" GroupName="GameType" Content="Tactics" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameType_Click"/>
+               <RadioButton x:Name="myRadioButtonGv25No3AndTactics" GroupName="GameType" Content="General v25 No3 + Tactics" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameType_Click"/>
                <RadioButton x:Name="myRadioButtonCustom" GroupName="GameType" Content="Custom" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameType_Click"/>
             </StackPanel>
          </GroupBox>
@@ -41,8 +42,8 @@
                <CheckBox x:Name="myCheckBoxSkipOpening"  Content="Skip Opening" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
                <CheckBox x:Name="myCheckBoxSkipHistorical"  Content="Skip Historical" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
                <CheckBox x:Name="myCheckBoxSkipMoveBoard"  Content="Skip Movement Board" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
-               <CheckBox x:Name="myCheckBoxPrinceBattleBoard"  Content="Skip Battle Board" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
-               <CheckBox x:Name="myCheckBoxPrinceTankCard"  Content="Skip Tank Card" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
+               <CheckBox x:Name="myCheckBoxBattleBoard"  Content="Skip Battle Board" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
+               <CheckBox x:Name="myCheckBoxTankCard"  Content="Skip Tank Card" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
                <CheckBox x:Name="myCheckBoxStartAfterActionReport"  Content="Skip After Action" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelTutorial_Click"/>
             </StackPanel>
          </GroupBox>
@@ -71,10 +72,11 @@
                <CheckBox x:Name="myCheckBoxContinueMove"  Content="Increase Chances of Moving in Same Direction" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxRearFacingAfterMoveAway"  Content="Increase Chances of Rear Facing after Move-B" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxIncreasedMove"  Content="Increase Sherman Consecutive Move Chances" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-                    <CheckBox x:Name="myCheckBoxEnhancedMgFire"  Content="Increase Sherman MG Leathality" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-                    <CheckBox x:Name="myCheckBoxIncreaseAdvance"  Content="Increase Friendly Advance Chances" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-                    <CheckBox x:Name="myCheckBoxMgSurpressingFire"  Content="Decrease Enemy Fire from Sherman MGs" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-                </StackPanel>
+               <CheckBox x:Name="myCheckBoxEnhancedMgFire"  Content="Increase Sherman MG Leathality" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxMgSurpressingFire"  Content="Decrease Enemy Fire from Sherman MGs" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxMovingFwdIncreaseAdvanceChances"  Content="Sherman advancing increase Friendly Advance" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxTerrainPointValueCenter"  Content="Add random (0 to 2) points for capturing center grid" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+            </StackPanel>
          </GroupBox>
          <StackPanel Name="myStackPanelButtons" Grid.Row="3" Grid.ColumnSpan="4"  Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="5,5,5,15" >
             <Button x:Name="myButtonCancel" HorizontalAlignment="Center" Width="70" Height="30" VerticalAlignment="Top" Margin="0,10,70,0" FontSize="14" Click="ButtonCancel_Click" IsCancel="True">Cancel</Button>

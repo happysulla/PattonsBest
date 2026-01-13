@@ -890,15 +890,15 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): unknown enemyUnit=" + mi.Name);
-            return -100;
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyActionModifier(): unknown enemyUnit=" + mi.Name);
+            return FN_ERROR;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): lastReport=null");
-            return -100;
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyActionModifier(): lastReport=null");
+            return FN_ERROR;
          }
          //----------------------------------------------------
          int modifier = 0;
@@ -937,8 +937,8 @@ namespace Pattons_Best
                   modifier += 10;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): reached default with enemyUnit=" + enemyUnit);
-               return -1;
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyActionModifier(): reached default with enemyUnit=" + enemyUnit);
+               return FN_ERROR;
          }
          return modifier;
       }
@@ -958,25 +958,24 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): lastReport=null");
             return "ERROR";
          }
-         bool isDoNothingInsteadOfFiring = false;  // If fog or falling snow, do not fire if not at close range
+         bool isDoNothingDueToWeather = false;  // If fog or falling snow, do not fire if not at close range
          string name = mi.TerritoryCurrent.Name;
          if ('C' != name[name.Length - 1])
          {
-            string weather = lastReport.Weather;
-            if (true == weather.Contains("Fog") || true == weather.Contains("Falling"))
-               isDoNothingInsteadOfFiring = true;
+            if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
+               isDoNothingDueToWeather = true;
          }
          //----------------------------------------------------
-         bool isDoNothingInsteadOfFiringAtYourTank = false;
+         bool isDoNothingInsteadDueToHidden = false;
          if (EnumSpottingResult.HIDDEN == mi.Spotting)
-            isDoNothingInsteadOfFiringAtYourTank = true;
+            isDoNothingInsteadDueToHidden = true;
          //----------------------------------------------------
-         bool isDoNothingInsteadOfMoving = mi.IsInterdicted; ;
+         bool isDoNothingDueToInterdicted = mi.IsInterdicted;
          //----------------------------------------------------
          int modifier = GetEnemyActionModifier(gi, mi);
-         if (modifier < 0)
+         if (TableMgr.FN_ERROR == modifier)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): GetEnemyActionModifier() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): Get_EnemyActionModifier() returned error");
             return "ERROR";
          }
          dieRoll += modifier;
@@ -991,40 +990,40 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 21)
                   {
-                     if( true == isDoNothingInsteadOfMoving )
-                        return "Do Nothing";
+                     if( true == isDoNothingDueToInterdicted )
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 31)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 41)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 61)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
                   if (dieRoll < 96)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
                      return "Fire-Infantry";
                   }
-                  if (true == isDoNothingInsteadOfFiring)
-                     return "Do Nothing";
+                  if (true == isDoNothingDueToWeather)
+                     return "Do Nothing (W)";
                   return "Collateral";
                case "ATG":
                case "Pak43":
@@ -1032,8 +1031,8 @@ namespace Pattons_Best
                case "Pak40":
                   if (dieRoll < 21)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
@@ -1041,56 +1040,56 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 66)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if (true == isDoNothingInsteadOfFiringAtYourTank)
-                           return "Do Nothing";
-                        return "Fire-Your Tank";
+                        if (true == isDoNothingInsteadDueToHidden)
+                           return "Do Nothing (H)";
+                        return "Fire-Your Tank (4)";
                      }
                      else
                         return "Fire-Any Tank";
                   }
                   if (dieRoll < 71)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
                      return "Fire-Any Tank";
                   }
-                  if (true == isDoNothingInsteadOfFiring)
-                     return "Do Nothing";
-                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank))
-                     return "Do Nothing";
+                  if (true == isDoNothingDueToWeather)
+                     return "Do Nothing (W)";
+                  if ((true == isDoNothingInsteadDueToHidden) && (true == gi.IsLeadTank))
+                     return "Do Nothing (H)";
                   return "Fire-Lead Tank";
                case "TRUCK":
                   if (dieRoll < 31)
                      return "Do Nothing";
                   if (dieRoll < 41)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 51)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 61)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 91)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
@@ -1101,39 +1100,47 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 41)
                   {
-                     if ( (true == isThrownTrack) || (true == isDoNothingInsteadOfMoving) )
-                        return "Do Nothing";
+                     if (true == isThrownTrack) 
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 51)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 61)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 91)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
                   if (dieRoll < 96)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
                      return "Fire-Infantry";
                   }
-                  if (true == isDoNothingInsteadOfFiring)
+                  if (true == isDoNothingDueToWeather)
                      return "Do Nothing";
                   return "Collateral";
                case "TANK":
@@ -1151,29 +1158,37 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 21)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 31)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 41)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 61)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
@@ -1183,38 +1198,40 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsShermanFiringAtFront)
                      {
-                        if (true == isDoNothingInsteadOfFiring)
-                           return "Do Nothing";
-                        if (true == isDoNothingInsteadOfFiringAtYourTank)
-                           return "Do Nothing";
-                        return "Fire-Your Tank";
+                        if (true == isDoNothingDueToWeather)
+                           return "Do Nothing (W)";
+                        if (true == isDoNothingInsteadDueToHidden)
+                           return "Do Nothing (H)";
+                        return "Fire-Your Tank (5)";
                      }
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                           return "Do Nothing";
+                        if (true == isThrownTrack)
+                           return "Do Nothing (TT)";
+                        else if (true == isDoNothingDueToInterdicted)
+                           return "Do Nothing (I)";
                         else
-                           return "Move-B";
+                           return "Move-B (5)";
                      }
                      else
                      {
-                        if (true == isDoNothingInsteadOfFiring)
-                           return "Do Nothing";
+                        if (true == isDoNothingDueToWeather)
+                           return "Do Nothing (W)";
                         return "Fire-Any Tank";
                      }
                   }
                   if (dieRoll < 86)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
-                     if (true == isDoNothingInsteadOfFiringAtYourTank)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
+                     if (true == isDoNothingInsteadDueToHidden)
+                        return "Do Nothing (H)";
                      return "Fire-Your Tank";
                   }
-                  if (true == isDoNothingInsteadOfFiring)
-                     return "Do Nothing";
-                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank))
-                     return "Do Nothing";
+                  if (true == isDoNothingDueToWeather)
+                     return "Do Nothing (W)";
+                  if ((true == isDoNothingInsteadDueToHidden) && (true == gi.IsLeadTank))
+                     return "Do Nothing (H)";
                   return "Fire-Lead Tank";
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
@@ -1231,29 +1248,29 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 21)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 31)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 41)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 61)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
@@ -1266,8 +1283,8 @@ namespace Pattons_Best
                case "Pak40":
                   if (dieRoll < 21)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
@@ -1275,27 +1292,27 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 81)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if (true == isDoNothingInsteadOfFiringAtYourTank)
-                           return "Do Nothing";
-                        return "Fire-Your Tank";
+                        if (true == isDoNothingInsteadDueToHidden)
+                           return "Do Nothing (H)";
+                        return "Fire-Your Tank (4)";
                      }
                      else
                         return "Fire-Any Tank";
                   }
                   if (dieRoll < 91)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
                      return "Fire-Any Tank";
                   }
-                  if (true == isDoNothingInsteadOfFiring)
-                     return "Do Nothing";
-                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank))
-                     return "Do Nothing";
+                  if (true == isDoNothingDueToWeather)
+                     return "Do Nothing (W)";
+                  if ((true == isDoNothingInsteadDueToHidden) && (true == gi.IsLeadTank))
+                     return "Do Nothing (H)";
                   return "Fire-Lead Tank";
                case "TANK":
                case "PzIV":
@@ -1312,29 +1329,37 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 16)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 21)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 26)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 36)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
@@ -1344,38 +1369,40 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsShermanFiringAtFront)
                      {
-                        if (true == isDoNothingInsteadOfFiring)
-                           return "Do Nothing";
-                        if (true == isDoNothingInsteadOfFiringAtYourTank)
-                           return "Do Nothing";
-                        return "Fire-Your Tank";
+                        if (true == isDoNothingDueToWeather)
+                           return "Do Nothing (W)";
+                        if (true == isDoNothingInsteadDueToHidden)
+                           return "Do Nothing (H)";
+                        return "Fire-Your Tank (5)";
                      }
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                           return "Do Nothing";
+                        if (true == isThrownTrack)
+                           return "Do Nothing (TT)";
+                        else if (true == isDoNothingDueToInterdicted)
+                           return "Do Nothing (I)";
                         else
-                           return "Move-B";
+                           return "Move-B (5)";
                      }
                      else
                      {
-                        if (true == isDoNothingInsteadOfFiring)
-                           return "Do Nothing";
+                        if (true == isDoNothingDueToWeather)
+                           return "Do Nothing (W)";
                         return "Fire-Any Tank";
                      }
                   }
                   if (dieRoll < 91)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
-                     if (true == isDoNothingInsteadOfFiringAtYourTank)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
+                     if (true == isDoNothingInsteadDueToHidden)
+                        return "Do Nothing (H)";
                      return "Fire-Your Tank";
                   }
-                  if (true == isDoNothingInsteadOfFiring)
-                     return "Do Nothing";
-                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank))
-                     return "Do Nothing";
+                  if (true == isDoNothingDueToWeather)
+                     return "Do Nothing (W)";
+                  if ((true == isDoNothingInsteadDueToHidden) && (true == gi.IsLeadTank))
+                     return "Do Nothing (H)";
                   return "Fire-Lead Tank";
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): Battle - reached default with enemyUnit=" + enemyUnit);
@@ -1392,40 +1419,40 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 41)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 51)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 61)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 71)
                   {
-                     if (true == isDoNothingInsteadOfMoving)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
                   if (dieRoll < 76)
                   {
-                     if (true == isDoNothingInsteadOfFiring)
-                        return "Do Nothing";
+                     if (true == isDoNothingDueToWeather)
+                        return "Do Nothing (W)";
                      return "Fire-Infantry";
                   }
-                  if (true == isDoNothingInsteadOfFiring)
-                     return "Do Nothing";
+                  if (true == isDoNothingDueToWeather)
+                     return "Do Nothing (W)";
                   return "Collateral";
                case "TANK":
                case "PzIV":
@@ -1442,29 +1469,37 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 41)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 51)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 61)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 71)
                   {
-                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                        return "Do Nothing";
+                     if (true == isThrownTrack)
+                        return "Do Nothing (TT)";
+                     else if (true == isDoNothingDueToInterdicted)
+                        return "Do Nothing (I)";
                      else
                         return "Move-B";
                   }
@@ -1474,30 +1509,32 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsShermanFiringAtFront)
                      {
-                        if (true == isDoNothingInsteadOfFiring)
-                           return "Do Nothing";
-                        if (true == isDoNothingInsteadOfFiringAtYourTank)
-                           return "Do Nothing";
-                        return "Fire-Your Tank";
+                        if (true == isDoNothingDueToWeather)
+                           return "Do Nothing (W)";
+                        if (true == isDoNothingInsteadDueToHidden)
+                           return "Do Nothing (H)";
+                        return "Fire-Your Tank (5)";
                      }
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
-                           return "Do Nothing";
+                        if (true == isThrownTrack)
+                           return "Do Nothing (TT)";
+                        else if (true == isDoNothingDueToInterdicted)
+                           return "Do Nothing (I)";
                         else
-                           return "Move-B";
+                           return "Move-B (5)";
                      }
                      else
                      {
-                        if (true == isDoNothingInsteadOfFiring)
-                           return "Do Nothing";
+                        if (true == isDoNothingDueToWeather)
+                           return "Do Nothing (W)";
                         return "Fire-Any Tank";
                      }
                   }
-                  if (true == isDoNothingInsteadOfFiring)
-                     return "Do Nothing";
-                  if (true == isDoNothingInsteadOfFiringAtYourTank)
-                     return "Do Nothing";
+                  if (true == isDoNothingDueToWeather)
+                     return "Do Nothing (W)";
+                  if (true == isDoNothingInsteadDueToHidden)
+                     return "Do Nothing (H)";
                   return "Fire-Your Tank";
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): Counterattack - reached default with enemyUnit=" + enemyUnit);
@@ -3369,7 +3406,6 @@ namespace Pattons_Best
          {
             gi.SetIncapacitated(cm);
             cm.SetBloodSpots(35);
-            gi.SetIncapacitated(cm);
             if ("Killed" != cm.Wound)
                cm.Wound = "Serious Wound";
             return "Serious Wound";
@@ -4380,15 +4416,15 @@ namespace Pattons_Best
          }
          Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): ------------------------------ for " + mi.Name);
          //----------------------------------------------------
-         if (true == gi.IsFlankingFire)
-         {
-            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -10 flanking fire");
-            modifier -= 10;
-         }
-         //----------------------------------------------------
          if ( (true == isTargetVehicle) && (true == isAirStrike) )
          {
             Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -10 Air Strike vs Vehicle");
+            modifier -= 10;
+         }
+         //----------------------------------------------------
+         if (true == gi.IsFlankingFire)
+         {
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -10 flanking fire");
             modifier -= 10;
          }
          //----------------------------------------------------
@@ -4410,10 +4446,10 @@ namespace Pattons_Best
             }
          }
          //----------------------------------------------------
-         if ((true == isInfantryTargetInWoods) && (true == isOffBoardArillery))
+         if ((true == isTargetVehicle) && (false == isTruck) && ((true == isAdvancingFire || true == isOffBoardArillery)) )
          {
-            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -3 artillery vs inf in woods");
-            modifier -= 3;
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 non-truck vehicle during adv/artillery fire");
+            modifier += 10;
          }
          //----------------------------------------------------
          if( false == isOffBoardArillery )
@@ -4433,10 +4469,10 @@ namespace Pattons_Best
             }
          }
          //----------------------------------------------------
-         if ((true == isTargetVehicle) && (false == isTruck) && (true == isAdvancingFire || true == isOffBoardArillery))
+         else if (true == isInfantryTargetInWoods)  // isOffBoardArillery=true
          {
-            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 non-truck vehicle during adv/artillery fire");
-            modifier += 10;
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -3 artillery vs inf in woods");
+            modifier -= 3;
          }
          //----------------------------------------------------
          return modifier;

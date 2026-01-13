@@ -36,7 +36,6 @@
 				<Paragraph>
 					<Bold>
 						<Run Text='SPG/Tank'> </Run>
-						<Run Typography.Variants='Superscript'>1</Run>
 					</Bold>
 				</Paragraph>
 			</TableCell>
@@ -51,7 +50,6 @@
 				<Paragraph>
 					<Bold>
 						<Run Text='MG/LW'> </Run>
-						<Run Typography.Variants='Superscript'>2</Run>
 					</Bold>
 				</Paragraph>
 			</TableCell>
@@ -163,7 +161,7 @@
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
 					<Run Text='76-95'></Run>
-					<Run Typography.Variants='Superscript'>1</Run>
+					<Run Typography.Variants='Superscript'>5</Run>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
@@ -190,7 +188,7 @@
 			<TableCell TextAlignment='Center'  >
 				<Paragraph>
 					<Run Text='96-100+'></Run>
-					<Run Typography.Variants='Superscript'>2</Run>
+					<Run Typography.Variants='Superscript'>1</Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -203,13 +201,13 @@
 						<Run Text='NOTES:'></Run>
 					</Bold>
 					<LineBreak/>
-					<Run Text='(1) Fires at your tank instead if you are firing at its front. If you are firing at its side or rear, it moves back (MOVE-B).'></Run>
-					<LineBreak/>
-					<Run Text='(2) MG and LW fire versus your tank is resolved on the '></Run>
-					<InlineUIContainer>
-						<Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
-					</InlineUIContainer>
-					<Run Text=' Damage Table.'></Run>
+					<Run Text='(1) MG and LW fire versus your tank is resolved on the '></Run>
+               <InlineUIContainer>
+                  <Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text=' Damage Table.'></Run>
+               <LineBreak/>
+               <Run Text='(5) Fires at your tank instead if you are firing at its front. If you are firing at its side or rear, it moves back (MOVE-B).'></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>

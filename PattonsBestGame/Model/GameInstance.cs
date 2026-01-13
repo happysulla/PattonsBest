@@ -451,26 +451,21 @@ namespace Pattons_Best
       public void SetIncapacitated(ICrewMember cm)
       { 
          cm.IsIncapacitated = true;
-         bool isAlreadyIncapacitated = false;
          //-------------------------------
          IMapItems removals = new MapItems(); // Remove any coorresponding crew actions and add the hurt crewman in the crewaction box
          foreach (IMapItem ca in this.CrewActions)
          {
             if ( (true == ca.Name.Contains(cm.Role)) || (cm.Name == ca.Name) ) // crew action contains role or it is already incapacitated and added
                removals.Add(ca);
-            if (cm.Name == ca.Name) // if crew action matches cm.Name -- it is already incapacitated and added
-               isAlreadyIncapacitated = true;
          }
          foreach (IMapItem ca in removals)
          {
             this.CrewActions.Remove(ca);
             Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_Incapacitated(): ---------------------removing ca=" + ca.Name);
          }
-         if( false == isAlreadyIncapacitated)
-         {
-            this.CrewActions.Add(cm);
-            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_Incapacitated(): +++++++++++++++++++++++adding cm=" + cm.Name + " cm.Role=" + cm.Role);
-         }
+         //-------------------------------
+         this.CrewActions.Add(cm);
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_Incapacitated(): +++++++++++++++++++++++adding cm=" + cm.Name + " cm.Role=" + cm.Role);
          //-------------------------------
          removals.Clear();
          foreach (IMapItem mi in this.Hatches) // incapacitated crewmember becomes button up

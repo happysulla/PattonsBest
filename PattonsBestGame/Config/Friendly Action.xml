@@ -13,6 +13,8 @@
 					<Run FontSize='12' FontStyle='Italic' Text='Roll 2D for each enemy unit on the Battle Board to see if the unit is KO or obscured by smoke due to Friendly Action. '></Run>
 					<Run FontSize='12' FontStyle='Italic' Text='If the number rolled (after modification) is within the range of numbers under KO, the unit is eliminated. '></Run>
 					<Run FontSize='12' FontStyle='Italic' Text='If the number is equal to the smoke number or higher, place a Smoke marker in the units zone. '></Run>
+               <Run FontSize='12' FontStyle='Italic' Text='Off Board Arillery occurs when a Friendly Artillery roll is made on the Random Event (RE) table. '></Run>
+               <Run FontSize='12' FontStyle='Italic' Text='Rule #4.76 is On Board Artillery and is made when the Friendly Action Phase occurs. '></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -237,23 +239,23 @@
 						<Run Text='Die Roll modifiers (To KO only):'></Run>
 					</Bold>
 					<LineBreak/>
-					<Run Text='-10 Flanking Fire - 4.76 Friendly Action attack and not Offboard (OB) Artillery'></Run>
-					<LineBreak/>
 					<Run Text='-10 Air Strikes versus vehicles'></Run>
+               <LineBreak/>
+               <Run Text='-10 Flanking Fire is r4.76 attack even though a Random Event (RE)'></Run>
 					<LineBreak/>
-					<Run Text='-3 For each sector marked US Control - Advance Fire and r4.76 attacks'></Run>
+					<Run Text='-3 For each sector marked US Control - Adv Fire and r4.76 attacks'></Run>
 					<LineBreak/>
-					<Run Text='-3 Artillery versus LW, MG, or AT gun targets in Woods - Only Applies to OB Artillery'></Run>
+					<Run Text='+1 Versus LW or MG for each friendly infantry squad lost - Adv Fire and r4.76 attacks'></Run>
 					<LineBreak/>
-					<Run Text='+1 Versus LW or MG for each friendly infantry squad lost - Advance Fire and r4.76 attacks'></Run>
+					<Run Text='+2 Versus vehicle targets for each friendly tank lost - Adv Fire and r4.76 attacks'></Run>
+               <LineBreak/>
+               <Run Text='+10 versus vehicles (except trucks) - Adv Fire and RE Artillery'></Run>
 					<LineBreak/>
-					<Run Text='+2 Versus vehicle targets for each friendly tank lost - Advance Fire and r4.76 attacks'></Run>
+					<Run Text='+10 For each smoke marker in the targets zone - All but RE Artillery'></Run>
 					<LineBreak/>
-					<Run Text='+10 For each smoke marker in the targets zone - Does not apply for OB Artillery'></Run>
-					<LineBreak/>
-					<Run Text='+10 During fog or falling snow weather - Does not apply for OB Artillery'></Run>
-					<LineBreak/>
-					<Run Text='+10 Advancing Fire or OB Artillery Fire versus vehicles (except trucks)'></Run>
+					<Run Text='+10 During fog or falling snow weather - All but RE Artillery'></Run>
+               <LineBreak/>
+               <Run Text='-3 Artillery versus LW, MG, or AT gun targets in Woods - Only RE Artillery'></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>

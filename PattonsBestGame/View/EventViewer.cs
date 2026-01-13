@@ -6590,7 +6590,11 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Debrief":
-                           action = GameAction.EveningDebriefingRatingImprovement;
+                           Option optionSingleDayGame = myGameInstance.Options.Find("SingleDayScenario");
+                           if( true == optionSingleDayGame.IsEnabled )
+                              action = GameAction.EveningDebriefingRatingImprovementEnd;
+                           else
+                              action = GameAction.EveningDebriefingRatingImprovement;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "c108Smoke1": // smoke depletion

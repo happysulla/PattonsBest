@@ -148,8 +148,8 @@ namespace Pattons_Best
             case "Enemy Battle":
                this.Title = "Enemy Action: Battle Scenario";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 570;
-               this.MinHeight = this.MaxHeight = 810;
+               this.Width = this.MinWidth = this.MaxWidth = 575;
+               this.MinHeight = this.MaxHeight = 820;
                break;
             case "Enemy Counterattack":
                this.Title = "Enemy Action: CounterAttack Scenario";
@@ -173,7 +173,7 @@ namespace Pattons_Best
                this.Title = "Friendly Action";
                this.Background = theBrushBlue;
                this.Width = this.MinWidth = this.MaxWidth = 550;
-               this.MinHeight = this.MaxHeight = 680;
+               this.MinHeight = this.MaxHeight = 700;
                break;
             case "Gun Malfunction":
                this.Title = "Gun Malfunction Repair Table";
@@ -293,7 +293,7 @@ namespace Pattons_Best
                this.Title = "Weather Tables";
                this.Background = theBrushOrange;
                this.Width = this.MinWidth = this.MaxWidth = 700;
-               this.MinHeight = this.MaxHeight = 720;
+               this.MinHeight = this.MaxHeight = 730;
                break;
             case "Wounds":
                this.Title = "Wounds Tables";

@@ -293,7 +293,14 @@ namespace Pattons_Best
          myMaxRowCount = i;
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
+         {
             myGridRows[k].myModifierEnemyAction = TableMgr.GetEnemyActionModifier(myGameInstance, myGridRows[k].myMapItem);
+            if( TableMgr.FN_ERROR == myGridRows[k].myModifierEnemyAction )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): Get_EnemyActionModifier() return false");
+               return false;
+            }
+         }
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -1272,25 +1279,10 @@ namespace Pattons_Best
          IMapItem mi = myGridRows[i].myMapItem;
          //---------------------------------------
          ITerritory? newT = null;
-         switch (myGridRows[i].myEnemyAction)
-         {
-            case "Do Nothing":
-            case "Fire-Infantry":
-            case "Fire-Any Tank":
-            case "Fire-Lead Tank":
-            case "Fire-Your Tank":
-            case "Collateral":
-               return true;
-            case "Move-F":
-            case "Move-L":
-            case "Move-R":
-            case "Move-B":
-               newT = TableMgr.SetNewTerritory(mi, myGridRows[i].myEnemyAction);
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): reached default r=" + myGridRows[i].myEnemyAction);
-               return false;
-         }
+         if (true == myGridRows[i].myEnemyAction.Contains("Move"))
+            newT = TableMgr.SetNewTerritory(mi, myGridRows[i].myEnemyAction);
+         else
+            return true;
          if (null == newT)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): SetNewTerritory() returned null");

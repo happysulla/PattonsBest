@@ -40,7 +40,8 @@ namespace Pattons_Best
       {
          "OriginalGame",
          "Generalv25No3",
-         "OtherGame",
+         "TacticsGame",
+         "Generalv25No3PlusTactic",
          "CustomGame",
          //---------------------
          "SingleDayScenario",
@@ -72,8 +73,8 @@ namespace Pattons_Best
          "ShermanIncreaseMoveChances",
          "ShermanEnhanceMgFire",
          "ShermanSurpressingMgFire",
-         "MovingForwardIncreseAdvanceChances"
-
+         "MovingFwdIncreaseAdvanceChances",
+         "TerrainPointValueForCenter"
       };
       private readonly ArrayList myList;
       public Options() { myList = new ArrayList(); }
@@ -128,7 +129,7 @@ namespace Pattons_Best
          Option option = this.Find("CustomGame");
          if (true == option.IsEnabled)
             return 3;
-         option = this.Find("OtherGame");
+         option = this.Find("TacticsGame");
          if (true == option.IsEnabled)
             return 2;
          option = this.Find("Generalv25No3");

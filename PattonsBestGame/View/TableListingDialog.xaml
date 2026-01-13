@@ -49,8 +49,8 @@
             <Grid.ColumnDefinitions>
                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" Content="Enemy Battle" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="1" Grid.Column="0" Content="Enemy Advance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Enemy Advance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="Enemy Battle" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="2" Grid.Column="0" Content="Enemy Counterattack" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="3" Grid.Column="0" Content="Enemy AP To Hit" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="4" Grid.Column="0" Content="Enemy AP To Kill" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>

@@ -642,7 +642,11 @@ namespace Pattons_Best
             usControl.Location = mpUsControl;
             gi.MoveStacks.Add(usControl);
             //---------------------------------------------
-            lastReport.VictoryPtsCaptureArea++;   // Set_StartArea()
+            if( false == lastReport.CaptureArea(gi, tStart))   // Set_StartArea()
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Set_StartArea(): Capture_Area() returned false");
+               return false;
+            }
             Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Set_StartArea(): Get VPs for Start Area t=" + tStart.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
             //---------------------------------------------
             //if( false == SetStartAreaExtraEnemy(gi))  // <CGS> TEST - Set extra units on move board during setup
@@ -1265,18 +1269,22 @@ namespace Pattons_Best
             bool isExitArea;
             if (false == gi.IsTaskForceInExitArea(out isExitArea))
             {
-               Logger.Log(LogEnum.LE_ERROR, "Skip_BattleBoard(): gi.IsTaskForce_InExitArea() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): gi.IsTaskForce_InExitArea() returned false");
                return false;
             }
             if (true == isExitArea)
             {
                lastReport.VictoryPtsCapturedExitArea++;
-               Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + gi.EnteredArea.Name + " #=" + lastReport.VictoryPtsCapturedExitArea.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Resolve_EmptyBattleBoard(): captured area t=" + gi.EnteredArea.Name + " #=" + lastReport.VictoryPtsCapturedExitArea.ToString());
             }
             else
             {
-               lastReport.VictoryPtsCaptureArea++; // Resolve_EmptyBattleBoard()
-               Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + gi.EnteredArea.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
+               if( false == lastReport.CaptureArea(gi, gi.EnteredArea)) // Resolve_EmptyBattleBoard()
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): Capture_Area() returned false");
+                  return false;
+               }
+               Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Resolve_EmptyBattleBoard(): captured area t=" + gi.EnteredArea.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
             }
          }
          //---------------------------------
@@ -1344,7 +1352,11 @@ namespace Pattons_Best
                {
                   Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): Removing UsControl from t=" + t.Name);
                   stack.MapItems.Remove(mi);
-                  lastReport.VictoryPtsLostArea++;
+                  if( false == lastReport.LoseArea(gi, t))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrun_ToPreviousArea(): LoseArea() returned false");
+                     return false;
+                  }
                   Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "EnemiesOverrun_ToPreviousArea(): Removing UsControl from t=" + t.Name + " #=" + lastReport.VictoryPtsLostArea.ToString());
                   break;
                }
@@ -1873,6 +1885,127 @@ namespace Pattons_Best
                return false;
             }
          }
+         return true;
+      }
+      protected bool PerformEndCheck(IGameInstance gi, ref GameAction action)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
+            return false;
+         }
+         Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
+         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day + " o?=" + optionCommanderDeath.IsEnabled.ToString() + " k?=" + gi.IsCommanderKilled.ToString());
+         //----------------------------------------------------------
+         if (null != gi.Death)
+         {
+            Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck():  gi.Death=" + gi.Death.ToString());
+            if ((true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled))
+            {
+               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Game Ends!!!!! TankExplodes");
+               GameEngine.theInGameFeats.AddOne("EndGameExplode");
+               if (false == optionSingleDayGame.IsEnabled)
+                  GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+               gi.GamePhase = GamePhase.EndGame;
+               action = GameAction.EndGameLost;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+            }
+            else if (true == optionSingleDayGame.IsEnabled)
+            {
+               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Game Ends!!!!! Lost Tank");
+               gi.GamePhase = GamePhase.EndGame;
+               action = GameAction.EndGameLost;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+            }
+         }
+         //----------------------------------------------------------
+         else if (((true == gi.IsCommanderKilled) || (0 < lastReport.Commander.WoundDaysUntilReturn)) && (true == optionSingleDayGame.IsEnabled))
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Single Day Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
+            if (true == gi.IsCommanderKilled)
+               GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+            gi.GamePhase = GamePhase.EndGame;
+            action = GameAction.EndGameLost;
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+         }
+         //----------------------------------------------------------
+         else if (((true == gi.IsCommanderKilled) || (TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn)) && (false == optionCommanderDeath.IsEnabled))
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
+            if (true == gi.IsCommanderKilled)
+               GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+            gi.GamePhase = GamePhase.EndGame;
+            action = GameAction.EndGameLost;
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+         }
+         //----------------------------------------------------------
+         else if ( (189 < gi.Day) || ((true == optionSingleDayGame.IsEnabled) && (GamePhase.MorningBriefing == gi.GamePhase)) ) // ends on day 190 -- or if this is a single day game
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! optionSingleDay=" + optionSingleDayGame.IsEnabled.ToString() + " or 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
+            if ((false == optionSingleDayGame.IsEnabled) && (189 < gi.Day))
+               GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
+            //-------------------------------------------------------------
+            gi.GamePhase = GamePhase.EndGame;
+            if (0 < gi.VictoryPtsTotalCampaign)
+            {
+               gi.Statistics.AddOne("NumWins");
+               if (true == optionSingleDayGame.IsEnabled)
+                  GameEngine.theInGameFeats.AddOne("EndSingleDayWin");
+               else
+                  GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
+               gi.EndGameReason = "Won on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " > 0";
+               action = GameAction.EndGameWin;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
+            }
+            else
+            {
+               gi.EndGameReason = "Lost on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " < 1";
+               action = GameAction.EndGameLost;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+            }
+         }
+         //----------------------------------------------------------
+         if (GamePhase.EndGame == gi.GamePhase)
+         {
+            int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
+            GameStatistic crewRatingStat = gi.Statistics.Find("CrewRating");
+            crewRatingStat.Value = crewRating;
+            if (GameAction.EndGameWin == action)
+            {
+               GameStatistic statMaxCrewRatingWin = gi.Statistics.Find("MaxCrewRatingWin");
+               statMaxCrewRatingWin.Value = crewRating;
+               GameStatistic statMinCrewRatingWin = gi.Statistics.Find("MinCrewRatingWin");
+               statMinCrewRatingWin.Value = crewRating;
+            }
+            //----------------------------
+            GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
+            if (statMaxRollsForAirSupport.Value < gi.MaxRollsForAirSupport)
+               statMaxRollsForAirSupport.Value = gi.MaxRollsForAirSupport;
+            gi.MaxRollsForAirSupport = 0;
+            //----------------------------
+            GameStatistic statMaxRollsForArtillerySupport = gi.Statistics.Find("MaxRollsForArtillerySupport");
+            if (statMaxRollsForArtillerySupport.Value < gi.MaxRollsForArtillerySupport)
+               statMaxRollsForArtillerySupport.Value = gi.MaxRollsForArtillerySupport;
+            gi.MaxRollsForArtillerySupport = 0;
+            //----------------------------
+            if (false == optionSingleDayGame.IsEnabled)
+               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+         }
+         //----------------------------------------------------------
+         GameStatistic statMaxDayBetweenCombat = gi.Statistics.Find("MaxDayBetweenCombat");
+         if (statMaxDayBetweenCombat.Value < gi.MaxDayBetweenCombat)
+            statMaxDayBetweenCombat.Value = gi.MaxDayBetweenCombat;
+         gi.MaxDayBetweenCombat = 0;
+         GameStatistic statMaxEnemiesInOneBattle = gi.Statistics.Find("MaxEnemiesInOneBattle");
+         if (statMaxEnemiesInOneBattle.Value < gi.MaxEnemiesInOneBattle)
+            statMaxEnemiesInOneBattle.Value = gi.MaxEnemiesInOneBattle;
+         gi.MaxEnemiesInOneBattle = 0;
+         GameStatistic statMaxRoundsOfCombat = gi.Statistics.Find("MaxRoundsOfCombat");
+         if (statMaxRoundsOfCombat.Value < gi.RoundsOfCombat)
+            statMaxRoundsOfCombat.Value = gi.RoundsOfCombat;
+         gi.RoundsOfCombat = 0;  // Perform_EndCheck()
          return true;
       }
    }
@@ -5158,9 +5291,30 @@ namespace Pattons_Best
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e025");
                   break;
                case GameAction.MovementAirStrikeCheckTerritory:
-                  gi.MinSinceLastCheck += 30;
-                  AdvanceTime(lastReport, 30);   // GameStateMovement.PerformAction(Movement_AirStrikeCheckTerritory) 
-                  Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +30 Movement_AirStrikeCheckTerritory -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                  SetCommand(gi, action, GameAction.MovementAirStrikeCheckTerritoryRoll, "e026");
+                  break;
+               case GameAction.MovementAirStrikeCheckTerritoryRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == SetAirStrikeCounter(gi, dieRoll))
+                  {
+                     returnStatus = "Set_AirStrikeCounter() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  //---------------------------------------
+                  if (dieRoll < 5)
+                  {
+                     gi.MinSinceLastCheck += 30;
+                     AdvanceTime(lastReport, 30);   // GameStateMovement.PerformAction(Movement_AirStrikeCheckTerritory) 
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +30 Movement_AirStrikeCheckTerritory -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                  }
+                  else
+                  {
+                     gi.MinSinceLastCheck += 15;
+                     AdvanceTime(lastReport, 15);   // GameStateMovement.PerformAction(Movement_AirStrikeCheckTerritory) 
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +30 Movement_AirStrikeCheckTerritory -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                  }
+                  //---------------------------------------
                   if (false == gi.IsDaylightLeft(lastReport))  // GameStateMovement.PerformAction(Movement_AirStrikeCheckTerritory) 
                   {
                      gi.GamePhase = GamePhase.EveningDebriefing;
@@ -5180,19 +5334,6 @@ namespace Pattons_Best
                      {
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
                      }
-                  }
-                  else
-                  {
-                     SetCommand(gi, action, GameAction.MovementAirStrikeCheckTerritoryRoll, "e026");
-                  }
-                  break;
-               case GameAction.MovementAirStrikeCheckTerritoryRoll:
-                  gi.DieResults[key][0] = dieRoll;
-                  gi.DieRollAction = GameAction.DieRollActionNone;
-                  if (false == SetAirStrikeCounter(gi, dieRoll))
-                  {
-                     returnStatus = "Set_AirStrikeCounter() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.MovementAirStrikeCancel:
@@ -5611,7 +5752,7 @@ namespace Pattons_Best
          SetCommand(gi, action, GameAction.MovementStrengthBattleBoardRoll, "e031"); // if there is NO Strength Marker in this area, next roll checks for strength check
          return true;
       }
-      private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport report, GameAction action)
+      private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport lastReport, GameAction action)
       {
          gi.IsAdvancingFireChosen = false;
          gi.GamePhase = GamePhase.Movement;
@@ -5655,13 +5796,17 @@ namespace Pattons_Best
          }
          if (true == isExitArea)
          {
-            report.VictoryPtsCapturedExitArea++;
-            Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + taskForce.TerritoryCurrent.Name + " #=" + report.VictoryPtsCapturedExitArea.ToString());
+            lastReport.VictoryPtsCapturedExitArea++;
+            Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + taskForce.TerritoryCurrent.Name + " #=" + lastReport.VictoryPtsCapturedExitArea.ToString());
          }
          else
          {
-            report.VictoryPtsCaptureArea++; // Skip_BattleBoard()
-            Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + taskForce.TerritoryCurrent.Name + " #=" + report.VictoryPtsCaptureArea.ToString());
+            if( false == lastReport.CaptureArea(gi, taskForce.TerritoryCurrent)) // Skip_BattleBoard()
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Skip_BattleBoard(): Capture_Area() returned false");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + taskForce.TerritoryCurrent.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
          }
          return true;
       }
@@ -6667,9 +6812,16 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceRoundStart:
+                  //----------------------------------------------------------
                   if (false == StartSmokeDepletion(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(Start_SmokeDepletion)
                   {
                      returnStatus = "Start_SmokeDepletion() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(Start_SmokeDepletion): " + returnStatus);
+                  }
+                  //-------------------------------------------------------
+                  if (false == PerformEndCheck(gi, ref action))
+                  {
+                     returnStatus = "Perform_EndCheck() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(Start_SmokeDepletion): " + returnStatus);
                   }
                   break;
@@ -9282,8 +9434,12 @@ namespace Pattons_Best
             }
             //--------------------------------------
             if (EnumScenario.Counterattack == lastReport.Scenario) // MoveSherman_AdvanceOrRetreat()
-            { 
-               lastReport.VictoryPtsLostArea++;
+            {
+               if ( false == lastReport.LoseArea(gi, gi.EnteredArea))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): LoseArea() returned false");
+                  return false;
+               }
                if (false == MoveShermanCounterattackRetreatChoices(gi, startArea, taskForce))
                {
                   Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): MoveShermanAdvanceOrRetreatCounterattack() returned false");
@@ -11359,127 +11515,6 @@ namespace Pattons_Best
          }
          //----------------------------------------------------------
          gi.Statistics.AddOne("NumDays");
-         return true;
-      }
-      protected bool PerformEndCheck(IGameInstance gi, ref GameAction action)
-      {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
-            return false;
-         }
-         Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
-         Option optionSingleDayGame= gi.Options.Find("SingleDayScenario");
-         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day + " o?=" + optionCommanderDeath.IsEnabled.ToString() + " k?=" + gi.IsCommanderKilled.ToString());
-         //----------------------------------------------------------
-         if ( null != gi.Death ) 
-         {
-            Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck():  gi.Death=" + gi.Death.ToString());
-            if ((true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled))
-            {
-               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Game Ends!!!!! TankExplodes");
-               GameEngine.theInGameFeats.AddOne("EndGameExplode");
-               if (false == optionSingleDayGame.IsEnabled)
-                  GameEngine.theInGameFeats.AddOne("EndCampaignGame");
-               gi.GamePhase = GamePhase.EndGame;
-               action = GameAction.EndGameLost;
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
-            }
-            else if (true == optionSingleDayGame.IsEnabled)
-            {
-               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Game Ends!!!!! Lost Tank");
-               gi.GamePhase = GamePhase.EndGame;
-               action = GameAction.EndGameLost;
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
-            }
-         }
-         //----------------------------------------------------------
-         else if ( ((true == gi.IsCommanderKilled) || (0 < lastReport.Commander.WoundDaysUntilReturn)) && (true == optionSingleDayGame.IsEnabled))
-         {
-            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Single Day Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
-            if (true == gi.IsCommanderKilled)
-               GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
-            gi.GamePhase = GamePhase.EndGame;
-            action = GameAction.EndGameLost;
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
-         }
-         //----------------------------------------------------------
-         else if ( ((true == gi.IsCommanderKilled) || ( TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn) ) && (false == optionCommanderDeath.IsEnabled) )
-         {
-            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
-            if (true == gi.IsCommanderKilled)
-               GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
-            gi.GamePhase = GamePhase.EndGame;
-            action = GameAction.EndGameLost;
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
-         }
-         //----------------------------------------------------------
-         else if ((189 < gi.Day) || (true == optionSingleDayGame.IsEnabled)) // ends on day 190 -- or if this is a single day game
-         {
-            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! optionSingleDay=" + optionSingleDayGame.IsEnabled.ToString() + " or 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            if ((false == optionSingleDayGame.IsEnabled) && (189 < gi.Day))
-               GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
-            //-------------------------------------------------------------
-            gi.GamePhase = GamePhase.EndGame;
-            if (0 < gi.VictoryPtsTotalCampaign)
-            {
-               gi.Statistics.AddOne("NumWins");
-               if (true == optionSingleDayGame.IsEnabled)
-                  GameEngine.theInGameFeats.AddOne("EndSingleDayWin");
-               else
-                  GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
-               gi.EndGameReason = "Won on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " > 0";
-               action = GameAction.EndGameWin;
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
-            }
-            else
-            {
-               gi.EndGameReason = "Lost on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " < 1";
-               action = GameAction.EndGameLost;
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
-            }
-         }
-         //----------------------------------------------------------
-         if (GamePhase.EndGame == gi.GamePhase)
-         {
-            int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
-            GameStatistic crewRatingStat = gi.Statistics.Find("CrewRating");
-            crewRatingStat.Value = crewRating;
-            if(GameAction.EndGameWin == action)
-            {
-               GameStatistic statMaxCrewRatingWin = gi.Statistics.Find("MaxCrewRatingWin");
-               statMaxCrewRatingWin.Value = crewRating;
-               GameStatistic statMinCrewRatingWin = gi.Statistics.Find("MinCrewRatingWin");
-               statMinCrewRatingWin.Value = crewRating;
-            }
-            //----------------------------
-            GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
-            if (statMaxRollsForAirSupport.Value < gi.MaxRollsForAirSupport)
-               statMaxRollsForAirSupport.Value = gi.MaxRollsForAirSupport;
-            gi.MaxRollsForAirSupport = 0;
-            //----------------------------
-            GameStatistic statMaxRollsForArtillerySupport = gi.Statistics.Find("MaxRollsForArtillerySupport");
-            if (statMaxRollsForArtillerySupport.Value < gi.MaxRollsForArtillerySupport)
-               statMaxRollsForArtillerySupport.Value = gi.MaxRollsForArtillerySupport;
-            gi.MaxRollsForArtillerySupport = 0;
-            //----------------------------
-            if ( false == optionSingleDayGame.IsEnabled )
-               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
-         }
-         //----------------------------------------------------------
-         GameStatistic statMaxDayBetweenCombat = gi.Statistics.Find("MaxDayBetweenCombat");
-         if (statMaxDayBetweenCombat.Value < gi.MaxDayBetweenCombat)
-            statMaxDayBetweenCombat.Value = gi.MaxDayBetweenCombat;
-         gi.MaxDayBetweenCombat = 0;
-         GameStatistic statMaxEnemiesInOneBattle = gi.Statistics.Find("MaxEnemiesInOneBattle");
-         if (statMaxEnemiesInOneBattle.Value < gi.MaxEnemiesInOneBattle)
-            statMaxEnemiesInOneBattle.Value = gi.MaxEnemiesInOneBattle;
-         gi.MaxEnemiesInOneBattle = 0;
-         GameStatistic statMaxRoundsOfCombat = gi.Statistics.Find("MaxRoundsOfCombat");
-         if (statMaxRoundsOfCombat.Value < gi.RoundsOfCombat)
-            statMaxRoundsOfCombat.Value = gi.RoundsOfCombat;
-         gi.RoundsOfCombat = 0;  // Perform_EndCheck()
          return true;
       }
    }

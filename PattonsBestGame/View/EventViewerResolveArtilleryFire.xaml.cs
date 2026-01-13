@@ -130,7 +130,6 @@ namespace Pattons_Best
       }
       public bool ResolveArtilleryFire(EndResolveArtilleryFireCallback callback, bool isOffBoardArtillery)
       {
-         myIsOffboardArtillery = isOffBoardArtillery;
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveArtilleryFire(): myGameInstance=null");
@@ -159,6 +158,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          myCallback = callback;
          myNumUseControlled = 0;
+         myIsOffboardArtillery = isOffBoardArtillery;
          //--------------------------------------------------
          if (null == myGameInstance.EnteredArea)
          {
@@ -456,7 +456,7 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myResult };
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myResult };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);

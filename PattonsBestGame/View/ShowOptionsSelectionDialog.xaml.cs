@@ -28,7 +28,7 @@ namespace Pattons_Best
          //-----------------------------
          myRadioButtonOriginal.ToolTip = "Original game with original rules.";
          myRadioButtonGeneralv25No3.ToolTip = "Rules from General magazine, version 25, Issue 3. Magazine provided with this distribution under '<user>/AppData/Roaming/PattonBest/Docs' folder.";
-         myRadioButtonOther.ToolTip = "Game creator added rules to make game more appealing.";
+         myRadioButtonGv25No3AndTactics.ToolTip = "Added rules to make game more tactical.";
          myRadioButtonCustom.ToolTip = "Custom combination of General v25 Issue3 rules and other rules.";
          //-----------------------------
          myRadioButtonSingleDay.ToolTip = "Game only last one day. You are given the option what tank you want to use.";
@@ -38,8 +38,8 @@ namespace Pattons_Best
          myCheckBoxSkipOpening.ToolTip = "Skip opening screen with tank image. Contains button to begin game or read rules.";
          myCheckBoxSkipHistorical.ToolTip = "Skip screen with map of 4th division historical path through France and Germany.";
          myCheckBoxSkipMoveBoard.ToolTip = "Skip showing description of Movement Board. Introduces concept of what Movement Board looks like.";
-         myCheckBoxPrinceBattleBoard.ToolTip = "Skip showing description of Battle Board. Introduces concept of what Battle Board looks like.";
-         myCheckBoxPrinceTankCard.ToolTip = "Skip showing description of Tank Card. Introduces Tank Card boxes and starting tank model.";
+         myCheckBoxBattleBoard.ToolTip = "Skip showing description of Battle Board. Introduces concept of what Battle Board looks like.";
+         myCheckBoxTankCard.ToolTip = "Skip showing description of Tank Card. Introduces Tank Card boxes and starting tank model.";
          myCheckBoxStartAfterActionReport.ToolTip = "Skip showing description of After Action Report. Allows changing names of tank and crew names.";
          //-----------------------------
          myCheckBoxAutoRollRatings.ToolTip = "Roll a single die and automatically roll all other die for new crew ratings.";
@@ -60,8 +60,9 @@ namespace Pattons_Best
          myCheckBoxRearFacingAfterMoveAway.ToolTip = "Enemy units when retreating have increase chances of rear facing.";
          myCheckBoxIncreasedMove.ToolTip = "Ever consecutive turn the Sherman attempts to move, increase chance it does move.";
          myCheckBoxEnhancedMgFire.ToolTip = "Increase the MG fire effectivity against close and medium range targets.";
-         myCheckBoxIncreaseAdvance.ToolTip = "Moving Forward with Sherman inceases chances of a Friendly Advance in the Random Event Phase.";
          myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs reduce their fire effectiveness and cause them to not move if called on to move.";
+         myCheckBoxMovingFwdIncreaseAdvanceChances.ToolTip = "Sherman advancing on Battle Board incease Friendly Advance result in Random Event.";
+         myCheckBoxTerrainPointValueCenter.ToolTip = "Capturing/Losing Board Center adds/subtracts random points of 0 to 2 points.";
          //-----------------------------
          if (false == UpdateDisplay(myOptions))
          {
@@ -73,9 +74,9 @@ namespace Pattons_Best
       private bool UpdateDisplay(Options options)
       {
          bool isAllGeneralChecked = true;
-         bool isAllOtherChecked = true;
+         bool isAllTacticsChecked = true;
          bool isAtLeastOneGeneralChecked = false;
-         bool isAtLeastOneOtherChecked = false;
+         bool isAtLeastOneTacticChecked = false;
          //------------------------------
          Option option = myOptions.Find("SingleDayScenario");
          if( true == option.IsEnabled)
@@ -98,9 +99,9 @@ namespace Pattons_Best
          option = options.Find("SkipTutorial2");
          myCheckBoxSkipMoveBoard.IsChecked = option.IsEnabled;
          option = options.Find("SkipTutorial3");
-         myCheckBoxPrinceBattleBoard.IsChecked = option.IsEnabled;
+         myCheckBoxBattleBoard.IsChecked = option.IsEnabled;
          option = options.Find("SkipTutorial4");
-         myCheckBoxPrinceTankCard.IsChecked = option.IsEnabled;
+         myCheckBoxTankCard.IsChecked = option.IsEnabled;
          option = options.Find("SkipTutorial5");
          myCheckBoxStartAfterActionReport.IsChecked = option.IsEnabled;
          //++++++++++++++++++++++++++++++++++++++++++++++++
@@ -114,6 +115,8 @@ namespace Pattons_Best
          myCheckBoxAutoRollEnemySetup.IsChecked = option.IsEnabled;
          option = options.Find("AutoRollBowMgFire");
          myCheckBoxAutoRollBowMg.IsChecked = option.IsEnabled;
+         option = options.Find("AutoSetAmmoLoad");
+         myCheckBoxAutoAmmoLoad.IsChecked = option.IsEnabled;
          //++++++++++++++++++++++++++++++++++++++++++++++++
          option = options.Find("AirInterdiction");
          myCheckBoxAirInterdiction.IsChecked = option.IsEnabled;
@@ -155,60 +158,85 @@ namespace Pattons_Best
          option = options.Find("EnemyContinueMove");
          myCheckBoxContinueMove.IsChecked = option.IsEnabled;
          if (false == option.IsEnabled)
-            isAllOtherChecked = false;
+            isAllTacticsChecked = false;
          else
-            isAtLeastOneOtherChecked = true;
+            isAtLeastOneTacticChecked = true;
          option = options.Find("EnemyRearFacingOnMove");
          myCheckBoxRearFacingAfterMoveAway.IsChecked = option.IsEnabled;
          if (false == option.IsEnabled)
-            isAllOtherChecked = false;
+            isAllTacticsChecked = false;
          else
-            isAtLeastOneOtherChecked = true;
+            isAtLeastOneTacticChecked = true;
          option = options.Find("ShermanIncreaseMoveChances");
          myCheckBoxIncreasedMove.IsChecked = option.IsEnabled;
          if (false == option.IsEnabled)
-            isAllOtherChecked = false;
+            isAllTacticsChecked = false;
          else
-            isAtLeastOneOtherChecked = true;
+            isAtLeastOneTacticChecked = true;
          option = options.Find("ShermanEnhanceMgFire");
          myCheckBoxEnhancedMgFire.IsChecked = option.IsEnabled;
          if (false == option.IsEnabled)
-            isAllOtherChecked = false;
+            isAllTacticsChecked = false;
          else
-            isAtLeastOneOtherChecked = true;
+            isAtLeastOneTacticChecked = true;
          option = options.Find("ShermanSurpressingMgFire");
          myCheckBoxMgSurpressingFire.IsChecked = option.IsEnabled;
          if (false == option.IsEnabled)
-            isAllOtherChecked = false;
+            isAllTacticsChecked = false;
          else
-            isAtLeastOneOtherChecked = true;
+            isAtLeastOneTacticChecked = true;
+         option = options.Find("MovingFwdIncreaseAdvanceChances");
+         myCheckBoxMovingFwdIncreaseAdvanceChances.IsChecked = option.IsEnabled;
+         if (false == option.IsEnabled)
+            isAllTacticsChecked = false;
+         else
+            isAtLeastOneTacticChecked = true;
+         option = options.Find("TerrainPointValueForCenter");
+         myCheckBoxTerrainPointValueCenter.IsChecked = option.IsEnabled;
+         if (false == option.IsEnabled)
+            isAllTacticsChecked = false;
+         else
+            isAtLeastOneTacticChecked = true;
          //++++++++++++++++++++++++++++++++++++++++++++++++
          // Summary Selection
-         if ( (false == isAtLeastOneGeneralChecked) && (false == isAtLeastOneOtherChecked) && (false == isAllGeneralChecked) && (false == isAllOtherChecked) )
+         if ( (false == isAtLeastOneGeneralChecked) && (false == isAtLeastOneTacticChecked) && (false == isAllGeneralChecked) && (false == isAllTacticsChecked) )
          {
             option = options.Find("OriginalGame");
             option.IsEnabled = true;
             myRadioButtonOriginal.IsChecked = true;
             myRadioButtonGeneralv25No3.IsChecked = false;
-            myRadioButtonOther.IsChecked = false;
+            myRadioButtonTactics.IsChecked = false;
+            myRadioButtonGv25No3AndTactics.IsChecked = false;
             myRadioButtonCustom.IsChecked = false;
          }
-         else if ((true == isAllGeneralChecked) && (false == isAllOtherChecked) && (false == isAtLeastOneOtherChecked) )
+         else if ((false == isAtLeastOneTacticChecked) && (true == isAllGeneralChecked))
          {
             option = options.Find("Generalv25No3");
             option.IsEnabled = true;
             myRadioButtonOriginal.IsChecked = false;
             myRadioButtonGeneralv25No3.IsChecked = true;
-            myRadioButtonOther.IsChecked = false;
+            myRadioButtonTactics.IsChecked = false;
+            myRadioButtonGv25No3AndTactics.IsChecked = false;
             myRadioButtonCustom.IsChecked = false;
          }
-         else if ((true == isAllGeneralChecked) &&  (true == isAllOtherChecked))
+         else if ((false == isAtLeastOneGeneralChecked) && (true == isAllTacticsChecked))
          {
-            option = options.Find("OtherGame");
+            option = options.Find("TacticsGame");
             option.IsEnabled = true;
             myRadioButtonOriginal.IsChecked = false;
             myRadioButtonGeneralv25No3.IsChecked = false;
-            myRadioButtonOther.IsChecked = true;
+            myRadioButtonTactics.IsChecked = true;
+            myRadioButtonGv25No3AndTactics.IsChecked = false;
+            myRadioButtonCustom.IsChecked = false;
+         }
+         else if ((true == isAllGeneralChecked) &&  (true == isAllTacticsChecked))
+         {
+            option = options.Find("Generalv25No3PlusTactic");
+            option.IsEnabled = true;
+            myRadioButtonOriginal.IsChecked = false;
+            myRadioButtonGeneralv25No3.IsChecked = false;
+            myRadioButtonTactics.IsChecked = false;
+            myRadioButtonGv25No3AndTactics.IsChecked = true;
             myRadioButtonCustom.IsChecked = false;
          }
          else
@@ -217,7 +245,8 @@ namespace Pattons_Best
             option.IsEnabled = true;
             myRadioButtonOriginal.IsChecked = false;
             myRadioButtonGeneralv25No3.IsChecked = false;
-            myRadioButtonOther.IsChecked = false;
+            myRadioButtonTactics.IsChecked = false;
+            myRadioButtonGv25No3AndTactics.IsChecked = false;
             myRadioButtonCustom.IsChecked = true;
          }
          return true;
@@ -229,12 +258,14 @@ namespace Pattons_Best
          option.IsEnabled = false;
          option = myOptions.Find("Generalv25No3Game");
          option.IsEnabled = false;
-         option = myOptions.Find("OtherGame");
+         option = myOptions.Find("TacticsGame");
+         option.IsEnabled = false;
+         option = myOptions.Find("Generalv25No3PlusTactic");
          option.IsEnabled = false;
          option = myOptions.Find("CustomGame");
          option.IsEnabled = false;
       }
-      private void ResetGameGeneralV25No3Options( bool value=false )
+      private void ResetGameGeneralV25No3Options( bool value )
       {
          Option option = myOptions.Find("AirInterdiction");
          option.IsEnabled = value;
@@ -249,7 +280,7 @@ namespace Pattons_Best
          option = myOptions.Find("AtgCoveredArc");
          option.IsEnabled = value;
       }
-      private void ResetGameOther(bool value = false)
+      private void ResetGameTactics(bool value)
       {
          Option option = myOptions.Find("EnemyContinueMove");
          option.IsEnabled = value;
@@ -261,41 +292,51 @@ namespace Pattons_Best
          option.IsEnabled = value;
          option = myOptions.Find("ShermanSurpressingMgFire");
          option.IsEnabled = value;
+         option = myOptions.Find("MovingFwdIncreaseAdvanceChances");
+         option.IsEnabled = value;
+         option = myOptions.Find("TerrainPointValueForCenter");
+         option.IsEnabled = value;
       }
       //----------------------CONTROLLER FUNCTIONS----------------------
       private void StackPanelGameType_Click(object sender, RoutedEventArgs e)
       {
          RadioButton rb = (RadioButton)sender;
          ResetGameType();
-         ResetGameGeneralV25No3Options();
-         ResetGameOther();
          myRadioButtonOriginal.IsChecked = false;
          myRadioButtonGeneralv25No3.IsChecked = false;
-         myRadioButtonOther.IsChecked = false;
+         myRadioButtonTactics.IsChecked = false;
+         myRadioButtonGv25No3AndTactics.IsChecked = false;
          myRadioButtonCustom.IsChecked = false;
          Option option;
          switch (rb.Name)
          {
             case "myRadioButtonOriginal":
                ResetGameGeneralV25No3Options(false);
-               ResetGameOther(false);
+               ResetGameTactics(false);
                option = myOptions.Find("OriginalGame");
                option.IsEnabled = true;
                myRadioButtonOriginal.IsChecked = true;
                break;
             case "myRadioButtonGeneralv25No3": 
                ResetGameGeneralV25No3Options(true);
-               ResetGameOther(false);
+               ResetGameTactics(false);
                option = myOptions.Find("Generalv25No3Game");
                option.IsEnabled = true;
                myRadioButtonGeneralv25No3.IsChecked = true;
                break;
-            case "myRadioButtonOther":
-               ResetGameGeneralV25No3Options(true);
-               ResetGameOther(true);
-               option = myOptions.Find("OtherGame");
+            case "myRadioButtonTactics":
+               ResetGameGeneralV25No3Options(false);
+               ResetGameTactics(true);
+               option = myOptions.Find("TacticsGame");
                option.IsEnabled = true;
-               myRadioButtonOther.IsChecked = true;
+               myRadioButtonGv25No3AndTactics.IsChecked = true;
+               break;
+            case "myRadioButtonGv25No3AndTactics":
+               ResetGameGeneralV25No3Options(true);
+               ResetGameTactics(true);
+               option = myOptions.Find("Generalv25No3PlusTactic");
+               option.IsEnabled = true;
+               myRadioButtonGv25No3AndTactics.IsChecked = true;
                break;
             case "myRadioButtonCustom":
                option = myOptions.Find("CustomGame");
@@ -344,11 +385,11 @@ namespace Pattons_Best
                option = myOptions.Find("SkipTutorial2");
                option.IsEnabled = !option.IsEnabled;
                break;
-            case "myCheckBoxPrinceBattleBoard":
+            case "myCheckBoxBattleBoard":
                option = myOptions.Find("SkipTutorial3");
                option.IsEnabled = !option.IsEnabled;
                break;
-            case "myCheckBoxPrinceTankCard":
+            case "myCheckBoxTankCard":
                option = myOptions.Find("SkipTutorial4");
                option.IsEnabled = !option.IsEnabled;
                break;
@@ -425,6 +466,8 @@ namespace Pattons_Best
             case "myCheckBoxIncreasedMove": option = myOptions.Find("ShermanIncreaseMoveChances"); option.IsEnabled = !option.IsEnabled; break;
             case "myCheckBoxEnhancedMgFire": option = myOptions.Find("ShermanEnhanceMgFire"); option.IsEnabled = !option.IsEnabled; break;
             case "myCheckBoxMgSurpressingFire": option = myOptions.Find("ShermanSurpressingMgFire"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxMovingFwdIncreaseAdvanceChances": option = myOptions.Find("MovingFwdIncreaseAdvanceChances"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxTerrainPointValueCenter": option = myOptions.Find("TerrainPointValueForCenter"); option.IsEnabled = !option.IsEnabled; break;
             case "myCheckBoxEndOnCmdrDeath": option = myOptions.Find("GameEndsOnCommanderDeath"); option.IsEnabled = !option.IsEnabled; break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): reached default name=" + cb.Name); return;
          }

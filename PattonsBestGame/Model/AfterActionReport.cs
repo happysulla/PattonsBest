@@ -109,6 +109,70 @@ namespace Pattons_Best
          //------------------------------
          Decorations = aar.Decorations;
       }
+      public bool CaptureArea(IGameInstance gi, ITerritory area)
+      {
+         Option optionTerrainPointValue = gi.Options.Find("TerrainPointValue");
+
+         if( false == optionTerrainPointValue.IsEnabled )
+         {
+            this.VictoryPtsCaptureArea++;
+         }
+         else
+         {
+            switch( area.Type )
+            {
+               case "A":
+               case "B":
+                  this.VictoryPtsCaptureArea++;
+                  break;
+               case "C":
+                  this.VictoryPtsCaptureArea += 3;
+                  break;
+               case "D":
+                  this.VictoryPtsCaptureArea += 2;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "Capture_Area(): reached default with area.Type=" + area.Type);
+                  return false;
+            }
+         }
+         //----------------------------
+         Option optionTerrainPointValueForCenter = gi.Options.Find("TerrainPointValueForCenter");
+         if ((true == optionTerrainPointValueForCenter.IsEnabled) && ("M018" == area.Name) )
+            this.VictoryPtsCaptureArea += Utilities.RandomGenerator.Next(0, 3);
+         return true;
+      }
+      public bool LoseArea(IGameInstance gi, ITerritory area)
+      {
+         Option optionTerrainPointValue = gi.Options.Find("TerrainPointValue");
+         if (false == optionTerrainPointValue.IsEnabled)
+         {
+            this.VictoryPtsCaptureArea--;
+         }
+         else
+         {
+            switch (area.Type)
+            {
+               case "A":
+               case "B":
+                  this.VictoryPtsCaptureArea--;
+                  break;
+               case "C":
+                  this.VictoryPtsCaptureArea -= 3;
+                  break;
+               case "D":
+                  this.VictoryPtsCaptureArea -= 2;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "Lose_Area(): reached default with area.Type=" + area.Type);
+                  return false;
+            }
+         }
+         Option optionTerrainPointValueForCenter = gi.Options.Find("TerrainPointValueForCenter");
+         if ((true == optionTerrainPointValueForCenter.IsEnabled) && ("M018" == area.Name))
+            this.VictoryPtsCaptureArea -= Utilities.RandomGenerator.Next(0, 3);
+         return true;
+      }
    }
    //===================================================================
    public class AfterActionReports : IEnumerable, IAfterActionReports

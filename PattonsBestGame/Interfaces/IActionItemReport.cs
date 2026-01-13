@@ -76,6 +76,9 @@ namespace Pattons_Best
       string DayEndedTime { get; set; }
       string Breakdown { get; set; }
       string KnockedOut { get; set; }
+      //----------------------------------------
+      public bool CaptureArea(IGameInstance gi, ITerritory t);
+      public bool LoseArea(IGameInstance gi, ITerritory t);
    }
    public interface IAfterActionReports : System.Collections.IEnumerable
    {

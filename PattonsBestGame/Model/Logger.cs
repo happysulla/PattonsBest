@@ -194,14 +194,14 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
          SetOn(LogEnum.LE_SHOW_CREW_RETURN);
-         SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
+         //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD);
          SetOn(LogEnum.LE_SHOW_PROMOTION);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
-         //SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD);
+         SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD);
          SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_ADVANCE);
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
@@ -220,10 +220,10 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_IMMOBILIZATION);
          SetOn(LogEnum.LE_SHOW_KILLED_ENEMY);
          //-------------------------------
-         SetOn(LogEnum.LE_SHOW_TIME_ADVANCE);
+         //SetOn(LogEnum.LE_SHOW_TIME_ADVANCE);
          //SetOn(LogEnum.LE_SHOW_TIME_GAME);
          //SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
-         //SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
+         SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
          //SetOn(LogEnum.LE_SHOW_VP_TOTAL);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
