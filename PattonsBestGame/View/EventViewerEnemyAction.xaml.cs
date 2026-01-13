@@ -1520,7 +1520,7 @@ namespace Pattons_Best
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetEnemyActionResult() returned ERROR");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_EnemyActionResult() returned ERROR");
                   return;
                }
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): myState=" + myState.ToString() + " enemyAction=" + enemyAction);
@@ -1601,14 +1601,21 @@ namespace Pattons_Best
                      mi.Spotting = EnumSpottingResult.UNSPOTTED;
                      mi.IsSpotted = false;
                   }
-                  mi.IsMoved = true;
-                  mi.IsHullDown = false;
-                  mi.IsBuilding = false;
-                  mi.IsFortification = false;
-                  mi.IsWoods = false;
-                  mi.IsMoving = true;
-                  if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name)) // reset to zero if enemy moves
-                     myGameInstance.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+                  if (true == mi.IsInterdicted)
+                  {
+
+                  }
+                  else
+                  {
+                     mi.IsMoved = true;
+                     mi.IsHullDown = false;
+                     mi.IsBuilding = false;
+                     mi.IsFortification = false;
+                     mi.IsWoods = false;
+                     mi.IsMoving = true;
+                     if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name)) // reset to zero if enemy moves
+                        myGameInstance.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+                  }
                }
                else
                {

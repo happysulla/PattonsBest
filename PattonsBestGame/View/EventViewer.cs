@@ -419,23 +419,30 @@ namespace Pattons_Best
             case GameAction.BattleResolveAdvanceFire:
                EventViewerResolveAdvanceFire battleResolveAdvFire = new EventViewerResolveAdvanceFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleResolveAdvFire.CtorError)
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveAdvFire.CtorError=true");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Battle_ResolveAdvFire.CtorError=true");
                else if (false == battleResolveAdvFire.ResolveAdvanceFire(ShowSupportingFireResults) )
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAdvanceFire() returned false");
                break;
             case GameAction.BattleResolveArtilleryFire:
                EventViewerResolveArtilleryFire battleResolveArtFire = new EventViewerResolveArtilleryFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleResolveArtFire.CtorError)
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): BattleResolveArtilleryFire.CtorError=true");
-               else if (false == battleResolveArtFire.ResolveArtilleryFire(ShowSupportingFireResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Battle_ResolveArtilleryFire.CtorError=true");
+               else if (false == battleResolveArtFire.ResolveArtilleryFire(ShowSupportingFireResults, false))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveArtilleryFire() returned false");
                break;
-            case GameAction.BattleRoundSequenceFriendlyAction:
+            case GameAction.BattleResolveOffoardArtilleryFire:
+               EventViewerResolveArtilleryFire battleResolveArtFire1 = new EventViewerResolveArtilleryFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == battleResolveArtFire1.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): 1-Battle_ResolveArtilleryFire.CtorError=true");
+               else if (false == battleResolveArtFire1.ResolveArtilleryFire(ShowSupportingFireResults, true))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): 1-ResolveArtilleryFire() returned false");
+               break;
+            case GameAction.BattleRoundSequenceFriendlyAction: // 4.76 - Friendly Action
                EventViewerResolveArtilleryFire battleResolveFriendlyAction = new EventViewerResolveArtilleryFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleResolveFriendlyAction.CtorError)
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveFriendlyAction.CtorError=true");
-               else if (false == battleResolveFriendlyAction.ResolveArtilleryFire(ShowFriendlyActionResults))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveArtilleryFire() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): 2-Battle_ResolveFriendlyAction.CtorError=true");
+               else if (false == battleResolveFriendlyAction.ResolveArtilleryFire(ShowFriendlyActionResults, false))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): 2-ResolveArtilleryFire() returned false");
                break;
             case GameAction.BattleResolveAirStrike:
                EventViewerResolveAirStrike battleResolveAirStrike = new EventViewerResolveAirStrike(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
@@ -5976,13 +5983,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_CollateralDamageResults(): Collateraly Damage during Ambush e=" + myGameInstance.EventActive);
             outAction = GameAction.BattleRoundSequenceRoundStart;   // Show_CollateralDamageResults() - BattlePhase.AmbushRandomEvent
          }
-         else if (BattlePhase.EnemyAction == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (EnemyAction==BattlePhase)  ==> BattleRoundSequenceFriendlyAction
+         else if (BattlePhase.EnemyAction == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (EnemyAction==BattlePhase)  ==> BattleRoundSequence_FriendlyAction
          {
-            outAction = GameAction.BattleRoundSequenceFriendlyAction; // Show_CollateralDamageResults() - (EnemyAction==BattlePhase)  ==> BattleRoundSequenceFriendlyAction
+            outAction = GameAction.BattleRoundSequenceFriendlyAction; // 4.76 - Show_CollateralDamageResults() - (EnemyAction==BattlePhase)  ==> BattleRoundSequence_FriendlyAction
          }
-         else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase)  // Show_CollateralDamageResults() - (RandomEvent==BattlePhase) ==> BattleRoundSequenceBackToSpotting
+         else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase)  // Show_CollateralDamageResults() - (RandomEvent==BattlePhase) ==> BattleRoundSequence_BackToSpotting
          {
-            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_CollateralDamageResults() - (RandomEvent==BattlePhase) ==> BattleRoundSequenceBackToSpotting
+            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_CollateralDamageResults() - (RandomEvent==BattlePhase) ==> BattleRoundSequence_BackToSpotting
          }
          else
          {
@@ -6147,7 +6154,7 @@ namespace Pattons_Best
                   {
                      if (true == mi.IsEnemyUnit())
                      {
-                        outAction = GameAction.BattleRoundSequenceFriendlyAction;
+                        outAction = GameAction.BattleRoundSequenceFriendlyAction;  //4.76 - On-Board Artillery
                         break;
                      }
                   }

@@ -223,9 +223,9 @@ namespace Pattons_Best
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
          {
-            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, true, false, false);
+            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, true, false, false);
             if (TableMgr.FN_ERROR == myGridRows[k].myModifier)
-               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): GetFriendlyActionModifier() return false");
+               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): Get_FriendlyActionModifier() return false");
          }
 
          //--------------------------------------------------
@@ -471,7 +471,7 @@ namespace Pattons_Best
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
          myGridRows[i].myDieRoll = dieRoll;
-         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, true, false, false); // EventViewerResolveAdvanceFire.ShowDieResults()
+         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false, false); // EventViewerResolveAdvanceFire.ShowDieResults()
          if ( "ERROR" == myGridRows[i].myResult )
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_FriendlyActionResult() returned ERROR");
@@ -491,15 +491,15 @@ namespace Pattons_Best
             }
          }
          //-------------------------------
-         if ("Smoke" == myGridRows[i].myResult)
+         if ("Smoke" == myGridRows[i].myResult) // update modifier if smoke is in target zone
          {
             for (int j = 0; j < myMaxRowCount; ++j)
             {
                if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
                {
-                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, true, false, false);
+                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, true, false, false);
                   if (TableMgr.FN_ERROR == myGridRows[j].myModifier)
-                     Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAdvanceFire.ShowDieResults(): GetFriendlyActionModifier() return false");
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAdvanceFire.ShowDieResults(): Get_FriendlyActionModifier() return false");
                }
             }
          }

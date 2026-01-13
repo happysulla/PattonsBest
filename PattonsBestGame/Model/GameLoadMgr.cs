@@ -3660,6 +3660,25 @@ namespace Pattons_Best
             }
             mi.IsSpotted = Convert.ToBoolean(sIsSpotted);
             //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(IsInterdicted) = false");
+               return false;
+            }
+            if (reader.Name != "IsInterdicted")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsInterdicted != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sIsInterdicted = reader.GetAttribute("value");
+            if (null == sIsInterdicted)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsInterdicted=null");
+               return false;
+            }
+            mi.IsInterdicted = Convert.ToBoolean(sIsInterdicted);
+            //---------------------------------------------
             if (false == ReadXmlListingMapItemsEnemyAcquiredShots(reader, mi.EnemyAcquiredShots))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): ReadXmlListingMapItemsEnemyAcquiredShots() returned false");
@@ -8348,6 +8367,20 @@ namespace Pattons_Best
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsSpotted) returned null");
+               return false;
+            }
+            //--------------------------------
+            elem = aXmlDocument.CreateElement("IsInterdicted");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsInterdicted) returned null");
+               return false;
+            }
+            elem.SetAttribute("value", mi.IsInterdicted.ToString());
+            node = miNode.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsInterdicted) returned null");
                return false;
             }
             //--------------------------------

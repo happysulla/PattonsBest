@@ -35,6 +35,7 @@ namespace Pattons_Best
       bool IsIncapacitated { get; set; }
       bool IsFired { get; set; }
       bool IsSpotted { get; set; }
+      bool IsInterdicted { get; set; }
       Dictionary<string, int> EnemyAcquiredShots { set; get; } // Enemies that have acquired on this MapItem <string=Firer, int=number of shots>
       //----------------------------------------
       bool IsVehicle { get; set; }

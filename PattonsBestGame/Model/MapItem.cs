@@ -129,6 +129,7 @@ namespace Pattons_Best
       public bool IsIncapacitated { get; set; } = false;
       public bool IsFired { get; set; } = false;
       public bool IsSpotted { get; set; } = false;
+      public bool IsInterdicted { get; set; } = false;
       public Dictionary<string, int> EnemyAcquiredShots { set; get; } = new Dictionary<string, int>();
       //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;

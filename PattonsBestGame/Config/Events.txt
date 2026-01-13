@@ -530,14 +530,14 @@ Fifteen minutes pass on the After Action Report
 Click image to continue.
 <LineBreak/><LineBreak/>
                                    <InlineUIContainer><Image Name='MilitaryWatch' Height='100' Width='200'></Image></InlineUIContainer>"
-e041	"<Bold>e041 Friendly Artillery</Bold> 
+e041	"<Bold>e041 Off-Board Friendly Artillery</Bold> 
 <InlineUIContainer><Button Content='r15.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Friendly artillery support arrives. Click image to continue.
+Offboard Friendly artillery support arrives. O.B. artillery is not affected by smoke, fog/snow, friendly losses, or controlled sectors. It adds affect LW/MG/ATG in woods. Click image to continue.
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
-e042	"<Bold>e042 Enemy Artillery</Bold>
+e042	"<Bold>e042 Enemy Artillery</Bold> 
 <InlineUIContainer><Button Content='r15.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Enemy artillery arrives. Roll 1D to knock out (KO) friendly units: 

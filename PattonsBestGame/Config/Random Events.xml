@@ -74,7 +74,7 @@
 		<TableRow  FontSize='12' >
 			<TableCell TextAlignment='Left' >
 				<Paragraph>
-					<Run Text='   2) Friendly Artillery'></Run>
+					<Run Text='   2) Offboard (OB) Friendly Artillery'></Run>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center' >

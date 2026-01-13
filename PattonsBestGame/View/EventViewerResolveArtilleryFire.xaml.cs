@@ -35,6 +35,7 @@ namespace Pattons_Best
       private int myMaxRowCount = 0;
       private int myRollResultRowNum = 0;
       private bool myIsRollInProgress = false;
+      private bool myIsOffboardArtillery = false;
       //---------------------------------------------------
       public struct GridRow
       {
@@ -127,8 +128,9 @@ namespace Pattons_Best
          myMapItemArtillery = new MapItem("dummyArt", Utilities.ZOOM, "c39ArtillerySupport", t);
          myGrid.MouseDown += Grid_MouseDown;
       }
-      public bool ResolveArtilleryFire(EndResolveArtilleryFireCallback callback)
+      public bool ResolveArtilleryFire(EndResolveArtilleryFireCallback callback, bool isOffBoardArtillery)
       {
+         myIsOffboardArtillery = isOffBoardArtillery;
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveArtilleryFire(): myGameInstance=null");
@@ -237,9 +239,9 @@ namespace Pattons_Best
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
          {
-            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, true, false);
+            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, false, true, myIsOffboardArtillery);
             if (TableMgr.FN_ERROR == myGridRows[k].myModifier)
-               Logger.Log(LogEnum.LE_ERROR, "ResolveArtilleryFire(): GetFriendlyActionModifier() return false");
+               Logger.Log(LogEnum.LE_ERROR, "ResolveArtilleryFire(): Get_FriendlyActionModifier() return false");
          }
          //--------------------------------------------------
          if( BattlePhase.FriendlyAction == myGameInstance.BattlePhase)
@@ -504,7 +506,7 @@ namespace Pattons_Best
          //dieRoll = 50; // <CGS> TEST - AdvanceRetreat - AAAAAAAAAAAAAAAAAAAAAAA no artillery deaths
          //dieRoll = 1;  // <CGS> TEST -                  AAAAAAAAAAAAAAAAAAAAAAA ensure artillery deaths to end battle quickly
          myGridRows[i].myDieRoll = dieRoll;
-         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false); // EventViewerResolveArtilleryFire.ShowDieResults()
+         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, false, !myIsOffboardArtillery, myIsOffboardArtillery); // EventViewerResolveArtilleryFire.ShowDieResults()
          if ( "ERROR" == myGridRows[i].myResult )
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_FriendlyActionResult() returned ERROR");
@@ -527,11 +529,11 @@ namespace Pattons_Best
          {
             for (int j = 0; j < myMaxRowCount; ++j)
             {
-               if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
+               if (Utilities.NO_RESULT == myGridRows[j].myDieRoll) // update modifier if smoke is in target zone
                {
-                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, true, false);
+                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, false, !myIsOffboardArtillery, myIsOffboardArtillery);
                   if (TableMgr.FN_ERROR == myGridRows[j].myModifier)
-                     Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveArtilleryFire.ShowDieResults(): GetFriendlyActionModifier() return false");
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveArtilleryFire.ShowDieResults(): Get_FriendlyActionModifier() return false");
                }
             }
          }

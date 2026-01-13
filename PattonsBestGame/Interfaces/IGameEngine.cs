@@ -343,6 +343,7 @@ namespace Pattons_Best
       BattlePlaceAdvanceFire,
       BattleResolveAdvanceFire,
       BattleResolveArtilleryFire,
+      BattleResolveOffoardArtilleryFire,
       BattleResolveAirStrike,
       BattleAmbushStart,
       BattleAmbushRoll,

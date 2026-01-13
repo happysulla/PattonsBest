@@ -237,23 +237,23 @@
 						<Run Text='Die Roll modifiers (To KO only):'></Run>
 					</Bold>
 					<LineBreak/>
-					<Run Text='-10 Flanking Fire'></Run>
+					<Run Text='-10 Flanking Fire - 4.76 Friendly Action attack and not Offboard (OB) Artillery'></Run>
 					<LineBreak/>
 					<Run Text='-10 Air Strikes versus vehicles'></Run>
 					<LineBreak/>
-					<Run Text='-3 For each sector marked US Control'></Run>
+					<Run Text='-3 For each sector marked US Control - Advance Fire and r4.76 attacks'></Run>
 					<LineBreak/>
-					<Run Text='-3 Artillery versus LW, MG, or AT gun targets in Woods'></Run>
+					<Run Text='-3 Artillery versus LW, MG, or AT gun targets in Woods - Only Applies to OB Artillery'></Run>
 					<LineBreak/>
-					<Run Text='+1 Versus LW or MG for each friendly infantry squad lost '></Run>
+					<Run Text='+1 Versus LW or MG for each friendly infantry squad lost - Advance Fire and r4.76 attacks'></Run>
 					<LineBreak/>
-					<Run Text='+2 Versus vehicle targets for each friendly tank lost '></Run>
+					<Run Text='+2 Versus vehicle targets for each friendly tank lost - Advance Fire and r4.76 attacks'></Run>
 					<LineBreak/>
-					<Run Text='+10 For each smoke marker in the targets zone '></Run>
+					<Run Text='+10 For each smoke marker in the targets zone - Does not apply for OB Artillery'></Run>
 					<LineBreak/>
-					<Run Text='+10 During fog or falling snow weather'></Run>
+					<Run Text='+10 During fog or falling snow weather - Does not apply for OB Artillery'></Run>
 					<LineBreak/>
-					<Run Text='+10 Advancing Fire or Artillery Fire versus vehicles (except trucks)'></Run>
+					<Run Text='+10 Advancing Fire or OB Artillery Fire versus vehicles (except trucks)'></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>

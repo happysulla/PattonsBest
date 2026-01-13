@@ -948,14 +948,14 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): unknown enemyUnit=" + mi.Name);
             return "ERROR";
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): lastReport=null");
             return "ERROR";
          }
          bool isDoNothingInsteadOfFiring = false;  // If fog or falling snow, do not fire if not at close range
@@ -971,10 +971,12 @@ namespace Pattons_Best
          if (EnumSpottingResult.HIDDEN == mi.Spotting)
             isDoNothingInsteadOfFiringAtYourTank = true;
          //----------------------------------------------------
+         bool isDoNothingInsteadOfMoving = mi.IsInterdicted; ;
+         //----------------------------------------------------
          int modifier = GetEnemyActionModifier(gi, mi);
          if (modifier < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): GetEnemyActionModifier() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): GetEnemyActionModifier() returned error");
             return "ERROR";
          }
          dieRoll += modifier;
@@ -988,13 +990,33 @@ namespace Pattons_Best
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 21)
-                     return "Move-F";
+                  {
+                     if( true == isDoNothingInsteadOfMoving )
+                        return "Do Nothing";
+                     else
+                        return "Move-F";
+                  }
                   if (dieRoll < 31)
-                     return "Move-L";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 41)
-                     return "Move-R";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 61)
-                     return "Move-B";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 96)
                   {
                      if (true == isDoNothingInsteadOfFiring)
@@ -1009,7 +1031,12 @@ namespace Pattons_Best
                case "Pak38":
                case "Pak40":
                   if (dieRoll < 21)
-                     return "Move-B";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 31)
                      return "Do Nothing";
                   if (dieRoll < 66)
@@ -1040,13 +1067,33 @@ namespace Pattons_Best
                   if (dieRoll < 31)
                      return "Do Nothing";
                   if (dieRoll < 41)
-                     return "Move-F";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-F";
+                  }
                   if (dieRoll < 51)
-                     return "Move-L";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 61)
-                     return "Move-R";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 91)
-                     return "Move-B";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   return "Do Nothing";
                case "PSW":
                case "SPW":
@@ -1054,28 +1101,28 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 41)
                   {
-                     if (true == isThrownTrack)
+                     if ( (true == isThrownTrack) || (true == isDoNothingInsteadOfMoving) )
                         return "Do Nothing";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 51)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 61)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 91)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-B";
@@ -1104,28 +1151,28 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 21)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 31)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 41)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 61)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-B";
@@ -1144,7 +1191,7 @@ namespace Pattons_Best
                      }
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if (true == isThrownTrack)
+                        if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                            return "Do Nothing";
                         else
                            return "Move-B";
@@ -1170,7 +1217,7 @@ namespace Pattons_Best
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
                   return "ERROR";
             }
          }
@@ -1183,13 +1230,33 @@ namespace Pattons_Best
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 21)
-                     return "Move-F";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-F";
+                  }
                   if (dieRoll < 31)
-                     return "Move-L";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 41)
-                     return "Move-R";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 61)
-                     return "Move-B";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 96)
                      return "Fire-Infantry";
                   return "Collateral";
@@ -1198,7 +1265,12 @@ namespace Pattons_Best
                case "Pak38":
                case "Pak40":
                   if (dieRoll < 21)
-                     return "Move-B";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 31)
                      return "Do Nothing";
                   if (dieRoll < 81)
@@ -1240,28 +1312,28 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 16)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 21)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 26)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 36)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-B";
@@ -1280,7 +1352,7 @@ namespace Pattons_Best
                      }
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if (true == isThrownTrack)
+                        if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                            return "Do Nothing";
                         else
                            return "Move-B";
@@ -1306,7 +1378,7 @@ namespace Pattons_Best
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): Battle - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): Battle - reached default with enemyUnit=" + enemyUnit);
                   return "ERROR";
             }
          }
@@ -1319,13 +1391,33 @@ namespace Pattons_Best
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 41)
-                     return "Move-F";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-F";
+                  }
                   if (dieRoll < 51)
-                     return "Move-L";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 61)
-                     return "Move-R";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 71)
-                     return "Move-B";
+                  {
+                     if (true == isDoNothingInsteadOfMoving)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 76)
                   {
                      if (true == isDoNothingInsteadOfFiring)
@@ -1350,28 +1442,28 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 41)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-F";
                   }
                   if (dieRoll < 51)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-L";
                   }
                   if (dieRoll < 61)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-R";
                   }
                   if (dieRoll < 71)
                   {
-                     if (true == isThrownTrack)
+                     if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                         return "Do Nothing";
                      else
                         return "Move-B";
@@ -1390,7 +1482,7 @@ namespace Pattons_Best
                      }
                      else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
-                        if (true == isThrownTrack)
+                        if ((true == isThrownTrack) || (true == isDoNothingInsteadOfMoving))
                            return "Do Nothing";
                         else
                            return "Move-B";
@@ -1408,11 +1500,11 @@ namespace Pattons_Best
                      return "Do Nothing";
                   return "Fire-Your Tank";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): Counterattack - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): Counterattack - reached default with enemyUnit=" + enemyUnit);
                   return "ERROR";
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default");
+         Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): reached default");
          return "ERROR";
       }
       public static ITerritory? SetNewTerritory(IMapItem mi, string move)
@@ -4217,7 +4309,7 @@ namespace Pattons_Best
          return movingModifier;
       }
       //-------------------------------------------
-      public static int GetFriendlyActionModifier(IGameInstance gi, IMapItem mi, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
+      public static int GetFriendlyActionModifier(IGameInstance gi, IMapItem mi, int numUsControlledSector, bool isAirStrike, bool isAdvancingFire, bool isOnBoardArtilleryFire, bool isOffBoardArillery )
       {
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
@@ -4300,7 +4392,7 @@ namespace Pattons_Best
             modifier -= 10;
          }
          //----------------------------------------------------
-         if (true == isAdvancingFire) // friendly losses and friendly sectors do not affect artillery/airstrikes
+         if ( (true == isAdvancingFire) || (true == isOnBoardArtilleryFire) ) // friendly losses and friendly sectors do not affect artillery/airstrikes
          {
             int minus = 3 * numUsControlledSector;
             modifier -= minus;
@@ -4318,28 +4410,30 @@ namespace Pattons_Best
             }
          }
          //----------------------------------------------------
-         if ((true == isInfantryTargetInWoods) && (true == isArtilleryFire))
+         if ((true == isInfantryTargetInWoods) && (true == isOffBoardArillery))
          {
             Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -3 artillery vs inf in woods");
             modifier -= 3;
          }
          //----------------------------------------------------
-         foreach (IMapItem smoke in stack.MapItems)
+         if( false == isOffBoardArillery )
          {
-            if (true == smoke.Name.Contains("Smoke"))
+            foreach (IMapItem mi1 in stack.MapItems)
             {
-               Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 smoke");
+               if (true == mi1.Name.Contains("Smoke"))
+               {
+                  Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 smoke");
+                  modifier += 10;
+               }
+            }
+            if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
+            {
+               Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 fog/falling");
                modifier += 10;
             }
          }
          //----------------------------------------------------
-         if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
-         {
-            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 fog/falling");
-            modifier += 10;
-         }
-         //----------------------------------------------------
-         if ((true == isTargetVehicle) && (false == isTruck) && (true == isAdvancingFire || true == isArtilleryFire))
+         if ((true == isTargetVehicle) && (false == isTruck) && (true == isAdvancingFire || true == isOffBoardArillery))
          {
             Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 non-truck vehicle during adv/artillery fire");
             modifier += 10;
@@ -4347,8 +4441,9 @@ namespace Pattons_Best
          //----------------------------------------------------
          return modifier;
       }
-      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
+      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAirStrike, bool isAdvancingFire, bool isOnBoardArtilleryFire, bool isOffBoardArillery)
       {
+         Option optionAirInterdiction = gi.Options.Find("AirInterdiction");
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -4356,7 +4451,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): lastReport=null");
             return "ERROR";
          }
-         if ( (false == isArtilleryFire)  &&  ((true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))) )
+         if ( (false == isOnBoardArtilleryFire)  &&  ((true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))) )
          {
             if ("B6M" == mi.TerritoryCurrent.Name || "B6L" == mi.TerritoryCurrent.Name) // no Friendly action allowed in these regions unless artillery
                return "None";
@@ -4405,19 +4500,34 @@ namespace Pattons_Best
             case "JdgPzIV":
             case "JdgPz38t":
                if (79 < dieRoll)
-                  isSmokeAddedToTerritory = true;
+               {
+                  if( (true == isAirStrike) && (true == optionAirInterdiction.IsEnabled))
+                     mi.IsInterdicted = true;
+                  else
+                     isSmokeAddedToTerritory = true;
+               }
                break;
             case "PzIV":
             case "STuGIIIg":
             case "SPG":
                if (89 < dieRoll)
-                  isSmokeAddedToTerritory = true;
+               {
+                  if ((true == isAirStrike) && (true == optionAirInterdiction.IsEnabled))
+                     mi.IsInterdicted = true;
+                  else
+                     isSmokeAddedToTerritory = true;
+               }
                break;
             case "TANK":
             case "PzVIe":
             case "PzVIb":
                if (59 < dieRoll)
-                  isSmokeAddedToTerritory = true;
+               {
+                  if ((true == isAirStrike) && (true == optionAirInterdiction.IsEnabled))
+                     mi.IsInterdicted = true;
+                  else
+                     isSmokeAddedToTerritory = true;
+               }
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
@@ -4434,7 +4544,7 @@ namespace Pattons_Best
             return "Smoke"; // if smoke occurs, no chance of killing target
          }
          //----------------------------------------------------
-         int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike);
+         int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAirStrike, isAdvancingFire, isOnBoardArtilleryFire, isOffBoardArillery);
          if (FN_ERROR == modifier)
          {
             Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Get_FriendlyActionModifier() returned error");

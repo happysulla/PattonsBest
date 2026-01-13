@@ -6216,6 +6216,7 @@ namespace Pattons_Best
                   break; 
                case GameAction.BattleActivation:       // GameStateBattle.PerformAction(BattleActivation) - EventViewer takes over
                case GameAction.BattleResolveArtilleryFire:
+               case GameAction.BattleResolveOffoardArtilleryFire:
                case GameAction.BattleResolveAirStrike:
                case GameAction.BattleResolveAdvanceFire:
                   break;
@@ -6407,7 +6408,7 @@ namespace Pattons_Best
                         case "Friendly Artillery":
                            if (true == isEnemyUnitLeft)
                            {
-                              action = GameAction.BattleResolveArtilleryFire;
+                              action = GameAction.BattleResolveOffoardArtilleryFire; // "Off-Board Friendly Artillery"
                            }
                            else if (false == NextStepAfterRandomEventBattle(gi, ref action))
                            {
@@ -6461,7 +6462,7 @@ namespace Pattons_Best
                         case "Flanking Fire":
                            if (true == isEnemyUnitLeft)
                            {
-                              action = GameAction.BattleResolveArtilleryFire;
+                              action = GameAction.BattleResolveArtilleryFire; // "On-Board Flanking Fire"
                               gi.IsFlankingFire = true;
                            }
                            else if (false == NextStepAfterRandomEventBattle(gi, ref action))
@@ -8112,6 +8113,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceCollateralDamageCheck: // Handled with EventViewerTankCollateral class
                   break;
                case GameAction.BattleResolveArtilleryFire:
+               case GameAction.BattleResolveOffoardArtilleryFire:
                   break;
                case GameAction.BattleRoundSequenceRandomEvent:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRandomEvent): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmbushRandomEvent");
@@ -8170,7 +8172,7 @@ namespace Pattons_Best
                         case "Friendly Artillery":
                            if (true == isEnemyUnitLeft)
                            {
-                              action = GameAction.BattleResolveArtilleryFire;
+                              action = GameAction.BattleResolveOffoardArtilleryFire; // "Off-Board Friendly Artillery"
                            }
                            else if (false == NextStepAfterRandomEvent(gi, ref action))
                            {
@@ -8224,7 +8226,7 @@ namespace Pattons_Best
                         case "Flanking Fire":
                            if (true == isEnemyUnitLeft)
                            {
-                              action = GameAction.BattleResolveArtilleryFire;
+                              action = GameAction.BattleResolveArtilleryFire; // "On-Board Flanking Fire"
                               gi.IsFlankingFire = true;
                            }
                            else if (false == NextStepAfterRandomEvent(gi, ref action))
@@ -9005,7 +9007,7 @@ namespace Pattons_Best
                {
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.FriendlyAction");
                   gi.BattlePhase = BattlePhase.FriendlyAction;
-                  outAction = GameAction.BattleResolveArtilleryFire;
+                  outAction = GameAction.BattleResolveArtilleryFire; // 4.76 - On-Board Artillery
                }
                else
                {
@@ -10668,6 +10670,7 @@ namespace Pattons_Best
                   removals.Add(mi);
                if (true == mi.Name.Contains("Panzerfaust"))
                   removals.Add(mi);
+               mi.IsInterdicted = false;
             }
          }
          foreach (IMapItem mi in removals)
