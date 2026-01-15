@@ -52,7 +52,7 @@ namespace Pattons_Best
          public IMapItem myMapItem;
          //---------------------------------------------------
          public int myExplosionModifier = 0;
-         public int myDieRollExplosion = Utilities.NO_RESULT;
+         public int myExplosionDieRoll = Utilities.NO_RESULT;
          public string myExplosionResult = "Uninit";
          //---------------------------------------------------
          public GridRowExplode(IMapItem mi)
@@ -687,7 +687,7 @@ namespace Pattons_Best
          Grid.SetRow(label1, rowNum);
          Grid.SetColumn(label1, 1);
          //----------------------------
-         if (Utilities.NO_RESULT == myGridRowExplodes[0].myDieRollExplosion)
+         if (Utilities.NO_RESULT == myGridRowExplodes[0].myExplosionDieRoll)
          {
             BitmapImage bmi = new BitmapImage();
             bmi.BeginInit();
@@ -701,11 +701,11 @@ namespace Pattons_Best
          }
          else
          {
-            Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowExplodes[0].myDieRollExplosion.ToString() };
+            Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowExplodes[0].myExplosionDieRoll.ToString() };
             myGrid.Children.Add(label2);
             Grid.SetRow(label2, rowNum);
             Grid.SetColumn(label2, 2);
-            int combo = myGridRowExplodes[0].myExplosionModifier + myGridRowExplodes[0].myDieRollExplosion;
+            int combo = myGridRowExplodes[0].myExplosionModifier + myGridRowExplodes[0].myExplosionDieRoll;
             Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = combo.ToString() };
             myGrid.Children.Add(label3);
             Grid.SetRow(label3, rowNum);
@@ -1154,8 +1154,8 @@ namespace Pattons_Best
          {
             case E0481Enum.TANK_EXPLOSION_ROLL:
                //dieRoll = 1; // <CGS> TEST - KillYourTank - tank penetration
-               myGridRowExplodes[0].myDieRollExplosion = dieRoll;
-               int rollPlusModifier = dieRoll + myGridRowExplodes[0].myDieRollExplosion;
+               myGridRowExplodes[0].myExplosionDieRoll = dieRoll;
+               int rollPlusModifier = myGridRowExplodes[0].myExplosionDieRoll + myGridRowExplodes[0].myExplosionModifier;
                if (99 < rollPlusModifier)
                {
                   myGridRowExplodes[0].myExplosionResult = "Explodes";

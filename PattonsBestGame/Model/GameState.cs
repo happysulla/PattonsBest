@@ -317,7 +317,7 @@ namespace Pattons_Best
          {
             gi.MinSinceLastCheck += 30;
             AdvanceTime(lastReport, 30);   // Replace_InjuredCrewmen() - replacing crewmen takes 30 minutes
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Replace_InjuredCrewmen() : +30 replace crewmen -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Replace_InjuredCrewmen() : +30 replace crewmen -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
             Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): advancing time by 30 min gp=" + gi.GamePhase.ToString());
          }
          return true;
@@ -1392,7 +1392,7 @@ namespace Pattons_Best
                enemyUnit.IsWoods = false;
                enemyUnit.IsBuilding = false;
                enemyUnit.IsFortification = false;
-               enemyUnit.IsThrownTrack = false;
+               enemyUnit.IsThrownTrack = false;  // EnemiesOverrun_ToPreviousArea()
                enemyUnit.Zoom = 1.0;
                enemyUnit.TerritoryCurrent = t;
                IMapPoint mp = Territory.GetRandomPoint(t, enemyUnit.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area
@@ -1481,6 +1481,7 @@ namespace Pattons_Best
          gi.Sherman.RotationHull = 0.0;
          gi.Sherman.IsMoving = false;
          gi.Sherman.IsHullDown = false;
+         gi.Sherman.IsThrownTrack = false; // PrepareFor_Battle()
          gi.Sherman.IsBoggedDown = false;  // PrepareFor_Battle()
          gi.Sherman.EnemyAcquiredShots.Clear();
          //---------------------------------
@@ -1978,6 +1979,7 @@ namespace Pattons_Best
                statMaxCrewRatingWin.Value = crewRating;
                GameStatistic statMinCrewRatingWin = gi.Statistics.Find("MinCrewRatingWin");
                statMinCrewRatingWin.Value = crewRating;
+               Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): crewRating=" + crewRating.ToString());
             }
             //----------------------------
             GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
@@ -5149,7 +5151,7 @@ namespace Pattons_Best
                      {
                         gi.MinSinceLastCheck += 15;
                         AdvanceTime(lastReport, 15);       // MovementEnemyStrengthCheckTerritory - when not first check
-                        Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory): +15  -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                        Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory): +15  -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                         if (false == gi.IsDaylightLeft(lastReport))  // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritory) 
                         {
                            gi.GamePhase = GamePhase.EveningDebriefing;
@@ -5247,7 +5249,7 @@ namespace Pattons_Best
                   {
                      gi.MinSinceLastCheck += 15;
                      AdvanceTime(lastReport, 15);       // MovementArtillerySupportCheck
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(MovementArtillerySupportCheck): +15  -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(MovementArtillerySupportCheck): +15  -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                      if (false == gi.IsDaylightLeft(lastReport))  // GameStateMovement.PerformAction(MovementArtillerySupportChoice) 
                      {
                         gi.GamePhase = GamePhase.EveningDebriefing;
@@ -5306,13 +5308,13 @@ namespace Pattons_Best
                   {
                      gi.MinSinceLastCheck += 30;
                      AdvanceTime(lastReport, 30);   // GameStateMovement.PerformAction(Movement_AirStrikeCheckTerritory) 
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +30 Movement_AirStrikeCheckTerritory -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +30 Movement_AirStrikeCheckTerritory -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                   }
                   else
                   {
                      gi.MinSinceLastCheck += 15;
                      AdvanceTime(lastReport, 15);   // GameStateMovement.PerformAction(Movement_AirStrikeCheckTerritory) 
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +30 Movement_AirStrikeCheckTerritory -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +30 Movement_AirStrikeCheckTerritory -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                   }
                   //---------------------------------------
                   if (false == gi.IsDaylightLeft(lastReport))  // GameStateMovement.PerformAction(Movement_AirStrikeCheckTerritory) 
@@ -5349,13 +5351,13 @@ namespace Pattons_Best
                   {
                      gi.MinSinceLastCheck += 45;
                      AdvanceTime(lastReport, 45);  // GameStateMovement.PerformAction(MovementResupplyCheck) 
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(): +45 MovementResupplyCheck -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(): +45 MovementResupplyCheck -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                   }
                   else
                   {
                      gi.MinSinceLastCheck += 60;
                      AdvanceTime(lastReport, 60);  // GameStateMovement.PerformAction(MovementResupplyCheck) 
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(): +60 MovementResupplyCheck -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(): +60 MovementResupplyCheck -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                   }
                   if (false == gi.IsDaylightLeft(lastReport))  // GameStateMovement.PerformAction(MovementResupplyCheck) 
                   {
@@ -5491,14 +5493,14 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Battle;
                   gi.MinSinceLastCheck += 15;
                   AdvanceTime(lastReport, 15);     // GameStateMovement.PerformAction(MovementBattlePhase_StartCounterattack) - SHow e035 Ambush Check - This happens when on Move Board and battle activated
-                  Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +15 for MovementBattlePhase_StartCounterattack -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +15 for MovementBattlePhase_StartCounterattack -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                   break;
                case GameAction.MovementBattlePhaseStartDueToAdvance:
                case GameAction.MovementBattlePhaseStartDueToRetreat:   // GameStateMovement.PerformAction(Battle_Activation) - Add 15 min - This happens when on Move Board and battle activated
                   gi.GamePhase = GamePhase.Battle;
                   gi.MinSinceLastCheck += 15;
                   AdvanceTime(lastReport, 15);     // GameStateMovement.PerformAction(Battle_Activation)
-                  Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +15 for Battle_Activation -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +15 for Battle_Activation -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                   break;
                case GameAction.MovementBattleCheckCounterattackRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -5512,7 +5514,7 @@ namespace Pattons_Best
                      gi.DieResults[key][0] = Utilities.NO_RESULT; // only enter this path if no combat this time. Rereoll again until daylight ends
                      gi.MinSinceLastCheck += 15;
                      AdvanceTime(lastReport, 15);     // MovementBattleCheckCounterattackRoll - no battle  - if a battle occurs, it will be MovementBattlePhaseStartCounterattack event
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +15 for Movement_BattleCheckCounterattackRoll -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction() : +15 for Movement_BattleCheckCounterattackRoll -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                      if (false == gi.IsDaylightLeft(lastReport)) // GameStateMovement.PerformAction(MovementBattleCheckCounterattackRoll)
                      {
                         gi.GamePhase = GamePhase.EveningDebriefing;
@@ -5937,25 +5939,25 @@ namespace Pattons_Best
          {
             gi.MinSinceLastCheck += 15;
             AdvanceTime(lastReport, 15);    // Move_TaskForceToNewArea() - Paved Roads
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +15 for paved roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +15 for paved roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
          }
          else if (true == taskForce.TerritoryCurrent.UnpavedRoads.Contains(gi.EnteredArea.Name))
          {
             gi.MinSinceLastCheck += 30;
             AdvanceTime(lastReport, 30);    // Move_TaskForceToNewArea() - Unpaved Roads
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +30 for unpaved roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +30 for unpaved roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
          }
          else
          {
             gi.MinSinceLastCheck += 45;
             AdvanceTime(lastReport, 45);   // Move_TaskForceToNewArea() - no roads
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +45 for no roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +45 for no roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
          }
          if ((true == lastReport.Weather.Contains("Mud")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Rain")) || (true == lastReport.Weather.Contains("Ground Snow")) || (true == lastReport.Weather.Contains("Deep Snow")))
          {
             gi.MinSinceLastCheck += 15;
             AdvanceTime(lastReport, 15);    // Move_TaskForceToNewArea() - add 15 min for mud/fog/rain/snow
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +15 for mud/fog/rain/snow -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "MoveTaskForceToNewArea(): +15 for mud/fog/rain/snow -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
          }
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "Move_TaskForceToNewArea(): TF Entering t=" + gi.EnteredArea.Name);
@@ -6029,7 +6031,7 @@ namespace Pattons_Best
          gi.BattlePhase = BattlePhase.Ambush;
          gi.MinSinceLastCheck += 15;
          AdvanceTime(lastReport, 15);     // StartBattle() called by Resolve_BattleCheckRoll()
-         Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Start_Battle(): +15 for starting battle -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+         Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Start_Battle(): +15 for starting battle -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
          Logger.Log(LogEnum.LE_SHOW_START_BATTLE, "Start_Battle(): -----------------------------------");
          return true;
       }
@@ -6282,7 +6284,7 @@ namespace Pattons_Best
                      SetCommand(gi, outAction, GameAction.BattleAmbushRoll, "e035");  // Perform_AutoBattlePreparationsSetup() - Start Ambush Check - Advance/Battle - Start battle activation due to starting movement with enemy in area
                      gi.MinSinceLastCheck += 15;
                      AdvanceTime(lastReport, 15);    // Perform_AutoBattlePreparationsSetup() - Advance/Battle - Start battle activation due to starting movement with enemy in area
-                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Perform_AutoBattlePreparationsSetup() : +15 Advance/Battle - Start battle activation due to starting movement with enemy in area -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Perform_AutoBattlePreparationsSetup() : +15 Advance/Battle - Start battle activation due to starting movement with enemy in area -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                   }
                   else
                   {
@@ -6543,7 +6545,7 @@ namespace Pattons_Best
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e040");
                            gi.MinSinceLastCheck += 15;
                            AdvanceTime(lastReport, 15);     // GameStateBattle.PerformAction(BattleRandomEventRoll) - Time Passes
-                           Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "ameStateBattle.PerformAction(BattleRandomEventRoll) : +15 for time passes -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                           Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "ameStateBattle.PerformAction(BattleRandomEventRoll) : +15 for time passes -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" +gi.MinSinceLastCheck.ToString());
                            if (false == NextStepAfterRandomEventBattle(gi, ref action))
                            {
                               returnStatus = "NextStep_AfterRandomEvent() returned false";
@@ -6773,6 +6775,7 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+                  break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -8314,7 +8317,7 @@ namespace Pattons_Best
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e040");
                            gi.MinSinceLastCheck += 15;
                            AdvanceTime(lastReport, 15);     // GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll) - Time Passes
-                           Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll) : +15 for time passes -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
+                           Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll) : +15 for time passes -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
                            if (false == NextStepAfterRandomEvent(gi, ref action))
                            {
                               returnStatus = "NextStep_AfterRandomEvent() returned false";
@@ -9469,7 +9472,7 @@ namespace Pattons_Best
             enemyUnit.IsWoods = false;
             enemyUnit.IsBuilding = false;
             enemyUnit.IsFortification = false;
-            enemyUnit.IsThrownTrack = false;
+            enemyUnit.IsThrownTrack = false; // MoveSherman_AdvanceOrRetreat()
             enemyUnit.Zoom = 1.0;
             enemyUnit.TerritoryCurrent = gi.EnteredArea;
             IMapPoint mp1 = Territory.GetRandomPoint(gi.EnteredArea, enemyUnit.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area

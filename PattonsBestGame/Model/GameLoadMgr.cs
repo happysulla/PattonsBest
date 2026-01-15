@@ -3783,18 +3783,18 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(IsThrownTrack) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(Is_ThrownTrack) = false");
                return false;
             }
             if (reader.Name != "IsThrownTrack")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsThrownTrack != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): Is_ThrownTrack != (node=" + reader.Name + ")");
                return false;
             }
             string? sIsThrownTrack = reader.GetAttribute("value");
             if (null == sIsThrownTrack)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsThrownTrack=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): Is_ThrownTrack=null");
                return false;
             }
             mi.IsThrownTrack = Convert.ToBoolean(sIsThrownTrack);
@@ -8463,14 +8463,14 @@ namespace Pattons_Best
             elem = aXmlDocument.CreateElement("IsThrownTrack");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsThrownTrack) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(Is_ThrownTrack) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsThrownTrack.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsThrownTrack) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(Is_ThrownTrack) returned null");
                return false;
             }
             //--------------------------------

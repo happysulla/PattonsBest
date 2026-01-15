@@ -75,7 +75,7 @@
                <CheckBox x:Name="myCheckBoxEnhancedMgFire"  Content="Increase Sherman MG Leathality" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxMgSurpressingFire"  Content="Decrease Enemy Fire from Sherman MGs" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxMovingFwdIncreaseAdvanceChances"  Content="Sherman advancing increase Friendly Advance" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-               <CheckBox x:Name="myCheckBoxTerrainPointValueCenter"  Content="Add random (0 to 2) points for capturing center grid" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxTerrainPointValueCenter"  Content="Add random 0-2 points for capturing center area" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
             </StackPanel>
          </GroupBox>
          <StackPanel Name="myStackPanelButtons" Grid.Row="3" Grid.ColumnSpan="4"  Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="5,5,5,15" >

@@ -670,7 +670,8 @@ namespace Pattons_Best
                   Canvas.SetLeft(imgTerrain, 0);
                   Canvas.SetTop(imgTerrain, 0);
                }
-               else if (true == mi.IsThrownTrack)
+               ///-----------------------------------------
+               if (true == mi.IsThrownTrack)
                {
                   double width = zoom * Utilities.theMapItemSize;
                   double height = width;

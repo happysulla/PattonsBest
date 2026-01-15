@@ -2443,7 +2443,7 @@ r28.9	"<Bold>r28.10 Hints - Crew Actions</Bold>
 r29.0	"<Bold>r29.0 Fuel</Bold>
 <LineBreak/><LineBreak/>
 All Sherman tank models carry a maxium of 35 units of fuel, where each unit equals 5 gallons (175 gallons total). During the Time Check step 
-<InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the sequence of play when you determine the amount of time and ammo already expended for the day, 
+<InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the sequence of play, when you determine the amount of time and ammo already expended for the day, 
 the number rolled also deteremines the number of fuel units already used.
 <LineBreak/><LineBreak/>
 Subtract the number rolled from 35 to determine the number of fuel units remaining. 

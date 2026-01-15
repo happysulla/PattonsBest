@@ -321,16 +321,13 @@ namespace Pattons_Best
          //-------------------------------------------------------
          switch (action)
          {
-            case GameAction.UnitTestStart:
-            case GameAction.UnitTestCommand:
-            case GameAction.UnitTestNext:
-            case GameAction.UnitTestCleanup:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowGameFeatsDialog:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
+            case GameAction.ShowTableListing:
+            case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.SetupShowMapHistorical:
@@ -3342,11 +3339,14 @@ namespace Pattons_Best
             }
             else if (true == stat.Key.Contains("Min"))
             {
-               GameStatistic statMin = totalStatistics.Find(stat.Key);
-               if (0 == statMin.Value)
-                  statMin.Value = 1000000;
-               if ( stat.Value < statMin.Value )
-                  statMin.Value = stat.Value;
+               GameStatistic current = totalStatistics.Find(stat.Key);
+               Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): current.Value=" + current.Value.ToString() + " stat.Value=" + stat.Value.ToString());
+               if ( (stat.Value < current.Value) && (0 != stat.Value) )
+               {
+                  Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): (stat.Value=" + stat.Value.ToString() + ") < (current.Value=" + current.Value.ToString() + ")");
+                  current.Value = stat.Value;
+               }
+
             }
          }
       }

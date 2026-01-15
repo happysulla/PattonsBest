@@ -3359,7 +3359,7 @@ namespace Pattons_Best
             string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi, gi.TargetMainGun);
             myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
              myTextBlock.Inlines.Add(new LineBreak());
-            double toHitNum = TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun);
+            double toHitNum = Math.Floor( TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun) );
             if (TableMgr.FN_ERROR == toHitNum)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): Get_ShermanToHitBaseNumber() returned error for key=" + key);
