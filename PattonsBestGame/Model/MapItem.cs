@@ -244,7 +244,7 @@ namespace Pattons_Best
             this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
          //--------------------------------------
          this.IsVehicle = mi.IsVehicle;
-         this.IsMovingInOpen = mi.IsMovingInOpen;
+         this.IsMovingInOpen = mi.IsMovingInOpen; // Copy()
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
          this.IsFortification = mi.IsFortification;
@@ -282,7 +282,7 @@ namespace Pattons_Best
             this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
          //--------------------------------------
          this.IsVehicle = mi.IsVehicle;
-         this.IsMovingInOpen = mi.IsMovingInOpen;
+         this.IsMovingInOpen = mi.IsMovingInOpen;  // Sync()
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
          this.IsFortification = mi.IsFortification;

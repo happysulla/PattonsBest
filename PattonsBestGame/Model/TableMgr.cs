@@ -7876,28 +7876,28 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == enemyUnit.IsWoods)
+         if ( (true == enemyUnit.IsWoods) && ((false == enemyUnit.IsMoving) || (false == isAdvancingFire)) )
          {
             toKillModifierNum += 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == enemyUnit.IsBuilding)
+         if ( (true == enemyUnit.IsBuilding) && ((false == enemyUnit.IsMoving) || (false == isAdvancingFire)) )
          {
             toKillModifierNum += 15;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if ((true == enemyUnit.IsFortification) && ((false == enemyUnit.IsMoving) || (false == isAdvancingFire)))
+         {
+            toKillModifierNum += 20;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
          if (("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
          {
             toKillModifierNum += 15;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
-         }
-         //------------------------------------
-         if (true == enemyUnit.IsFortification)
-         {
-            toKillModifierNum += 20;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());
          }
          return toKillModifierNum;
       }

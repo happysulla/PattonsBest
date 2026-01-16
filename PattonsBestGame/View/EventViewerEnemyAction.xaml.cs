@@ -1437,7 +1437,7 @@ namespace Pattons_Best
                terrain = new MapItem("Terrain", 1.0, "c114Open", mi.TerritoryCurrent);
                break;
             case "Moving in Open":
-               mi.IsMovingInOpen = true;
+               mi.IsMovingInOpen = true;  // EventViewerEnemyAction.SetTerrainCounter()
                mi.IsMoving = true;
                terrain = new MapItem("Terrain", 1.0, "c13Moving", mi.TerritoryCurrent);
                break;
@@ -1913,7 +1913,7 @@ namespace Pattons_Best
          mi.IsWoods = false;
          mi.IsFortification = false;
          mi.IsBuilding = false;
-         mi.IsMovingInOpen = false;
+         mi.IsMovingInOpen = false; // EventViewerEnemyAction.ShowDieResultUpdateTerrain()
          switch (myGridRows[i].myTerrain)
          {
             case "Hull Down":
@@ -1932,7 +1932,7 @@ namespace Pattons_Best
                break;
             case "Moving in Open":
                mi.IsMoving = true;
-               mi.IsMovingInOpen = true;
+               mi.IsMovingInOpen = true; // EventViewerEnemyAction.ShowDieResultUpdateTerrain()
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateTerrain(): reached default terrain=" + myGridRows[i].myDieRollTerrain);

@@ -3410,12 +3410,12 @@ namespace Pattons_Best
             {
                tb.Inlines.Add(new LineBreak());
                tb.Inlines.Add(new Run("Max Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
-            if (0 < minCrewRatingWin.Value)
-            {
+               GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
                tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               if (0 < minCrewRatingWin.Value)
+                  tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               else
+                  tb.Inlines.Add(new Run("Min Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             }
             //-------------------------------------
             tb.Inlines.Add(new LineBreak());
@@ -3499,9 +3499,15 @@ namespace Pattons_Best
                tb.Inlines.Add(new LineBreak());
                tb.Inlines.Add(new Run("Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             }
-            GameStatistic crewRating = statistics.Find("CrewRating");
+            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_ShowStatsText(): lastReport=null");
+               return false;
+            }
+            int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Crew Rating = " + crewRating.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            tb.Inlines.Add(new Run("Crew Rating = " + crewRating.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             //-------------------------------------
             if (1 < numDays.Value)
             {

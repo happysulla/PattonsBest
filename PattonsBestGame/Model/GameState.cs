@@ -12,6 +12,7 @@ namespace Pattons_Best
 {
    public abstract class GameState : IGameState
    {
+      protected static bool theIs1stEnemyStrengthCheckTerritory = true;
       abstract public string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll); // abstract function...GameEngine calls PerformAction() 
       static public IGameState? GetGameState(GamePhase phase) // static method that returns the next GameState object based on GamePhase
       {
@@ -1428,6 +1429,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PrepareFor_Battle(): lastReport=null");
             return false;
          }
+         theIs1stEnemyStrengthCheckTerritory = true; // PrepareFor_Battle(): Allow one free strength check at end of each preparations phase
          //---------------------------------
          gi.AdvancingEnemies.Clear();
          //---------------------------------
@@ -1971,8 +1973,6 @@ namespace Pattons_Best
          if (GamePhase.EndGame == gi.GamePhase)
          {
             int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
-            GameStatistic crewRatingStat = gi.Statistics.Find("CrewRating");
-            crewRatingStat.Value = crewRating;
             if (GameAction.EndGameWin == action)
             {
                GameStatistic statMaxCrewRatingWin = gi.Statistics.Find("MaxCrewRatingWin");
@@ -3028,7 +3028,7 @@ namespace Pattons_Best
                   break;
                case "Open":
                   break;
-               case "Moving in Open":
+               case "Moving in Open":  // PerformAutoSetupSkipBattleSetup()
                   mi.IsMovingInOpen = true;
                   break;
                default:
@@ -4932,7 +4932,6 @@ namespace Pattons_Best
    //-----------------------------------------------------
    class GameStateMovement : GameState
    {
-      private static bool theIs1stEnemyStrengthCheckTerritory = true;
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
@@ -4986,7 +4985,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.PreparationsFinalSkip:
-                  theIs1stEnemyStrengthCheckTerritory = true; // at the end of each battle, get one free enemy strength check
+                  theIs1stEnemyStrengthCheckTerritory = true; // GameStateMovement.PerformAction(Preparations_FinalSkip): at the end of each battle, get one free enemy strength check
                   if (false == PerformAutoBattlePreparationsSetup(gi, ref action))
                   {
                      returnStatus = "Perform_BattlePreparationsSetup() returned false";
@@ -5090,7 +5089,7 @@ namespace Pattons_Best
                case GameAction.MovementStartAreaSet:
                case GameAction.MovementStartAreaRestart: // No fight occurs
                case GameAction.MovementStartAreaRestartAfterBattle: // Win a battle resulting in empty battle board
-                  theIs1stEnemyStrengthCheckTerritory = true; // do not do enemy strength check on first area which is the start area
+                  theIs1stEnemyStrengthCheckTerritory = true; // GameStateMovement.PerformAction() - free emeny enemy strength check after moving to new board
                   if (false == MovementPhaseRestart(gi, lastReport, action))
                   {
                      returnStatus = "MovementPhaseRestart() returned false";
@@ -5188,7 +5187,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementEnemyStrengthCheckTerritoryRoll:
-                  theIs1stEnemyStrengthCheckTerritory = false; // MovementEnemyStrengthCheckTerritoryRoll - free check over
+                  theIs1stEnemyStrengthCheckTerritory = false; // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritoryRoll) - free check over
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == SetEnemyStrengthCounter(gi, dieRoll)) // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritoryRoll)

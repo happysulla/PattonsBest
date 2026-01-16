@@ -479,10 +479,12 @@
       <adjacent value="M015" />
       <adjacent value="M007" />
     </Adjacents>
-    <PavedRoads count="0" />
-    <UnpavedRoads count="3">
+     <PavedRoads count="2" >
+        <paved value="M018" />
+        <paved value="M019" />
+     </PavedRoads>
+    <UnpavedRoads count="2">
       <unpaved value="M007" />
-      <unpaved value="M018" />
       <unpaved value="M015" />
     </UnpavedRoads>
   </Territory>
@@ -622,7 +624,7 @@
     </Adjacents>
     <PavedRoads count="2">
       <paved value="M017" />
-      <paved value="M019" />
+      <paved value="M014" />
     </PavedRoads>
     <UnpavedRoads count="4">
       <unpaved value="M012" />
@@ -664,7 +666,7 @@
       <adjacent value="M024" />
     </Adjacents>
     <PavedRoads count="4">
-      <paved value="M018" />
+      <paved value="M014" />
       <paved value="M015" />
       <paved value="M020" />
       <paved value="M025" />

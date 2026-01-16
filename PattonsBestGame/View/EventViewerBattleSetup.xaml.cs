@@ -1721,7 +1721,7 @@ namespace Pattons_Best
          mi.IsWoods = false;
          mi.IsFortification = false;
          mi.IsBuilding = false;
-         mi.IsMovingInOpen = false;
+         mi.IsMovingInOpen = false;  // ShowDieResultUpdateTerrain() - set all to false
          mi.IsMoving = false;
          switch (myGridRows[i].myTerrain)
          {
@@ -1741,7 +1741,7 @@ namespace Pattons_Best
                break;
             case "Moving in Open":
                mi.IsMoving = true;
-               mi.IsMovingInOpen = true;
+               mi.IsMovingInOpen = true; // ShowDieResultUpdateTerrain()
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateTerrain(): reached default terrain=" + myGridRows[i].myDieRollTerrain);
