@@ -3018,7 +3018,7 @@ namespace Pattons_Best
             b.RenderTransformOrigin = new Point(0.5, 0.5);
             RotateTransform rotateTransform = new RotateTransform();
             //----------------------------------------------------
-            if ((true == mim.MapItem.IsVehicle) && (BattlePhase.ConductCrewAction != myGameInstance.BattlePhase))
+            if ( ((true == mim.MapItem.IsVehicle) || (true == mim.MapItem.IsAntiTankGun)) && (BattlePhase.ConductCrewAction != myGameInstance.BattlePhase))
             {
                double xDiff = xStart - mp.X;
                double yDiff = yStart - mp.Y;
@@ -3116,6 +3116,7 @@ namespace Pattons_Best
          myRectangleMoving.Visibility = Visibility.Visible;
          return true;
       }
+      //---------------------------------------
       private bool UpdateCanvasShowFeats()
       {
          myMoveButtons.Clear();
@@ -3339,14 +3340,16 @@ namespace Pattons_Best
             }
             else if (true == stat.Key.Contains("Min"))
             {
-               GameStatistic current = totalStatistics.Find(stat.Key);
-               Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): current.Value=" + current.Value.ToString() + " stat.Value=" + stat.Value.ToString());
-               if ( (stat.Value < current.Value) && (0 != stat.Value) )
+               GameStatistic statMin = totalStatistics.Find(stat.Key);
+               Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): key=" + stat.Key + " statMin.Value=" + statMin.Value.ToString() + " stat.Value=" + stat.Value.ToString());
+               if ( (stat.Value < statMin.Value) || (0 == statMin.Value)  )
                {
-                  Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): (stat.Value=" + stat.Value.ToString() + ") < (current.Value=" + current.Value.ToString() + ")");
-                  current.Value = stat.Value;
+                  if( 0 < stat.Value )
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): (stat.Value=" + stat.Value.ToString() + ") < (statMin.Value=" + statMin.Value.ToString() + ")");
+                     statMin.Value = stat.Value;
+                  }
                }
-
             }
          }
       }
@@ -3410,12 +3413,13 @@ namespace Pattons_Best
             {
                tb.Inlines.Add(new LineBreak());
                tb.Inlines.Add(new Run("Max Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
+            }
+            //-------------------------------------
+            GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
+            if (0 < minCrewRatingWin.Value)
+            {
                tb.Inlines.Add(new LineBreak());
-               if (0 < minCrewRatingWin.Value)
-                  tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               else
-                  tb.Inlines.Add(new Run("Min Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             }
             //-------------------------------------
             tb.Inlines.Add(new LineBreak());

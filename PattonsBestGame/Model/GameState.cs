@@ -663,7 +663,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy():  lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy():  lastReport=null");
             return false;
          }
          //-----------------------------------
@@ -681,19 +681,19 @@ namespace Pattons_Best
          }
          if (null == startArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy():  startArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy():  startArea=null");
             return false;
          }
          //-----------------------------------
          if (0 == startArea.TerritoryCurrent.Adjacents.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): no adjacents for start area=" + startArea.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy(): no adjacents for start area=" + startArea.TerritoryCurrent.Name);
             return false;
          }
          ITerritory? tStart = Territories.theTerritories.Find(startArea.TerritoryCurrent.Adjacents[0]); // should only be one adjacent to start area
          if (null == tStart)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): taskForceArea tStart=" + startArea.TerritoryCurrent.Adjacents[0]);
+            Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy(): taskForceArea tStart=" + startArea.TerritoryCurrent.Adjacents[0]);
             return false;
          }
          //-----------------------------------
@@ -704,7 +704,7 @@ namespace Pattons_Best
             ITerritory? t1 = Territories.theTerritories.Find(s);
             if (null == t1)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): t=null for " + s);
+               Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy(): t=null for " + s);
                return false;
             }
             int diceRoll = 0;
@@ -721,7 +721,8 @@ namespace Pattons_Best
             switch (enemyUnit)
             {
                case "ATG":
-                  mi = new MapItem(nameEnemy, 1.0, "c76UnidentifiedAtg", t1); // SetStartAreaExtraEnemy()
+                  mi = new MapItem(nameEnemy, 1.0, "c76UnidentifiedAtg", t1); // Set_StartAreaExtraEnemy()
+                  mi.IsAntiTankGun = true;
                   break;
                case "LW":
                   mi = new MapItem(nameEnemy, 1.0, "c91Lw", t1);
@@ -743,11 +744,11 @@ namespace Pattons_Best
                   mi.IsVehicle = true;
                   break;
                case "SPG":
-                  mi = new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", t1); // SetStartAreaExtraEnemy()
+                  mi = new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", t1); // Set_StartAreaExtraEnemy()
                   mi.IsVehicle = true;
                   break;
                case "TANK":
-                  mi = new MapItem(nameEnemy, 1.0, "c78UnidentifiedTank", t1); // SetStartAreaExtraEnemy()
+                  mi = new MapItem(nameEnemy, 1.0, "c78UnidentifiedTank", t1); // Set_StartAreaExtraEnemy()
                   mi.IsVehicle = true;
                   mi.IsTurret = true;
                   break;
@@ -758,12 +759,12 @@ namespace Pattons_Best
                   mi.IsVehicle = true;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy(): reached default with enemyUnit=" + enemyUnit);
                   return false;
             }
             if (null == mi)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): mi=null");
+               Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy(): mi=null");
                return false;
             }
             IMapPoint mpEnemy = Territory.GetRandomPoint(t1, mi.Zoom * Utilities.theMapItemOffset);
@@ -2935,6 +2936,18 @@ namespace Pattons_Best
             {
                case "ATG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.1, "c76UnidentifiedAtg", t);  // PerformAutoSetupSkipBattleSetup()
+                  die1 = Utilities.RandomGenerator.Next(1, 11);
+                  string facing = TableMgr.GetEnemyNewFacing(enemyUnit, die1);
+                  if ("ERROR" == facing)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): GetEnemyNewFacing() returned error");
+                     return false;
+                  }
+                  if (false == mi.UpdateMapRotation(facing))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): Update_MapRotation() returned false");
+                     return false;
+                  }
                   break;
                case "LW":
                   mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
@@ -2983,7 +2996,7 @@ namespace Pattons_Best
             mi.Location = mp;
             gi.BattleStacks.Add(mi);
             //-----------------------------------------
-            if (true == mi.IsVehicle)
+            if ( (true == mi.IsVehicle) || (true == mi.IsAntiTankGun) )
             {
                if (false == mi.SetMapItemRotation(gi.Sherman))
                {
@@ -2999,7 +3012,7 @@ namespace Pattons_Best
                }
                if (false == mi.UpdateMapRotation(facing))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): UpdateMapRotation() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): Update_MapRotation() returned false");
                   return false;
                }
             }

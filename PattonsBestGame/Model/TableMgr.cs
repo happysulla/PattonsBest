@@ -660,6 +660,10 @@ namespace Pattons_Best
                   return "Side";
                else
                   return "Rear";
+            case "ATG":
+            case "Pak38":
+            case "Pak40":
+            case "Pak43":
             case "TANK":
             case "PzVIe":
             case "PzIV":
@@ -3862,18 +3866,21 @@ namespace Pattons_Best
                   name = "Pak38" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
+                  appearingMapItem.IsAntiTankGun = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "Pak40":
                   name = "Pak40" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
+                  appearingMapItem.IsAntiTankGun = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "Pak43":
                   name = "Pak43" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
+                  appearingMapItem.IsAntiTankGun = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                default:
@@ -3894,12 +3901,14 @@ namespace Pattons_Best
                   name = "PzIV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "PzV":
                   name = "PzV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                default:
@@ -3920,30 +3929,35 @@ namespace Pattons_Best
                   name = "STuGIIIg" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "MARDERII":
                   name = "MARDERII" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "MARDERIII":
                   name = "MARDERIII" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "JdgPzIV":
                   name = "JdgPzIV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "JdgPz38t":
                   name = "JdgPz38t" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                default:
@@ -3974,6 +3988,7 @@ namespace Pattons_Best
                string name = "Pak38" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
+               appearingMapItem.IsAntiTankGun = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak38"; // Get_AppearingUnitNew()
             }
@@ -3982,6 +3997,7 @@ namespace Pattons_Best
                string name = "Pak40" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
+               appearingMapItem.IsAntiTankGun = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak40"; // Get_AppearingUnitNew()
             }
@@ -3990,6 +4006,7 @@ namespace Pattons_Best
                string name = "Pak43" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
+               appearingMapItem.IsAntiTankGun = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak43"; // Get_AppearingUnitNew()
             }
@@ -4001,6 +4018,7 @@ namespace Pattons_Best
                string name = "PzIV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
+               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedTank = "PzIV";
             }
@@ -4009,6 +4027,7 @@ namespace Pattons_Best
                string name = "PzV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedTank = "PzV";
             }
@@ -4026,6 +4045,7 @@ namespace Pattons_Best
                   string name = "PzV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                   gi.IdentifiedTank = "PzV";
                }
@@ -4034,6 +4054,7 @@ namespace Pattons_Best
                   string name = "PzVIe" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c81PzVIe", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                }
                else
@@ -4041,6 +4062,7 @@ namespace Pattons_Best
                   string name = "PzVIb" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
+                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                }
             }
@@ -4052,6 +4074,7 @@ namespace Pattons_Best
                string name = "STuGIIIg" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
+               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "STuGIIIg";
             }
@@ -4060,6 +4083,7 @@ namespace Pattons_Best
                string name = "MARDERII" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
+               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "MARDERII";
             }
@@ -4068,6 +4092,7 @@ namespace Pattons_Best
                string name = "MARDERIII" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
+               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "MARDERIII";
             }
@@ -4076,6 +4101,7 @@ namespace Pattons_Best
                string name = "JdgPzIV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
+               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "JdgPzIV";
             }
@@ -4084,6 +4110,7 @@ namespace Pattons_Best
                string name = "JdgPz38t" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
+               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "JdgPz38t";
             }

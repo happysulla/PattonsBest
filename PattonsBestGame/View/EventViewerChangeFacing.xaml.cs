@@ -482,12 +482,12 @@ namespace Pattons_Best
             myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
          if ("ERROR" == myGridRows[i].myFacingNew)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
             return;
          }
          if (false == ShowDieResultUpdateFacing(i))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateFacing() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResult_UpdateFacing() returned false");
             return;
          }
          //-------------------------------
@@ -526,17 +526,17 @@ namespace Pattons_Best
          IMapItem? mi = myGridRows[i].myMapItem;
          if (null == mi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateFacing(): mi=null for i=" + i.ToString());
             return false;
          }
          if( false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): Set_MapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateFacing(): Set_MapItemRotation() returned false");
             return false;
          }
          if (false == mi.UpdateMapRotation(myGridRows[i].myFacingNew))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): UpdateMapRotation() returned false for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateFacing(): Update_MapRotation() returned false for i=" + i.ToString());
             return false;
          }
          return true;

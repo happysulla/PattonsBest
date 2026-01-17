@@ -365,19 +365,19 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateTerrain() returned ERROR");
                            return false;
                         }
-                        if (true == mi1.IsVehicle)
+                        if ( (true == mi1.IsVehicle) || (false == mi1.IsAntiTankGun) )
                         {
                            dieRoll = Utilities.RandomGenerator.Next(1, 11);
                            myGridRows[startingRow].myDieRollFacing = dieRoll;
                            myGridRows[startingRow].myFacing = TableMgr.GetEnemyNewFacing(activation, dieRoll);
                            if ("ERROR" == myGridRows[startingRow].myFacing)
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.GetEnemyNewFacing() returned ERROR");
+                              Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.Get_EnemyNewFacing() returned ERROR");
                               return false;
                            }
                            if (false == mi1.UpdateMapRotation(myGridRows[startingRow].myFacing))
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): UpdateMapRotation() returned false");
+                              Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): Update_MapRotation() returned false");
                               return false;
                            }
                         }
@@ -1103,9 +1103,21 @@ namespace Pattons_Best
             case "ATG":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.1, "c76UnidentifiedAtg", t);
+               mi.IsAntiTankGun = true;
                myGridRows[i].myDieRollFacing = NO_FACING;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to ATG");
-               myGridRows[i].myFacing = "NA";
+               int die1 = Utilities.RandomGenerator.Next(0, 10);
+               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, die1);
+               if ("ERROR" == myGridRows[i].myFacing)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): TableMgr.Get_EnemyNewFacing() returned ERROR");
+                  return false;
+               }
+               if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): Update_MapRotation() returned false");
+                  return false;
+               }
                break;
             case "LW":
                t = tRight;
@@ -1225,6 +1237,7 @@ namespace Pattons_Best
             case E046Enum.ACTIVATION:
                //dieRoll = 11; // <CGS> TEST - infantry appearing
                //dieRoll = 10; // <CGS> TEST - AdvanceRetreat - MG Appearing
+               dieRoll = 70; // <cgs> TEST - ATG GUN APPEARING in Advance Scenario
                //dieRoll = 45; // <CGS> TEST - KillYourTank - TANKS APPEARING in battle scenario
                //dieRoll = 91; // <CGS> TEST - PSW/SPW APPEARING in Advance scenario
                myGridRows[i].myDieRollActivation = dieRoll;
@@ -1347,7 +1360,7 @@ namespace Pattons_Best
                myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, dieRoll);
                if ("ERROR" == myGridRows[i].myFacing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
                   return;
                }
                Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "ShowDieResults(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
@@ -1359,7 +1372,7 @@ namespace Pattons_Best
                }
                if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateMapRotation() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Update_MapRotation() returned false");
                   return;
                }
                myState = E046Enum.PLACE_TERRAIN;
@@ -1502,7 +1515,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
             if (false == miEnemyUnit.UpdateMapRotation(myGridRows[i].myFacing))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): UpdateMapRotation() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): Update_MapRotation() returned false");
                return false;
             }
          }

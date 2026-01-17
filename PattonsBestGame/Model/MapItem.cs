@@ -133,6 +133,7 @@ namespace Pattons_Best
       public Dictionary<string, int> EnemyAcquiredShots { set; get; } = new Dictionary<string, int>();
       //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;
+      public bool IsAntiTankGun { get; set; } = false;
       public bool IsMovingInOpen { get; set; } = false;
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;
@@ -244,6 +245,7 @@ namespace Pattons_Best
             this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
          //--------------------------------------
          this.IsVehicle = mi.IsVehicle;
+         this.IsAntiTankGun = mi.IsAntiTankGun;
          this.IsMovingInOpen = mi.IsMovingInOpen; // Copy()
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
@@ -282,6 +284,7 @@ namespace Pattons_Best
             this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
          //--------------------------------------
          this.IsVehicle = mi.IsVehicle;
+         this.IsAntiTankGun = mi.IsAntiTankGun;
          this.IsMovingInOpen = mi.IsMovingInOpen;  // Sync()
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
@@ -399,7 +402,6 @@ namespace Pattons_Best
          }
          switch (enemyUnit)
          {
-            case "ATG":
             case "LW":
             case "MG":
                return true;
