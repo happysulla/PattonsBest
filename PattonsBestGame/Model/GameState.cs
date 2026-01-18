@@ -1443,8 +1443,8 @@ namespace Pattons_Best
          gi.NumSmokeAttacksThisRound = 0;
          gi.IsMainGunRepairAttempted = false;
          //---------------------------------
-         gi.IsShermanTurretRotated = false; // PrepareFor_Battle()
-         gi.ShermanRotationTurretOld = 0.0;
+         gi.Sherman.IsTurretRotated = false;       // PrepareFor_Battle()
+         gi.Sherman.RotationTurretOld = 0.0;
          //---------------------------------
          gi.IsMinefieldAttack = false;
          gi.IsHarrassingFireBonus = false; 
@@ -3338,8 +3338,8 @@ namespace Pattons_Best
          gi.IsBowMgRepairAttempted = false;
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;       // Setup_NewGame()
-         gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
+         gi.Sherman.IsTurretRotated = false;       // Setup_NewGame()
+         gi.Sherman.RotationTurretOld = gi.Sherman.RotationTurret;
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
@@ -8882,9 +8882,9 @@ namespace Pattons_Best
                if ("Gunner_RotateTurret" == crewAction.Name)
                   isRotateTurret = true;
             }
-            if ((true == isRotateTurret) && (false == gi.IsShermanTurretRotated))
+            if ((true == isRotateTurret) && (false == gi.Sherman.IsTurretRotated))
             {
-               gi.IsShermanTurretRotated = true;
+               gi.Sherman.IsTurretRotated = true; // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
                if ((false == isTankFiringMainGun) && (null != gi.TargetMainGun) )
                {
                   Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear() when turret rotated");
@@ -10912,8 +10912,8 @@ namespace Pattons_Best
          gi.IsBowMgRepairAttempted = false;
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;       // Reset_Round()
-         gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
+         gi.Sherman.IsTurretRotated = false;       // Reset_Round()
+         gi.Sherman.RotationTurretOld = gi.Sherman.RotationTurret;
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
@@ -11423,8 +11423,8 @@ namespace Pattons_Best
          gi.IsBrokenPeriscopeGunner = false;
          gi.IsBrokenPeriscopeCommander = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;  // EveningDebriefing_ResetDay()
-         gi.ShermanRotationTurretOld = 0.0;
+         gi.Sherman.IsTurretRotated = false;       // EveningDebriefing_ResetDay()
+         gi.Sherman.RotationTurretOld = 0.0;
          //-------------------------------------------------------
          gi.IsLeadTank = false;
          gi.IsAirStrikePending = false;

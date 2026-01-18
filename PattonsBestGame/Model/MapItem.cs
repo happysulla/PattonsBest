@@ -105,6 +105,8 @@ namespace Pattons_Best
       public double RotationHull { get; set; } = 0.0; // can only be 0, 60, 120, 180, 240, 300 degrees
       public double RotationOffsetTurret { get; set; } = 0.0;  // extra offset to show on battle board
       public double RotationTurret { get; set; } = 0.0; // can only be 0, 60, 120, 180, 240, 300 degrees
+      public double RotationTurretOld { get; set; } = 0.0; // to track how much turret changes before firing - can only be 0, 60, 120, 180, 240, 300 degrees
+      public bool IsTurretRotated { get; set; } = false;  // to track how much turret changes before firing - can only be 0, 60, 120, 180, 240, 300 degrees
       //--------------------------------------------------
       private IMapPoint myLocation = new MapPoint();  // top left corner of MapItem
       public IMapPoint Location 

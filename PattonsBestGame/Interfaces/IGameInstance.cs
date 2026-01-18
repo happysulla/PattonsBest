@@ -124,9 +124,6 @@ namespace Pattons_Best
       bool IsBrokenPeriscopeGunner { set; get; }
       bool IsBrokenPeriscopeCommander { set; get; }
       //------------------------------------------------
-      bool IsShermanTurretRotated { set; get; }
-      double ShermanRotationTurretOld { set; get; }
-      //------------------------------------------------
       bool IsCounterattackAmbush { set; get; }
       bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }

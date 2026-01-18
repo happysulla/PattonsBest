@@ -23,6 +23,8 @@ namespace Pattons_Best
       double RotationHull { get; set; }      // rotation to point at location
       double RotationOffsetTurret { get; set; }
       double RotationTurret { get; set; }
+      double RotationTurretOld { get; set; } // to track how much the turret changes before firing - can only be 0, 60, 120, 180, 240, 300 degrees
+      bool IsTurretRotated { get; set; } // For Sherman. Turret rotated without firing main gun causes target acquisition = 0
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }

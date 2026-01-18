@@ -2461,44 +2461,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
                return null;
             }
-            if (reader.Name != "IsShermanTurretRotated")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanTurretRotated != (node=" + reader.Name + ")");
-               return null;
-            }
-            string? sIsShermanTurretRotated = reader.GetAttribute("value");
-            if (null == sIsShermanTurretRotated)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanTurretRotated=null");
-               return null;
-            }
-            gi.IsShermanTurretRotated = Convert.ToBoolean(sIsShermanTurretRotated);
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
-               return null;
-            }
-            if (reader.Name != "ShermanRotationTurretOld")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ShermanRotationTurretOld != (node=" + reader.Name + ")");
-               return null;
-            }
-            string? sShermanRotationTurretOld = reader.GetAttribute("value");
-            if (null == sShermanRotationTurretOld)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ShermanRotationTurretOld=null");
-               return null;
-            }
-            gi.ShermanRotationTurretOld = Convert.ToDouble(sShermanRotationTurretOld);
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
-               return null;
-            }
             if (reader.Name != "IsCounterattackAmbush")
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsCounterattackAmbush != (node=" + reader.Name + ")");
@@ -7556,34 +7518,6 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenPeriscopeCommander) returned null");
-            return null;
-         }
-         //------------------------------------------
-         elem = aXmlDocument.CreateElement("IsShermanTurretRotated");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanTurretRotated) returned null");
-            return null;
-         }
-         elem.SetAttribute("value", gi.IsShermanTurretRotated.ToString());
-         node = root.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanTurretRotated) returned null");
-            return null;
-         }
-         //------------------------------------------
-         elem = aXmlDocument.CreateElement("ShermanRotationTurretOld");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(ShermanRotationTurretOld) returned null");
-            return null;
-         }
-         elem.SetAttribute("value", gi.ShermanRotationTurretOld.ToString());
-         node = root.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(ShermanRotationTurretOld) returned null");
             return null;
          }
          //------------------------------------------

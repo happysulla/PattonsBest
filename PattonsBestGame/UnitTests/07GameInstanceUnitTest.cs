@@ -500,9 +500,6 @@ namespace Pattons_Best.UnitTests
          myGameInstanceSave.IsBrokenPeriscopeGunner = true;
          myGameInstanceSave.IsBrokenPeriscopeCommander = false;
          //----------------------------------------------
-         myGameInstanceSave.IsShermanTurretRotated = true;
-         myGameInstanceSave.ShermanRotationTurretOld = 555.55;
-         //----------------------------------------------
          myGameInstanceSave.IsCounterattackAmbush = false;
          myGameInstanceSave.IsLeadTank = true;
          myGameInstanceSave.IsAirStrikePending = false;
@@ -1182,17 +1179,6 @@ namespace Pattons_Best.UnitTests
          if (left.IsBrokenPeriscopeCommander != right.IsBrokenPeriscopeCommander)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.IsBrokenPeriscopeCommander != right.IsBrokenPeriscopeCommander");
-            return false;
-         }
-         //---------------------------------------------------
-         if (left.IsShermanTurretRotated != right.IsShermanTurretRotated)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.IsShermanTurretRotated != right.IsShermanTurretRotated");
-            return false;
-         }
-         if (left.ShermanRotationTurretOld != right.ShermanRotationTurretOld)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanRotationTurretOld != right.ShermanRotationTurretOld");
             return false;
          }
          //---------------------------------------------------

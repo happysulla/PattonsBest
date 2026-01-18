@@ -27,7 +27,7 @@ namespace Pattons_Best
       public delegate bool EndResolveEnemyActionCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int NO_MOVE = 100;
-      private const int NO_FIRE = 101;
+      private const int NO_FIRE_OTHER = 101;
       private const int NO_FACING = 102;
       private const int KEEP_TERRAIN = 103;
       private const int NO_FIRE_YOUR_TANK = 105;
@@ -998,7 +998,7 @@ namespace Pattons_Best
             Grid.SetRow(label1, rowNum);
             Grid.SetColumn(label1, 1);
             //----------------------------
-            if (NO_FIRE == myGridRows[i].myDieRollFire)
+            if (NO_FIRE_OTHER == myGridRows[i].myDieRollFire)
             {
                Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
                myGrid.Children.Add(label2);
@@ -1555,7 +1555,7 @@ namespace Pattons_Best
                         myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0;
                      Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
                      //-------------------------------------
-                     myGridRows[i].myDieRollFire = NO_FIRE; // not firing at other tanks... only firing at your tank
+                     myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks... only firing at your tank
                      //-------------------------------------
                      if ( true == mi.IsTurret )
                      {
@@ -1575,39 +1575,32 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToKillNumberTank() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                         return;
                      }
-                     myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;
-                     myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
+                     myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK; // not firing at your tank 
+                     myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK; // not firing at your tank 
                   }
                }
                else
                {
-                  myGridRows[i].myDieRollFire = NO_FIRE;
-                  myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;
-                  myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
+                  myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks or infantry
+                  myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK; // not firing at your tank either
+                  myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK; // not firing at your tank either
                }
                //----------------------------------------
-               if ( (true == enemyAction.Contains("Move") ) && (false == mi.IsThrownTrack) )
+               if ( (true == enemyAction.Contains("Move") ) && (false == mi.IsThrownTrack) && (false == mi.IsInterdicted))
                {
                   if ( (EnumSpottingResult.HIDDEN == mi.Spotting)  || (EnumSpottingResult.SPOTTED == mi.Spotting) )// Hidden units that move become unspotted
                   {
                      mi.Spotting = EnumSpottingResult.UNSPOTTED;
                      mi.IsSpotted = false;
                   }
-                  if (true == mi.IsInterdicted)
-                  {
-
-                  }
-                  else
-                  {
-                     mi.IsMoved = true;
-                     mi.IsHullDown = false;
-                     mi.IsBuilding = false;
-                     mi.IsFortification = false;
-                     mi.IsWoods = false;
-                     mi.IsMoving = true;
-                     if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name)) // reset to zero if enemy moves
-                        myGameInstance.Sherman.EnemyAcquiredShots.Remove(mi.Name);
-                  }
+                  mi.IsMoved = true;
+                  mi.IsHullDown = false;
+                  mi.IsBuilding = false;
+                  mi.IsFortification = false;
+                  mi.IsWoods = false;
+                  mi.IsMoving = true;
+                  if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name)) // reset to zero if enemy moves
+                     myGameInstance.Sherman.EnemyAcquiredShots.Remove(mi.Name);
                }
                else
                {
@@ -1747,7 +1740,7 @@ namespace Pattons_Best
                         for (int j = 0; j < myMaxRowCount; ++j)
                         {
                            if ((Utilities.NO_RESULT == myGridRows[j].myDieRollFire) && (true == myGridRows[j].myEnemyAction.Contains("Lead")))
-                              myGridRows[j].myDieRollFire = NO_FIRE;
+                              myGridRows[j].myDieRollFire = NO_FIRE_OTHER;
                         }
                      }
                      myGridRows[i].myToKillResult = "Tank KO";

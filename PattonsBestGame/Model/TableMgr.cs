@@ -685,7 +685,7 @@ namespace Pattons_Best
                else
                   return "Rear";
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemyNewFacing(): Reached Default enemy=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyNewFacing(): Reached Default enemy=" + enemyUnit);
                return "ERROR";
          }
       }
@@ -5332,7 +5332,7 @@ namespace Pattons_Best
          }
          //------------------------------------
          double t1 = 360 - gi.Sherman.RotationTurret;
-         double t2 = gi.ShermanRotationTurretOld;
+         double t2 = gi.Sherman.RotationTurretOld;
          double totalAngle = t1 + t2;
          if (360.0 < totalAngle)
             totalAngle = totalAngle - 360;
