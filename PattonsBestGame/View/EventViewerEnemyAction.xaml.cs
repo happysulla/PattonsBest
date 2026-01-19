@@ -269,7 +269,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): count<3 for mi.TerritoryCurrent.Name=" + mi.TerritoryCurrent.Name);
                      return false;
                   }
-                  if (false == mi.IsVehicle)
+                  if (false == mi.IsVehicle())
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "PerformEnemyAction(): mi=" + mi.Name + " isVehicle=false for i=" + i.ToString());
                      myGridRows[i].myDieRollFacing = NO_FACING;
@@ -568,7 +568,7 @@ namespace Pattons_Best
                for (int j = 0; j < myMaxRowCount; ++j)
                {
                   IMapItem enemyMapItem = myGridRows[j].myMapItem;
-                  if ( (true == myGridRows[j].myEnemyAction.Contains("Move")) && ((false == enemyMapItem.IsVehicle) || ("TRUCK" == enemyMapItem.GetEnemyUnit())) )
+                  if ( (true == myGridRows[j].myEnemyAction.Contains("Move")) && ((false == enemyMapItem.IsVehicle()) || ("TRUCK" == enemyMapItem.GetEnemyUnit())) )
                   {
                      ITerritory t = enemyMapItem.TerritoryCurrent;
                      IStack? stack = myGameInstance.BattleStacks.Find(t);
@@ -1557,7 +1557,7 @@ namespace Pattons_Best
                      //-------------------------------------
                      myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks... only firing at your tank
                      //-------------------------------------
-                     if ( true == mi.IsTurret )
+                     if ( true == mi.IsTurret() )
                      {
                         if (false == mi.SetMapItemRotationTurret(myGameInstance.Sherman))
                         {
@@ -2031,7 +2031,7 @@ namespace Pattons_Best
                               IMapItem enemyUnit = myGridRows[j].myMapItem;
                               if (true == myGridRows[j].myEnemyAction.Contains("Move"))
                               {
-                                 if ( (true == enemyUnit.IsVehicle) && ("TRUCK" != enemyUnit.GetEnemyUnit()) ) // Trucks are attacked by MG fire - other vehicles are not
+                                 if ( (true == enemyUnit.IsVehicle()) && ("TRUCK" != enemyUnit.GetEnemyUnit()) ) // Trucks are attacked by MG fire - other vehicles are not
                                     continue;
                                  ITerritory t = enemyUnit.TerritoryCurrent;
                                  IStack? stack = myGameInstance.BattleStacks.Find(t);

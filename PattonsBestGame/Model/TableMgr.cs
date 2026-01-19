@@ -2733,6 +2733,50 @@ namespace Pattons_Best
          return "ERROR";
       }
       //-------------------------------------------
+      public static string GetEnemyFacingFromRotationAndSector(IMapItem enemyUnit)
+      {
+         int count = enemyUnit.TerritoryCurrent.Name.Count();
+         if (3 != count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacing(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+            return "ERROR";
+         }
+         char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
+         double rotation = 0.0;
+         switch (enemySector)
+         {
+            case '6': rotation = 0.0; break;
+            case '9': rotation = 60.0; break;
+            case '1': rotation = 120.0; break;
+            case '2': rotation = 180.0; break;
+            case '3': rotation = 240.0; break;
+            case '4': rotation = 300.0; break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacing(): reached default enemySector=" + enemySector);
+               return "ERROR";
+         }
+         double totalRotation = rotation - enemyUnit.RotationHull;
+         double or = totalRotation;
+         if (totalRotation < 0.0)
+            totalRotation += 360.0;
+         if (359.9 < totalRotation)
+            totalRotation = totalRotation - 360.0;
+         string returnValue;
+         switch (totalRotation)
+         {
+            case 0.0: returnValue="Rear"; break;
+            case 60.0: returnValue = "Side"; break;
+            case 120.0: returnValue = "Side"; break;
+            case 180.0: returnValue = "Front"; break;
+            case 240.0: returnValue = "Side"; break;
+            case 300.0: returnValue = "Side"; break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacing(): 2-reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
+               return "ERROR";
+         }
+         Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Get_EnemyFacing(): facing=" + returnValue + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+         return returnValue;
+      }
       public static string GetEnemyFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
       {
          int count = enemyUnit.TerritoryCurrent.Name.Count();
@@ -2764,7 +2808,7 @@ namespace Pattons_Best
                totalRotation += 360.0;
             while (359.9 < totalRotation)
                totalRotation -= 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
             switch (totalRotation)
             {
                case 0.0: return "H F";
@@ -2785,7 +2829,7 @@ namespace Pattons_Best
                totalRotation += 360.0;
             while (359.9 < totalRotation)
                totalRotation -= 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
             switch (totalRotation)
             {
                case 0.0: return "T F";
@@ -2811,11 +2855,67 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return FN_ERROR;
          }
-         if (false == gi.FirstShots.Contains(mi.Name))
+         //-----------------------------------------------
+         double hullT1 = 360 - mi.RotationTurret;
+         double hullT2 = mi.RotationTurretOld;
+         double hullTotalAngle = hullT1 + hullT2;
+         if (360.0 < hullTotalAngle)
+            hullTotalAngle = hullTotalAngle - 360;
+         if (180.0 < hullTotalAngle)
+            hullTotalAngle = 360 - hullTotalAngle;
+         int hulltNumRotations = (int)(hullTotalAngle / 60.0);
+         int hullTurretMod = (int)(10.0 * hulltNumRotations);
+         //-----------------------------------------------
+         double turretT1 = 360 - mi.RotationTurret;
+         double turretT2 = mi.RotationTurretOld;
+         double turretTotalAngle = turretT1 + turretT2;
+         if (360.0 < turretTotalAngle)
+            turretTotalAngle = turretTotalAngle - 360;
+         if (180.0 < turretTotalAngle)
+            turretTotalAngle = 360 - turretTotalAngle;
+         int turretNumRotations = (int)(turretTotalAngle / 60.0);
+         //-----------------------------------------------
+         Option optionTankCoveredArc = gi.Options.Find("TankCoveredArc");
+         Option optionSlowTransverseCoveredArc = gi.Options.Find("SlowTransverseCoveredArc");
+         Option optionSpgCoveredArc = gi.Options.Find("SpgCoveredArc");
+         Option optionAtgCoveredArc = gi.Options.Find("AtgCoveredArc");
+         //-----------------------------------------------
+         if ( (true == optionTankCoveredArc.IsEnabled) && (true==mi.IsTurret()) &&  (false == enemyUnit.Contains("PzVI")) ) // if using Tank Cover Arc rules, the modifer changes
          {
-            gi.FirstShots.Add(mi.Name);
-            toHitModifierNum += 10; // add 10 if first shot
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
+            int turretMod = (int)(10.0 * turretNumRotations);
+            toHitModifierNum += turretMod;
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
+         }
+         else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && (true == enemyUnit.Contains("PzVI")) ) // if using Tank Cover Arc rules, the modifer changes
+         {
+            int turretMod = (int)(10.0 * turretNumRotations);
+            toHitModifierNum += turretMod;
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
+         }
+         else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()) )// if using Tank Cover Arc rules, the modifer changes
+         {
+            if (false == mi.UpdateMapRotation("Front"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
+               return FN_ERROR;
+            }
+         }
+         else if ((true == optionSpgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()))// if using Tank Cover Arc rules, the modifer changes
+         {
+            if (false == mi.UpdateMapRotation("Front"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
+               return FN_ERROR;
+            }
+         }
+         else
+         {
+            if (false == gi.FirstShots.Contains(mi.Name))
+            {
+               gi.FirstShots.Add(mi.Name);
+               toHitModifierNum += 10; // add 10 if first shot
+               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
+            }
          }
          //-----------------------------------------------
          if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))  // GetEnemy_ToHitNumberYourTank()
@@ -3866,21 +3966,18 @@ namespace Pattons_Best
                   name = "Pak38" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
-                  appearingMapItem.IsAntiTankGun = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "Pak40":
                   name = "Pak40" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
-                  appearingMapItem.IsAntiTankGun = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "Pak43":
                   name = "Pak43" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
-                  appearingMapItem.IsAntiTankGun = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                default:
@@ -3901,14 +3998,12 @@ namespace Pattons_Best
                   name = "PzIV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "PzV":
                   name = "PzV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                default:
@@ -3929,35 +4024,30 @@ namespace Pattons_Best
                   name = "STuGIIIg" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "MARDERII":
                   name = "MARDERII" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "MARDERIII":
                   name = "MARDERIII" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "JdgPzIV":
                   name = "JdgPzIV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                case "JdgPz38t":
                   name = "JdgPz38t" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
                   break;
                default:
@@ -3988,7 +4078,6 @@ namespace Pattons_Best
                string name = "Pak38" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
-               appearingMapItem.IsAntiTankGun = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak38"; // Get_AppearingUnitNew()
             }
@@ -3997,7 +4086,6 @@ namespace Pattons_Best
                string name = "Pak40" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
-               appearingMapItem.IsAntiTankGun = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak40"; // Get_AppearingUnitNew()
             }
@@ -4006,7 +4094,6 @@ namespace Pattons_Best
                string name = "Pak43" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
-               appearingMapItem.IsAntiTankGun = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak43"; // Get_AppearingUnitNew()
             }
@@ -4018,7 +4105,6 @@ namespace Pattons_Best
                string name = "PzIV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
-               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedTank = "PzIV";
             }
@@ -4027,7 +4113,6 @@ namespace Pattons_Best
                string name = "PzV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
-               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedTank = "PzV";
             }
@@ -4045,7 +4130,6 @@ namespace Pattons_Best
                   string name = "PzV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                   gi.IdentifiedTank = "PzV";
                }
@@ -4054,7 +4138,6 @@ namespace Pattons_Best
                   string name = "PzVIe" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c81PzVIe", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                }
                else
@@ -4062,7 +4145,6 @@ namespace Pattons_Best
                   string name = "PzVIb" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
-                  appearingMapItem.IsVehicle = true;
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                }
             }
@@ -4074,7 +4156,6 @@ namespace Pattons_Best
                string name = "STuGIIIg" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
-               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "STuGIIIg";
             }
@@ -4083,7 +4164,6 @@ namespace Pattons_Best
                string name = "MARDERII" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
-               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "MARDERII";
             }
@@ -4092,7 +4172,6 @@ namespace Pattons_Best
                string name = "MARDERIII" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
-               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "MARDERIII";
             }
@@ -4101,7 +4180,6 @@ namespace Pattons_Best
                string name = "JdgPzIV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
-               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "JdgPzIV";
             }
@@ -4110,7 +4188,6 @@ namespace Pattons_Best
                string name = "JdgPz38t" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
-               appearingMapItem.IsVehicle = true;
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "JdgPz38t";
             }
@@ -5138,7 +5215,7 @@ namespace Pattons_Best
                totalRotation += 360.0;
             if (359.9 < totalRotation)
                totalRotation = totalRotation - 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Get_ShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
             switch (totalRotation)
             {
                case 0.0: return "Rear";
@@ -5159,7 +5236,7 @@ namespace Pattons_Best
                totalRotation += 360.0;
             if (359.9 < totalRotation)
                totalRotation = totalRotation - 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Get_ShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
             switch (totalRotation)
             {
                case 0.0: return "Rear";
@@ -5294,7 +5371,7 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
-         if ((true == enemyUnit.IsVehicle) && (true == enemyUnit.IsMoving))
+         if ((true == enemyUnit.IsVehicle()) && (true == enemyUnit.IsMoving))
          {
             if ('C' == range)
             {
@@ -5357,7 +5434,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): ------------>>>>>>>>>>>gi.ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
          if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitModifier()
          {
-            if (true == enemyUnit.IsVehicle)
+            if (true == enemyUnit.IsVehicle())
             {
                if (true == gi.IsShermanDeliberateImmobilization)
                {
@@ -5485,7 +5562,7 @@ namespace Pattons_Best
                      return FN_ERROR;
                   }
                }
-               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
+               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle()))
                {
                   if ('C' == range)
                   {
@@ -5508,7 +5585,7 @@ namespace Pattons_Best
                      return FN_ERROR;
                   }
                }
-               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
+               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle()))
                {
                   if ('C' == range)
                   {

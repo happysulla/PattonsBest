@@ -31,7 +31,6 @@ namespace Pattons_Best
       //----------------------------------------
       bool IsMoving { get; set; }
       bool IsHullDown { get; set; }
-      bool IsTurret { get; set; }
       bool IsKilled { get; set; }
       bool IsUnconscious { get; set; }
       bool IsIncapacitated { get; set; }
@@ -40,8 +39,6 @@ namespace Pattons_Best
       bool IsInterdicted { get; set; }
       Dictionary<string, int> EnemyAcquiredShots { set; get; } // Enemies that have acquired on this MapItem <string=Firer, int=number of shots>
       //----------------------------------------
-      bool IsVehicle { get; set; }
-      bool IsAntiTankGun { get; set; }
       bool IsMovingInOpen { get; set; }
       bool IsWoods { get; set; }
       bool IsBuilding { get; set; }
@@ -57,6 +54,10 @@ namespace Pattons_Best
       void Copy(IMapItem mi);
       void Sync(IMapItem mi); // synchronize most of the data but not all
       bool IsEnemyUnit();
+      bool IsVehicle();
+      bool IsTurret();
+      bool IsAntiTankGun();
+      bool IsSelfPropelledGun();
       string GetEnemyUnit();
       void SetBloodSpots(int percent = 40);
       bool SetMapItemRotation(IMapItem target);

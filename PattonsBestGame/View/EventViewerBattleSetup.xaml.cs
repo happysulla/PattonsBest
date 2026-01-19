@@ -62,7 +62,7 @@ namespace Pattons_Best
       public struct GridRow
       {
          public IMapItem? myMapItem;
-         public string myActivation;
+         public string myActivatedEnemyUnit;
          public string mySector;
          public string myRange;
          public string myFacing;
@@ -75,7 +75,7 @@ namespace Pattons_Best
          public GridRow()
          {
             myMapItem = null;
-            myActivation = "Unknown";
+            myActivatedEnemyUnit = "Unknown";
             mySector = "Unknown";
             myRange = "Unknown";
             myFacing = "Unknown";
@@ -89,7 +89,7 @@ namespace Pattons_Best
          public GridRow(IMapItem mi)
          {
             myMapItem = mi;
-            myActivation = mi.GetEnemyUnit();
+            myActivatedEnemyUnit = mi.GetEnemyUnit();
             mySector = "Unk";
             myRange = "Unk";
             myFacing = "Unk";
@@ -304,7 +304,7 @@ namespace Pattons_Best
                      mi1.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
                      Utilities.MapItemNum++;
                      myGridRows[startingRow] = new GridRow(mi1);
-                     if (false == mi1.IsVehicle)
+                     if (false == mi1.IsVehicle())
                      {
                         myGridRows[startingRow].myDieRollFacing = NO_FACING;
                         myGridRows[startingRow].myFacing = "NA";
@@ -365,7 +365,7 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateTerrain() returned ERROR");
                            return false;
                         }
-                        if ( (true == mi1.IsVehicle) || (false == mi1.IsAntiTankGun) )
+                        if ( (true == mi1.IsVehicle()) || (false == mi1.IsAntiTankGun()) )
                         {
                            dieRoll = Utilities.RandomGenerator.Next(1, 11);
                            myGridRows[startingRow].myDieRollFacing = dieRoll;
@@ -628,7 +628,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): myGridRows[k].myMapItem=null for k=" + k.ToString());
                      return false;
                   }
-                  if( (false  == enemyUnit.IsVehicle) || ("TRUCK" == enemyUnit.GetEnemyUnit()) )
+                  if( (false  == enemyUnit.IsVehicle()) || ("TRUCK" == enemyUnit.GetEnemyUnit()) )
                   {
                      ITerritory t = enemyUnit.TerritoryCurrent;
                      IStack? stack = myGameInstance.BattleStacks.Find(t);
@@ -1096,18 +1096,17 @@ namespace Pattons_Best
          }
          ITerritory? t = null;
          IMapItem? mi = null;
-         string name = myGridRows[i].myActivation + Utilities.MapItemNum;
+         string name = myGridRows[i].myActivatedEnemyUnit + Utilities.MapItemNum;
          Utilities.MapItemNum++;
-         switch (myGridRows[i].myActivation)
+         switch (myGridRows[i].myActivatedEnemyUnit)
          {
             case "ATG":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.1, "c76UnidentifiedAtg", t);
-               mi.IsAntiTankGun = true;
                myGridRows[i].myDieRollFacing = NO_FACING;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to ATG");
                int die1 = Utilities.RandomGenerator.Next(0, 10);
-               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, die1);
+               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivatedEnemyUnit, die1);
                if ("ERROR" == myGridRows[i].myFacing)
                {
                   Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): TableMgr.Get_EnemyNewFacing() returned ERROR");
@@ -1142,14 +1141,12 @@ namespace Pattons_Best
                mi = new MapItem(name, Utilities.ZOOM, "SpwOrPsw", t);
                mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
-               mi.IsVehicle = true;
                return true;
             case "PSW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
                mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
-               mi.IsVehicle = true;
                myIsVehicleActivated = true;
                break;
             case "SPW":
@@ -1157,20 +1154,16 @@ namespace Pattons_Best
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c90Spw251", t);
                mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
-               mi.IsVehicle = true;
                myIsVehicleActivated = true;
                break;
             case "SPG":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
-               mi.IsVehicle = true;
                myIsVehicleActivated = true;
                break;
             case "TANK":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
-               mi.IsVehicle = true;
-               mi.IsTurret = true;
                myIsVehicleActivated = true;
                break;
             case "TRUCK":
@@ -1178,11 +1171,10 @@ namespace Pattons_Best
                mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
                mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
-               mi.IsVehicle = true;
                myIsVehicleActivated = true;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): reached default with enemyUnit=" + myGridRows[i].myActivation);
+               Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): reached default with enemyUnit=" + myGridRows[i].myActivatedEnemyUnit);
                return false;
          }
          if (null == mi)
@@ -1237,17 +1229,17 @@ namespace Pattons_Best
             case E046Enum.ACTIVATION:
                //dieRoll = 11; // <CGS> TEST - infantry appearing
                //dieRoll = 10; // <CGS> TEST - AdvanceRetreat - MG Appearing
-               dieRoll = 70; // <cgs> TEST - ATG GUN APPEARING in Advance Scenario
+               //dieRoll = 70; // <CGS> TEST - ATG GUN APPEARING in Advance Scenario
                //dieRoll = 45; // <CGS> TEST - KillYourTank - TANKS APPEARING in battle scenario
                //dieRoll = 91; // <CGS> TEST - PSW/SPW APPEARING in Advance scenario
                myGridRows[i].myDieRollActivation = dieRoll;
-               myGridRows[i].myActivation = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
+               myGridRows[i].myActivatedEnemyUnit = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
                if (false == CreateMapItem(i))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");
                   return;
                }
-               if ("PSW/SPW" == myGridRows[i].myActivation)
+               if ("PSW/SPW" == myGridRows[i].myActivatedEnemyUnit)
                {
                   myState = E046Enum.SPW_OR_PSW_ROLL;
                   if (false == UpdateGrid())
@@ -1282,9 +1274,9 @@ namespace Pattons_Best
             //-------------------------------------------------------------------
             case E046Enum.SPW_OR_PSW_ROLL:
                if (dieRoll < 9)
-                  myGridRows[i].myActivation = "SPW";
+                  myGridRows[i].myActivatedEnemyUnit = "SPW";
                else
-                  myGridRows[i].myActivation = "PSW";
+                  myGridRows[i].myActivatedEnemyUnit = "PSW";
                if (false == CreateMapItem(i))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");
@@ -1333,7 +1325,7 @@ namespace Pattons_Best
             case E046Enum.PLACE_RANGE:
                //dieRoll = 10; // <CGS> TEST - AdvanceRetreat - Start at long range
                myGridRows[i].myDieRollRange = dieRoll;
-               myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
+               myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivatedEnemyUnit, dieRoll);
                if ( "ERROR" == myGridRows[i].myRange )
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyRange() returned ERROR");
@@ -1357,7 +1349,7 @@ namespace Pattons_Best
             //-------------------------------------------------------------------
             case E046Enum.PLACE_FACING:
                myGridRows[i].myDieRollFacing= dieRoll;
-               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, dieRoll);
+               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivatedEnemyUnit, dieRoll);
                if ("ERROR" == myGridRows[i].myFacing)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
@@ -1386,7 +1378,7 @@ namespace Pattons_Best
             case E046Enum.PLACE_TERRAIN:
                //dieRoll = 1; // <CGS> TEST - Set Terrain to hull down
                myGridRows[i].myDieRollTerrain = dieRoll;
-               myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, dieRoll);
+               myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivatedEnemyUnit, dieRoll);
                if ("ERROR" == myGridRows[i].myTerrain)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyTerrain() returned ERROR");
@@ -1485,7 +1477,7 @@ namespace Pattons_Best
          int dieRoll = Utilities.RandomGenerator.Next(1, 11);
          //dieRoll = 13; // <CGS> TEST - AdvanceRetreat - long range
          myGridRows[i].myDieRollRange = dieRoll;
-         myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
+         myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivatedEnemyUnit, dieRoll);
          if ("ERROR" == myGridRows[i].myRange)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyRange() returned ERROR");
@@ -1503,10 +1495,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): miEnemyUnit=null for i=" + i.ToString());
             return false;
          }
-         if( true == miEnemyUnit.IsVehicle )
+         if( true == miEnemyUnit.IsVehicle())
          {
             myGridRows[i].myDieRollFacing = Utilities.RandomGenerator.Next(1, 11);
-            myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, myGridRows[i].myDieRollFacing);
+            myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivatedEnemyUnit, myGridRows[i].myDieRollFacing);
             if ("ERROR" == myGridRows[i].myFacing)
             {
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyNewFacing() returned ERROR");
@@ -1523,7 +1515,7 @@ namespace Pattons_Best
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
          //dieRoll = 1; // <CGS> TEST - force hull down for auto rolls.
          myGridRows[i].myDieRollTerrain = dieRoll;
-         myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, dieRoll);
+         myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivatedEnemyUnit, dieRoll);
          if ("ERROR" == myGridRows[i].myTerrain)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyTerrain() returned ERROR");
@@ -1856,7 +1848,7 @@ namespace Pattons_Best
                                  return;
                               }
                               //-------------------------------------------
-                              if ((true == enemyUnit.IsVehicle) && ("TRUCK" != enemyUnit.GetEnemyUnit())) // Trucks are attacked by MG fire - other vehicles are not
+                              if ((true == enemyUnit.IsVehicle()) && ("TRUCK" != enemyUnit.GetEnemyUnit())) // Trucks are attacked by MG fire - other vehicles are not
                                  continue;
                               IStack? stack = myGameInstance.BattleStacks.Find(t);
                               if (null == stack)

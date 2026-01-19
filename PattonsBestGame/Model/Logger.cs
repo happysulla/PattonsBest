@@ -75,7 +75,8 @@ namespace Pattons_Best
       LE_SHOW_NUM_SHERMAN_SHOTS,
       LE_SHOW_NUM_ENEMY_SHOTS,
       LE_SHOW_GUN_LOAD,
-      LE_SHOW_FIRE_DIRECTION,
+      LE_SHOW_FIRE_DIRECTION_TO_SHERMAN,
+      LE_SHOW_FIRE_DIRECTION_TO_ENEMY,
       LE_SHOW_IMMOBILIZATION,
       LE_SHOW_KILLED_ENEMY,
       LE_SHOW_PROMOTION,
@@ -218,7 +219,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK);
          SetOn(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS);
          //SetOn(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS);
-         SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
+         SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN);
+         SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY);
          SetOn(LogEnum.LE_SHOW_IMMOBILIZATION);
          SetOn(LogEnum.LE_SHOW_KILLED_ENEMY);
          //-------------------------------

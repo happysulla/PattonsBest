@@ -3511,25 +3511,6 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(IsTurret) = false");
-               return false;
-            }
-            if (reader.Name != "IsTurret")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsTurret != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sIsTurret = reader.GetAttribute("value");
-            if (null == sIsTurret)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsTurret=null");
-               return false;
-            }
-            mi.IsTurret = Convert.ToBoolean(sIsTurret);
-            //---------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(IsKilled) = false");
                return false;
             }
@@ -3646,25 +3627,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): ReadXmlListingMapItemsEnemyAcquiredShots() returned false");
                return false;
             }
-            //---------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(IsVehicle) = false");
-               return false;
-            }
-            if (reader.Name != "IsVehicle")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsVehicle != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sIsVehicle = reader.GetAttribute("value");
-            if (null == sIsVehicle)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsVehicle=null");
-               return false;
-            }
-            mi.IsVehicle = Convert.ToBoolean(sIsVehicle);
             //---------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -8220,20 +8182,6 @@ namespace Pattons_Best
                return false;
             }
             //--------------------------------
-            elem = aXmlDocument.CreateElement("IsTurret");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsTurret) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", mi.IsTurret.ToString());
-            node = miNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsTurret) returned null");
-               return false;
-            }
-            //--------------------------------
             elem = aXmlDocument.CreateElement("IsKilled");
             if (null == elem)
             {
@@ -8321,20 +8269,6 @@ namespace Pattons_Best
             if (false == CreateXmlListingOfMapItemsAcquiredShots(aXmlDocument, miNode, mi.EnemyAcquiredShots))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateXmlListingOfMapItemsWoundSpots() returned false");
-               return false;
-            }
-            //--------------------------------
-            elem = aXmlDocument.CreateElement("IsVehicle");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsVehicle) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", mi.IsVehicle.ToString());
-            node = miNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsVehicle) returned null");
                return false;
             }
             //--------------------------------

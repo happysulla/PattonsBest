@@ -3338,7 +3338,7 @@ namespace Pattons_Best
          Button be53b2 = new Button() { FontFamily = myFontFam1, FontSize = 12, Content = " Area " };
          if (("Wp" != gunload) && ("Hbci" != gunload))
          {
-            if (("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.TargetMainGun.IsVehicle) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
+            if (("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.TargetMainGun.IsVehicle()) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
                be53b2.IsEnabled = false;
          }
          be53b2.Click += Button_Click;
@@ -3536,7 +3536,7 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
-         if ((true == enemyUnit.IsVehicle) && (true == enemyUnit.IsMoving))
+         if ((true == enemyUnit.IsVehicle()) && (true == enemyUnit.IsMoving))
          {
             if ('C' == range)
                sb51.Append("+20 for moving target at close range\n");
@@ -3597,7 +3597,7 @@ namespace Pattons_Best
          if ("Direct" == gi.ShermanTypeOfFire)   // EventViewer.UpdateEventContent_GetToHitModifier()
          {
             //----------------------------
-            if (true == enemyUnit.IsVehicle)
+            if (true == enemyUnit.IsVehicle())
             {
                //----------------------------
                string enemyUnitType = enemyUnit.GetEnemyUnit();
@@ -3671,7 +3671,7 @@ namespace Pattons_Best
                      return "ERROR";
                   }
                }
-               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
+               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle()))
                {
                   if ('C' == range)
                      sb51.Append("+10 for target in building at close range\n");
@@ -3685,7 +3685,7 @@ namespace Pattons_Best
                      return "ERROR";
                   }
                }
-               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
+               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle()))
                {
                   if ('C' == range)
                      sb51.Append("+15 for target in fortification at close range\n");
@@ -3733,7 +3733,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifierImmobilization(): gi.TargetMainGun=null");
             return false;
          }
-         if ((true == gi.TargetMainGun.IsVehicle) && ("Direct" ==  gi.ShermanTypeOfFire) && (false == gi.TargetMainGun.IsHullDown)) // EventViewer.UpdateEventContent_GetToHitModifierImmobilization()
+         if ((true == gi.TargetMainGun.IsVehicle()) && ("Direct" ==  gi.ShermanTypeOfFire) && (false == gi.TargetMainGun.IsHullDown)) // EventViewer.UpdateEventContent_GetToHitModifierImmobilization()
          {
             if (3 != enemyUnit.TerritoryCurrent.Name.Length)
             {

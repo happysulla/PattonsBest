@@ -193,7 +193,7 @@ namespace Pattons_Best
             {
                if (true == mi.IsEnemyUnit())
                {
-                  if (false == mi.IsVehicle)
+                  if (false == mi.IsVehicle())
                      continue;
                   int count = mi.TerritoryCurrent.Name.Length;
                   if (count < 3)

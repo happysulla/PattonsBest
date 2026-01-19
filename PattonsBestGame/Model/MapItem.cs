@@ -125,7 +125,6 @@ namespace Pattons_Best
       //--------------------------------------------------
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
-      public bool IsTurret { get; set; } = false;
       public bool IsKilled { get; set; } = false;
       public bool IsUnconscious { get; set; } = false;
       public bool IsIncapacitated { get; set; } = false;
@@ -134,8 +133,6 @@ namespace Pattons_Best
       public bool IsInterdicted { get; set; } = false;
       public Dictionary<string, int> EnemyAcquiredShots { set; get; } = new Dictionary<string, int>();
       //--------------------------------------------------
-      public bool IsVehicle { get; set; } = false;
-      public bool IsAntiTankGun { get; set; } = false;
       public bool IsMovingInOpen { get; set; } = false;
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;
@@ -237,7 +234,6 @@ namespace Pattons_Best
          //--------------------------------------
          this.IsMoving = mi.IsMoving;
          this.IsHullDown = mi.IsHullDown;
-         this.IsTurret = mi.IsTurret;
          this.IsKilled = mi.IsKilled;
          this.IsUnconscious = mi.IsUnconscious;
          this.IsIncapacitated = mi.IsIncapacitated;
@@ -246,8 +242,6 @@ namespace Pattons_Best
          foreach (KeyValuePair<string, int> kvp in mi.EnemyAcquiredShots)
             this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
          //--------------------------------------
-         this.IsVehicle = mi.IsVehicle;
-         this.IsAntiTankGun = mi.IsAntiTankGun;
          this.IsMovingInOpen = mi.IsMovingInOpen; // Copy()
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
@@ -276,7 +270,6 @@ namespace Pattons_Best
          //--------------------------------------
          this.IsMoving = mi.IsMoving;
          this.IsHullDown = mi.IsHullDown;
-         this.IsTurret = mi.IsTurret;
          this.IsKilled = mi.IsKilled;
          this.IsUnconscious = mi.IsUnconscious;
          this.IsIncapacitated = mi.IsIncapacitated;
@@ -285,8 +278,6 @@ namespace Pattons_Best
          foreach (KeyValuePair<string, int> kvp in mi.EnemyAcquiredShots)
             this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
          //--------------------------------------
-         this.IsVehicle = mi.IsVehicle;
-         this.IsAntiTankGun = mi.IsAntiTankGun;
          this.IsMovingInOpen = mi.IsMovingInOpen;  // Sync()
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
@@ -303,17 +294,17 @@ namespace Pattons_Best
       {
          if (true == this.Name.Contains("LW"))
             return true;
-         else if (true == this.Name.Contains("ATG") || true == this.Name.Contains("Pak"))
+         else if ( (true == this.Name.Contains("ATG")) || (true == this.Name.Contains("Pak")) )
             return true;
-         else if (true == this.Name.Contains("SPG") || true == this.Name.Contains("STuGIIIg"))
+         else if ( (true == this.Name.Contains("SPG")) || (true == this.Name.Contains("STuGIIIg")) )
             return true;
-         else if (true == this.Name.Contains("TANK") || true == this.Name.Contains("PzVI"))
+         else if ( (true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVI")) )
             return true;
          else if (true == this.Name.Contains("MG"))
             return true;
          else if (true == this.Name.Contains("TRUCK"))
             return true;
-         else if (true == this.Name.Contains("PSW") || true == this.Name.Contains("SPW"))
+         else if ( (true == this.Name.Contains("PSW")) || (true == this.Name.Contains("SPW")) )
             return true;
          else if (true == this.Name.Contains("MARDER"))
             return true;
@@ -321,9 +312,59 @@ namespace Pattons_Best
             return true;
          else if (true == this.Name.Contains("PzV"))
             return true;
-         else if (true == this.Name.Contains("PzVIb"))
+         else if (true == this.Name.Contains("JdgPzIV"))
             return true;
-         else if (true == this.Name.Contains("PzVIe"))
+         else if (true == this.Name.Contains("JdgPz38t"))
+            return true;
+         return false;
+      }
+      public bool IsVehicle()
+      {
+         if ((true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVI")))
+            return true;
+         else if ((true == this.Name.Contains("SPG")) || (true == this.Name.Contains("STuGIIIg")))
+            return true;
+         else if (true == this.Name.Contains("TRUCK"))
+            return true;
+         else if (true == this.Name.Contains("PSW"))
+            return true;
+         else if (true == this.Name.Contains("SPW"))
+            return true;
+         else if (true == this.Name.Contains("PzIV"))
+            return true;
+         else if (true == this.Name.Contains("PzV"))
+            return true;
+         else if (true == this.Name.Contains("MARDER"))
+            return true;
+         else if (true == this.Name.Contains("JdgPzIV"))
+            return true;
+         else if (true == this.Name.Contains("JdgPz38t"))
+            return true;
+         return false;
+      }
+      public bool IsTurret()
+      {
+         if (true == this.Name.Contains("Sherman"))
+            return true;
+         if ((true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVI")))
+            return true;
+         else if (true == this.Name.Contains("PzIV"))
+            return true;
+         else if (true == this.Name.Contains("PzV"))
+            return true;
+         return false;
+      }
+      public bool IsAntiTankGun()
+      {
+         if ( (true == this.Name.Contains("ATG")) || (true == this.Name.Contains("Pak")) )
+            return true;
+         return false;
+      }
+      public bool IsSelfPropelledGun()
+      {
+         if ( (true == this.Name.Contains("SPG")) || (true == this.Name.Contains("STuGIIIg")) )
+            return true;
+         else if (true == this.Name.Contains("MARDER"))
             return true;
          else if (true == this.Name.Contains("JdgPzIV"))
             return true;
@@ -581,7 +622,7 @@ namespace Pattons_Best
             img.Source = theMapImages.GetBitmapImage(mi.TopImageName);
             g.Children.Add(img);
             //----------------------------------------------------
-            if (true == mi.IsTurret)
+            if (true == mi.IsTurret())
             {
                double width = zoom * Utilities.theMapItemSize;
                double height = width;

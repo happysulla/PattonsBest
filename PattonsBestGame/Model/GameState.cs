@@ -722,7 +722,6 @@ namespace Pattons_Best
             {
                case "ATG":
                   mi = new MapItem(nameEnemy, 1.0, "c76UnidentifiedAtg", t1); // Set_StartAreaExtraEnemy()
-                  mi.IsAntiTankGun = true;
                   break;
                case "LW":
                   mi = new MapItem(nameEnemy, 1.0, "c91Lw", t1);
@@ -741,22 +740,17 @@ namespace Pattons_Best
                   mi = new MapItem(nameEnemy, 1.0, "c89Psw232", t1);
                   mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
-                  mi.IsVehicle = true;
                   break;
                case "SPG":
                   mi = new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", t1); // Set_StartAreaExtraEnemy()
-                  mi.IsVehicle = true;
                   break;
                case "TANK":
                   mi = new MapItem(nameEnemy, 1.0, "c78UnidentifiedTank", t1); // Set_StartAreaExtraEnemy()
-                  mi.IsVehicle = true;
-                  mi.IsTurret = true;
                   break;
                case "TRUCK":
                   mi = new MapItem(nameEnemy, 1.0, "c88Truck", t1);
                   mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
-                  mi.IsVehicle = true;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Set_StartAreaExtraEnemy(): reached default with enemyUnit=" + enemyUnit);
@@ -1210,7 +1204,7 @@ namespace Pattons_Best
                   outAction = GameAction.BattleRoundSequenceSpotting; // Targets are found, need to spot
                   gi.IsLoaderSpotThisTurn = false;
                   gi.IsCommanderSpotThisTurn = false;
-                  gi.RoundsOfCombat++;
+                  gi.RoundsOfCombat++; // SpottingPhase_Begin(): Entering Spotting Dialog
                   Logger.Log(LogEnum.LE_SHOW_ROUND_COMBAT, "SpottingPhase_Begin(): ++gi.RoundsOfCombat=" + gi.RoundsOfCombat.ToString() + " SPOTTING STARTS");
                   return true;
                }
@@ -1224,7 +1218,7 @@ namespace Pattons_Best
          gi.BattlePhase = BattlePhase.MarkCrewAction;
          gi.IsLoaderSpotThisTurn = false;
          gi.IsCommanderSpotThisTurn = false;
-         gi.RoundsOfCombat++;
+         gi.RoundsOfCombat++; // // SpottingPhase_Begin() - skipping spotting b/c nobody to find since sottedTerritories.Count = 0
          Logger.Log(LogEnum.LE_SHOW_ROUND_COMBAT, "SpottingPhase_Begin(): ++gi.RoundsOfCombat=" + gi.RoundsOfCombat.ToString() + " START CREW ACTIONS");
          return true;
       }
@@ -2008,7 +2002,6 @@ namespace Pattons_Best
          GameStatistic statMaxRoundsOfCombat = gi.Statistics.Find("MaxRoundsOfCombat");
          if (statMaxRoundsOfCombat.Value < gi.RoundsOfCombat)
             statMaxRoundsOfCombat.Value = gi.RoundsOfCombat;
-         gi.RoundsOfCombat = 0;  // Perform_EndCheck()
          return true;
       }
    }
@@ -2631,9 +2624,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Commander_Hatch");
                return false;
             }
-            string name = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
+            string nameOpenHatch = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
             Utilities.MapItemNum++;
-            IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
+            IMapItem mi = new MapItem(nameOpenHatch, 1.0, "c15OpenHatch", t);
             int delta0 = (int)(mi.Zoom * Utilities.theMapItemOffset);
             mi.Location.X = t.CenterPoint.X - delta0;
             mi.Location.Y = t.CenterPoint.Y - delta0;
@@ -2655,9 +2648,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Driver_Hatch");
                return false;
             }
-            string name = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
+            string nameOpenHatch = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
             Utilities.MapItemNum++;
-            IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
+            IMapItem mi = new MapItem(nameOpenHatch, 1.0, "c15OpenHatch", t);
             int delta1 = (int)(mi.Zoom * Utilities.theMapItemOffset);
             mi.Location.X = t.CenterPoint.X - delta1;
             mi.Location.Y = t.CenterPoint.Y - delta1;
@@ -2679,9 +2672,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Assistant_Hatch");
                return false;
             }
-            string name = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
+            string nameOpenHatch = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
             Utilities.MapItemNum++;
-            IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
+            IMapItem mi = new MapItem(nameOpenHatch, 1.0, "c15OpenHatch", t);
             int delta3 = (int)(mi.Zoom * Utilities.theMapItemOffset);
             mi.Location.X = t.CenterPoint.X - delta3;
             mi.Location.Y = t.CenterPoint.Y - delta3;
@@ -2694,7 +2687,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Spot4");
             return false;
          }
-         gi.BattleStacks.Add(new MapItem("LoaderSpot", 1.0, "c18LoaderSpot", t1));
+         string name = "LoaderSpot" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         gi.BattleStacks.Add(new MapItem(name, 1.0, "c18LoaderSpot", t1));
          //------------------------------------
          if (false == SetUsControlOnBattleMap(gi))
          {
@@ -2713,7 +2708,6 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         gi.Sherman.IsTurret = true;
          gi.Sherman.TerritoryCurrent = gi.Home;
          int delta = (int)(gi.Sherman.Zoom * Utilities.theMapItemOffset);
          gi.Sherman.Location.X = gi.Home.CenterPoint.X - delta;
@@ -2966,22 +2960,17 @@ namespace Pattons_Best
                   mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
                   mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
-                  mi.IsVehicle = true;
                   break;
                case "SPG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t); // PerformAutoSetupSkipBattleSetup()
-                  mi.IsVehicle = true;
                   break;
                case "TANK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t); // PerformAutoSetupSkipBattleSetup()
-                  mi.IsVehicle = true;
-                  mi.IsTurret = true;
                   break;
                case "TRUCK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
                   mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
-                  mi.IsVehicle = true;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with enemyUnit=" + enemyUnit);
@@ -2996,7 +2985,7 @@ namespace Pattons_Best
             mi.Location = mp;
             gi.BattleStacks.Add(mi);
             //-----------------------------------------
-            if ( (true == mi.IsVehicle) || (true == mi.IsAntiTankGun) )
+            if ( (true == mi.IsVehicle()) || (true == mi.IsAntiTankGun()) )
             {
                if (false == mi.SetMapItemRotation(gi.Sherman))
                {
@@ -3874,7 +3863,6 @@ namespace Pattons_Best
                      if ( 12 < lastReport.TankCardNum )
                        shermanName = "Sherman76";
                      gi.Sherman = new MapItem(shermanName, 2.0, tankImageName, gi.Home);
-                     gi.Sherman.IsTurret = true;
                      gi.BattleStacks.Add(gi.Sherman);
                      lastReport.Name = Utilities.GetNickName();
                   }
@@ -4703,7 +4691,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.PreparationsReadyRackEnd:
-                  if( false == PrepareForBattle(gi))
+                  if( false == PrepareForBattle(gi)) // GameStateBattlePrep.PerformAction(PreparationsReadyRackEnd)
                   {
                      returnStatus = "PrepareFor_Battle() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsReadyRackEnd): " + returnStatus);
@@ -4768,7 +4756,6 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsTurret:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e014");
-                  gi.Sherman.IsTurret = true;
                   break;
                case GameAction.PreparationsTurretRotateLeft:
                   gi.Sherman.RotationTurret -= 60;
@@ -4928,17 +4915,18 @@ namespace Pattons_Best
          gi.BattlePrep.myAmmoType = gi.GetGunLoadType();
          gi.BattlePrep.myTurretRotation = gi.Sherman.RotationTurret;
          //---------------------------
-         IMapItem? spotter = gi.BattleStacks.FindMapItem("LoaderSpot");
-         if (null == spotter)
-            gi.BattlePrep.myLoaderSpotTerritory = "";
-         else
-            gi.BattlePrep.myLoaderSpotTerritory = spotter.TerritoryCurrent.Name;
-         //---------------------------
-         spotter = gi.BattleStacks.FindMapItem("CommanderSpot");
-         if (null == spotter)
-            gi.BattlePrep.myCommanderSpotTerritory = "";
-         else
-            gi.BattlePrep.myCommanderSpotTerritory = spotter.TerritoryCurrent.Name;
+         gi.BattlePrep.myLoaderSpotTerritory = "";
+         gi.BattlePrep.myCommanderSpotTerritory = "";
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach(IMapItem mi in stack.MapItems)
+            {
+               if( true == mi.Name.Contains("LoaderSpot"))
+                  gi.BattlePrep.myLoaderSpotTerritory = mi.TerritoryCurrent.Name;
+               if (true == mi.Name.Contains("CommanderSpot"))
+                  gi.BattlePrep.myCommanderSpotTerritory = mi.TerritoryCurrent.Name;
+            }
+         }
          return true;
       }
    }
@@ -6162,11 +6150,25 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Perform_AutoBattlePreparationsSetup(): loader t=null for name=" + gi.BattlePrep.myLoaderSpotTerritory);
                return false;
             }
-            IMapItem? spotter = gi.BattleStacks.FindMapItem("LoaderSpot");
+            IMapItem? spotter = null;
+            foreach (IStack stack in gi.BattleStacks)
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  if (true == mi.Name.Contains("LoaderSpot"))
+                     spotter = mi;
+               }
+            }
             if (null == spotter)
-               gi.BattleStacks.Add(new MapItem("LoaderSpot", 1.0, "c18LoaderSpot", t));
+            {
+               string name = "LoaderSpot" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               gi.BattleStacks.Add(new MapItem(name, 1.0, "c18LoaderSpot", t));
+            }
             else
+            {
                spotter.TerritoryCurrent = t;
+            }
          }
          //---------------------------
          if (false == string.IsNullOrEmpty(gi.BattlePrep.myCommanderSpotTerritory))
@@ -6177,11 +6179,29 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Perform_AutoBattlePreparationsSetup(): cmdr t=null for name=" + gi.BattlePrep.myCommanderSpotTerritory);
                return false;
             }
-            IMapItem? spotter = gi.BattleStacks.FindMapItem("CommanderSpot");
+            IMapItem? spotter = null;
+            foreach (IStack stack in gi.BattleStacks) // remove commander spot mapitem
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  if (true == mi.Name.Contains("CommanderSpot"))
+                  {
+                     spotter = mi;
+                     break;
+                  }
+               }
+            }
             if (null == spotter)
-               gi.BattleStacks.Add(new MapItem("CommanderSpot", 1.0, "c19CommanderSpot", t));
+            {
+               string name = "CommanderSpot" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               gi.BattleStacks.Add(new MapItem(name, 1.0, "c19CommanderSpot", t));
+            }
             else
+            {
                spotter.TerritoryCurrent = t;
+            }
+
          }
          //---------------------------
          if (false == SetUsControlOnBattleMap(gi))
@@ -9570,7 +9590,7 @@ namespace Pattons_Best
             {
                foreach (IMapItem mi in stack.MapItems)
                {
-                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsVehicle) && (false == mi.IsThrownTrack)) // vehicles with thrown track cannot change facing 
+                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsVehicle()) && (false == mi.IsThrownTrack)) // vehicles with thrown track cannot change facing 
                   {
                      outAction = GameAction.BattleRoundSequenceChangeFacing;
                      return true;
@@ -9684,7 +9704,7 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------------
-         if (true == gi.TargetMainGun.IsVehicle)
+         if (true == gi.TargetMainGun.IsVehicle())
          {
             string facingOfTarget = TableMgr.GetShermanFireDirection(gi, gi.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
             if ("ERROR" == facingOfTarget)
@@ -9694,12 +9714,12 @@ namespace Pattons_Best
             }
             if ("Front" == facingOfTarget)
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=TRUE");
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=TRUE");
                gi.IsShermanFiringAtFront = true; // Sherman is firing at front of target
             }
             else
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=FALSE");
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=FALSE");
                gi.IsShermanFiringAtFront = false; // Sherman is firing at front of target
             }
          }
@@ -9858,7 +9878,7 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------------
-         if (true == gi.TargetMainGun.IsVehicle)
+         if (true == gi.TargetMainGun.IsVehicle())
          {
             string facingOfTarget = TableMgr.GetShermanFireDirection(gi, gi.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
             if ("ERROR" == facingOfTarget)
@@ -9868,12 +9888,12 @@ namespace Pattons_Best
             }
             if ("Front" == facingOfTarget)
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=TRUE");
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=TRUE");
                gi.IsShermanFiringAtFront = true; // Sherman is firing at front of target
             }
             else
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=FALSE");
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=FALSE");
                gi.IsShermanFiringAtFront = false; // Sherman is firing at front of target
             }
          }
@@ -9952,10 +9972,10 @@ namespace Pattons_Best
          //-----------------------------------------------------------------------------------
          else if (Utilities.NO_RESULT == gi.DieResults[key][0])
          {
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "Resolve_ToKillEnemyUnit(): 1st time thru ----->hit.myAmmoType=" + hit.myAmmoType + "<--------- d1=" + dieRoll.ToString() + " v?=" + gi.TargetMainGun.IsVehicle + " hulldown?=" + gi.TargetMainGun.IsHullDown);
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "Resolve_ToKillEnemyUnit(): 1st time thru ----->hit.myAmmoType=" + hit.myAmmoType + "<--------- d1=" + dieRoll.ToString() + " v?=" + gi.TargetMainGun.IsVehicle().ToString() + " hulldown?=" + gi.TargetMainGun.IsHullDown);
             //dieRoll = 10; // <CGS> TEST - Force miss on hull down vehicles
             gi.DieResults[key][0] = dieRoll;
-            if (true == gi.TargetMainGun.IsVehicle) // first die is hit location - even no chance hits could hit could cause thrown track
+            if (true == gi.TargetMainGun.IsVehicle()) // first die is hit location - even no chance hits could hit could cause thrown track
             {
                gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
                if (true == gi.TargetMainGun.IsHullDown)
@@ -9999,7 +10019,7 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------------------------------------------------
-         else if ((Utilities.NO_RESULT == gi.DieResults[key][1]) && (true == gi.TargetMainGun.IsVehicle)) // 2nd time through for vehicles hits this branch
+         else if ((Utilities.NO_RESULT == gi.DieResults[key][1]) && (true == gi.TargetMainGun.IsVehicle())) // 2nd time through for vehicles hits this branch
          {
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "Resolve_ToKillEnemyUnit(): 2nd time through to kill ------V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V ");
             //dieRoll = 1; // <CGS> TEST - KillEnemyUnit - SHERMAN TO KILL Roll
@@ -10492,7 +10512,7 @@ namespace Pattons_Best
             {
                foreach (IMapItem mi in stack.MapItems)
                {
-                  bool isVehicleTarget = ((true == mi.IsVehicle) && (false == mi.Name.Contains("TRUCK"))); // allowed to show MG at trucks
+                  bool isVehicleTarget = ((true == mi.IsVehicle()) && (false == mi.Name.Contains("TRUCK"))); // allowed to show MG at trucks
                   if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted) && (false == mi.IsKilled) && (false == isVehicleTarget))
                      gi.Targets.Add(mi);
                }

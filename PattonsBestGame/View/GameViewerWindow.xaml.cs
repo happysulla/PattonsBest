@@ -3018,7 +3018,7 @@ namespace Pattons_Best
             b.RenderTransformOrigin = new Point(0.5, 0.5);
             RotateTransform rotateTransform = new RotateTransform();
             //----------------------------------------------------
-            if ( ((true == mim.MapItem.IsVehicle) || (true == mim.MapItem.IsAntiTankGun)) && (BattlePhase.ConductCrewAction != myGameInstance.BattlePhase))
+            if ( ((true == mim.MapItem.IsVehicle()) || (true == mim.MapItem.IsAntiTankGun())) && (BattlePhase.ConductCrewAction != myGameInstance.BattlePhase))
             {
                double xDiff = xStart - mp.X;
                double yDiff = yStart - mp.Y;
@@ -4360,8 +4360,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): t=null for " + ellipse.Name.ToString());
             return;
          }
-         IMapItem? spotter = myGameInstance.BattleStacks.FindMapItem("LoaderSpot");
-         if (null == spotter)
+         IMapItem? loaderSpot = null;
+         foreach (IStack stack in myGameInstance.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("LoaderSpot"))
+                  loaderSpot = mi;
+            }
+         }
+         if (null == loaderSpot)
          {
             string name = "LoaderSpot" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
@@ -4369,7 +4377,7 @@ namespace Pattons_Best
          }
          else
          {
-            spotter.TerritoryCurrent = t;
+            loaderSpot.TerritoryCurrent = t;
          }
          GameAction outAction = GameAction.PreparationsLoaderSpotSet;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -4388,7 +4396,18 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): t=null for " + ellipse.Name.ToString());
             return;
          }
-         IMapItem? spotter = myGameInstance.BattleStacks.FindMapItem("CommanderSpot");
+         IMapItem? spotter = null;
+         foreach (IStack stack in myGameInstance.BattleStacks) 
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("CommanderSpot"))
+               {
+                  spotter = mi;
+                  break;
+               }
+            }
+         }
          if (null == spotter)
          {
             string name = "CommanderSpot" + Utilities.MapItemNum.ToString();

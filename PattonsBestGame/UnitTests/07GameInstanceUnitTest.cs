@@ -1803,11 +1803,6 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsHullDown != right.IsHullDown");
             return false;
          }
-         if (left.IsTurret != right.IsTurret)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsTurret != right.IsTurret");
-            return false;
-         }
          if (left.IsKilled != right.IsKilled)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsKilled != right.IsKilled");
@@ -1853,11 +1848,6 @@ namespace Pattons_Best.UnitTests
             }
          }
          //-------------------------------------------------
-         if (left.IsVehicle != right.IsVehicle)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsVehicle != right.IsVehicle");
-            return false;
-         }
          if (left.IsMovingInOpen != right.IsMovingInOpen)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsMovingInOpen != right.IsMovingInOpen");
