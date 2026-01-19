@@ -1556,217 +1556,217 @@ namespace Pattons_Best
          switch (oldT.Name)
          {
             case "B1C":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B4C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B9C";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B2C";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B1M";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B1M":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B1C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B9M";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B2M";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B1L";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B1L":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B1M";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B9L";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B2L";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "OffBottomRight";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B2C":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B6C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B1C";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B3C";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B2M";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B2M":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B2C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B1M";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B3M";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B2L";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B2L":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B2M";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B1L";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B3L";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "OffBottomRight";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B3C":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B9C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B2C";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B4C";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B3M";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B3M":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B3C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B2M";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B4M";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B3L";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B3L":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B3M";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B2L";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B4L";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "OffBottomLeft";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B4C":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B1C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B3C";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B6C";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B4M";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B4M":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B4C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B3M";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B6M";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B4L";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B4L":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B4M";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B3L";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B6L";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "OffTopLeft";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B6C":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B2C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B4C";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B9C";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B6M";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B6M":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B6C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B4M";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B9M";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B6L";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B6L":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B6M";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B4L";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B9L";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "OffTopRight";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B9C":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B3C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B6C";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B1C";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B9M";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B9M":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B9C";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B6M";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B1M";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "B9L";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;
             case "B9L":
-               if ("Move-F" == move)
+               if (true == move.Contains("Move-F"))
                   newTerritoryName = "B9M";
-               else if ("Move-L" == move)
+               else if (true == move.Contains("Move-L"))
                   newTerritoryName = "B6L";
-               else if ("Move-R" == move)
+               else if (true == move.Contains("Move-R"))
                   newTerritoryName = "B1L";
-               else if ("Move-B" == move)
+               else if (true == move.Contains("Move-B"))
                   newTerritoryName = "OffTopRight";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);

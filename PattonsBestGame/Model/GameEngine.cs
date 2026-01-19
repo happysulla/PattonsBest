@@ -56,7 +56,7 @@ namespace Pattons_Best
       public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr, CanvasImageViewer civ)
       {
          //-----------------------------------------------------------------------------
-         IUnitTest ut1 = new GameViewerCreateUnitTest(dp);
+         IUnitTest ut1 = new GameViewerCreateUnitTest(dp, gi, civ);
          if (true == ut1.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): GameViewerCreateUnitTest() ctor error");

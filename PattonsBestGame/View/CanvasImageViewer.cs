@@ -412,7 +412,7 @@ namespace Pattons_Best
          Canvas.SetTop(img, top);
          Canvas.SetZIndex(img, 99999);
       }
-      private void ShowEndGameSuccess(Canvas c)
+      public void ShowEndGameSuccess(Canvas c)
       {
          c.LayoutTransform = new ScaleTransform(1.0, 1.0);
          BitmapImage bmi1 = new BitmapImage();
@@ -430,7 +430,7 @@ namespace Pattons_Best
          Canvas.SetTop(img, 0);
          Canvas.SetZIndex(img, 99999);
       }
-      private void ShowEndGameFail(Canvas c)
+      public void ShowEndGameFail(Canvas c)
       {
          c.LayoutTransform = new ScaleTransform(1.0, 1.0);
          BitmapImage bmi1 = new BitmapImage();
