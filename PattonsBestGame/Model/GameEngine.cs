@@ -1,5 +1,4 @@
-﻿using Pattons_Best.UnitTests;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -53,13 +52,21 @@ namespace Pattons_Best
          }
          myMainWindow.UpdateViews(gi, action); // Update all registered views when performNextAction() is called
       }
-      public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr, CanvasImageViewer civ)
+      public bool CreateUnitTests(IGameInstance gi, DockPanel dp, GameViewerWindow gvw, EventViewer ev, IDieRoller dr, CanvasImageViewer civ)
       {
+         //-----------------------------------------------------------------------------
+         IUnitTest ut8 = new TableMgrUnitTest(dp, gi, civ, gvw);
+         if (true == ut8.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): TableMgrUnitTest() ctor error");
+            return false;
+         }
+         gi.UnitTests.Add(ut8);
          //-----------------------------------------------------------------------------
          IUnitTest ut1 = new GameViewerCreateUnitTest(dp, gi, civ);
          if (true == ut1.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): GameViewerCreateUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): GameViewerCreateUnitTest() ctor error");
             return false;
          }
          gi.UnitTests.Add(ut1);
@@ -67,7 +74,7 @@ namespace Pattons_Best
          IUnitTest ut2 = new TerritoryCreateUnitTest(dp, gi, civ);
          if (true == ut2.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): TerritoryCreateUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): TerritoryCreateUnitTest() ctor error");
             return false;
          }
          gi.UnitTests.Add(ut2);
@@ -75,7 +82,7 @@ namespace Pattons_Best
          IUnitTest ut3 = new TerritoryRegionUnitTest(dp, gi, civ);
          if (true == ut3.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): TerritoryRegionUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): TerritoryRegionUnitTest() ctor error");
             return false;
          }
          gi.UnitTests.Add(ut3);
@@ -83,7 +90,7 @@ namespace Pattons_Best
          IUnitTest ut4 = new PolylineCreateUnitTest(dp, gi, civ);
          if (true == ut4.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): PolylineCreateUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): PolylineCreateUnitTest() ctor error");
             return false;
          }
          gi.UnitTests.Add(ut4);
@@ -91,7 +98,7 @@ namespace Pattons_Best
          IUnitTest ut5 = new ConfigMgrUnitTest(dp, ev);
          if (true == ut5.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): ConfigMgrUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): ConfigMgrUnitTest() ctor error");
             return false;
          }
          gi.UnitTests.Add(ut5);
@@ -99,7 +106,7 @@ namespace Pattons_Best
          IUnitTest ut6 = new DiceRollerUnitTest(dp, dr);
          if (true == ut6.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): DiceRollerUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): DiceRollerUnitTest() ctor error");
             return false;
          }
          gi.UnitTests.Add(ut6);
@@ -107,7 +114,7 @@ namespace Pattons_Best
          IUnitTest ut7 = new GameInstanceUnitTest(dp);
          if (true == ut7.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): GameInstanceUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "Create_UnitTests(): GameInstanceUnitTest() ctor error");
             return false;
          }
          gi.UnitTests.Add(ut7);

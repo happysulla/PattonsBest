@@ -11,7 +11,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 
-namespace Pattons_Best.UnitTests
+namespace Pattons_Best
 {
    internal class GameInstanceUnitTest : IUnitTest
    {
@@ -215,7 +215,7 @@ namespace Pattons_Best.UnitTests
          Canvas.SetLeft(imageMap, 0);
          Canvas.SetTop(imageMap, 0);
          //--------------------------------------------------
-         Application.Current.Shutdown();
+         ++gi.GameTurn; // moves to next unit test
          return true;
       }
       //--------------------------------------------------------------------

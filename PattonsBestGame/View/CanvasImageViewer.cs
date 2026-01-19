@@ -58,6 +58,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer.UpdateView(): lastReport=null");
             return;
          }
+         bool isFogOrFalling = false;
+         if ((true == lastReport.Weather.Contains("Falling")) || (true == lastReport.Weather.Contains("Fog")))
+            isFogOrFalling = true;
          if (null == myDieRoller)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDieRoller=null");
@@ -102,7 +105,7 @@ namespace Pattons_Best
                      break;
                   case "e003":
                      theMainImage = EnumMainImage.MI_Battle;
-                     ShowBattleMap(lastReport, myCanvas);
+                     ShowBattleMap(isFogOrFalling, myCanvas);
                      break;
                   default:
                      theMainImage = EnumMainImage.MI_Other;
@@ -126,8 +129,12 @@ namespace Pattons_Best
                CanvasImageViewer.theMainImage = cmd.MainImage;
                switch(cmd.MainImage)
                {
-                  case EnumMainImage.MI_Battle: ShowBattleMap(lastReport,myCanvas); break;
-                  case EnumMainImage.MI_Move: ShowMovementMap(myCanvas); break;
+                  case EnumMainImage.MI_Battle: 
+                     ShowBattleMap(isFogOrFalling, myCanvas); 
+                     break;
+                  case EnumMainImage.MI_Move: 
+                     ShowMovementMap(myCanvas); 
+                     break;
                   case EnumMainImage.MI_Other:
                      switch(cmd.Action)
                      {
@@ -221,8 +228,8 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
-               ShowBattleMap(lastReport, myCanvas);
-               if( true == gi.IsAdvancingFireChosen ) // show advance fire counter as mouse pointer
+               ShowBattleMap(isFogOrFalling, myCanvas);
+               if ( true == gi.IsAdvancingFireChosen ) // show advance fire counter as mouse pointer
                {
                   double sizeCursor = Utilities.ZoomCanvas * Utilities.ZOOM * Utilities.theMapItemSize;
                   System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, sizeCursor * 0.5); // set the center of the MapItem as the hot point for the cursor
@@ -315,11 +322,11 @@ namespace Pattons_Best
          Canvas.SetTop(img, 0);
          Canvas.SetZIndex(img, 0);
       }
-      public void ShowBattleMap(IAfterActionReport lastReport, Canvas c)
+      public void ShowBattleMap(bool isFallingOrFog, Canvas c)
       {
          CleanCanvas(c, true);
          Image img;
-         if ( (true == lastReport.Weather.Contains("Falling")) || (true == lastReport.Weather.Contains("Fog")) )
+         if ( true == isFallingOrFog )
             img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattleFogFalling") };
          else
             img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };

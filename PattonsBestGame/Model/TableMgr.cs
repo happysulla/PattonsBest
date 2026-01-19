@@ -2847,7 +2847,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default hitLocation=" + hitLocation);
          return "ERROR";
       }
-      public static int GetEnemyToHitNumberModifierForYourTank(IGameInstance gi, IMapItem mi, char range)
+      public static int GetEnemyToHitNumberModifierForYourTank(IGameInstance gi, IMapItem mi)
       {
          int toHitModifierNum = 0;
          string enemyUnit = mi.GetEnemyUnit();
@@ -2857,19 +2857,37 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //-----------------------------------------------
-         double hullT1 = 360 - mi.RotationTurret;
-         double hullT2 = mi.RotationTurretOld;
-         double hullTotalAngle = hullT1 + hullT2;
-         if (360.0 < hullTotalAngle)
+         int count = mi.TerritoryCurrent.Name.Count();
+         if (3 != count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + mi.TerritoryCurrent.Name + " eu=" + mi.Name);
+            return FN_ERROR;
+         }
+         char enemySector = mi.TerritoryCurrent.Name[count - 2];
+         char enemyRange = mi.TerritoryCurrent.Name[count - 1];
+         //-----------------------------------------------
+         double rotation = 0.0;
+         switch (enemySector)
+         {
+            case '6': rotation = 0.0; break;
+            case '9': rotation = 60.0; break;
+            case '1': rotation = 120.0; break;
+            case '2': rotation = 180.0; break;
+            case '3': rotation = 240.0; break;
+            case '4': rotation = 300.0; break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector + " eu=" + mi.Name);
+               return FN_ERROR;
+         }
+         //-----------------------------------------------
+         double hullTotalAngle = rotation + 180 - mi.RotationHull;
+         if (359.9 < hullTotalAngle)
             hullTotalAngle = hullTotalAngle - 360;
          if (180.0 < hullTotalAngle)
-            hullTotalAngle = 360 - hullTotalAngle;
-         int hulltNumRotations = (int)(hullTotalAngle / 60.0);
-         int hullTurretMod = (int)(10.0 * hulltNumRotations);
+            hullTotalAngle = 360.0 - hullTotalAngle;
+         int hullNumRotations = (int)(hullTotalAngle / 60.0);
          //-----------------------------------------------
-         double turretT1 = 360 - mi.RotationTurret;
-         double turretT2 = mi.RotationTurretOld;
-         double turretTotalAngle = turretT1 + turretT2;
+         double turretTotalAngle = 180 - mi.RotationTurret;
          if (360.0 < turretTotalAngle)
             turretTotalAngle = turretTotalAngle - 360;
          if (180.0 < turretTotalAngle)
@@ -2885,46 +2903,43 @@ namespace Pattons_Best
          {
             int turretMod = (int)(10.0 * turretNumRotations);
             toHitModifierNum += turretMod;
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): vca +" + turretMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): vca +" + turretMod.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
             if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == enemyUnit.Contains("PzVI")))
             {
                int turretMod2 = (int)(15.0 * turretNumRotations);
                toHitModifierNum += turretMod2;
-               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() );
             }
          }
          else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && (true == enemyUnit.Contains("PzVI")) ) 
          {
             int turretMod = (int)(15.0 * turretNumRotations);
             toHitModifierNum += turretMod;
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() );
          }
          else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()) )
          {
             string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
-            if ( "Front" != facing )
+            int coveredArcMod = (int)(25.0 * hullNumRotations);
+            if( (true == mi.Name.Contains("Pak43")) || (true == mi.Name.Contains("ATG")) )
+               coveredArcMod = (int)(10.0 * hullNumRotations);
+            toHitModifierNum += coveredArcMod;
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): ATG +" + coveredArcMod.ToString() + " turretTotalAngle=" + turretTotalAngle.ToString() + " #r=" + rotation.ToString() + " mod=" + toHitModifierNum.ToString() + " facing=" + facing);
+            if (false == mi.SetMapItemRotation(gi.Sherman))
             {
-               int coveredArcMod = (int)(10.0 * turretNumRotations);
-               if( (true == mi.Name.Contains("Pak43")) || (true == mi.Name.Contains("ATG")) )
-                  coveredArcMod = (int)(25.0 * turretNumRotations);
-               toHitModifierNum += coveredArcMod;
-               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): ATG +" + coveredArcMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString() + " facing=" + facing);
-               if (false == mi.UpdateMapRotation("Front"))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
-                  return FN_ERROR;
-               }
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotation() returned false");
+               return FN_ERROR;
             }
          }
          else if ((true == optionSpgCoveredArc.IsEnabled) && (true == mi.IsSelfPropelledGun()))
          {
             string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): SPG_FIRE_OUTSIDE_ARC tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString() + " facing=" + facing);
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): SPG Firing facing=" + facing);
             if ("Front" != facing)
             {
-               if (false == mi.UpdateMapRotation("Front"))
+               if (false == mi.SetMapItemRotation(gi.Sherman))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotation() returned false");
                   return FN_ERROR;
                }
                return SPG_FIRE_OUTSIDE_ARC;
@@ -2944,47 +2959,47 @@ namespace Pattons_Best
          {
             if (0 < gi.Sherman.EnemyAcquiredShots[mi.Name]) // GetEnemy_ToHitNumberYourTank() - acquire 2 marker
             {
-               if ('C' == range)
+               if ('C' == enemyRange)
                {
                   toHitModifierNum -= 10;
                   Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-2 close");
                }
-               else if ('M' == range)
+               else if ('M' == enemyRange)
                {
                   toHitModifierNum -= 10;
                   Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -20 mod=" + toHitModifierNum.ToString() + " acquire-2 medium");
                }
-               else if ('L' == range)
+               else if ('L' == enemyRange)
                {
                   toHitModifierNum -= 30;
                   Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -30 mod=" + toHitModifierNum.ToString() + " acquire-2 long");
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): 1-unknown range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): 1-unknown range=" + enemyRange);
                   return FN_ERROR;
                }
             }
             else // acquired 1 marker
             {
-               if ('C' == range)
+               if ('C' == enemyRange)
                {
                   toHitModifierNum -= 5;
                   Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -5 mod=" + toHitModifierNum.ToString() + " acquire-1 close");
                }
-               else if ('M' == range)
+               else if ('M' == enemyRange)
                {
                   toHitModifierNum -= 10;
                   Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-1 medium");
                }
-               else if ('L' == range)
+               else if ('L' == enemyRange)
                {
                   toHitModifierNum -= 15;
                   Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -15 mod=" + toHitModifierNum.ToString() + " acquire-1 long");
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): 2-unknown range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): 2-unknown range=" + enemyRange);
                   return FN_ERROR;
                }
             }

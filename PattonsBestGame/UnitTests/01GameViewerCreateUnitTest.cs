@@ -107,12 +107,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Command(): myGameInstance=null");
             return false;
          }
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer.UpdateView(): lastReport=null");
-            return false;
-         }
+
          if (null == myCanvasImageViewer)
          {
             Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasImageViewer=null");
@@ -160,12 +155,12 @@ namespace Pattons_Best
          }
          else if (CommandName == myCommandNames[3])
          {
-            myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
+            myCanvasImageViewer.ShowBattleMap(false, myCanvasMain);
             myCanvasImageViewer.ShowEndGameFail(myCanvasMain);
          }
          else if (CommandName == myCommandNames[4])
          {
-            myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
+            myCanvasImageViewer.ShowBattleMap(false, myCanvasMain);
             myCanvasImageViewer.ShowEndGameSuccess(myCanvasMain);
          }
          else if (CommandName == myCommandNames[5])

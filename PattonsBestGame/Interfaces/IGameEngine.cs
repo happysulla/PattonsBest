@@ -483,6 +483,6 @@ namespace Pattons_Best
       List<IView> Views { get; }
       void RegisterForUpdates(IView view);
       void PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll = 0);
-      bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr, CanvasImageViewer civ);
+      bool CreateUnitTests(IGameInstance gi, DockPanel dp, GameViewerWindow gvw, EventViewer ev, IDieRoller dr, CanvasImageViewer civ);
    }
 }

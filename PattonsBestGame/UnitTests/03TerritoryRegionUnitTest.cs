@@ -184,7 +184,7 @@ namespace Pattons_Best
             else
             {
                myIsBattleMapShown = true;
-               myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
+               myCanvasImageViewer.ShowBattleMap(false, myCanvasMain);
             }
             if (false == CreateEllipses(true))
             {

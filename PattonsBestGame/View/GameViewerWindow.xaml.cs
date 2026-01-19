@@ -245,9 +245,9 @@ namespace Pattons_Best
          ge.RegisterForUpdates(this); // needs to be last so that canvas updates after all actions taken
          Logger.Log(LogEnum.LE_GAME_INIT, "GameViewerWindow(): \nzoomCanvas=" + Properties.Settings.Default.ZoomCanvas.ToString() + "\nwp=" + Properties.Settings.Default.WindowPlacement + "\noptions=" + Properties.Settings.Default.GameOptions);
 #if UT1
-            if (false == ge.CreateUnitTests(gi, myDockPanelTop, myEventViewer, myDieRoller, civ))
+            if (false == ge.CreateUnitTests(gi, myDockPanelTop, this, myEventViewer, myDieRoller, civ))
             {
-               Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): CreateUnitTests() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): Create_UnitTests() returned false");
                CtorError = true;
                return;
             }
@@ -2610,8 +2610,8 @@ namespace Pattons_Best
          if( GameAction.UpdateLoadingGame != action)
             UpdateCanvasMainClear(buttons, stacks, action);
          //-------------------------------------------------------
-         if (GamePhase.UnitTest == gi.GamePhase)
-            return true;
+         //if (GamePhase.UnitTest == gi.GamePhase)
+         //   return true;
          //-------------------------------------------------------
          if (false == UpdateCanvasMainMapItems(buttons, stacks))
          {

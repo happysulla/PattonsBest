@@ -11669,6 +11669,7 @@ namespace Pattons_Best
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
+            case GameAction.UpdateNewGameEnd:
             case GameAction.UpdateGameOptions:
             case GameAction.UpdateStatusBar:
             case GameAction.UpdateTankCard:

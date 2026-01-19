@@ -1535,7 +1535,7 @@ namespace Pattons_Best
                   if ( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
-                     myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
+                     myGridRows[i].myModifierToHitYourTank = TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, mi);
                      if (TableMgr.FN_ERROR == myGridRows[i].myModifierToHitYourTank)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberModifierForYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);

@@ -125,7 +125,7 @@ namespace Pattons_Best
                lastReport = new AfterActionReport(entry); 
                gi.Reports.Add(lastReport); 
             }
-            myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
+            myCanvasImageViewer.ShowBattleMap(false, myCanvasMain);
          }
          //-------------------------------------
          myDashArray.Add(5);  // used for dotted lines
@@ -165,7 +165,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "Command(): lastReport=null");
                   return false;
                }
-               myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
+               myCanvasImageViewer.ShowBattleMap(false, myCanvasMain);
             }
          }
          else if (CommandName == myCommandNames[1])
