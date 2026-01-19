@@ -9,6 +9,7 @@ namespace Pattons_Best
    public class TableMgr
    {
       public const int NO_CHANCE = 55555;
+      public const int SPG_FIRE_OUTSIDE_ARC = 55556;
       public const int KIA = 10000;
       public const int MIA = 10001;
       public const int FN_ERROR = -1000;
@@ -2880,32 +2881,53 @@ namespace Pattons_Best
          Option optionSpgCoveredArc = gi.Options.Find("SpgCoveredArc");
          Option optionAtgCoveredArc = gi.Options.Find("AtgCoveredArc");
          //-----------------------------------------------
-         if ( (true == optionTankCoveredArc.IsEnabled) && (true==mi.IsTurret()) &&  (false == enemyUnit.Contains("PzVI")) ) // if using Tank Cover Arc rules, the modifer changes
+         if ( (true == optionTankCoveredArc.IsEnabled) && (true==mi.IsTurret())) // if using Tank Cover Arc rules, the modifer changes
          {
             int turretMod = (int)(10.0 * turretNumRotations);
             toHitModifierNum += turretMod;
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
-         }
-         else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && (true == enemyUnit.Contains("PzVI")) ) // if using Tank Cover Arc rules, the modifer changes
-         {
-            int turretMod = (int)(10.0 * turretNumRotations);
-            toHitModifierNum += turretMod;
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
-         }
-         else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()) )// if using Tank Cover Arc rules, the modifer changes
-         {
-            if (false == mi.UpdateMapRotation("Front"))
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): vca +" + turretMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
+            if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == enemyUnit.Contains("PzVI")))
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
-               return FN_ERROR;
+               int turretMod2 = (int)(15.0 * turretNumRotations);
+               toHitModifierNum += turretMod2;
+               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
             }
          }
-         else if ((true == optionSpgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()))// if using Tank Cover Arc rules, the modifer changes
+         else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && (true == enemyUnit.Contains("PzVI")) ) 
          {
-            if (false == mi.UpdateMapRotation("Front"))
+            int turretMod = (int)(15.0 * turretNumRotations);
+            toHitModifierNum += turretMod;
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
+         }
+         else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()) )
+         {
+            string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
+            if ( "Front" != facing )
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
-               return FN_ERROR;
+               int coveredArcMod = (int)(10.0 * turretNumRotations);
+               if( (true == mi.Name.Contains("Pak43")) || (true == mi.Name.Contains("ATG")) )
+                  coveredArcMod = (int)(25.0 * turretNumRotations);
+               toHitModifierNum += coveredArcMod;
+               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): ATG +" + coveredArcMod.ToString() + " tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString() + " facing=" + facing);
+               if (false == mi.UpdateMapRotation("Front"))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
+                  return FN_ERROR;
+               }
+            }
+         }
+         else if ((true == optionSpgCoveredArc.IsEnabled) && (true == mi.IsSelfPropelledGun()))
+         {
+            string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): SPG_FIRE_OUTSIDE_ARC tNew=" + turretT1.ToString() + " tOld=" + turretT2.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString() + " facing=" + facing);
+            if ("Front" != facing)
+            {
+               if (false == mi.UpdateMapRotation("Front"))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Update_MapRotation() returned false");
+                  return FN_ERROR;
+               }
+               return SPG_FIRE_OUTSIDE_ARC;
             }
          }
          else
