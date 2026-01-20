@@ -94,6 +94,8 @@ namespace Pattons_Best
       public int HoursOfRainThisDay { set; get; } = 0;
       public int MinSinceLastCheck { set; get; } = 0;
       //---------------------------------------------------------------
+      public double ShermanTurretRotationOld { set; get; } = 0.0;
+      public bool IsShermanTurretRotatedThisRound { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
       public int NumSmokeAttacksThisRound { set; get; } = 0;

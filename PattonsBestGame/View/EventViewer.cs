@@ -3572,10 +3572,10 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
-         if (gi.Sherman.RotationTurret != gi.Sherman.RotationTurretOld)
+         if (gi.Sherman.RotationTurret != gi.ShermanTurretRotationOld)
          {
             double t1 = 360 - gi.Sherman.RotationTurret;
-            double t2 = gi.Sherman.RotationTurretOld;
+            double t2 = gi.ShermanTurretRotationOld;
             double totalAngle = t1 + t2;
             if (360.0 < totalAngle)
                totalAngle = totalAngle - 360;

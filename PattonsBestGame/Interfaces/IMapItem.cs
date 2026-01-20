@@ -19,16 +19,17 @@ namespace Pattons_Best
       bool IsMoved { get; set; }               // If Sherman moved, it cannot fire unless it has HVSS
       int Count { get; set; }
       IMapPoint Location { get; set; }       // top left corner of MapItem
-      double RotationOffsetHull { get; set; }
+      //----------------------------------------
       double RotationHull { get; set; }      // rotation to point at location
-      double RotationOffsetTurret { get; set; }
+      double RotationOffsetHull { get; set; }
+      //----------------------------------------
       double RotationTurret { get; set; }
-      double RotationTurretOld { get; set; } // to track how much the turret changes before firing - can only be 0, 60, 120, 180, 240, 300 degrees
-      bool IsTurretRotated { get; set; } // For Sherman. Turret rotated without firing main gun causes target acquisition = 0
+      double RotationOffsetTurret { get; set; }
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
       //----------------------------------------
+      string LastAction { get; set; }
       bool IsMoving { get; set; }
       bool IsHullDown { get; set; }
       bool IsKilled { get; set; }

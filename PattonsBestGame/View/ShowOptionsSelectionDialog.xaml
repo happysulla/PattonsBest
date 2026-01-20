@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Pattons_Best"
         mc:Ignorable="d"
         Topmost="True" 
-        Title="Options Dialog" FontSize="20" Height="440" Width="1150" WindowStartupLocation="CenterScreen">
+        Title="Options Dialog" FontSize="20" Height="440" Width="1170" WindowStartupLocation="CenterScreen">
    <ScrollViewer Name="myScrollViewerInside" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
       <Grid x:Name="myGrid">
          <Grid.RowDefinitions>
@@ -74,8 +74,8 @@
                <CheckBox x:Name="myCheckBoxIncreasedMove"  Content="Increase Sherman Consecutive Move Chances" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxEnhancedMgFire"  Content="Increase Sherman MG Leathality" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxMgSurpressingFire"  Content="Decrease Enemy Fire from Sherman MGs" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-               <CheckBox x:Name="myCheckBoxMovingFwdIncreaseAdvanceChances"  Content="Sherman advancing increase Friendly Advance" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-               <CheckBox x:Name="myCheckBoxTerrainPointValueCenter"  Content="Add random 0-2 points for capturing center area" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxMovingFwdIncreaseAdvanceChances"  Content="Sherman Advancing Increase Friendly Advance" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxTerrainPointValueCenter"  Content="Add Random 0-2 Points for Capturing Center Area" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
             </StackPanel>
          </GroupBox>
          <StackPanel Name="myStackPanelButtons" Grid.Row="3" Grid.ColumnSpan="4"  Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="5,5,5,15" >

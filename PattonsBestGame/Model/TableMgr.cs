@@ -957,6 +957,8 @@ namespace Pattons_Best
             return "ERROR";
          }
          //----------------------------------------------------
+         Option optionEnemyContinueMove = gi.Options.Find("EnemyContinueMove");
+         //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -5461,7 +5463,7 @@ namespace Pattons_Best
          }
          //------------------------------------
          double t1 = 360 - gi.Sherman.RotationTurret;
-         double t2 = gi.Sherman.RotationTurretOld;
+         double t2 = gi.ShermanTurretRotationOld;
          double totalAngle = t1 + t2;
          if (360.0 < totalAngle)
             totalAngle = totalAngle - 360;

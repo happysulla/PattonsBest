@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Transactions;
 using System.Windows.Controls;
@@ -99,14 +100,14 @@ namespace Pattons_Best
             return mii.IsAnimated;
          }
       }
-      public bool IsMoved { get; set; } = false;
       public int Count { get; set; } = 0;
+      public bool IsMoved { get; set; } = false;
+      //--------------------------------------------------
       public double RotationOffsetHull { get; set; } = 0.0; // extra offset to show on battle board
       public double RotationHull { get; set; } = 0.0; // can only be 0, 60, 120, 180, 240, 300 degrees
+       //--------------------------------------------------
       public double RotationOffsetTurret { get; set; } = 0.0;  // extra offset to show on battle board
       public double RotationTurret { get; set; } = 0.0; // can only be 0, 60, 120, 180, 240, 300 degrees
-      public double RotationTurretOld { get; set; } = 0.0; // to track how much turret changes before firing - can only be 0, 60, 120, 180, 240, 300 degrees
-      public bool IsTurretRotated { get; set; } = false;  // to track how much turret changes before firing - can only be 0, 60, 120, 180, 240, 300 degrees
       //--------------------------------------------------
       private IMapPoint myLocation = new MapPoint();  // top left corner of MapItem
       public IMapPoint Location 
@@ -123,6 +124,7 @@ namespace Pattons_Best
       protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
+      public string LastAction { get; set; } = string.Empty;
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
       public bool IsKilled { get; set; } = false;
