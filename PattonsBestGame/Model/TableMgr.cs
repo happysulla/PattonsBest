@@ -3876,67 +3876,96 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------
-      public static string GetRandomEvent(EnumScenario scenario, int dieRoll)
+      public static string GetRandomEvent(IGameInstance gi, EnumScenario scenario, int dieRoll)
       {
          //dieRoll = 80; // <CGS> TEST - Random Event
+         Option option = gi.Options.Find("MovingFwdIncreaseAdvanceChances");
          switch (scenario)
          {
             case EnumScenario.Advance:
                if (dieRoll < 6)
                   return "Time Passes";
-               if (dieRoll < 16)
+               else if (dieRoll < 16)
                   return "Friendly Artillery";
-               if (dieRoll < 21)
+               else if (dieRoll < 21)
                   return "Enemy Artillery";
-               if (dieRoll < 26)
+               else if (dieRoll < 26)
                   return "Mines";
-               if (dieRoll < 31)
+               else if (dieRoll < 31)
                   return "Panzerfaust";
-               if (dieRoll < 36)
+               else if (dieRoll < 36)
                   return "Harrassing Fire";
-               if (dieRoll < 61)
+               else if (dieRoll < 61)
                   return "Friendly Advance";
-               if (dieRoll < 81)
-                  return "Enemy Reinforce";
-               return "Flanking Fire";
+               else if (dieRoll < 81)
+               {
+                  if ((true == option.IsEnabled) && (true == gi.IsShermanAdvancingOnBattleBoard) && (dieRoll < 65)) // add 4% to Friendly Advance
+                     return "Friendly Advance";
+                  else
+                     return "Enemy Reinforce";
+               }
+               else
+                  return "Flanking Fire";
             case EnumScenario.Battle:
                if (dieRoll < 6)
                   return "Time Passes";
-               if (dieRoll < 21)
+               else if (dieRoll < 21)
                   return "Friendly Artillery";
-               if (dieRoll < 31)
+               else if (dieRoll < 31)
                   return "Enemy Artillery";
-               if (dieRoll < 36)
+               else if (dieRoll < 36)
                   return "Mines";
-               if (dieRoll < 41)
+               else if (dieRoll < 41)
                   return "Panzerfaust";
-               if (dieRoll < 46)
+               else if (dieRoll < 46)
                   return "Harrassing Fire";
-               if (dieRoll < 61)
+               else if (dieRoll < 61)
                   return "Friendly Advance";
-               if (dieRoll < 81)
-                  return "Enemy Reinforce";
-               if (dieRoll < 86)
-                  return "Enemy Advance";
-               return "Flanking Fire";
+               else if (dieRoll < 81)
+               {
+                  if ((true == option.IsEnabled) && (true == gi.IsShermanAdvancingOnBattleBoard) && (dieRoll < 65)) // add 4% to Friendly Advance
+                     return "Friendly Advance";
+                  else
+                     return "Enemy Reinforce";
+               }
+               else if (dieRoll < 86)
+               {
+                  if ((true == option.IsEnabled) && (true == gi.IsShermanAdvancingOnBattleBoard) && (dieRoll < 83 )) // add 2% to Friendly Advance
+                     return "Friendly Advance";
+                  else
+                     return "Enemy Advance";
+               }
+               else
+                  return "Flanking Fire";
             case EnumScenario.Counterattack:
                if (dieRoll < 6)
                   return "Time Passes";
-               if (dieRoll < 26)
+               else if (dieRoll < 26)
                   return "Friendly Artillery";
-               if (dieRoll < 36)
+               else if (dieRoll < 36)
                   return "Enemy Artillery";
-               if (dieRoll < 41)
+               else if (dieRoll < 41)
                   return "Panzerfaust";
-               if (dieRoll < 46)
+               else if (dieRoll < 46)
                   return "Harrassing Fire";
-               if (dieRoll < 51)
+               else if (dieRoll < 51)
                   return "Friendly Advance";
-               if (dieRoll < 76)
-                  return "Enemy Reinforce";
-               if (dieRoll < 91)
-                  return "Enemy Advance";
-               return "Flanking Fire";
+               else if (dieRoll < 76)
+               {
+                  if ((true == option.IsEnabled) && (true == gi.IsShermanAdvancingOnBattleBoard) && (dieRoll < 54)) // add 3% to Friendly Advance
+                     return "Friendly Advance";
+                  else
+                     return "Enemy Reinforce";
+               }
+               else if (dieRoll < 91)
+               {
+                  if ((true == option.IsEnabled) && (true == gi.IsShermanAdvancingOnBattleBoard) && (dieRoll < 80)) // add 4% to Friendly Advance
+                     return "Friendly Advance";
+                  else
+                     return "Enemy Advance";
+               }
+               else
+                  return "Flanking Fire";
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetRandomEvent(): reached default scenario=" + scenario.ToString());
                return "ERROR";
@@ -6167,6 +6196,10 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
+         Option optionShermanSurpressingMgFire = gi.Options.Find("ShermanSurpressingMgFire");
+         if( (true == optionShermanSurpressingMgFire.IsEnabled) && ((true == enemyUnit.Name.Contains("LW")) || (true == enemyUnit.Name.Contains("MG"))) )
+               enemyUnit.IsInterdicted = true;
+         //------------------------------------
          if (true == enemyUnit.IsMovingInOpen)
          {
             toKillModifierNum -= 10;
@@ -6189,6 +6222,10 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
+         //------------------------------------
+         Option optionShermanSurpressingMgFire = gi.Options.Find("ShermanSurpressingMgFire");
+         if ((true == optionShermanSurpressingMgFire.IsEnabled) && ((true == enemyUnit.Name.Contains("LW")) || (true == enemyUnit.Name.Contains("MG"))))
+            enemyUnit.IsInterdicted = true;
          //---------------------------------------------------
          int toKillNum = 0;
          if ("75" == card.myMainGun)

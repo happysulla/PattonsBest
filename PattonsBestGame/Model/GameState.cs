@@ -1430,6 +1430,7 @@ namespace Pattons_Best
          //---------------------------------
          gi.IsHatchesActive = false;
          gi.IsRetreatToStartArea = false;
+         gi.IsShermanAdvancingOnBattleBoard = false; // PrepareFor_Battle()
          //---------------------------------
          gi.IsShermanFiringAtFront = false; // PrepareFor_Battle()
          gi.IsShermanDeliberateImmobilization = false;
@@ -3288,6 +3289,7 @@ namespace Pattons_Best
          gi.MovementEffectOnEnemy = "unit";
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
+         gi.IsShermanAdvancingOnBattleBoard = false; // Setup_NewGame()
          //-------------------------------------------------------
          gi.ShermanTypeOfFire = "";                    // Setup_NewGame()
          gi.IsShermanDeliberateImmobilization = false; // Setup_NewGame()
@@ -6558,7 +6560,7 @@ namespace Pattons_Best
                         }
                      }
                      gi.GamePhase = GamePhase.BattleRoundSequence;                              // <<<<<<<<<<<<< Change to BattleRoundSequence
-                     string randomEvent = TableMgr.GetRandomEvent(lastReport.Scenario, gi.DieResults[key][0]);
+                     string randomEvent = TableMgr.GetRandomEvent(gi, lastReport.Scenario, gi.DieResults[key][0]);
                      switch (randomEvent)
                      {
                         case "Time Passes":
@@ -8330,7 +8332,7 @@ namespace Pattons_Best
                            }
                         }
                      }
-                     string randomEvent = TableMgr.GetRandomEvent(lastReport.Scenario, gi.DieResults[key][0]);
+                     string randomEvent = TableMgr.GetRandomEvent(gi, lastReport.Scenario, gi.DieResults[key][0]);
                      switch (randomEvent)
                      {
                         case "Time Passes":
@@ -9318,6 +9320,12 @@ namespace Pattons_Best
       }
       private bool MoveShermanMoveEnemyUnits(IGameInstance gi)
       {
+         if ((((270.0 < gi.Sherman.RotationHull) || (gi.Sherman.RotationHull < 90.0)) && ("A" == gi.MovementEffectOnEnemy)) ||
+             (((90.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull < 270.0)) && ("B" == gi.MovementEffectOnEnemy)))
+         {
+            gi.IsShermanAdvancingOnBattleBoard = true;
+         }
+         //--------------------------------------------
          IMapItems enemyUnits = new MapItems();
          foreach (IStack stack in gi.BattleStacks)
          {
@@ -10898,6 +10906,7 @@ namespace Pattons_Best
          gi.MovementEffectOnEnemy = "unit";
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
+         gi.IsShermanAdvancingOnBattleBoard = false; // Reset_Round()
          //-------------------------------------------------------
          gi.ShermanTypeOfFire = "";                    // Reset_Round()
          gi.IsShermanDeliberateImmobilization = false; // Reset_Round()
@@ -11371,6 +11380,7 @@ namespace Pattons_Best
          gi.AdvanceFire = null;
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
+         gi.IsShermanAdvancingOnBattleBoard = false; // EveningDebriefing_ResetDay()
          //-------------------------------------------------------
          gi.IsFallingSnowStopped = false;
          gi.HoursOfRainThisDay = 0;

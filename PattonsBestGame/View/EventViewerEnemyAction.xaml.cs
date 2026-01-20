@@ -1609,7 +1609,7 @@ namespace Pattons_Best
                else
                {
                   myGridRows[i].myDieRollFacing = NO_MOVE;
-                  myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // if MOve is false or thrown track
+                  myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // if MOve is false or thrown track or interdicted
                }
                //----------------------------------------
                if (true == enemyAction.Contains("Collateral"))

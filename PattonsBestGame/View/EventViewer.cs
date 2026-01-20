@@ -1867,7 +1867,7 @@ namespace Pattons_Best
             case "e039c":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  string result = "=   " + TableMgr.GetRandomEvent(report.Scenario, gi.DieResults[key][0]);
+                  string result = "=   " + TableMgr.GetRandomEvent(gi, report.Scenario, gi.DieResults[key][0]);
                   myTextBlock.Inlines.Add(new Run(result));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());

@@ -83,6 +83,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
       public bool IsRetreatToStartArea { set; get; } = false;
+      public bool IsShermanAdvancingOnBattleBoard { set; get; } = false;
       public bool IsShermanAdvancingOnMoveBoard { set; get; } = false;
       public bool IsLoaderSpotThisTurn { set; get; } = false;
       public bool IsCommanderSpotThisTurn { set; get; } = false;
