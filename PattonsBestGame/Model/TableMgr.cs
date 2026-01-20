@@ -2885,14 +2885,14 @@ namespace Pattons_Best
             hullTotalAngle = hullTotalAngle - 360;
          if (180.0 < hullTotalAngle)
             hullTotalAngle = 360.0 - hullTotalAngle;
-         int hullNumRotations = (int)(hullTotalAngle / 60.0);
+         int hullNumRotations = (int)Math.Abs(hullTotalAngle / 60.0);
          //-----------------------------------------------
-         double turretTotalAngle = 180 - mi.RotationTurret;
+         double turretTotalAngle = hullTotalAngle - mi.RotationTurret;
          if (360.0 < turretTotalAngle)
             turretTotalAngle = turretTotalAngle - 360;
          if (180.0 < turretTotalAngle)
             turretTotalAngle = 360 - turretTotalAngle;
-         int turretNumRotations = (int)(turretTotalAngle / 60.0);
+         int turretNumRotations = (int)Math.Abs(turretTotalAngle / 60.0);
          //-----------------------------------------------
          Option optionTankCoveredArc = gi.Options.Find("TankCoveredArc");
          Option optionSlowTransverseCoveredArc = gi.Options.Find("SlowTransverseCoveredArc");
@@ -2904,18 +2904,28 @@ namespace Pattons_Best
             int turretMod = (int)(10.0 * turretNumRotations);
             toHitModifierNum += turretMod;
             Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): vca +" + turretMod.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
-            if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == enemyUnit.Contains("PzVI")))
+            if ((true == optionSlowTransverseCoveredArc.IsEnabled) && ( (true == enemyUnit.Contains("PzVI")) || (true == enemyUnit.Contains("TANK")) ) )
             {
-               int turretMod2 = (int)(15.0 * turretNumRotations);
+               int turretMod2 = (int)(5.0 * turretNumRotations);
                toHitModifierNum += turretMod2;
-               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() );
+               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod2.ToString() + " mod=" + toHitModifierNum.ToString());
+            }
+            if( false == mi.SetMapItemRotationTurret(gi.Sherman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotationTurret() returned false");
+               return FN_ERROR;
             }
          }
-         else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && (true == enemyUnit.Contains("PzVI")) ) 
+         else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && ((true == enemyUnit.Contains("PzVI")) || (true == enemyUnit.Contains("TANK"))) ) 
          {
-            int turretMod = (int)(15.0 * turretNumRotations);
+            int turretMod = (int)(5.0 * turretNumRotations);
             toHitModifierNum += turretMod;
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() );
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
+            if (false == mi.SetMapItemRotationTurret(gi.Sherman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotationTurret() returned false");
+               return FN_ERROR;
+            }
          }
          else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()) )
          {
@@ -2934,7 +2944,7 @@ namespace Pattons_Best
          else if ((true == optionSpgCoveredArc.IsEnabled) && (true == mi.IsSelfPropelledGun()))
          {
             string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): SPG Firing facing=" + facing);
+
             if ("Front" != facing)
             {
                if (false == mi.SetMapItemRotation(gi.Sherman))
@@ -2942,7 +2952,12 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotation() returned false");
                   return FN_ERROR;
                }
+               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): SPG Firing facing=" + facing + " return SPG_FIRE_OUTSIDE_ARC" );
                return SPG_FIRE_OUTSIDE_ARC;
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): SPG Firing - No Change - facing=" + facing + " mod=" + toHitModifierNum.ToString());
             }
          }
          else

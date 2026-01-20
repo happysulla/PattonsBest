@@ -456,7 +456,7 @@ namespace Pattons_Best
          double rotation = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
          if (rotation < 0)
             rotation += 360.0;
-         if ( 0.0 < rotation && rotation <= 30.0)
+         if ((330.0 < rotation && rotation <= 360.0) || (0.0 <= rotation && rotation <= 30.0))
          {
             this.RotationHull = 0.0;
          }
@@ -476,7 +476,7 @@ namespace Pattons_Best
          {
             this.RotationHull = 240.0;
          }
-         else if (270.0 < rotation && rotation <= 360.0) //------------
+         else if (270.0 < rotation && rotation <= 330.0) //------------
          {
             this.RotationHull = 300.0;
          }
@@ -513,7 +513,7 @@ namespace Pattons_Best
          double rotation = rotationDelta;
          while (rotation < 0)
             rotation += 360.0;
-         if (-1.0 < rotation && rotation <= 30.0)
+         if ((330.0 < rotation && rotation <= 360.0) || (0.0 <= rotation && rotation <= 30.0))
          {
             this.RotationTurret = 0.0;
          }
@@ -533,7 +533,7 @@ namespace Pattons_Best
          {
             this.RotationTurret = 240.0;
          }
-         else if (270.0 < rotation && rotation <= 360.0) //------------
+         else if (270.0 < rotation && rotation <= 330.0) //------------
          {
             this.RotationTurret = 300.0;
          }

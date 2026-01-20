@@ -149,7 +149,7 @@ namespace Pattons_Best
             //------------------------------------
             string name = "ATG" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
-            ITerritory? t = Territories.theTerritories.Find("B6M");
+            ITerritory? t = Territories.theTerritories.Find("B2M");
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for B6M");
@@ -172,7 +172,7 @@ namespace Pattons_Best
             //------------------------------------
             name = "SPG" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
-            t = Territories.theTerritories.Find("B4M");
+            t = Territories.theTerritories.Find("B3M");
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for B4M");
@@ -195,7 +195,7 @@ namespace Pattons_Best
             //------------------------------------
             name = "PzIV" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
-            t = Territories.theTerritories.Find("B9M");
+            t = Territories.theTerritories.Find("B2M");
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for B9M");
@@ -205,10 +205,20 @@ namespace Pattons_Best
             mp = Territory.GetRandomPoint(t, myPzIV.Zoom * Utilities.theMapItemOffset);
             myPzIV.Location = mp;
             myGameInstance.BattleStacks.Add(myPzIV);
+            if (false == myPzIV.SetMapItemRotation(myGameInstance.Sherman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): Set_MapItemRotation() returned false");
+               return false;
+            }
+            if (false == myPzIV.SetMapItemRotationTurret(myGameInstance.Sherman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): Set_MapItemRotation() returned false");
+               return false;
+            }
             //------------------------------------
             name = "TANK" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
-            t = Territories.theTerritories.Find("B9M");
+            t = Territories.theTerritories.Find("B1M");
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for B9M");
@@ -218,6 +228,16 @@ namespace Pattons_Best
             mp = Territory.GetRandomPoint(t, myTank.Zoom * Utilities.theMapItemOffset);
             myTank.Location = mp;
             myGameInstance.BattleStacks.Add(myTank);
+            if (false == myTank.SetMapItemRotation(myGameInstance.Sherman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): Set_MapItemRotation() returned false");
+               return false;
+            }
+            if (false == myTank.UpdateMapRotation("Rear"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): Update_MapRotation() returned false");
+               return false;
+            }
             ++myIndexName;
          } 
          //-----------------------------------------
@@ -255,6 +275,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Command(): myPzIV=null");
                return false;
             }
+            Option option = gi.Options.Find("TankCoveredArc");
+            option.IsEnabled = true;
+            int modifier = TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, myPzIV);
+            GameAction outAction = GameAction.UpdateBattleBoard;
+            myGameViewerWindow.UpdateView(ref myGameInstance, outAction);
          }
          else if (CommandName == myCommandNames[4])
          {
@@ -263,6 +288,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Command(): myTank=null");
                return false;
             }
+            Option option = gi.Options.Find("SlowTransverseCoveredArc");
+            option.IsEnabled = true;
+            int modifier = TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, myTank);
+            GameAction outAction = GameAction.UpdateBattleBoard;
+            myGameViewerWindow.UpdateView(ref myGameInstance, outAction);
          }
          else if (CommandName == myCommandNames[5])
          {
