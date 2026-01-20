@@ -56,7 +56,7 @@ namespace Pattons_Best
          myCheckBoxSpgCoverArc.ToolTip = "Self Propelled Guns (SPGs) is ingored if the current facing is side or rear.";
          myCheckBoxAtgCoverArc.ToolTip = "Anti-Tank Guns (ATGs) using facings equivalent to AFVs. Pake38/Pak40 add +25 to change facing. Pak43 are on 360-degree mounts and only add +10 dice roll modifer per sector.";
          //-----------------------------
-         myCheckBoxContinueMove.ToolTip = "Enemy units tend to move in straight line. Increase chances that same movement order occurs in consecutive moves.";
+         myCheckBoxContinueMove.ToolTip = "Enemy units tend to move in straight line. Increase by 66& chances that same movement order occurs in consecutive moves.";
          myCheckBoxRearFacingAfterMoveAway.ToolTip = "Enemy units when retreating have increase chances of rear facing.";
          myCheckBoxIncreasedMove.ToolTip = "Ever consecutive turn the Sherman attempts to move, increase chance it does move.";
          myCheckBoxEnhancedMgFire.ToolTip = "Increase the MG fire effectivity against close and medium range targets.";

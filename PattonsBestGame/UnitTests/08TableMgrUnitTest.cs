@@ -38,10 +38,10 @@ namespace Pattons_Best
          //------------------------------------
          myIndexName = 0;
          myHeaderNames.Add("08-Show Battle Map");
-         myHeaderNames.Add("08-1-GetEnemyToHitNumberModifierForYourTank");
-         myHeaderNames.Add("08-2-GetEnemyToHitNumberModifierForYourTank");
-         myHeaderNames.Add("08-3-GetEnemyToHitNumberModifierForYourTank");
-         myHeaderNames.Add("08-4-GetEnemyToHitNumberModifierForYourTank");
+         myHeaderNames.Add("08-1-ToHitNumberModsYourTank");
+         myHeaderNames.Add("08-2-ToHitNumberModsYourTank");
+         myHeaderNames.Add("08-3-ToHitNumberModsYourTank");
+         myHeaderNames.Add("08-4-ToHitNumberModsYourTank");
          myHeaderNames.Add("08-Finish");
          //------------------------------------
          myCommandNames.Add("Show Battle Map");

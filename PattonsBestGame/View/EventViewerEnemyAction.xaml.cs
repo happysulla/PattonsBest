@@ -1481,7 +1481,6 @@ namespace Pattons_Best
             return;
          }
          IMapItem mi;
-         string enemyUnit;
          //-------------------------------
          switch (myState)
          {
@@ -1490,12 +1489,6 @@ namespace Pattons_Best
                if (null == mi)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_SELECT): mi = null for i=" + i.ToString());
-                  return;
-               }
-               enemyUnit = mi.GetEnemyUnit();
-               if ("ERROR" == enemyUnit)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_SELECT): mi.GetEnemyUnit() returned error");
                   return;
                }
                mi.IsFired = false; // set to true if unit fires
@@ -1516,6 +1509,7 @@ namespace Pattons_Best
                   return;
                }
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): myState=" + myState.ToString() + " enemyAction=" + enemyAction);
+               myGridRows[i].myEnemyAction = enemyAction;
                //----------------------------------------
                if (true == enemyAction.Contains("Infantry"))
                {
@@ -1541,28 +1535,38 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberModifierForYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
-                     //-------------------------------------
-                     myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetEnemyToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if (TableMgr.FN_ERROR == myGridRows[i].myToHitNumberYourTank)
+                     if (TableMgr.SPG_FIRE_OUTSIDE_ARC == myGridRows[i].myModifierToHitYourTank)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
-                        return;
+                        mi.IsFired = false;
+                        myGridRows[i].myEnemyAction = "Rotate Hull";
+                        myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK; // not firing at your tank 
+                        myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK; // not firing at your tank 
+                        myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks... only firing at your tank
                      }
-                     //-------------------------------------
-                     if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))
-                        myGameInstance.Sherman.EnemyAcquiredShots[mi.Name]++;
                      else
-                        myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0;
-                     Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
-                     //-------------------------------------
-                     myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks... only firing at your tank
-                     //-------------------------------------
-                     if ( true == mi.IsTurret() )
                      {
-                        if (false == mi.SetMapItemRotationTurret(myGameInstance.Sherman))
+                        myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetEnemyToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                        if (TableMgr.FN_ERROR == myGridRows[i].myToHitNumberYourTank)
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_MapItemRotationTurret() returned false for mi=" + mi.Name + " i=" + i.ToString());
+                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                            return;
+                        }
+                        //-------------------------------------
+                        if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))
+                           myGameInstance.Sherman.EnemyAcquiredShots[mi.Name]++;
+                        else
+                           myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0;
+                        Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
+                        //-------------------------------------
+                        myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks... only firing at your tank
+                        //-------------------------------------
+                        if (true == mi.IsTurret())
+                        {
+                           if (false == mi.SetMapItemRotationTurret(myGameInstance.Sherman))
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_MapItemRotationTurret() returned false for mi=" + mi.Name + " i=" + i.ToString());
+                              return;
+                           }
                         }
                      }
                   }
@@ -1614,7 +1618,6 @@ namespace Pattons_Best
                   mi.IsFired = true;
                }
                //----------------------------------------
-               myGridRows[i].myEnemyAction = enemyAction;
                myState = E0475Enum.ENEMY_ACTION_SELECT_SHOW;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
@@ -1630,16 +1633,10 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi = null for i=" + i.ToString());
                   return;
                }
-               enemyUnit = mi.GetEnemyUnit();
-               if ("ERROR" == enemyUnit)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi.GetEnemyUnit() returned error");
-                  return;
-               }
                if ( 2 == myRollResultColNum )
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
-                  myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll); 
+                  myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll); 
                   if ("ERROR" == myGridRows[i].myFacing)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
@@ -1653,6 +1650,12 @@ namespace Pattons_Best
                }
                else if (3 == myRollResultColNum)
                {
+                  string enemyUnit = mi.GetEnemyUnit();
+                  if( "ERROR" == enemyUnit)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi.GetEnemyUnit() returned ERROR for mi=" + mi.Name);
+                     return;
+                  }
                   myGridRows[i].myDieRollTerrain = dieRoll;
                   myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myGameInstance.Day, myAreaType, enemyUnit, dieRoll);
                   if ("ERROR" == myGridRows[i].myTerrain)
@@ -1684,12 +1687,6 @@ namespace Pattons_Best
                if (null == mi)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi = null for i=" + i.ToString());
-                  return;
-               }
-               enemyUnit = mi.GetEnemyUnit();
-               if ("ERROR" == enemyUnit)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi.GetEnemyUnit() returned error");
                   return;
                }
                myAdvanceFireGridRows[i].myDieRollAdvanceFire = dieRoll;

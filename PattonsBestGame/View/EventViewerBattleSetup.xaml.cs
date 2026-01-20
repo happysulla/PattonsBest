@@ -369,7 +369,7 @@ namespace Pattons_Best
                         {
                            dieRoll = Utilities.RandomGenerator.Next(1, 11);
                            myGridRows[startingRow].myDieRollFacing = dieRoll;
-                           myGridRows[startingRow].myFacing = TableMgr.GetEnemyNewFacing(activation, dieRoll);
+                           myGridRows[startingRow].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi1, dieRoll);
                            if ("ERROR" == myGridRows[startingRow].myFacing)
                            {
                               Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.Get_EnemyNewFacing() returned ERROR");
@@ -1106,7 +1106,7 @@ namespace Pattons_Best
                myGridRows[i].myDieRollFacing = NO_FACING;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to ATG");
                int die1 = Utilities.RandomGenerator.Next(0, 10);
-               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivatedEnemyUnit, die1);
+               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, die1);
                if ("ERROR" == myGridRows[i].myFacing)
                {
                   Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): TableMgr.Get_EnemyNewFacing() returned ERROR");
@@ -1348,20 +1348,20 @@ namespace Pattons_Best
                break;
             //-------------------------------------------------------------------
             case E046Enum.PLACE_FACING:
-               myGridRows[i].myDieRollFacing= dieRoll;
-               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivatedEnemyUnit, dieRoll);
-               if ("ERROR" == myGridRows[i].myFacing)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
-                  return;
-               }
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "ShowDieResults(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
                IMapItem? mi = myGridRows[i].myMapItem;
                if (null == mi)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi=null for i=" + i.ToString());
                   return;
                }
+               myGridRows[i].myDieRollFacing= dieRoll;
+               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
+               if ("ERROR" == myGridRows[i].myFacing)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
+                  return;
+               }
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "ShowDieResults(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
                if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Update_MapRotation() returned false");
@@ -1467,6 +1467,11 @@ namespace Pattons_Best
       }
       private bool ShowDieResultsAutoRolls(Index i)
       {
+         if( null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): myGameInstance=null");
+            return false;
+         }
          myGridRows[i].myDieRollSector = Utilities.RandomGenerator.Next(1, 11);
          if (false == ShowDieResultUpdateSector(i))
          {
@@ -1498,10 +1503,10 @@ namespace Pattons_Best
          if( true == miEnemyUnit.IsVehicle())
          {
             myGridRows[i].myDieRollFacing = Utilities.RandomGenerator.Next(1, 11);
-            myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivatedEnemyUnit, myGridRows[i].myDieRollFacing);
+            myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, miEnemyUnit, myGridRows[i].myDieRollFacing);
             if ("ERROR" == myGridRows[i].myFacing)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyNewFacing() returned ERROR");
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.Get_EnemyNewFacing() returned ERROR");
                return false;
             }
             Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);

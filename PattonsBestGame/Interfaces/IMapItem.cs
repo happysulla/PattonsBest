@@ -29,7 +29,7 @@ namespace Pattons_Best
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
       //----------------------------------------
-      string LastAction { get; set; }
+      string LastMoveAction { get; set; }
       bool IsMoving { get; set; }
       bool IsHullDown { get; set; }
       bool IsKilled { get; set; }

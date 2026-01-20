@@ -73,7 +73,7 @@
                <CheckBox x:Name="myCheckBoxRearFacingAfterMoveAway"  Content="Increase Chances of Rear Facing after Move-B" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxIncreasedMove"  Content="Increase Sherman Consecutive Move Chances" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxEnhancedMgFire"  Content="Increase Sherman MG Leathality" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
-               <CheckBox x:Name="myCheckBoxMgSurpressingFire"  Content="Decrease Enemy Fire from Sherman MGs" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxMgSurpressingFire"  Content="LW/MG Limited Interdiction due to MG Fire" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxMovingFwdIncreaseAdvanceChances"  Content="Sherman Advancing Increase Friendly Advance" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
                <CheckBox x:Name="myCheckBoxTerrainPointValueCenter"  Content="Add Random 0-2 Points for Capturing Center Area" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
             </StackPanel>

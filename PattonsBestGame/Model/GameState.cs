@@ -2930,18 +2930,6 @@ namespace Pattons_Best
             {
                case "ATG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.1, "c76UnidentifiedAtg", t);  // PerformAutoSetupSkipBattleSetup()
-                  die1 = Utilities.RandomGenerator.Next(1, 11);
-                  string facing = TableMgr.GetEnemyNewFacing(enemyUnit, die1);
-                  if ("ERROR" == facing)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): GetEnemyNewFacing() returned error");
-                     return false;
-                  }
-                  if (false == mi.UpdateMapRotation(facing))
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): Update_MapRotation() returned false");
-                     return false;
-                  }
                   break;
                case "LW":
                   mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
@@ -2993,10 +2981,10 @@ namespace Pattons_Best
                   return false;
                }
                die1 = Utilities.RandomGenerator.Next(1, 11);
-               string facing = TableMgr.GetEnemyNewFacing(enemyUnit, die1);
+               string facing = TableMgr.GetEnemyNewFacing(gi, mi, die1);
                if ("ERROR" == facing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): GetEnemyNewFacing() returned error");
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): Get_EnemyNewFacing() returned error");
                   return false;
                }
                if (false == mi.UpdateMapRotation(facing))

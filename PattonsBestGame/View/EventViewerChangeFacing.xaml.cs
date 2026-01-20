@@ -461,6 +461,11 @@ namespace Pattons_Best
       public void ShowDieResults(int dieRoll)
       {
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "EventViewerChangeFacing.ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
+         if( null == myGameInstance )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerChangeFacing.ShowDieResults(): myGameInstance=null");
+            return;
+         }
          //-------------------------------
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
@@ -468,18 +473,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): 0 > i=" + i.ToString());
             return;
          }
-         IMapItem mi = myGridRows[i].myMapItem;
-         string enemyUnit = mi.GetEnemyUnit();
-         if( "ERROR" == enemyUnit )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi.GetEnemyUnit() returned error");
-            return;
-         }
+         //-------------------------------
          myGridRows[i].myDieRollFacing = dieRoll;
+         IMapItem mi = myGridRows[i].myMapItem;
          if (true == mi.IsThrownTrack)
             myGridRows[i].myFacingNew = myGridRows[i].myFacingOld;  // do not change facing if thrown track
          else
-            myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
+            myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
          if ("ERROR" == myGridRows[i].myFacingNew)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");

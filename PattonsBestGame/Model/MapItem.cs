@@ -124,7 +124,7 @@ namespace Pattons_Best
       protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
-      public string LastAction { get; set; } = string.Empty;
+      public string LastMoveAction { get; set; } = string.Empty;
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
       public bool IsKilled { get; set; } = false;
