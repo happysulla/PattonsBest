@@ -4601,6 +4601,35 @@ namespace Pattons_Best
          {
             sb.Append("+20 if target in fortification\n");
          }
+         //------------------------------------
+         Option optionShermanEnhanceMgFire = gi.Options.Find("ShermanEnhanceMgFire");
+         if (true == optionShermanEnhanceMgFire.IsEnabled)
+         {
+            if ('C' != range)
+            {
+               if ("Bow" == mgType) 
+                  sb.Append("-8 for enhanced MG option\n");
+               else if ("Coaxial" == mgType)
+                  sb.Append("-10 for enhanced MG option\n");
+               else if ("Aa" == mgType) 
+                  sb.Append("-12 for enhanced MG option\n");
+               else if ("Sub" == mgType) 
+                  sb.Append("-6 for enhanced MG option\n");
+            }
+            else if ('M' != range)
+            {
+               if ("Bow" == mgType) 
+                  sb.Append("-5 for enhanced MG option\n");
+               else if ("Coaxial" == mgType) 
+                  sb.Append("-6 for enhanced MG option\n");
+               else if ("Aa" == mgType) 
+                  sb.Append("-7 for enhanced MG option\n");
+               else if ("Sub" == mgType)
+                  sb.Append("-4 for enhanced MG option\n");
+            }
+            //-------------------
+
+         }
          return sb.ToString() ;
       }
       private bool UpdateEventContentVictoryPointTotal(IGameInstance gi)

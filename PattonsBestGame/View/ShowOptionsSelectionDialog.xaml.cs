@@ -59,9 +59,9 @@ namespace Pattons_Best
          myCheckBoxContinueMove.ToolTip = "Enemy units tend to move in straight line. Increase by 66& chances that same movement order occurs in consecutive moves.";
          myCheckBoxRearFacingAfterMoveAway.ToolTip = "Enemy units when retreating have increase chances of rear facing.";
          myCheckBoxIncreasedMove.ToolTip = "Ever consecutive turn the Sherman attempts to move, increase chance it does move.";
-         myCheckBoxEnhancedMgFire.ToolTip = "Increase the MG fire effectivity against close and medium range targets.";
-         myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs cause interdiction to prevent them from moving for this one round.";
-         myCheckBoxMovingFwdIncreaseAdvanceChances.ToolTip = "Sherman advancing on Battle Board incease Friendly Advance result in Random Event.";
+         myCheckBoxEnhancedMgFire.ToolTip = "Increase the MG fire effectivity against close (6-12%) and medium range (4-7%) targets.";
+         myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs cause interdiction to prevent them from moving for one round.";
+         myCheckBoxMovingFwdIncreaseAdvanceChances.ToolTip = "Sherman advancing on Battle Board increase Friendly Advance by ~7% in Random Event.";
          myCheckBoxTerrainPointValueCenter.ToolTip = "Capturing/Losing Board Center adds/subtracts random points of 0 to 2 points.";
          //-----------------------------
          if (false == UpdateDisplay(myOptions))

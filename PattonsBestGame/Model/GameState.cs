@@ -11075,12 +11075,14 @@ namespace Pattons_Best
                   lastReport.DayEndedTime = TableMgr.GetTime(lastReport);
                   break;
                case GameAction.EveningDebriefingRatingImprovementEnd:
+                  gi.BattleStacks.Clear();
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e101");
                   if (false == UpdateForEveningDebriefing(gi, lastReport))
                   {
                      returnStatus = "UpdateForEveningDebriefing() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
+                  lastReport.DayEndedTime = TableMgr.GetTime(lastReport);
                   break;
                case GameAction.EveningDebriefingCrewReplacedEnd:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e101");
@@ -11231,13 +11233,13 @@ namespace Pattons_Best
          string oldRank = report.Commander.Rank;
          string lastPromoDate = TableMgr.GetDate(gi.PromotionDay);
          string currentDate = TableMgr.GetDate(gi.Day);
-         int diff = Utilities.DiffInDates(lastPromoDate, currentDate);
-         if (diff < -999)
+         int diffInDates = Utilities.DiffInDates(lastPromoDate, currentDate);
+         if (diffInDates < -999)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): Utilities.DiffInDates() returned error");
             return false;
          }
-         if (29 < diff)  // cannot get promoted until 30 days past since last promotion
+         if (29 < diffInDates)  // cannot get promoted until 30 days past since last promotion
          {
             switch (oldRank)
             {
@@ -11289,7 +11291,7 @@ namespace Pattons_Best
             report.Notes.Add(sb.ToString());  // Set_Deployment(): gi.IsLeadTank
          }
          //--------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_PROMOTION, "UpdatePromotion(): oldRank=" + oldRank + " promoDate=" + lastPromoDate.ToString() + " diff=" + diff.ToString() + " isPromoted=" + gi.IsPromoted);
+         Logger.Log(LogEnum.LE_SHOW_PROMOTION, "UpdatePromotion(): oldRank=" + oldRank + " promoDate=" + lastPromoDate.ToString() + " diffInDates=" + diffInDates.ToString() + " isPromoted=" + gi.IsPromoted);
          return true;
       }
       public bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, GameAction action)

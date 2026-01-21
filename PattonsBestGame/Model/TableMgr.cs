@@ -8200,6 +8200,57 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
+         Option optionShermanEnhanceMgFire = gi.Options.Find("ShermanEnhanceMgFire");
+         if (true == optionShermanEnhanceMgFire.IsEnabled)
+         {
+            if ('C' != range)
+            {
+               if ("Bow" == mgType) 
+               {
+                  toKillModifierNum -= 8;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -8 mod=" + toKillModifierNum.ToString());
+               }
+               else if ("Coaxial" == mgType) 
+               {
+                  toKillModifierNum -= 10;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -10 mod=" + toKillModifierNum.ToString());
+               }
+               else if ("Aa" == mgType) 
+               {
+                  toKillModifierNum -= 12;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -12 mod=" + toKillModifierNum.ToString());
+               }
+               else if ("Sub" == mgType) 
+               {
+                  toKillModifierNum -= 6;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -6 mod=" + toKillModifierNum.ToString());
+               }
+            }
+            else if ('M' != range)
+            {
+               if ("Bow" == mgType) 
+               {
+                  toKillModifierNum -= 5;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -5 mod=" + toKillModifierNum.ToString());
+               }
+               else if ("Coaxial" == mgType) 
+               {
+                  toKillModifierNum -= 6;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -6 mod=" + toKillModifierNum.ToString());
+               }
+               else if ("Aa" == mgType) 
+               {
+                  toKillModifierNum -= 7;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -7 mod=" + toKillModifierNum.ToString());
+               }
+               else if ("Sub" == mgType)
+               {
+                  toKillModifierNum -= 4;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -4 mod=" + toKillModifierNum.ToString());
+               }
+            }
+         }
+         //------------------------------------
          if (true == isShermanMovingOrPivoting)
          {
             toKillModifierNum += 10;
