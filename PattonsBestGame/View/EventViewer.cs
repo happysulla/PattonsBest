@@ -2255,9 +2255,9 @@ namespace Pattons_Best
                   Option optionShermanIncreaseMoveChance = gi.Options.Find("ShermanIncreaseMoveChances");
                   if (true == optionShermanIncreaseMoveChance.IsEnabled)
                   {
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("Consecutive Move Modifier: -" + gi.ShermanConsectiveMoveAttempt.ToString()));
+                     int total = DieRoller.WhiteDie - gi.ShermanConsectiveMoveAttempt;
+                     string sTotal = " - " + gi.ShermanConsectiveMoveAttempt.ToString() + " = " + total.ToString();
+                     myTextBlock.Inlines.Add(new Run(sTotal));
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
