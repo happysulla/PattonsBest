@@ -100,8 +100,8 @@ namespace Pattons_Best
             return mii.IsAnimated;
          }
       }
-      public int Count { get; set; } = 0;
       public bool IsMoved { get; set; } = false;
+      public int Count { get; set; } = 0;
       //--------------------------------------------------
       public double RotationOffsetHull { get; set; } = 0.0; // extra offset to show on battle board
       public double RotationHull { get; set; } = 0.0; // can only be 0, 60, 120, 180, 240, 300 degrees
