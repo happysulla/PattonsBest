@@ -1438,8 +1438,9 @@ namespace Pattons_Best
          gi.NumSmokeAttacksThisRound = 0;
          gi.IsMainGunRepairAttempted = false;
          //---------------------------------
-         gi.IsShermanTurretRotatedThisRound = false;       // PrepareFor_Battle()
          gi.ShermanTurretRotationOld = 0.0;
+         gi.IsShermanTurretRotatedThisRound = false;       // PrepareFor_Battle()
+         gi.ShermanConsectiveMoveAttempt = 0;              // PrepareFor_Battle()
          //---------------------------------
          gi.IsMinefieldAttack = false;
          gi.IsHarrassingFireBonus = false; 
@@ -3317,8 +3318,9 @@ namespace Pattons_Best
          gi.IsBowMgRepairAttempted = false;
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
+         gi.ShermanTurretRotationOld = 0.0;                 // Setup_NewGame()
          gi.IsShermanTurretRotatedThisRound = false;       // Setup_NewGame()
-         gi.ShermanTurretRotationOld = gi.Sherman.RotationTurret;
+         gi.ShermanConsectiveMoveAttempt = 0;              // Setup_NewGame()
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
@@ -8833,6 +8835,7 @@ namespace Pattons_Best
             if (false == isTankMoving)
             {
                gi.Sherman.IsMoving = false;
+               gi.ShermanConsectiveMoveAttempt = 0;
             }
             else
             {
@@ -8840,6 +8843,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 1-phase=" + gi.CrewActionPhase.ToString() + "  isMove=" + isTankMoving.ToString() + " isPivot=" + isTankPivoting.ToString());
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
+               gi.ShermanConsectiveMoveAttempt++;
                //--------------------------------------------------
                if ( ((false == isGunnerTrainedInHvss) || (null == gi.ShermanHvss)) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
@@ -9323,7 +9327,7 @@ namespace Pattons_Best
          if ((((270.0 < gi.Sherman.RotationHull) || (gi.Sherman.RotationHull < 90.0)) && ("A" == gi.MovementEffectOnEnemy)) ||
              (((90.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull < 270.0)) && ("B" == gi.MovementEffectOnEnemy)))
          {
-            gi.IsShermanAdvancingOnBattleBoard = true;
+            gi.IsShermanAdvancingOnBattleBoard = true; // MoveSherman_MoveEnemyUnits()
          }
          //--------------------------------------------
          IMapItems enemyUnits = new MapItems();
@@ -10929,8 +10933,8 @@ namespace Pattons_Best
          gi.IsBowMgRepairAttempted = false;
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
+         gi.ShermanTurretRotationOld = gi.Sherman.RotationTurret;  // Reset_Round()
          gi.IsShermanTurretRotatedThisRound = false;       // Reset_Round()
-         gi.ShermanTurretRotationOld = gi.Sherman.RotationTurret;
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
@@ -11443,8 +11447,9 @@ namespace Pattons_Best
          gi.IsBrokenPeriscopeGunner = false;
          gi.IsBrokenPeriscopeCommander = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotatedThisRound = false;       // EveningDebriefing_ResetDay()
          gi.ShermanTurretRotationOld = 0.0;
+         gi.IsShermanTurretRotatedThisRound = false;       // EveningDebriefing_ResetDay()
+         gi.ShermanConsectiveMoveAttempt = 0;              // EveningDebriefing_ResetDay()
          //-------------------------------------------------------
          gi.IsLeadTank = false;
          gi.IsAirStrikePending = false;

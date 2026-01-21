@@ -4578,6 +4578,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): invalid dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
+         //---------------------------------------------
+         Option optionShermanIncreaseMoveChance = gi.Options.Find("ShermanIncreaseMoveChances");
+         if( true == optionShermanIncreaseMoveChance.IsEnabled)
+            dieRoll -= gi.ShermanConsectiveMoveAttempt;
+         //---------------------------------------------
          foreach (IMapItem crewAction in gi.CrewActions)
          {
             if (true == crewAction.Name.Contains("Driver"))

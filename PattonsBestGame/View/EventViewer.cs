@@ -2251,6 +2251,14 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Roll for Effect on Enemy: " + gi.MovementEffectOnEnemy));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("White Die Roll: " + DieRoller.WhiteDie.ToString()));
+                  //---------------------------------------------
+                  Option optionShermanIncreaseMoveChance = gi.Options.Find("ShermanIncreaseMoveChances");
+                  if (true == optionShermanIncreaseMoveChance.IsEnabled)
+                  {
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Consecutive Move Modifier: -" + gi.ShermanConsectiveMoveAttempt.ToString()));
+                  }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                            "));

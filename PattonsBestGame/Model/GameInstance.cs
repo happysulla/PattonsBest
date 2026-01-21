@@ -97,6 +97,7 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public double ShermanTurretRotationOld { set; get; } = 0.0;
       public bool IsShermanTurretRotatedThisRound { set; get; } = false;
+      public int ShermanConsectiveMoveAttempt { set; get; } = 0;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
