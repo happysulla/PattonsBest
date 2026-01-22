@@ -108,7 +108,7 @@ namespace Pattons_Best
          {
             if( false == SaveGame())
             {
-               Logger.Log(LogEnum.LE_ERROR, "Command(): SaveGame() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Command(): Save_Game() returned false");
                return false;
             }
             if (null == myGameInstanceSave)
@@ -225,6 +225,14 @@ namespace Pattons_Best
          myGameInstanceSave.GameCommands.Add(new GameCommand(GamePhase.EndGame, GameAction.MorningBriefingWeatherRoll, "e003", GameAction.EveningDebriefingRatingImprovement, EnumMainImage.MI_Battle));
          myGameInstanceSave.GameCommands.Add(new GameCommand(GamePhase.Movement, GameAction.MovementAdvanceFireAmmoUseRoll, "e004", GameAction.MorningBriefingTimeCheckRoll, EnumMainImage.MI_Move));
          myGameInstanceSave.GameCommands.Add(new GameCommand(GamePhase.Preparations, GameAction.DieRollActionNone, "e005", GameAction.MorningBriefingTrainCrew, EnumMainImage.MI_Other));
+         myGameInstanceSave.MaxDayBetweenCombat = 5;
+         myGameInstanceSave.MaxRollsForAirSupport = 6;
+         myGameInstanceSave.MaxRollsForArtillerySupport =7;
+         myGameInstanceSave.MaxEnemiesInOneBattle = 8;
+         myGameInstanceSave.RoundsOfCombat = 11;
+         //-----------------------
+         myGameInstanceSave.IsGridActive = true;
+         //-----------------------
          myGameInstanceSave.EventActive = "e001";
          myGameInstanceSave.EventDisplayed = "e002";
          myGameInstanceSave.Day = 01;
@@ -628,7 +636,40 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IGameInstance): right=null");
             return false;
          }
-         if(left.EventActive != right.EventActive )
+         //--------------------------------------------
+         if (left.MaxDayBetweenCombat != right.MaxDayBetweenCombat)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MaxDayBetweenCombat != right.MaxDayBetweenCombat");
+            return false;
+         }
+         if (left.MaxRollsForAirSupport != right.MaxRollsForAirSupport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MaxRollsForAirSupport != right.MaxRollsForAirSupport");
+            return false;
+         }
+         if (left.MaxRollsForArtillerySupport != right.MaxRollsForArtillerySupport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MaxRollsForArtillerySupport != right.MaxRollsForArtillerySupport");
+            return false;
+         }
+         if (left.MaxEnemiesInOneBattle != right.MaxEnemiesInOneBattle)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MaxEnemiesInOneBattle != right.MaxEnemiesInOneBattle");
+            return false;
+         }
+         if (left.RoundsOfCombat != right.RoundsOfCombat)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.RoundsOfCombat != right.RoundsOfCombat");
+            return false;
+         }
+         //--------------------------------------------
+         if (left.IsGridActive != right.IsGridActive)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.IsGridActive != right.IsGridActive");
+            return false;
+         }
+         //--------------------------------------------
+         if (left.EventActive != right.EventActive )
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.EventActive != right.EventActive");
             return false;
@@ -638,7 +679,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.EventDisplayed != right.EventDisplayed");
             return false;
          }
-         if( left.Day != right.Day )
+         //--------------------------------------------
+         if ( left.Day != right.Day )
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Day != right.Day");
             return false;
@@ -658,12 +700,14 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.EndGameReason != right.EndGameReason");
             return false;
          }
+         //--------------------------------------------
          if (false == IsEqual(left.Reports, right.Reports))
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): IsEqual(Reports)");
             return false;
          }
-         if(left.BattlePhase != right.BattlePhase )
+         //--------------------------------------------
+         if (left.BattlePhase != right.BattlePhase )
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.BattlePhase != right.BattlePhase");
             return false;
@@ -704,6 +748,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): IsEqual(CrewActions)");
             return false;
          }
+         if (false == IsEqual(left.GunLoads, right.GunLoads))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): IsEqual(CrewActions)");
+            return false;
+         }
          if (false == IsEqual(left.Targets, right.Targets))
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): IsEqual(Targets)");
@@ -736,13 +785,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Sherman != right.Sherman");
             return false;
          }
-         //------------------------------------------------------------
-         if ( null == left.TargetMainGun && null != right.TargetMainGun)
+         if ( null == left.TargetMainGun && null != right.TargetMainGun) // test if one is null and one is not null
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TargetMainGun=null");
             return false;
          }
-         if (null != left.TargetMainGun && null == right.TargetMainGun)
+         if (null != left.TargetMainGun && null == right.TargetMainGun) // test if one is null and one is not null
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.TargetMainGun=null");
             return false;
@@ -755,13 +803,12 @@ namespace Pattons_Best
                return false;
             }
          }
-         //------------------------------------------------------------
-         if (null == left.TargetMg && null != right.TargetMg)
+         if (null == left.TargetMg && null != right.TargetMg) // test if one is null and one is not null
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TargetMg=null");
             return false;
          }
-         if (null != left.TargetMg && null == right.TargetMg)
+         if (null != left.TargetMg && null == right.TargetMg) // test if one is null and one is not null
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.TargetMg=null");
             return false;
@@ -774,7 +821,6 @@ namespace Pattons_Best
                return false;
             }
          }
-         //------------------------------------------------------------
          if (null == left.ShermanHvss && null != right.ShermanHvss)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanHvss=null");
@@ -793,7 +839,6 @@ namespace Pattons_Best
                return false;
             }
          }
-         //------------------------------------------------------------
          if (null == left.ReturningCrewman && null != right.ReturningCrewman)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ReturningCrewman=null");
@@ -1761,19 +1806,14 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): (left.Location.Y=" + left.Location.Y.ToString("F2") + ") != (right.Location.Y=" + right.Location.Y.ToString("F2") + ")");
             return false;
          }
-         if (left.RotationOffsetHull != right.RotationOffsetHull)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.RotationOffsetHull != right.RotationOffsetHull");
-            return false;
-         }
          if (left.RotationHull != right.RotationHull)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.RotationHull != right.RotationHull");
             return false;
          }
-         if (left.RotationOffsetTurret != right.RotationOffsetTurret)
+         if (left.RotationOffsetHull != right.RotationOffsetHull)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.RotationOffsetTurret != right.RotationOffsetTurret");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.RotationOffsetHull != right.RotationOffsetHull");
             return false;
          }
          if (left.RotationTurret != right.RotationTurret)
@@ -1781,10 +1821,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.RotationOffsetTurret != right.RotationOffsetTurret");
             return false;
          }
+         if (left.RotationOffsetTurret != right.RotationOffsetTurret)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.RotationOffsetTurret != right.RotationOffsetTurret");
+            return false;
+         }
          //-------------------------------------------------
          if (left.TerritoryCurrent.Name != right.TerritoryCurrent.Name)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.TerritoryCurrent != right.TerritoryCurrent");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): Name left.TerritoryCurrent != right.TerritoryCurrent");
+            return false;
+         }
+         if (left.TerritoryCurrent.Type != right.TerritoryCurrent.Type)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): Type left.TerritoryCurrent != right.TerritoryCurrent");
             return false;
          }
          if (left.TerritoryStarting.Name != right.TerritoryStarting.Name)
@@ -1792,7 +1842,17 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.TerritoryStarting != right.TerritoryStarting");
             return false;
          }
+         if (left.TerritoryStarting.Type != right.TerritoryStarting.Type)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): Type left.TerritoryStarting != right.TerritoryStarting");
+            return false;
+         }
          //-------------------------------------------------
+         if (left.LastMoveAction != right.LastMoveAction)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.LastMoveAction != right.LastMoveAction");
+            return false;
+         }
          if (left.IsMoving != right.IsMoving)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsMoving != right.IsMoving");
@@ -2126,6 +2186,40 @@ namespace Pattons_Best
          if (left.myIsBrewUp != right.myIsBrewUp)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myIsBrewUp != right.myIsBrewUp");
+            return false;
+         }
+         return true;
+      }
+      private bool IsEqual(ShermanSetup left, ShermanSetup right)
+      {
+         if (left.myIsSetupPerformed != right.myIsSetupPerformed)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myIsSetupPerformed != right.myIsSetupPerformed");
+            return false;
+         }
+         if (false == IsEqual(left.myHatches, right.myHatches))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): IsEqual(myHatches)");
+            return false;
+         }
+         if (left.myAmmoType != right.myAmmoType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myAmmoType != right.myAmmoType");
+            return false;
+         }
+         if (left.myTurretRotation != right.myTurretRotation)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myTurretRotation != right.myTurretRotation");
+            return false;
+         }
+         if (left.myLoaderSpotTerritory != right.myLoaderSpotTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myLoaderSpotTerritory != right.myLoaderSpotTerritory");
+            return false;
+         }
+         if (left.myCommanderSpotTerritory != right.myCommanderSpotTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.myCommanderSpotTerritory != right.myCommanderSpotTerritory");
             return false;
          }
          return true;

@@ -27,8 +27,6 @@ namespace Pattons_Best
       public int MaxRollsForAirSupport { get; set; } = 0;
       public int MaxRollsForArtillerySupport { get; set; } = 0;
       public int MaxEnemiesInOneBattle { get; set; } = 0;
-      public int MaxPointsSingleDayGame { get; set; } = 0;
-      public int MaxPointsCampaignGame { get; set; } = 0;
       public int RoundsOfCombat { get; set; } = 0;
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
@@ -56,7 +54,6 @@ namespace Pattons_Best
       public IMapItems Hatches { set; get; } = new MapItems();
       public IMapItems CrewActions { set; get; } = new MapItems();
       public IMapItems GunLoads { set; get; } = new MapItems();
-      public IMapItem Sherman { set; get; } = new MapItem("Sherman75", 2.0, "t01", new Territory());
       public IMapItems Targets { set; get; } = new MapItems();
       public IMapItems AdvancingEnemies { set; get; } = new MapItems();   // enemies that appear on Move board for advancing to lower edge of board
       public IMapItems ShermanAdvanceOrRetreatEnemies { set; get; } = new MapItems(); // enemies that appear on Move board if Sherman Advances or Retreats
@@ -64,6 +61,7 @@ namespace Pattons_Best
       public ICrewMembers NewMembers { set; get; } = new CrewMembers();
       public ICrewMembers InjuredCrewMembers { set; get; } = new CrewMembers();
       //---------------------------------------------------------------
+      public IMapItem Sherman { set; get; } = new MapItem("Sherman75", 2.0, "t01", new Territory());
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
       public IMapItem? ShermanHvss { set; get; } = null;
