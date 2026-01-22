@@ -17,10 +17,10 @@ namespace Pattons_Best
    {
       static public Logger Logger = new Logger();
       public bool CtorError { get; } = false;
-      public IGameCommands GameCommands { set; get; } = new GameCommands();
       private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
       public Dictionary<string, int[]> DieResults { get => myDieResults; }
       //------------------------------------------------
+      public IGameCommands GameCommands { set; get; } = new GameCommands();
       public Options Options { get; set; } = new Options();
       public GameStatistics Statistics { get; set; } = new GameStatistics();
       public int MaxDayBetweenCombat { get; set; } = 0;

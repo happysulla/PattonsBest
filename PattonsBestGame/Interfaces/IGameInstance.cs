@@ -7,9 +7,9 @@ namespace Pattons_Best
    public interface IGameInstance
    {
       bool CtorError { get; }
-      IGameCommands GameCommands { set; get; }
       Dictionary<string, int[]> DieResults { get; }
       //----------------------------------------------
+      IGameCommands GameCommands { set; get; }
       Options Options { get; set; }
       GameStatistics Statistics { get; set; }
       int MaxDayBetweenCombat { get; set; }
