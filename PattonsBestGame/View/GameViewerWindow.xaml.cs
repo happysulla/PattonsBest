@@ -541,7 +541,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.UpdateView(): Save_DefaultsToSettings() due to a=" + action.ToString());
                SaveDefaultsToSettings();
                break;
-            case GameAction.SetupChooseFunOptions:
             case GameAction.SetupFinalize:
                myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                if (false == UpdateCanvasMain(gi, action))

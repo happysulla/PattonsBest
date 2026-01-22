@@ -748,7 +748,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private GameAction GetGameAction(string sGameAction)
+      private GameAction StringToGameAction(string sGameAction)
       {
          switch (sGameAction)
          {
@@ -769,6 +769,7 @@ namespace Pattons_Best
             case "UpdateGameOptions": return GameAction.UpdateGameOptions;
             case "UpdateLoadingGame": return GameAction.UpdateLoadingGame;
             case "UpdateUndo": return GameAction.UpdateUndo;
+
             case "TestingStartMorningBriefing": return GameAction.TestingStartMorningBriefing;
             case "TestingStartPreparations": return GameAction.TestingStartPreparations;
             case "TestingStartMovement": return GameAction.TestingStartMovement;
@@ -808,9 +809,12 @@ namespace Pattons_Best
             case "SetupShowAfterActionReport": return GameAction.SetupShowAfterActionReport;
             case "SetupAssignCrewRating": return GameAction.SetupAssignCrewRating;
             case "SetupShowCombatCalendarCheck": return GameAction.SetupShowCombatCalendarCheck;
-            case "SetupChooseFunOptions": return GameAction.SetupChooseFunOptions;
             case "SetupCombatCalendarRoll": return GameAction.SetupCombatCalendarRoll;
             case "SetupFinalize": return GameAction.SetupFinalize;
+            case "SetupSingleGameDay": return GameAction.SetupSingleGameDay;
+            case "SetupDecreaseDate": return GameAction.SetupDecreaseDate;
+            case "SetupIncreaseDate": return GameAction.SetupIncreaseDate;
+            case "SetupShowSingleDayBattleStart": return GameAction.SetupShowSingleDayBattleStart;
 
             case "MorningBriefingBegin": return GameAction.MorningBriefingBegin;
             case "MorningBriefingCrewmanHealing": return GameAction.MorningBriefingCrewmanHealing;
@@ -834,6 +838,7 @@ namespace Pattons_Best
             case "MorningBriefingSnowRoll": return GameAction.MorningBriefingSnowRoll;
             case "MorningBriefingSnowRollEnd": return GameAction.MorningBriefingSnowRollEnd;
             case "MorningBriefingAmmoLoad": return GameAction.MorningBriefingAmmoLoad;
+            case "MorningBriefingAmmoLoadSkip": return GameAction.MorningBriefingAmmoLoadSkip;
             case "MorningBriefingAmmoReadyRackLoad": return GameAction.MorningBriefingAmmoReadyRackLoad;
             case "MorningBriefingTimeCheck": return GameAction.MorningBriefingTimeCheck;
             case "MorningBriefingTimeCheckRoll": return GameAction.MorningBriefingTimeCheckRoll;
@@ -854,6 +859,19 @@ namespace Pattons_Best
             case "PreparationsCommanderSpot": return GameAction.PreparationsCommanderSpot;
             case "PreparationsCommanderSpotSet": return GameAction.PreparationsCommanderSpotSet;
             case "PreparationsFinal": return GameAction.PreparationsFinal;
+            case "PreparationsFinalSkip": return GameAction.PreparationsFinalSkip;
+            case "PreparationsShowFeat": return GameAction.PreparationsShowFeat;
+            case "PreparationsShowFeatEnd": return GameAction.PreparationsShowFeatEnd;
+            case "PreparationsRepairMainGunRoll": return GameAction.PreparationsRepairMainGunRoll;
+            case "PreparationsRepairMainGunRollEnd": return GameAction.PreparationsRepairMainGunRollEnd;
+            case "PreparationsRepairAaMgRoll": return GameAction.PreparationsRepairAaMgRoll;
+            case "PreparationsRepairAaMgRollEnd": return GameAction.PreparationsRepairAaMgRollEnd;
+            case "PreparationsRepairCoaxialMgRoll": return GameAction.PreparationsRepairCoaxialMgRoll;
+            case "PreparationsRepairCoaxialMgRollEnd": return GameAction.PreparationsRepairCoaxialMgRollEnd;
+            case "PreparationsRepairBowMgRoll": return GameAction.PreparationsRepairBowMgRoll;
+            case "PreparationsRepairBowMgRollEnd": return GameAction.PreparationsRepairBowMgRollEnd;
+            case "PreparationsCrewReplaced": return GameAction.PreparationsCrewReplaced;
+            case "PreparationsReadyRackEnd": return GameAction.PreparationsReadyRackEnd;
 
             case "MovementStartAreaSet": return GameAction.MovementStartAreaSet;
             case "MovementStartAreaSetRoll": return GameAction.MovementStartAreaSetRoll;
@@ -891,12 +909,19 @@ namespace Pattons_Best
             case "MovementStartAreaRestartAfterBattle": return GameAction.MovementStartAreaRestartAfterBattle;
             case "MovementExit": return GameAction.MovementExit;
             case "MovementRetreatStartBattle": return GameAction.MovementRetreatStartBattle;
+            case "MovementBattlePhaseStartDueToAdvance": return GameAction.MovementBattlePhaseStartDueToAdvance;
+            case "MovementRainRoll": return GameAction.MovementRainRoll;
+            case "MovementRainRollEnd": return GameAction.MovementRainRollEnd;
+            case "MovementSnowRoll": return GameAction.MovementSnowRoll;
+            case "MovementSnowRollEnd": return GameAction.MovementSnowRollEnd;
+            case "MovementBattlePhaseStartDueToRetreat": return GameAction.MovementBattlePhaseStartDueToRetreat;
 
             case "BattleAdvanceFireStart": return GameAction.BattleAdvanceFireStart;
             case "BattleActivation": return GameAction.BattleActivation;
             case "BattlePlaceAdvanceFire": return GameAction.BattlePlaceAdvanceFire;
             case "BattleResolveAdvanceFire": return GameAction.BattleResolveAdvanceFire;
             case "BattleResolveArtilleryFire": return GameAction.BattleResolveArtilleryFire;
+            case "BattleResolveOffoardArtilleryFire": return GameAction.BattleResolveOffoardArtilleryFire;
             case "BattleResolveAirStrike": return GameAction.BattleResolveAirStrike;
             case "BattleAmbushStart": return GameAction.BattleAmbushStart;
             case "BattleAmbushRoll": return GameAction.BattleAmbushRoll;
@@ -918,6 +943,7 @@ namespace Pattons_Best
             case "BattleRoundSequenceCrewOrders": return GameAction.BattleRoundSequenceCrewOrders;
             case "BattleRoundSequenceAmmoOrders": return GameAction.BattleRoundSequenceAmmoOrders;
             case "BattleRoundSequenceConductCrewAction": return GameAction.BattleRoundSequenceConductCrewAction;
+
             case "BattleRoundSequenceMovementRoll": return GameAction.BattleRoundSequenceMovementRoll;
             case "BattleRoundSequenceBoggedDownRoll": return GameAction.BattleRoundSequenceBoggedDownRoll;
             case "BattleRoundSequencePivot": return GameAction.BattleRoundSequencePivot;
@@ -929,15 +955,18 @@ namespace Pattons_Best
             case "BattleRoundSequenceTurretEnd": return GameAction.BattleRoundSequenceTurretEnd;
             case "BattleRoundSequenceTurretEndRotateLeft": return GameAction.BattleRoundSequenceTurretEndRotateLeft;
             case "BattleRoundSequenceTurretEndRotateRight": return GameAction.BattleRoundSequenceTurretEndRotateRight;
+
             case "BattleRoundSequenceShermanFiringSelectTarget": return GameAction.BattleRoundSequenceShermanFiringSelectTarget;
             case "BattleRoundSequenceShermanFiringMainGun": return GameAction.BattleRoundSequenceShermanFiringMainGun;
             case "BattleRoundSequenceShermanFiringMainGunEnd": return GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
             case "BattleRoundSequenceShermanFiringMainGunNot": return GameAction.BattleRoundSequenceShermanFiringMainGunNot;
             case "BattleRoundSequenceShermanToHitRoll": return GameAction.BattleRoundSequenceShermanToHitRoll;
             case "BattleRoundSequenceShermanSkipRateOfFire": return GameAction.BattleRoundSequenceShermanSkipRateOfFire;
+            case "BattleRoundSequenceShermanMissesLastShot": return GameAction.BattleRoundSequenceShermanMissesLastShot;
             case "BattleRoundSequenceShermanToKillRoll": return GameAction.BattleRoundSequenceShermanToKillRoll;
             case "BattleRoundSequenceShermanToHitRollNothing": return GameAction.BattleRoundSequenceShermanToHitRollNothing;
             case "BattleRoundSequenceShermanToKillRollMiss": return GameAction.BattleRoundSequenceShermanToKillRollMiss;
+
             case "BattleRoundSequenceShermanFiringSelectTargetMg": return GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
             case "BattleRoundSequenceFireAaMg": return GameAction.BattleRoundSequenceFireAaMg;
             case "BattleRoundSequenceFireBowMg": return GameAction.BattleRoundSequenceFireBowMg;
@@ -970,6 +999,7 @@ namespace Pattons_Best
             case "BattleRoundSequenceReadyRackEnd": return GameAction.BattleRoundSequenceReadyRackEnd;
             case "BattleRoundSequenceCrewSwitchEnd": return GameAction.BattleRoundSequenceCrewSwitchEnd;
             case "BattleRoundSequenceCrewReplaced": return GameAction.BattleRoundSequenceCrewReplaced;
+
             case "BattleRoundSequenceEnemyAction": return GameAction.BattleRoundSequenceEnemyAction;
             case "BattleRoundSequenceCollateralDamageCheck": return GameAction.BattleRoundSequenceCollateralDamageCheck;
             case "BattleRoundSequenceFriendlyAction": return GameAction.BattleRoundSequenceFriendlyAction;
@@ -978,7 +1008,9 @@ namespace Pattons_Best
             case "BattleRoundSequenceNextActionAfterRandomEvent": return GameAction.BattleRoundSequenceNextActionAfterRandomEvent;
             case "BattleRoundSequenceLoadMainGun": return GameAction.BattleRoundSequenceLoadMainGun;
             case "BattleRoundSequenceLoadMainGunEnd": return GameAction.BattleRoundSequenceLoadMainGunEnd;
+
             case "BattleRoundSequenceShermanKilled": return GameAction.BattleRoundSequenceShermanKilled;
+            case "BattleRoundSequenceShermanBail": return GameAction.BattleRoundSequenceShermanBail;
             case "BattleRoundSequenceEnemyArtilleryRoll": return GameAction.BattleRoundSequenceEnemyArtilleryRoll;
             case "BattleRoundSequenceMinefieldRoll": return GameAction.BattleRoundSequenceMinefieldRoll;
             case "BattleRoundSequenceMinefieldDisableRoll": return GameAction.BattleRoundSequenceMinefieldDisableRoll;
@@ -997,6 +1029,8 @@ namespace Pattons_Best
             case "BattleRoundSequenceShermanAdvanceOrRetreatEnd": return GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd;
             case "BattleRoundSequenceShermanRetreatChoice": return GameAction.BattleRoundSequenceShermanRetreatChoice;
             case "BattleRoundSequenceShermanRetreatChoiceEnd": return GameAction.BattleRoundSequenceShermanRetreatChoiceEnd;
+            case "BattleRoundSequenceShowFeat": return GameAction.BattleRoundSequenceShowFeat;
+            case "BattleRoundSequenceShowFeatEnd": return GameAction.BattleRoundSequenceShowFeatEnd;
 
             case "EveningDebriefingStart": return GameAction.EveningDebriefingStart;
             case "EveningDebriefingRatingImprovement": return GameAction.EveningDebriefingRatingImprovement;
@@ -1012,7 +1046,9 @@ namespace Pattons_Best
             case "EventDebriefDecorationHonor": return GameAction.EventDebriefDecorationHonor;
             case "EventDebriefDecorationHeart": return GameAction.EventDebriefDecorationHeart;
             case "EveningDebriefingResetDay": return GameAction.EveningDebriefingResetDay;
-            default: Logger.Log(LogEnum.LE_ERROR, " GetGameAction(): reached default sGameAction=" + sGameAction); return GameAction.Error;
+            case "EveningDebriefingShowFeat": return GameAction.EveningDebriefingShowFeat;
+            case "EveningDebriefingShowFeatEnd": return GameAction.EveningDebriefingShowFeatEnd;
+            default: Logger.Log(LogEnum.LE_ERROR, " String_ToGameAction(): reached default sGameAction=" + sGameAction); return GameAction.Error;
          }
       }
       //--------------------------------------------------
@@ -4103,10 +4139,10 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sAction=null");
                return false;
             }
-            GameAction action = GetGameAction(sAction);
+            GameAction action = StringToGameAction(sAction);
             if(GameAction.Error == action)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): String_ToGameAction() returned false");
                return false;
             }
             //------------------------------------
@@ -4116,10 +4152,10 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sActionDieRoll=null");
                return false;
             }
-            GameAction dieRollAction = GetGameAction(sActionDieRoll);
+            GameAction dieRollAction = StringToGameAction(sActionDieRoll);
             if (GameAction.Error == dieRollAction)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): String_ToGameAction() returned false");
                return false;
             }
             //------------------------------------
@@ -5745,16 +5781,24 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territory != (node=" + reader.Name + ")");
                return false;
             }
+            //-------------------------------------------
             string? tName = reader.GetAttribute("value");
             if (null == tName)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(tName) returned false");
                return false;
             }
-            ITerritory? territory = Territories.theTerritories.Find(tName);
+            string? tType = reader.GetAttribute("value");
+            if (null == tType)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(tType) returned false");
+               return false;
+            }
+            //-------------------------------------------
+            ITerritory? territory = Territories.theTerritories.Find(tName, tType);
             if (null == territory)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Find() returned null for tName=" + tName);
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Find() returned null for tName=" + tName + " tType=" + tType);
                return false;
             }
             territories.Add(territory);

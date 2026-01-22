@@ -231,7 +231,6 @@ namespace Pattons_Best
       SetupShowAfterActionReport,
       SetupAssignCrewRating,
       SetupShowCombatCalendarCheck,
-      SetupChooseFunOptions,
       SetupCombatCalendarRoll,
       SetupFinalize,
       SetupSingleGameDay,
@@ -337,6 +336,7 @@ namespace Pattons_Best
       MovementRainRollEnd,
       MovementSnowRoll,
       MovementSnowRollEnd,
+      MovementBattlePhaseStartDueToRetreat,
 
       BattleAdvanceFireStart,
       BattleActivation,
@@ -356,7 +356,6 @@ namespace Pattons_Best
       BattleEmpty,
       BattleEmptyResolve,
       BattleShermanKilled,
-      MovementBattlePhaseStartDueToRetreat,
 
       BattleRoundSequenceRoundStart,
       BattleRoundSequenceAmbushCounterattack,
