@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
-using System.Windows.Media.Imaging; // for BitmapImage
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -12,16 +10,20 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging; // for BitmapImage
 using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
+using Label = System.Windows.Controls.Label;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace Pattons_Best
 {
@@ -3177,11 +3179,11 @@ namespace Pattons_Best
          Canvas.SetZIndex(imgFeat, 99998);
          myCanvasMain.MouseDown += MouseDownGameFeat;
          //-------------------------------------
-         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelTitle);
-         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = GameFeats.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = GameFeats.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelForFeat);
-         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelClick);
          labelTitle.UpdateLayout();
          labelForFeat.UpdateLayout();
@@ -4359,16 +4361,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): t=null for " + ellipse.Name.ToString());
             return;
          }
-         IMapItem? loaderSpot = null;
+         IMapItem? spotter = null;
          foreach (IStack stack in myGameInstance.BattleStacks)
          {
             foreach (IMapItem mi in stack.MapItems)
             {
                if (true == mi.Name.Contains("LoaderSpot"))
-                  loaderSpot = mi;
+                  spotter = mi;
             }
          }
-         if (null == loaderSpot)
+         if (null == spotter)
          {
             string name = "LoaderSpot" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
@@ -4376,7 +4378,10 @@ namespace Pattons_Best
          }
          else
          {
-            loaderSpot.TerritoryCurrent = t;
+            spotter.TerritoryCurrent = t;
+            double offset = spotter.Zoom * Utilities.theMapItemOffset;
+            spotter.Location.X = t.CenterPoint.X - offset;
+            spotter.Location.Y = t.CenterPoint.Y - offset;
          }
          GameAction outAction = GameAction.PreparationsLoaderSpotSet;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -4416,6 +4421,9 @@ namespace Pattons_Best
          else
          {
             spotter.TerritoryCurrent = t;
+            double offset = spotter.Zoom * Utilities.theMapItemOffset;
+            spotter.Location.X = t.CenterPoint.X - offset;
+            spotter.Location.Y = t.CenterPoint.Y - offset;
          }
          GameAction outAction = GameAction.PreparationsCommanderSpotSet;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -5598,7 +5606,7 @@ namespace Pattons_Best
       }
       private void ClosedGameViewerWindow(object sender, EventArgs e)
       {
-         Application app = Application.Current;
+         System.Windows.Application app = System.Windows.Application.Current;
          app.Shutdown();
       }
       protected override void OnSourceInitialized(EventArgs e)

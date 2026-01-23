@@ -6723,7 +6723,7 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(tName);
             if( null == t )
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): t=null for tName=" + tName);
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): t=null for tName=" + tName );
                return false;
             }
             //---------------------------------------------

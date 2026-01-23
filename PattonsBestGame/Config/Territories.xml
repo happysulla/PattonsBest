@@ -1,4 +1,13 @@
-﻿<Territories count="829">
+﻿<Territories count="830">
+   <Territory value="Offboard">
+      <Parent value="Main" />
+      <Type value="A" />
+      <CenterPoint X="0.0" Y="0.0" />
+      <Points count="0"/>
+      <Adjacents count="0"/>
+      <PavedRoads count="0" />
+      <UnpavedRoads count="0"/>
+   </Territory>
   <Territory value="M000">
     <Parent value="Main" />
     <Type value="B" />
