@@ -2323,12 +2323,6 @@ namespace Pattons_Best
                return null;
             }
             //----------------------------------------------
-            if (false == ReadXmlShermanSetup(reader, gi.BattlePrep))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlShermanSetup() returned false");
-               return null;
-            }
-            //----------------------------------------------
             ShermanDeath? death = null;
             if (false == ReadXmlShermanDeath(reader, ref death))
             {
@@ -2336,6 +2330,12 @@ namespace Pattons_Best
                return null;
             }
             gi.Death = death;
+            //----------------------------------------------
+            if (false == ReadXmlShermanSetup(reader, gi.BattlePrep))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlShermanSetup() returned false");
+               return null;
+            }
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -3073,6 +3073,25 @@ namespace Pattons_Best
                return null;
             }
             gi.TankReplacementNumber = Convert.ToInt32(sTankReplacementNumber);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(Fuel) = false");
+               return null;
+            }
+            if (reader.Name != "Fuel")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): Fuel != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sFuel = reader.GetAttribute("value");
+            if (null == sFuel)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sFuel=null");
+               return null;
+            }
+            gi.Fuel = Convert.ToInt32(sFuel);
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -4175,6 +4194,7 @@ namespace Pattons_Best
             GamePhase phase = GamePhase.Error;
             switch (sGamePhase)
             {
+               case "UnitTest": phase = GamePhase.UnitTest; break;
                case "GameSetup": phase = GamePhase.GameSetup; break;
                case "MorningBriefing": phase = GamePhase.MorningBriefing; break;
                case "Preparations": phase = GamePhase.Preparations; break;
@@ -4182,8 +4202,8 @@ namespace Pattons_Best
                case "Battle": phase = GamePhase.Battle; break;
                case "BattleRoundSequence": phase = GamePhase.BattleRoundSequence; break;
                case "EveningDebriefing": phase = GamePhase.EveningDebriefing; break;
-               case "EndCampaignGame": phase = GamePhase.EveningDebriefing; break;
-               case "UnitTest": phase = GamePhase.UnitTest; break;
+               case "EndGame": phase = GamePhase.EndGame; break;
+               case "Error": phase = GamePhase.Error; break;
                default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sGamePhase=" + sGamePhase); return false;
             }
             //------------------------------------
@@ -5353,16 +5373,16 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sDecoration=null");
                return false;
             }
-            EnumDecoration decoration = EnumDecoration.ED_WW2Victory;
+            EnumDecoration decoration = EnumDecoration.WW2Victory;
             switch (sDecoration)
             {
-               case "ED_BronzeStar": decoration = EnumDecoration.ED_BronzeStar; break;
-               case "ED_SilverStar": decoration = EnumDecoration.ED_SilverStar; break;
-               case "ED_DistinguisedServiceCross": decoration = EnumDecoration.ED_DistinguisedServiceCross; break;
-               case "ED_MedalOfHonor": decoration = EnumDecoration.ED_MedalOfHonor; break;
-               case "ED_PurpleHeart": decoration = EnumDecoration.ED_PurpleHeart; break;
-               case "ED_EuropeanCampain": decoration = EnumDecoration.ED_EuropeanCampain; break;
-               case "ED_WW2Victory": decoration = EnumDecoration.ED_WW2Victory; break;
+               case "BronzeStar": decoration = EnumDecoration.BronzeStar; break;
+               case "SilverStar": decoration = EnumDecoration.SilverStar; break;
+               case "DistinguisedServiceCross": decoration = EnumDecoration.DistinguisedServiceCross; break;
+               case "MedalOfHonor": decoration = EnumDecoration.MedalOfHonor; break;
+               case "PurpleHeart": decoration = EnumDecoration.PurpleHeart; break;
+               case "EuropeanCampain": decoration = EnumDecoration.EuropeanCampain; break;
+               case "WW2Victory": decoration = EnumDecoration.WW2Victory; break;
                default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sDecoration=" + sDecoration); return false;
             }
             report.Decorations.Add(decoration);
@@ -5747,24 +5767,24 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Territories) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): IsStartElement(Territories) returned false");
             return false;
          }
          if (reader.Name != "Territories")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territories != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): Territories != (node=" + reader.Name + ")");
             return false;
          }
          string? attributeRead = reader.GetAttribute("value");
          if (attribute != attributeRead)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): attributeRead=null for attribute=" + attribute);
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): attributeRead=null for attribute=" + attribute);
             return false;
          }
          string? sCount = reader.GetAttribute("count");
          if (null == sCount)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Count=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): Count=null");
             return false;
          }
          int count = int.Parse(sCount);
@@ -5773,32 +5793,32 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameInstance(): IsStartElement(GameInstance) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): IsStartElement(GameInstance) returned false");
                return false;
             }
             if (reader.Name != "Territory")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territory != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): Territory != (node=" + reader.Name + ")");
                return false;
             }
             //-------------------------------------------
             string? tName = reader.GetAttribute("value");
             if (null == tName)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(tName) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): GetAttribute(tName) returned false");
                return false;
             }
-            string? tType = reader.GetAttribute("value");
+            string? tType = reader.GetAttribute("type");
             if (null == tType)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(tType) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): GetAttribute(tType) returned false");
                return false;
             }
             //-------------------------------------------
             ITerritory? territory = Territories.theTerritories.Find(tName, tType);
             if (null == territory)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Find() returned null for tName=" + tName + " tType=" + tType);
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_Territories2(): Find() returned null for tName=" + tName + " tType=" + tType);
                return false;
             }
             territories.Add(territory);
@@ -7332,6 +7352,7 @@ namespace Pattons_Best
             return null;
          }
          elem.SetAttribute("value", "Home");
+         elem.SetAttribute("type", "Battle");
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7346,9 +7367,15 @@ namespace Pattons_Best
             return null;
          }
          if( null == gi.EnemyStrengthCheckTerritory)
+         {
             elem.SetAttribute("value", "null");
+            elem.SetAttribute("type", "null");
+         }
          else
+         {
             elem.SetAttribute("value", gi.EnemyStrengthCheckTerritory.Name);
+            elem.SetAttribute("type", gi.EnemyStrengthCheckTerritory.Type);
+         }
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7363,9 +7390,15 @@ namespace Pattons_Best
             return null;
          }
          if (null == gi.ArtillerySupportCheck)
+         {
             elem.SetAttribute("value", "null");
+            elem.SetAttribute("type", "null");
+         }
          else
+         {
             elem.SetAttribute("value", gi.ArtillerySupportCheck.Name);
+            elem.SetAttribute("type", gi.ArtillerySupportCheck.Type);
+         }
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7380,9 +7413,15 @@ namespace Pattons_Best
             return null;
          }
          if (null == gi.AirStrikeCheckTerritory)
+         {
             elem.SetAttribute("value", "null");
+            elem.SetAttribute("type", "null");
+         }
          else
+         {
             elem.SetAttribute("value", gi.AirStrikeCheckTerritory.Name);
+            elem.SetAttribute("type", gi.AirStrikeCheckTerritory.Type);
+         }
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7397,9 +7436,15 @@ namespace Pattons_Best
             return null;
          }
          if (null == gi.EnteredArea)
+         {
             elem.SetAttribute("value", "null");
+            elem.SetAttribute("type", "null");
+         }
          else
+         {
             elem.SetAttribute("value", gi.EnteredArea.Name);
+            elem.SetAttribute("type", gi.EnteredArea.Type);
+         }
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7414,9 +7459,15 @@ namespace Pattons_Best
             return null;
          }
          if (null == gi.AdvanceFire)
+         {
             elem.SetAttribute("value", "null");
+            elem.SetAttribute("type", "null");
+         }
          else
+         {
             elem.SetAttribute("value", gi.AdvanceFire.Name);
+            elem.SetAttribute("type", gi.AdvanceFire.Type);
+         }
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7431,9 +7482,15 @@ namespace Pattons_Best
             return null;
          }
          if (null == gi.FriendlyAdvance)
+         {
             elem.SetAttribute("value", "null");
+            elem.SetAttribute("type", "null");
+         }
          else
+         {
             elem.SetAttribute("value", gi.FriendlyAdvance.Name);
+            elem.SetAttribute("type", gi.FriendlyAdvance.Type);
+         }
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7448,9 +7505,15 @@ namespace Pattons_Best
             return null;
          }
          if (null == gi.EnemyAdvance)
+         {
             elem.SetAttribute("value", "null");
+            elem.SetAttribute("type", "null");
+         }
          else
+         {
             elem.SetAttribute("value", gi.EnemyAdvance.Name);
+            elem.SetAttribute("type", gi.EnemyAdvance.Type);
+         }
          node = root.AppendChild(elem);
          if (null == node)
          {
@@ -7486,6 +7549,20 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanAdvancingOnBattleBoard");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsShermanAdvancingOnBattleBoard) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanAdvancingOnBattleBoard.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsShermanAdvancingOnBattleBoard) returned null");
+            return null;
+         }
+         //------------------------------------------
          elem = aXmlDocument.CreateElement("IsShermanAdvancingOnMoveBoard");
          if (null == elem)
          {
@@ -7497,6 +7574,76 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsShermanAdvancingOnMoveBoard) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsLoaderSpotThisTurn");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsLoaderSpotThisTurn) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsLoaderSpotThisTurn.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsLoaderSpotThisTurn) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCommanderSpotThisTurn");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsCommanderSpotThisTurn) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCommanderSpotThisTurn.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsCommanderSpotThisTurn) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsFallingSnowStopped");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsFallingSnowStopped) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsFallingSnowStopped.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsFallingSnowStopped) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("HoursOfRainThisDay");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(HoursOfRainThisDay) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.HoursOfRainThisDay.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(HoursOfRainThisDay) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("MinSinceLastCheck");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(MinSinceLastCheck) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.MinSinceLastCheck.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(MinSinceLastCheck) returned null");
             return null;
          }
          //------------------------------------------
@@ -7525,6 +7672,48 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(AssistantOriginalRating) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("ShermanTurretRotationOld");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(ShermanTurretRotationOld) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.ShermanTurretRotationOld.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(ShermanTurretRotationOld) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanTurretRotatedThisRound");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsShermanTurretRotatedThisRound) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanTurretRotatedThisRound.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsShermanTurretRotatedThisRound) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("ShermanConsectiveMoveAttempt");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(ShermanConsectiveMoveAttempt) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.ShermanConsectiveMoveAttempt.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(ShermanConsectiveMoveAttempt) returned null");
             return null;
          }
          //------------------------------------------
@@ -8208,6 +8397,20 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
+         elem = aXmlDocument.CreateElement("Fuel");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(Fuel) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.Fuel.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(Fuel) returned null");
+            return null;
+         }
+         //------------------------------------------
          elem = aXmlDocument.CreateElement("VictoryPtsTotalCampaign");
          if (null == elem)
          {
@@ -8447,7 +8650,7 @@ namespace Pattons_Best
             }
             if (null == mi)
             {
-               miElem.SetAttribute("value", "null");
+               miElem.SetAttribute("value", "null"); // MapItem
                return true;
             }
             else
@@ -10016,7 +10219,7 @@ namespace Pattons_Best
          }
          if (null == cm)
          {
-            cmElem.SetAttribute("value", "null");
+            cmElem.SetAttribute("value", "null"); // CrewMember
             return true;
          }
          cmElem.SetAttribute("value", cm.Role);
@@ -10335,7 +10538,7 @@ namespace Pattons_Best
          }
          if (null == death)
          {
-            shermanDeathElem.SetAttribute("value", "null");
+            shermanDeathElem.SetAttribute("value", "null"); // MapItem
             return true;
          }
          //------------------------------------------------
@@ -10578,7 +10781,7 @@ namespace Pattons_Best
          }
          if (null == pfAttack)
          {
-            pfAttackElem.SetAttribute("value", "null");
+            pfAttackElem.SetAttribute("value", "null");  // MapItem
             return true;
          }
          //------------------------------------------------
@@ -10715,9 +10918,15 @@ namespace Pattons_Best
                return false;
             }
             if( null == mim.OldTerritory )
+            {
                elem.SetAttribute("value", "null");
+               elem.SetAttribute("type", "null");
+            }
             else
+            {
                elem.SetAttribute("value", mim.OldTerritory.Name);
+               elem.SetAttribute("type", mim.OldTerritory.Type);
+            }
             XmlNode? node = mimNode.AppendChild(elem);
             if (null == node)
             {
@@ -10732,9 +10941,15 @@ namespace Pattons_Best
                return false;
             }
             if (null == mim.NewTerritory)
+            {
                elem.SetAttribute("value", "null");
+               elem.SetAttribute("type", "null");
+            }
             else
+            {
                elem.SetAttribute("value", mim.NewTerritory.Name);
+               elem.SetAttribute("type", mim.NewTerritory.Type);
+            }
             node = mimNode.AppendChild(elem);
             if (null == node)
             {
@@ -10766,7 +10981,7 @@ namespace Pattons_Best
          }
          if (null == bestPath)
          {
-            bestPathElem.SetAttribute("value", "null");
+            bestPathElem.SetAttribute("value", "null"); // BestPath
             return true;
          }
          bestPathElem.SetAttribute("name", bestPath.Name);

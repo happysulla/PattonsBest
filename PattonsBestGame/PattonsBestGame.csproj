@@ -24,7 +24,9 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);UT1</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Interfaces\Window1.xaml.cs" />

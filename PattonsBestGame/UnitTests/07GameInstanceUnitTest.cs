@@ -249,8 +249,8 @@ namespace Pattons_Best
                case 0:
                   report.Scenario = EnumScenario.Advance;
                   report.Weather = "Clear";
-                  EnumDecoration deco1 = EnumDecoration.ED_BronzeStar;
-                  EnumDecoration deco2 = EnumDecoration.ED_DistinguisedServiceCross;
+                  EnumDecoration deco1 = EnumDecoration.BronzeStar;
+                  EnumDecoration deco2 = EnumDecoration.DistinguisedServiceCross;
                   report.Decorations.Add(deco1);
                   report.Decorations.Add(deco2);
                   report.Notes.Add("Hello1");
@@ -261,9 +261,9 @@ namespace Pattons_Best
                case 1:
                   report.Scenario = EnumScenario.Battle;
                   report.Weather = "Snow";
-                  EnumDecoration deco3 = EnumDecoration.ED_EuropeanCampain;
-                  EnumDecoration deco4 = EnumDecoration.ED_MedalOfHonor;
-                  EnumDecoration deco5 = EnumDecoration.ED_PurpleHeart;
+                  EnumDecoration deco3 = EnumDecoration.EuropeanCampain;
+                  EnumDecoration deco4 = EnumDecoration.MedalOfHonor;
+                  EnumDecoration deco5 = EnumDecoration.PurpleHeart;
                   report.Decorations.Add(deco3);
                   report.Decorations.Add(deco4);
                   report.Decorations.Add(deco5);
@@ -278,8 +278,8 @@ namespace Pattons_Best
                default:
                   report.Scenario = EnumScenario.Counterattack;
                   report.Weather = "Rain";
-                  EnumDecoration deco6 = EnumDecoration.ED_SilverStar;
-                  EnumDecoration deco7 = EnumDecoration.ED_PurpleHeart;
+                  EnumDecoration deco6 = EnumDecoration.SilverStar;
+                  EnumDecoration deco7 = EnumDecoration.PurpleHeart;
                   report.Decorations.Add(deco6);
                   report.Decorations.Add(deco7);
                   report.Notes.Add("Hello6");
@@ -478,6 +478,21 @@ namespace Pattons_Best
          //----------------------------------------------
          myGameInstanceSave.Death = new ShermanDeath(enemy);
          //----------------------------------------------
+         myGameInstanceSave.BattlePrep = new ShermanSetup();
+         myGameInstanceSave.BattlePrep.myIsSetupPerformed = true;
+         myGameInstanceSave.BattlePrep.myAmmoType = "Hello";
+         myGameInstanceSave.BattlePrep.myTurretRotation = 36.5;
+         myGameInstanceSave.BattlePrep.myLoaderSpotTerritory = "Loader";
+         myGameInstanceSave.BattlePrep.myCommanderSpotTerritory = "Command";
+         string nameHatch1 = "Driver" + Utilities.MapItemNum.ToString() + "_OpenHatch";
+         Utilities.MapItemNum++;
+         IMapItem miHatch = new MapItem(nameHatch1, 1.0, "c15OpenHatch", t);
+         myGameInstanceSave.BattlePrep.myHatches.Add(mi);
+         nameHatch1 = "Driver" + Utilities.MapItemNum.ToString() + "_OpenHatch";
+         Utilities.MapItemNum++;
+         miHatch = new MapItem(nameHatch1, 1.0, "c15OpenHatch", t);
+         myGameInstanceSave.BattlePrep.myHatches.Add(mi);
+         //----------------------------------------------
          myGameInstanceSave.IdentifiedTank = "seven";
          myGameInstanceSave.IdentifiedAtg = "eight";
          myGameInstanceSave.IdentifiedSpg = "nine";
@@ -521,6 +536,16 @@ namespace Pattons_Best
          myGameInstanceSave.IsEnemyAdvanceComplete = true;
          myGameInstanceSave.Panzerfaust = new PanzerfaustAttack(enemy);
          myGameInstanceSave.NumCollateralDamage = 777;
+         //----------------------------------------------
+         myGameInstanceSave.TankReplacementNumber = 3;
+         myGameInstanceSave.Fuel = 3;
+         myGameInstanceSave.VictoryPtsTotalCampaign = 3;
+         myGameInstanceSave.PromotionPointNum = 3;
+         myGameInstanceSave.PromotionDay = 3;
+         myGameInstanceSave.NumPurpleHeart = 3;
+         myGameInstanceSave.IsCommanderRescuePerformed = true;
+         myGameInstanceSave.IsCommanderKilled = true;
+         myGameInstanceSave.IsPromoted = true;
          //----------------------------------------------
          ITerritory? tOld = Territories.theTerritories.Find("M010");
          if (null == tOld)
@@ -1094,6 +1119,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Death != right.Death");
             return false;
          }
+         if (false == IsEqual(left.BattlePrep, right.BattlePrep))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.BattlePrep != right.BattlePrep");
+            return false;
+         }
          //---------------------------------------------------
          if (left.IdentifiedTank != right.IdentifiedTank)
          {
@@ -1292,6 +1322,11 @@ namespace Pattons_Best
          if (left.TankReplacementNumber != right.TankReplacementNumber)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TankReplacementNumber != right.TankReplacementNumber");
+            return false;
+         }
+         if (left.Fuel != right.Fuel)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Fuel != right.Fuel");
             return false;
          }
          if (left.VictoryPtsTotalCampaign != right.VictoryPtsTotalCampaign)

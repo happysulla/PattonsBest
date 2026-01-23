@@ -284,13 +284,13 @@ namespace Pattons_Best
                   swriter.Close();
                }
             }
-            catch (FileNotFoundException fileException)
+            catch (FileNotFoundException)
             {
-              System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + fileException.ToString());
+              System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description);
             }
-            catch (IOException ioException)
+            catch (IOException)
             {
-               System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + ioException.ToString());
+               System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description);
             }
             catch (Exception ex)
             {

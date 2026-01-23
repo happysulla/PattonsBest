@@ -122,13 +122,13 @@ namespace Pattons_Best
    };
    public enum EnumDecoration
    {
-      ED_BronzeStar,
-      ED_SilverStar,
-      ED_DistinguisedServiceCross,
-      ED_MedalOfHonor,
-      ED_PurpleHeart,
-      ED_EuropeanCampain,
-      ED_WW2Victory
+      BronzeStar,
+      SilverStar,
+      DistinguisedServiceCross,
+      MedalOfHonor,
+      PurpleHeart,
+      EuropeanCampain,
+      WW2Victory
    };
    public enum GamePhase
    {

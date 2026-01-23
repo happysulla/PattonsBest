@@ -212,7 +212,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): count<3 for mi.TerritoryCurrent.Name=" + mi.TerritoryCurrent.Name);
                      return false;
                   }
-                  myGridRows[i].myFacingOld = GetFacingDisplay(i);
+                  myGridRows[i].myFacingOld = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
                   if (true == mi.IsThrownTrack)
                   {
                      myGridRows[i].myDieRollFacing = THROWN_TRACK;
@@ -444,18 +444,6 @@ namespace Pattons_Best
          }
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
          return sb.ToString();
-      }
-      private string GetFacingDisplay(int i)
-      {
-         IMapItem mi = myGridRows[i].myMapItem;
-         if (150 < mi.RotationOffsetHull && mi.RotationOffsetHull < 210)
-            return "Rear";
-         if (( 34 < mi.RotationOffsetHull && mi.RotationOffsetHull < 150) || (mi.RotationOffsetHull < 0) )
-            return "Side";
-         if (-35 < mi.RotationOffsetHull  && mi.RotationOffsetHull < 35)
-            return "Front";
-         Logger.Log(LogEnum.LE_ERROR, "GetFacingDisplay(): reached deefault with mi.Name=" + mi.Name + " rot=" + mi.RotationOffsetHull.ToString("F1"));
-         return "ERROR";
       }
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)

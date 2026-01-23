@@ -5718,6 +5718,7 @@ namespace Pattons_Best
       }
       private bool EnterMoveBoardArea(IGameInstance gi, GameAction action)
       {
+         theIs1stEnemyStrengthCheckTerritory = true;
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Enter_MoveBoardArea(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.IsShermanAdvancingOnMoveBoard = false;
@@ -11071,7 +11072,8 @@ namespace Pattons_Best
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
                   gi.BattleStacks.Clear();
-                  if( false == gi.SwitchMembers("Assistant")) // return assistant back to original position prior to improvement checks
+                  gi.MoveStacks.Clear();
+                  if ( false == gi.SwitchMembers("Assistant")) // return assistant back to original position prior to improvement checks
                   {
                      returnStatus = "Switch_Members() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingRatingImprovement): " + returnStatus);
@@ -11080,6 +11082,7 @@ namespace Pattons_Best
                   break;
                case GameAction.EveningDebriefingRatingImprovementEnd:
                   gi.BattleStacks.Clear();
+                  gi.MoveStacks.Clear();
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e101");
                   if (false == UpdateForEveningDebriefing(gi, lastReport))
                   {
