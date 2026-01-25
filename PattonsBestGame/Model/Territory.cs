@@ -877,9 +877,8 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public Territory()
       {
-
       }
-      public Territory(string name) { Name = name; }
+      //public Territory(string name) { Name = name; }
       public override string ToString()
       {
          return Name + ":" + Type;

@@ -1131,7 +1131,8 @@ namespace Pattons_Best
          dialog.myTextBoxName.Focus();
          if (true == dialog.ShowDialog())
          {
-            Territory territory = new Territory(dialog.myTextBoxName.Text) { CenterPoint = new MapPoint(p.X, p.Y) };
+            Territory territory = new Territory() { CenterPoint = new MapPoint(p.X, p.Y) };
+            territory.Name = dialog.myTextBoxName.Text;
             territory.CanvasName = TerritoryCreateDialog.theParentChecked;
             if( "Main" == territory.CanvasName)
                territory.Type = TerritoryCreateDialog.theTypeChecked;

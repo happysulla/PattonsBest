@@ -6001,7 +6001,11 @@ namespace Pattons_Best
          }
          //-----------------------------------------
          GameAction outAction = GameAction.Error;
-         if (BattlePhase.Ambush == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (Ambush==BattlePhase)  ==> BattleRandomEvent
+         if (null != myGameInstance.Death)
+         {
+            outAction = GameAction.BattleShermanKilled; // Show_CollateralDamageResults()
+         }
+         else if (BattlePhase.Ambush == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (Ambush==BattlePhase)  ==> BattleRandomEvent
          {
             outAction = GameAction.BattleRandomEvent; // Show_CollateralDamageResults() - (Ambush==BattlePhase)  ==> BattleRandomEvent
          }

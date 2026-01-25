@@ -263,6 +263,7 @@ namespace Pattons_Best
             //-----------------------------------------------------------------
             for (int i = 0; i < count; ++i)
             {
+               ITerritory territory = new Territory();
                reader.Read();
                if (false == reader.IsStartElement())
                {
@@ -280,7 +281,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute() returned false");
                   return false;
                }
-               ITerritory territory = new Territory(tName);
+               territory.Name = tName;
                //--------------------------------------
                reader.Read();
                if (false == reader.IsStartElement())
@@ -3604,7 +3605,7 @@ namespace Pattons_Best
             }
             if ("Offboard" == sTerritoryStartingName)
             {
-               mi.TerritoryStarting = new Territory(sTerritoryStartingName);
+               mi.TerritoryStarting = mi.TerritoryCurrent;
             }
             else
             {
@@ -8836,6 +8837,11 @@ namespace Pattons_Best
             if (null == elem)
             {
                Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(TerritoryCurrent) returned null");
+               return false;
+            }
+            if( "OffBoard" == mi.TerritoryCurrent.Name )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): Invalid State mi.Name=" + mi.Name + " is Offbaord!");
                return false;
             }
             elem.SetAttribute("value", mi.TerritoryCurrent.Name);

@@ -115,13 +115,13 @@ namespace Pattons_Best
          get => myLocation;
          set => myLocation = value;
       }
-      protected ITerritory myTerritoryCurrent = new Territory("Offboard");
+      protected ITerritory myTerritoryCurrent = new Territory();
       public ITerritory TerritoryCurrent
       {
          get => myTerritoryCurrent;
          set => myTerritoryCurrent = value;
       }
-      protected ITerritory myTerritoryStarting = new Territory("Offboard");
+      protected ITerritory myTerritoryStarting = new Territory();
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
       public string LastMoveAction { get; set; } = string.Empty;

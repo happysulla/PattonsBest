@@ -144,7 +144,9 @@ namespace Pattons_Best
             CanvasImageViewer.theMainImage = EnumMainImage.MI_Battle;
             myCanvasImageViewer.ShowBattleMap(false, myCanvasMain);
             //------------------------------------
-            gi.Sherman = new MapItem("Sherman75", 2.0, "t01", gi.Home);
+            string shermanName = "Sherman75" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            gi.Sherman = new MapItem(shermanName, 2.0, "t01", gi.Home);
             myGameInstance.BattleStacks.Add(gi.Sherman);
             //------------------------------------
             string name = "ATG" + Utilities.MapItemNum.ToString();

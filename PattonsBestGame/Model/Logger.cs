@@ -27,6 +27,7 @@ namespace Pattons_Best
       LE_VIEW_SHOW_STATS,
       LE_VIEW_SHOW_STATS_MIN,
       LE_VIEW_SHOW_SETTINGS,
+      LE_SHOW_UPLOAD_GAME,
       //-------------
       LE_SHOW_CREW_NAME,
       LE_SHOW_CREW_BU,
@@ -158,7 +159,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_GAME_END_CHECK);
          //SetOn(LogEnum.LE_SHOW_STACK_ADD);
          //SetOn(LogEnum.LE_SHOW_STACK_DEL);
-         SetOn(LogEnum.LE_SHOW_STACK_VIEW);
+         //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
          //SetOn(LogEnum.LE_SHOW_MAIN_CLEAR);
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
          //SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
@@ -170,6 +171,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_ROUND_COMBAT);
+         SetOn(LogEnum.LE_SHOW_UPLOAD_GAME);
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          //SetOn(LogEnum.LE_SHOW_CREW_BU);
          //-------------------------------
@@ -284,13 +286,13 @@ namespace Pattons_Best
                   swriter.Close();
                }
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException fileex)
             {
-              System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description);
+              System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + fileex.ToString());
             }
             catch (IOException)
             {
-               System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description);
+               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description);
             }
             catch (Exception ex)
             {
