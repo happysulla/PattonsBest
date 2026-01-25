@@ -101,7 +101,7 @@ namespace Pattons_Best
             case "Calendar":
                this.Title = "Combat Calendar";
                this.Width = this.MinWidth = this.MaxWidth = 1300;
-               this.MinHeight = this.MaxHeight = 900;
+               this.MinHeight = this.MaxHeight = 950;
                break;
             case "Collateral":
                this.Title = "Collateral Damage Table";
