@@ -3352,7 +3352,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "Setup_NewGame():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
-         gi.IsShermanFiringCoaxialMg = false;
+         gi.IsShermanFiringCoaxialMg = false; // Setup_NewGame()
          gi.IsShermanFiringSubMg = false;
          gi.IsShermanFiredAaMg = false;
          gi.IsShermanFiredBowMg = false;
@@ -5826,14 +5826,27 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ExitBattle(): taskForce= null");
             return false;
          }
-         string name = "UsControl" + Utilities.MapItemNum.ToString();
-         Utilities.MapItemNum++;
-         IMapItem usControl = new MapItem(name, 1.0, "c28UsControl", taskForce.TerritoryCurrent);
-         usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         IMapPoint mp = Territory.GetRandomPoint(taskForce.TerritoryCurrent, usControl.Zoom * Utilities.theMapItemOffset);
-         usControl.Location = mp;
-         stack.MapItems.Add(usControl);
-         Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "Skip_BattleBoard(): Added mi=" + usControl.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+         //------------------------------------
+         bool isUsControlAlreadyInArea = false;
+         foreach (IMapItem mi in stack.MapItems) // Loading a game might cause UsControl to already be in area - dont add again
+         {
+            if (true == mi.Name.Contains("UsControl"))
+            {
+               isUsControlAlreadyInArea = true;
+               break;
+            }
+         }
+         if( false == isUsControlAlreadyInArea )
+         {
+            string name = "UsControl" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem usControl = new MapItem(name, 1.0, "c28UsControl", taskForce.TerritoryCurrent);
+            usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+            IMapPoint mp = Territory.GetRandomPoint(taskForce.TerritoryCurrent, usControl.Zoom * Utilities.theMapItemOffset);
+            usControl.Location = mp;
+            stack.MapItems.Add(usControl);
+            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "Skip_BattleBoard(): Added mi=" + usControl.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+         }
          //------------------------------------
          foreach (IMapItem mi in stack.MapItems)
          {
@@ -5916,7 +5929,7 @@ namespace Pattons_Best
                {
                   if (false == SkipBattleBoard(gi, lastReport, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): SkipBattleBoard() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): Skip_BattleBoard() returned false");
                      return false;
                   }
                }
@@ -5934,7 +5947,7 @@ namespace Pattons_Best
                {
                   if (false == SkipBattleBoard(gi, lastReport, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): SkipBattleBoard() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): Skip_BattleBoard() returned false");
                      return false;
                   }
                }
@@ -5952,7 +5965,7 @@ namespace Pattons_Best
                {
                   if (false == SkipBattleBoard(gi, lastReport, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): SkipBattleBoard() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): Skip_BattleBoard() returned false");
                      return false;
                   }
                }
@@ -7745,7 +7758,7 @@ namespace Pattons_Best
                   gi.TargetMg = null;
                   gi.IsShermanFiringAaMg = true;
                   gi.IsShermanFiringBowMg = false;
-                  gi.IsShermanFiringCoaxialMg = false;
+                  gi.IsShermanFiringCoaxialMg = false; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_FireAaMg) 
                   gi.IsShermanFiringSubMg = false;
                   if (false == GetShermanMgTargets(gi, "Aa"))
                   {
@@ -7760,7 +7773,7 @@ namespace Pattons_Best
                   gi.TargetMg = null;
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = true;
-                  gi.IsShermanFiringCoaxialMg = false;
+                  gi.IsShermanFiringCoaxialMg = false; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireBowMg)
                   gi.IsShermanFiringSubMg = false;
                   if (true == gi.Sherman.IsHullDown)
                   {
@@ -7780,7 +7793,7 @@ namespace Pattons_Best
                   gi.TargetMg = null;
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = false;
-                  gi.IsShermanFiringCoaxialMg = true;
+                  gi.IsShermanFiringCoaxialMg = true;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireCoaxialMg)
                   gi.IsShermanFiringSubMg = false;
                   if (false == GetShermanMgTargets(gi, "Coaxial"))
                   {
@@ -7795,7 +7808,7 @@ namespace Pattons_Best
                   gi.TargetMg = null;
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = false;
-                  gi.IsShermanFiringCoaxialMg = false;
+                  gi.IsShermanFiringCoaxialMg = false; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireSubMg)
                   gi.IsShermanFiringSubMg = true;
                   gi.TargetMg = null;
                   if (false == GetShermanMgTargets(gi, "Sub"))
@@ -7937,7 +7950,7 @@ namespace Pattons_Best
                   //----------------------------------------------
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = false;
-                  gi.IsShermanFiringCoaxialMg = false;
+                  gi.IsShermanFiringCoaxialMg = false; // PerformAction(BattleRoundSequence_FireMachineGunRollEnd)
                   gi.IsShermanFiringSubMg = false;
                   Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequence_FireMachineGunRollEnd): " + Utilities.PrintMgState(gi));
                   //----------------------------------------------
@@ -8057,7 +8070,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMgAdvanceFireRollEnd:
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = false;
-                  gi.IsShermanFiringCoaxialMg = false;
+                  gi.IsShermanFiringCoaxialMg = false;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_MgAdvanceFireRollEnd)
                   gi.IsShermanFiringSubMg = false;
                   //----------------------------------------
                   gi.DieResults[key][0] = Utilities.NO_RESULT;
@@ -10986,7 +10999,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "Reset_Round():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
-         gi.IsShermanFiringCoaxialMg = false;
+         gi.IsShermanFiringCoaxialMg = false; // Reset_Round()
          gi.IsShermanFiringSubMg = false;
          gi.IsShermanFiredAaMg = false;
          gi.IsShermanFiredBowMg = false;
@@ -11495,11 +11508,11 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "EveningDebriefing_ResetDay():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
-         gi.IsShermanFiringCoaxialMg = false;
+         gi.IsShermanFiringCoaxialMg = false;  // EveningDebriefing_ResetDay()
          gi.IsShermanFiringSubMg = false;
          gi.IsShermanFiredAaMg = false;
          gi.IsShermanFiredBowMg = false;
-         gi.IsShermanFiredCoaxialMg = false;
+         gi.IsShermanFiredCoaxialMg = false;   // EveningDebriefing_ResetDay()
          gi.IsShermanFiredSubMg = false;
          gi.IsMalfunctionedMgAntiAircraft = false;
          gi.IsMalfunctionedMgBow = false;

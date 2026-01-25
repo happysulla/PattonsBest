@@ -340,6 +340,10 @@ namespace Pattons_Best
             case GameAction.SetupShowCombatCalendarCheck:
             case GameAction.SetupCombatCalendarRoll:
                return; // do not update Tank Card Canvas
+            case GameAction.UpdateGameOptions:
+               Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.UpdateView(): Save_DefaultsToSettings() due to a=" + action.ToString());
+               SaveDefaultsToSettings();
+               return; // do not update Tank Card Canvas
             case GameAction.ShowTankForcePath:
                if (null == myMainMenuViewer)
                {
@@ -501,12 +505,16 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasEnemyAdvance() returned error ");
                break;
             case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
+               if (false == UpdateCanvasMain(gi, action))  // show updated canvas if loading a game
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
             case GameAction.BattleRoundSequenceShermanFiringSelectTargetMg:
+               if (false == UpdateCanvasMain(gi, action))  // show updated canvas if loading a game
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
                if (false == UpdateCanvasShermanSelectTargetMg(gi))
@@ -538,10 +546,6 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                mySplashScreen.Close();
                myScrollViewerMap.UpdateLayout();
-               break;
-            case GameAction.UpdateGameOptions:
-               Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.UpdateView(): Save_DefaultsToSettings() due to a=" + action.ToString());
-               SaveDefaultsToSettings();
                break;
             case GameAction.SetupFinalize:
                myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
@@ -588,7 +592,7 @@ namespace Pattons_Best
             IGameCommand? cmd = gi.GameCommands.GetLast();
             if (null == cmd)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateViewForNewGame(): cmd=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateView_ForNewGame(): cmd=null");
                return false;
             }
             nextAction = cmd.Action;
@@ -600,7 +604,20 @@ namespace Pattons_Best
                if (0 < gi.AdvancingFireMarkerCount)
                   nextAction = GameAction.BattleAdvanceFireStart;
                else
-                  nextAction = GameAction.BattleActivation; // UpdateViewForNewGame() - GameAction.UpdateLoadingGame
+                  nextAction = GameAction.BattleActivation; // UpdateView_ForNewGame() - GameAction.UpdateLoadingGame
+            }
+            else  if( "e038" == gi.EventActive )
+            {
+               if (false == UpdateCanvasTank(gi, action))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasTank() returned error for action=" + action.ToString());
+                  return false;
+               }
+               if ( false == UpdateViewCrewOrderButtons(gi))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView_ForNewGame(): cmd=null");
+                  return false;
+               }
             }
          }
          else if (GameAction.UpdateNewGame == action)
@@ -613,6 +630,95 @@ namespace Pattons_Best
             nextAction = GameAction.UpdateNewGameEnd;
          }
          myGameEngine.PerformAction(ref gi, ref nextAction, 0);
+         return true;
+      }
+      private bool UpdateViewCrewOrderButtons(IGameInstance gi)
+      {
+         if (false == CreateContextMenuCrewAction(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView_CrewOrderButtons(): CreateContextMenu_CrewAction() returned false");
+            return false;
+         }
+         foreach (Button b in myTankButtons)
+         {
+            switch(b.Name)
+            {
+               case "Loader_Load":
+               case "Loader_RepairMainGun":
+               case "Loader_RepairCoaxialMg":
+               case "Loader_FireMortar":
+               case "Loader_ChangeGunLoad":
+               case "Loader_RestockReadyRack":
+               case "Loader_RepairScope":
+               case "Loader_FireAaMg":
+               case "Loader_RepairAaMg":
+               case "Loader_FireSubMg":
+               case "Loader_SwitchLdr":
+               case "Loader_SwitchDvr":
+               case "Loader_SwitchGunr":
+               case "Loader_SwitchAsst":
+               case "Loader_SwitchCmdr":
+                  b.ContextMenu = myContextMenuCrewActions["Loader"];
+                  break;
+               case "Driver_Stop":
+               case "Driver_Forward":
+               case "Driver_ForwardToHullDown":
+               case "Driver_Reverse":
+               case "Driver_ReverseToHullDown":
+               case "Driver_PivotTank":
+               case "Driver_RepairScope":
+               case "Driver_SwitchLdr":
+               case "Driver_SwitchDvr":
+               case "Driver_SwitchGunr":
+               case "Driver_SwitchAsst":
+               case "Driver_SwitchCmdr":
+                  b.ContextMenu = myContextMenuCrewActions["Driver"];
+                  break;
+               case "Gunner_FireMainGun":
+               case "Gunner_FireCoaxialMg":
+               case "Gunner_RotateTurret":
+               case "Gunner_RotateFireMainGun":
+               case "Gunner_RepairMainGun":
+               case "Gunner_RepairScope":
+               case "Gunner_ThrowGrenade":
+               case "Gunner_SwitchLdr":
+               case "Gunner_SwitchDvr":
+               case "Gunner_SwitchGunr":
+               case "Gunner_SwitchAsst":
+               case "Gunner_SwitchCmdr":
+                  b.ContextMenu = myContextMenuCrewActions["Gunner"];
+                  break;
+               case "Assistant_FireBowMg":
+               case "Assistant_RepairBowMg":
+               case "Assistant_PassAmmo":
+               case "Assistant_RepairScope":
+               case "Assistant_SwitchLdr":
+               case "Assistant_SwitchDvr":
+               case "Assistant_SwitchGunr":
+               case "Assistant_SwitchAsst":
+               case "Assistant_SwitchCmdr":
+                  b.ContextMenu = myContextMenuCrewActions["Assistant"];
+                  break;
+               case "Commander_Move":
+               case "Commander_MainGunFire":
+               case "Commander_MGFire":
+               case "Commander_RepairScope":
+               case "Commander_FireAaMg":
+               case "Commander_RepairAaMg":
+               case "Commander_FireSubMg":
+               case "Commander_ThrowGrenade":
+               case "Commander_Bail":
+               case "Commander_SwitchLdr":
+               case "Commander_SwitchDvr":
+               case "Commander_SwitchGunr":
+               case "Commander_SwitchAsst":
+               case "Commander_SwitchCmdr":
+                  b.ContextMenu = myContextMenuCrewActions["Commander"];
+                  break;
+               default:
+                  break; // do nothing
+            }
+         }
          return true;
       }
       private string UpdateViewTitle(IGameInstance gi, IAfterActionReport report)
@@ -4859,13 +4965,13 @@ namespace Pattons_Best
          //--------------------------------------
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): myGameInstance=null");
             return;
          }
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): lastReport=null");
             return;
          }
          string tType = lastReport.TankCardNum.ToString();
@@ -4874,7 +4980,7 @@ namespace Pattons_Best
          MenuItem? menuitem = sender as MenuItem;
          if( null == menuitem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menuitem=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): menuitem=null");
             return;
          }
          //--------------------------------------
@@ -4882,7 +4988,7 @@ namespace Pattons_Best
          string[] aStringArray1 = menuitem.Name.Split(new char[] { '_' });
          if(aStringArray1.Length < 2)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray1.Length);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray1.Length);
             return;
          }
          string sCrewMemberRole = aStringArray1[0];
@@ -4893,7 +4999,7 @@ namespace Pattons_Best
             if ((true == crewAction.Name.Contains(sCrewMemberRole + "_")) || (true == crewAction.Name.Contains("Bail")))
             {
                crewActionremovals.Add(crewAction);
-               Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): -----------------removing ca=" + crewAction.Name);
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItem_CrewActionClick(): -----------------removing ca=" + crewAction.Name);
                foreach (Button oldButton in myTankButtons)     // Remove existing Button
                {
                   if( oldButton.Name == crewAction.Name )
@@ -4919,7 +5025,7 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName + " tType=" + tType);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): t=null for " + tName + " tType=" + tType);
             return;
          }
          //--------------------------------------
@@ -5109,18 +5215,18 @@ namespace Pattons_Best
                MenuItemCrewActionClickBail();  
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): reached default name=" + menuitem.Name);
+               Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): reached default name=" + menuitem.Name);
                return;
          }
          if( null == mi )
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): mi=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): mi=null");
             return;
          }
          myGameInstance.CrewActions.Add(mi);
-         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): adding ca=" + mi.Name);
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItem_CrewActionClick(): adding ca=" + mi.Name);
          //--------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "MenuItemCrewActionClick(): adding new button=" + menuitem.Name + " for sCrewMemberRole=" + sCrewMemberRole);
+         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "MenuItem_CrewActionClick(): adding new button=" + menuitem.Name + " for sCrewMemberRole=" + sCrewMemberRole);
          ContextMenu menu = myContextMenuCrewActions[sCrewMemberRole];
          System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
@@ -5320,7 +5426,7 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName + " tType=" + tType);
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickBail(): t=null for " + tName + " tType=" + tType);
                return;
             }
             IMapItem mi = new MapItem(crewmember + "_Bail", 1.0, "c204Bail", t);

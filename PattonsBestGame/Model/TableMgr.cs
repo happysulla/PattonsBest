@@ -8208,7 +8208,7 @@ namespace Pattons_Best
          Option optionShermanEnhanceMgFire = gi.Options.Find("ShermanEnhanceMgFire");
          if (true == optionShermanEnhanceMgFire.IsEnabled)
          {
-            if ('C' != range)
+            if ('C' == range)
             {
                if ("Bow" == mgType) 
                {
@@ -8231,7 +8231,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): enhanced MG -6 mod=" + toKillModifierNum.ToString());
                }
             }
-            else if ('M' != range)
+            else if ('M' == range)
             {
                if ("Bow" == mgType) 
                {

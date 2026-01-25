@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace Pattons_Best
 {
@@ -4285,19 +4286,59 @@ namespace Pattons_Best
             reader.Read(); // get past </Options>
          return true;
       }
-      private bool ReadXmlGameStatistics(XmlReader reader, GameStatistics statistic)
+      private bool ReadXmlGameStatistics(XmlReader reader, GameStatistics statistics)
       {
+         statistics.Clear();
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "Read_XmlGameStatistics(): reader.IsStartElement(GameStatistics) = false");
             return false;
          }
          if (reader.Name != "GameStatistics")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): GameStatistics != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "Read_XmlGameStatistics(): GameStatistics != (node=" + reader.Name + ")");
             return false;
          }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Read_XmlGameStatistics(): Count=null");
+            return false;
+         }
+         //-------------------------------------
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; ++i)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Read_XmlGameStatistics(): IsStartElement(GameStatistic) returned false");
+               return false;
+            }
+            if (reader.Name != "GameStatistic")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Read_XmlGameStatistics(): GameStatistic != " + reader.Name);
+               return false;
+            }
+            string? key = reader.GetAttribute("Key");
+            if (key == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Read_XmlGameStatistics(): key=null");
+               return false;
+            }
+            string? sValue = reader.GetAttribute("Value");
+            if (sValue == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Read_XmlGameStatistics(): sValue=null");
+               return false;
+            }
+            int value = Int32.Parse(sValue);
+            GameStatistic stat = new GameStatistic(key, value);
+            statistics.Add(stat);
+         }
+         if (0 < count)
+            reader.Read(); // get past </GameStatistics>
          return true;
       }
       private bool ReadXmlReports(XmlReader reader, IAfterActionReports reports)
@@ -9311,25 +9352,44 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateXmlGameStatistics(XmlDocument aXmlDocument, GameStatistics stat)
+      private bool CreateXmlGameStatistics(XmlDocument aXmlDocument, GameStatistics statistics)
       {
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameStatistics(): root is null");
             return false;
          }
          XmlElement? gameStatElem = aXmlDocument.CreateElement("GameStatistics");
          if (null == gameStatElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): CreateElement(gameStatElem) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameStatistics(): CreateElement(gameStatElem) returned null");
             return false;
          }
-         XmlNode? gameStatNode = root.AppendChild(gameStatElem);
-         if (null == gameStatNode)
+         gameStatElem.SetAttribute("count", statistics.Count.ToString());
+         XmlNode? statsNode = root.AppendChild(gameStatElem);
+         if (null == statsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): AppendChild(gameStatNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameStatistics(): AppendChild(statsNode) returned null");
             return false;
+         }
+         //--------------------------------
+         foreach (GameStatistic stat in statistics)
+         {
+            XmlElement? statElem = aXmlDocument.CreateElement("GameStatistic");
+            if (null == statElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameStatistics(): CreateElement(GameStatistic) returned null");
+               return false;
+            }
+            statElem.SetAttribute("Key", stat.Key);
+            statElem.SetAttribute("Value", stat.Value.ToString());
+            XmlNode? statNode = statsNode.AppendChild(statElem);
+            if (null == statNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameStatistics(): AppendChild(statNode) returned null");
+               return false;
+            }
          }
          return true;
       }

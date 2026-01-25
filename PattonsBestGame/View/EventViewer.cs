@@ -4603,7 +4603,7 @@ namespace Pattons_Best
          Option optionShermanEnhanceMgFire = gi.Options.Find("ShermanEnhanceMgFire");
          if (true == optionShermanEnhanceMgFire.IsEnabled)
          {
-            if ('C' != range)
+            if ('C' == range)
             {
                if ("Bow" == mgType) 
                   sb.Append("-8 for enhanced MG option\n");
@@ -4614,7 +4614,7 @@ namespace Pattons_Best
                else if ("Sub" == mgType) 
                   sb.Append("-6 for enhanced MG option\n");
             }
-            else if ('M' != range)
+            else if ('M' == range)
             {
                if ("Bow" == mgType) 
                   sb.Append("-5 for enhanced MG option\n");
