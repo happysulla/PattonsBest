@@ -115,8 +115,8 @@ The following crewmen are convalesing in a medical hosptial and may rejoin your 
 e007b	"<Bold>e007b Crew Replacement</Bold> 
 <InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-When you tank is knocked out, wounded crewmen are replaced in morning briefing if combat may occur this day per 
-<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue to assign new replacement crew.
+When you tank is knocked out, wounded crewmen are replaced in the first morning briefing that occurs as a result of a Combat Calender check
+<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue to Combat Calender Check.  
 <LineBreak/><LineBreak/>
                           <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"
 e007c	"<Bold>e007c Returning Crewmen</Bold> 

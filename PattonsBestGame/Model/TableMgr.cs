@@ -5006,10 +5006,12 @@ namespace Pattons_Best
                   lastReport.TankCardNum = 4;
                else if (dieRoll < 46)
                   lastReport.TankCardNum = 5;
-               else if (dieRoll < 51)
+               else if (dieRoll < 48)
                   lastReport.TankCardNum = 7;
-               else if (dieRoll < 71)
+               else if (dieRoll < 51)
                   lastReport.TankCardNum = 8;
+               else if (dieRoll < 71)
+                  lastReport.TankCardNum = 10;
                else if (dieRoll < 81)
                   lastReport.TankCardNum = 14;
                else

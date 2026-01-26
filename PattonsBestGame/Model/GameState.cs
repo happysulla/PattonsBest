@@ -1962,7 +1962,7 @@ namespace Pattons_Best
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
          }
          //----------------------------------------------------------
-         else if (((true == gi.IsCommanderKilled) || (TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn)) && (false == optionCommanderDeath.IsEnabled))
+         else if (((true == gi.IsCommanderKilled) || (TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn)) && (true == optionCommanderDeath.IsEnabled))
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
             if (true == gi.IsCommanderKilled)
