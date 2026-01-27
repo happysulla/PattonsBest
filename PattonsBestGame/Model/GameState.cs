@@ -5487,6 +5487,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementAdvanceFireAmmoUseCheck:
+                  gi.UndoCmd = null; // opted not to undo move command
                   SetCommand(gi, action, GameAction.MovementAdvanceFireAmmoUseRoll, "e030");
                   gi.IsAdvancingFireChosen = true;
                   gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling(lastReport.VictoryPtsFriendlyTank / 3.0);  // six minus friendly tank/3 (rounded up)
@@ -5703,6 +5704,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_ChoicesForOperations(): ResetDieResults() returned false");
             return false;
          }
+         gi.UndoCmd = null; // no longer able to undo the move to new area
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
          if (false == gi.IsAirStrikePending)
