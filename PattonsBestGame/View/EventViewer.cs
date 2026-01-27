@@ -3021,6 +3021,30 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue show game statistics and feats."));
                break;
+            case "e503":
+               Option optionSingleDayScenario = gi.Options.Find("SingleDayScenario");
+               if ((false == optionSingleDayScenario.IsEnabled) || (gi.Day < 172))
+               {
+                  myTextBlock.Inlines.Add(new Run("Receive a Europe Campaign medal for participating in Europe Campaign."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imgEndGame1 = new Image { Name = "ExitGame", Source = MapItem.theMapImages.GetBitmapImage("DecorationEasternCampaign"), Width = 150, Height = 300 };
+                  myTextBlock.Inlines.Add(new Run("                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGame1));
+               }
+               else
+               {
+                  myTextBlock.Inlines.Add(new Run("Receive a Europe Campaign medal for participation and Victory medal since after Feb 1945."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imgEndGame2 = new Image { Name = "ExitGame", Source = MapItem.theMapImages.GetBitmapImage("DecorationVictory"), Width = 300, Height = 300 };
+                  myTextBlock.Inlines.Add(new Run("               "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGame2));
+               }
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Select 'File | New' menu option to play again --or-- Click image to exit the game."));
+               break;
             default:
                break;
          }
