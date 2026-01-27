@@ -268,13 +268,19 @@ namespace Pattons_Best
             myTargetCursor = Utilities.ConvertToCursor(img1, hotPoint);
             this.myCanvasMain.Cursor = myTargetCursor;
          }
-         //-------------------------------------------------------
          else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action) || (GameAction.RemoveSplashScreen == action) )
          {
             if( false == UpdateViewForNewGame(ref gi, action)) // This calls PerformAction() to get to proper event
                Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateViewForNewGame() returned false");
             return;
          }
+         else if( GameAction.UpdateUndo == action)
+         {
+            if (false == UpdateViewUndo(ref gi)) // This calls PerformAction() to get to proper event
+               Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateViewUndo() returned false");
+            return;
+         }
+         //-------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -630,6 +636,22 @@ namespace Pattons_Best
             nextAction = GameAction.UpdateNewGameEnd;
          }
          myGameEngine.PerformAction(ref gi, ref nextAction, 0);
+         return true;
+      }
+      private bool UpdateViewUndo(ref IGameInstance gi)
+      {
+         if (null == gi.UndoCmd)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_ViewUndo(): gi.UndoCmd=null");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_UNDO_COMMAND, "Update_ViewUndo(): undo=" + gi.UndoCmd.ToString());
+         if (false == gi.UndoCmd.Undo(gi, myGameEngine))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_ViewUndo():  gi.UndoCmd.Undo() return false");
+            return false;
+         }
+         gi.UndoCmd = null;
          return true;
       }
       private bool UpdateViewCrewOrderButtons(IGameInstance gi)

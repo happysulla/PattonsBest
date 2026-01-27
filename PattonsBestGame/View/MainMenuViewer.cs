@@ -198,11 +198,16 @@ namespace Pattons_Best
             default:
                if (true == GameLoadMgr.theIsCheckFileExist)
                   myMenuItemTopLevel22.IsEnabled = true;
-               Logger.Log(LogEnum.LE_UNDO_COMMAND, "MainMenuViewer.UpdateView(): cmd=" + myGameInstance.IsUndoCommandAvailable.ToString());
-                  if (true == myGameInstance.IsUndoCommandAvailable)
-                  myMenuItemTopLevel21.IsEnabled = true;
-               else
+
+               if (null == myGameInstance.UndoCmd)
+               {
                   myMenuItemTopLevel21.IsEnabled = false;
+               }
+               else
+               {
+                  myMenuItemTopLevel21.IsEnabled = true;
+                  Logger.Log(LogEnum.LE_UNDO_COMMAND, "MainMenuViewer.UpdateView(): cmd=" + myGameInstance.UndoCmd.ToString());
+               }
                return;
          }
       }
@@ -275,10 +280,10 @@ namespace Pattons_Best
       }
       public void MenuItemEditUndo_ClickCanExecute(object sender, CanExecuteRoutedEventArgs e)
       {
-         if (true == myGameInstance.IsUndoCommandAvailable)
-            e.CanExecute = true;
-         else
+         if (null == myGameInstance.UndoCmd)
             e.CanExecute = false;
+         else
+            e.CanExecute = true;
       }
       public void MenuItemEditRecover_Click(object sender, RoutedEventArgs e)
       {

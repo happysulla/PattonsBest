@@ -31,7 +31,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;
-      public bool IsUndoCommandAvailable { set; get; } = false;
+      public IUndo? UndoCmd { set; get; } = null;
       //------------------------------------------------
       public string EventActive { get; set; } = "e000";
       public string EventDisplayed { set; get; } = "e000";

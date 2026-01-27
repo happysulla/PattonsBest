@@ -4429,7 +4429,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_MovingModifier(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -4437,14 +4437,14 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_MovingModifier(): commander=null");
             return FN_ERROR;
          }
          //-------------------------------------------------
          ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): driver=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_MovingModifier(): driver=null");
             return FN_ERROR;
          }
          //-------------------------------------------------
@@ -4490,9 +4490,9 @@ namespace Pattons_Best
             return "Bogged Down";
          }
          int modifier = GetMovingModifier(gi);
-         if (modifier < -100)
+         if (TableMgr.FN_ERROR == modifier)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingResultSherman(): GetMovingModifier() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultSherman(): Get_MovingModifier() returned error");
             return "ERROR";
          }
          dieRoll += modifier;
@@ -4567,7 +4567,7 @@ namespace Pattons_Best
                }
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "GetMovingResultSherman(): reached default");
+         Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultSherman(): reached default");
          return "ERROR";
       }
       public static string GetMovingResultEnemy(IGameInstance gi)
@@ -4628,7 +4628,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_BoggedDownModifier(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -4636,14 +4636,14 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_BoggedDownModifier(): commander=null");
             return FN_ERROR;
          }
          //-------------------------------------------------
          ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): driver=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_BoggedDownModifier(): driver=null");
             return FN_ERROR;
          }
          //-------------------------------------------------

@@ -65,14 +65,6 @@ namespace Pattons_Best
          }
          return true;
       }
-      protected void UndoCommand(ref IGameInstance gi, ref GameAction action)
-      {
-         Logger.Log(LogEnum.LE_UNDO_COMMAND, "UndoCommand(): cmd=" + gi.IsUndoCommandAvailable.ToString() + "-->false  a=" + action.ToString());
-         gi.IsUndoCommandAvailable = false;
-         SetCommand(gi, action, GameAction.DieRollActionNone, "e203");
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "UndoCommand():  gi.MapItemMoves.Clear()  a=" + action.ToString());
-         gi.MapItemMoves.Clear();
-      }
       protected void PrintDiagnosticInfoToLog()
       {
          StringBuilder sb = new StringBuilder();
@@ -3700,6 +3692,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateMorningBriefing.PerformAction(): crew=" + lastReport.Commander.Name);
             switch (action)
             {
+               case GameAction.UpdateUndo:
                case GameAction.ShowTankForcePath:
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
@@ -4547,6 +4540,7 @@ namespace Pattons_Best
             TankCard card = new TankCard(lastReport.TankCardNum);
             switch (action)
             {
+               case GameAction.UpdateUndo:
                case GameAction.ShowTankForcePath:
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
@@ -5006,6 +5000,7 @@ namespace Pattons_Best
             string key = gi.EventActive;
             switch (action)
             {
+               case GameAction.UpdateUndo:
                case GameAction.ShowTankForcePath:
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
@@ -5481,8 +5476,8 @@ namespace Pattons_Best
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e099a");
                   break;
                case GameAction.MovementAdvanceFireChoice:
-                  if ( ("He" !=  gi.GetGunLoadType()) || (0 == lastReport.Ammo30CalibreMG) ) // no Advance Fire if no HE or no MG ammo
-                     SetCommand(gi, action, GameAction.DieRollActionNone, "e029a");
+                  if ( ("He" !=  gi.GetGunLoadType()) || (0 == lastReport.Ammo30CalibreMG) ) 
+                     SetCommand(gi, action, GameAction.DieRollActionNone, "e029a"); // no Advance Fire if no HE or no MG ammo
                   else
                      SetCommand(gi, action, GameAction.MovementAdvanceFireAmmoUseRoll, "e029");
                   if (false == MoveTaskForceToNewArea(gi)) // GameStateMovement.PerformAction(Movement_AdvanceFireChoice)
@@ -6003,32 +5998,19 @@ namespace Pattons_Best
          gi.MapItemMoves.Clear();
          //---------------------------------------------------------
          if( taskForce.TerritoryCurrent.Name == gi.EnteredArea.Name ) // when loading a game, the task force may have already moved
-            return true; 
+            return true;
          //---------------------------------------------------------
+         int timeToAdvance = 45;  // Move_TaskForceToNewArea() - no roads
          if ( true ==  taskForce.TerritoryCurrent.PavedRoads.Contains(gi.EnteredArea.Name) )
-         {
-            gi.MinSinceLastCheck += 15;
-            AdvanceTime(lastReport, 15);    // Move_TaskForceToNewArea() - Paved Roads
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +15 for paved roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
-         }
+            timeToAdvance = 15;  // Move_TaskForceToNewArea() - Paved Roads
          else if (true == taskForce.TerritoryCurrent.UnpavedRoads.Contains(gi.EnteredArea.Name))
-         {
-            gi.MinSinceLastCheck += 30;
-            AdvanceTime(lastReport, 30);    // Move_TaskForceToNewArea() - Unpaved Roads
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +30 for unpaved roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
-         }
-         else
-         {
-            gi.MinSinceLastCheck += 45;
-            AdvanceTime(lastReport, 45);   // Move_TaskForceToNewArea() - no roads
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +45 for no roads -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
-         }
+            timeToAdvance = 30;  // Move_TaskForceToNewArea() - Unpaved Roads
          if ((true == lastReport.Weather.Contains("Mud")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Rain")) || (true == lastReport.Weather.Contains("Ground Snow")) || (true == lastReport.Weather.Contains("Deep Snow")))
-         {
-            gi.MinSinceLastCheck += 15;
-            AdvanceTime(lastReport, 15);    // Move_TaskForceToNewArea() - add 15 min for mud/fog/rain/snow
-            Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +15 for mud/fog/rain/snow -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
-         }
+            timeToAdvance += 15;  // Move_TaskForceToNewArea() - add 15 min for mud/fog/rain/snow
+         gi.MinSinceLastCheck += timeToAdvance;
+         AdvanceTime(lastReport, timeToAdvance);
+         gi.UndoCmd = new UndoMoveTaskForceToNewArea(taskForce.TerritoryCurrent, timeToAdvance);
+         Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +" + timeToAdvance.ToString() +" -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "Move_TaskForceToNewArea(): TF Entering t=" + gi.EnteredArea.Name);
          if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
@@ -6427,6 +6409,7 @@ namespace Pattons_Best
             string key = gi.EventActive;
             switch (action)
             {
+               case GameAction.UpdateUndo:
                case GameAction.ShowTankForcePath:
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
@@ -6857,6 +6840,7 @@ namespace Pattons_Best
             string key = gi.EventActive;
             switch (action)
             {
+               case GameAction.UpdateUndo:
                case GameAction.ShowTankForcePath:
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
@@ -11093,6 +11077,7 @@ namespace Pattons_Best
             string key = gi.EventActive;
             switch (action)
             {
+               case GameAction.UpdateUndo:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
                case GameAction.ShowRoads:

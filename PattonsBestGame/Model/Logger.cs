@@ -155,6 +155,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_GAME_INIT);
          //SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_NEXT_ACTION);
+         SetOn(LogEnum.LE_UNDO_COMMAND);
          SetOn(LogEnum.LE_GAME_END);
          SetOn(LogEnum.LE_GAME_END_CHECK);
          //SetOn(LogEnum.LE_SHOW_STACK_ADD);

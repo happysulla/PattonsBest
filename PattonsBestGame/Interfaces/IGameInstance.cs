@@ -20,7 +20,7 @@ namespace Pattons_Best
       //----------------------------------------------
       bool IsMultipleSelectForDieResult { set; get; } // In EventViewer, show buttons instead of die results for user to choose from
       bool IsGridActive { set; get; } // True if there is some EventViewer manager active
-      bool IsUndoCommandAvailable { set; get; } // Allow user to back up if selected wrong user action
+      IUndo? UndoCmd { set; get; }
       //----------------------------------------------
       string EventActive { set; get; }
       string EventDisplayed { set; get; }

@@ -1020,12 +1020,7 @@ e501	"<Bold>e501 Game Won!!!</Bold>
 e502	"<Bold>e502 Game Lost</Bold>
 <LineBreak/><LineBreak/>"
 e503	"<Bold>e503 End Game Statistics and Feats </Bold>
-<LineBreak/><LineBreak/>
-Select 'File | New' menu option to play again.
-<LineBreak/><LineBreak/>
-Click image to exit game:
-<LineBreak/><LineBreak/>
-     <InlineUIContainer><Image Name='DoorClosing' Height='150' Width='75'></Image></InlineUIContainer>"
+<LineBreak/><LineBreak/>"
 e503a	"<Bold>e503a Game Feats </Bold>
 <LineBreak/><LineBreak/>You completed an achievement that requires great courage, skill, and persistence.
 <LineBreak/><LineBreak/>Congratulations!
