@@ -6000,17 +6000,17 @@ namespace Pattons_Best
          if( taskForce.TerritoryCurrent.Name == gi.EnteredArea.Name ) // when loading a game, the task force may have already moved
             return true;
          //---------------------------------------------------------
-         int timeToAdvance = 45;  // Move_TaskForceToNewArea() - no roads
+         int minToAdvance = 45;  // Move_TaskForceToNewArea() - no roads
          if ( true ==  taskForce.TerritoryCurrent.PavedRoads.Contains(gi.EnteredArea.Name) )
-            timeToAdvance = 15;  // Move_TaskForceToNewArea() - Paved Roads
+            minToAdvance = 15;  // Move_TaskForceToNewArea() - Paved Roads
          else if (true == taskForce.TerritoryCurrent.UnpavedRoads.Contains(gi.EnteredArea.Name))
-            timeToAdvance = 30;  // Move_TaskForceToNewArea() - Unpaved Roads
+            minToAdvance = 30;  // Move_TaskForceToNewArea() - Unpaved Roads
          if ((true == lastReport.Weather.Contains("Mud")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Rain")) || (true == lastReport.Weather.Contains("Ground Snow")) || (true == lastReport.Weather.Contains("Deep Snow")))
-            timeToAdvance += 15;  // Move_TaskForceToNewArea() - add 15 min for mud/fog/rain/snow
-         gi.MinSinceLastCheck += timeToAdvance;
-         AdvanceTime(lastReport, timeToAdvance);
-         gi.UndoCmd = new UndoMoveTaskForceToNewArea(taskForce.TerritoryCurrent, timeToAdvance);
-         Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +" + timeToAdvance.ToString() +" -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
+            minToAdvance += 15;  // Move_TaskForceToNewArea() - add 15 min for mud/fog/rain/snow
+         gi.MinSinceLastCheck += minToAdvance;
+         AdvanceTime(lastReport, minToAdvance);
+         gi.UndoCmd = new UndoMoveTaskForceToNewArea(taskForce.TerritoryCurrent, minToAdvance);
+         Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +" + minToAdvance.ToString() +" -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "Move_TaskForceToNewArea(): TF Entering t=" + gi.EnteredArea.Name);
          if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
