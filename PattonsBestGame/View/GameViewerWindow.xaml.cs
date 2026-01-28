@@ -57,7 +57,7 @@ namespace Pattons_Best
       //---------------------------------------------------------------------
       private readonly List<Button> myMoveButtons = new List<Button>();
       private readonly List<Button> myBattleButtons = new List<Button>();
-      private readonly List<Button> myTankButtons = new List<Button>();
+      public readonly List<Button> myTankButtons = new List<Button>();
       private bool myIsInitialAmmoReloadButtonCreated = false;
       private int myTankCardNum = 1;
       private Dictionary<string, Polyline> myRoads = new Dictionary<string, Polyline>();
@@ -488,10 +488,7 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequencePivotLeft:
             case GameAction.BattleRoundSequencePivotRight:
                foreach (Button b in myTankButtons)
-               {
-                  if (null != b.ContextMenu)
-                     b.ContextMenu.IsEnabled = false;  //  BattleRoundSequencePivotRight
-               }
+                  b.ContextMenu = null;
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -509,10 +506,7 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))  // show updated canvas if loading a game
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                foreach (Button b in myTankButtons)
-               {
-                  if (null != b.ContextMenu)
-                     b.ContextMenu.IsEnabled = false;  //  BattleRoundSequenceShermanFiringSelectTarget
-               }
+                  b.ContextMenu = null;
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
@@ -520,10 +514,7 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))  // show updated canvas if loading a game
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                foreach (Button b in myTankButtons)
-               {
-                  if (null != b.ContextMenu)
-                     b.ContextMenu.IsEnabled = false;  //  BattleRoundSequenceShermanFiringSelectTargetMg
-               }
+                  b.ContextMenu = null;
                if (false == UpdateCanvasShermanSelectTargetMg(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTargetMg() returned error ");
                break;
@@ -647,7 +638,7 @@ namespace Pattons_Best
             return false;
          }
          Logger.Log(LogEnum.LE_UNDO_COMMAND, "Update_ViewUndo(): undo=" + gi.UndoCmd.ToString());
-         if (false == gi.UndoCmd.Undo(gi, myGameEngine))
+         if (false == gi.UndoCmd.Undo(gi, myGameEngine, this))
          {
             Logger.Log(LogEnum.LE_ERROR, "Update_ViewUndo():  gi.UndoCmd.Undo() return false");
             return false;
@@ -655,7 +646,7 @@ namespace Pattons_Best
          gi.UndoCmd = null;
          return true;
       }
-      private bool UpdateViewCrewOrderButtons(IGameInstance gi)
+      public bool UpdateViewCrewOrderButtons(IGameInstance gi)
       {
          if (false == CreateContextMenuCrewAction(gi))
          {

@@ -16,7 +16,7 @@ namespace Pattons_Best
          myPrevious = previous;
          myMinsToRemove = minsToRemove;
       }
-      public bool Undo(IGameInstance gi, IGameEngine ge)
+      public bool Undo(IGameInstance gi, IGameEngine ge, GameViewerWindow gvw)
       {
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)

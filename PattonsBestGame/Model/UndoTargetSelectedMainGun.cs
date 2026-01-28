@@ -13,7 +13,7 @@ namespace Pattons_Best
       {
          myPreviousTarget = previousTarget;
       }
-      public bool Undo(IGameInstance gi, IGameEngine ge)
+      public bool Undo(IGameInstance gi, IGameEngine ge, GameViewerWindow gvw)
       {
          gi.TargetMainGun = myPreviousTarget;
          IGameCommand? cmd = gi.GameCommands.RemoveLast(); // Remove last command

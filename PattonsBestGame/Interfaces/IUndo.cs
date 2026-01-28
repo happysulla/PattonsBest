@@ -8,6 +8,6 @@ namespace Pattons_Best
 {
    public interface IUndo
    {
-      bool Undo(IGameInstance gi, IGameEngine ge);
+      bool Undo(IGameInstance gi, IGameEngine ge, GameViewerWindow gvw);
    }
 }

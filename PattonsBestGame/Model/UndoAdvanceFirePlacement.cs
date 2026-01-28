@@ -11,7 +11,7 @@ namespace Pattons_Best
       public UndoAdvanceFirePlacement()
       {
       }
-      public bool Undo(IGameInstance gi, IGameEngine ge)
+      public bool Undo(IGameInstance gi, IGameEngine ge, GameViewerWindow gvw)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
