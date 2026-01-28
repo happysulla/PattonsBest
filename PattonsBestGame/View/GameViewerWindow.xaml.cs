@@ -464,14 +464,6 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action)) // update smoke depletion
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
-            //case GameAction.BattleRoundSequenceAmmoOrders:
-            //   foreach (Button b in myTankButtons)
-            //      b.ContextMenu = null;
-            //   if (false == CreateContextMenuGunLoadAction(myGameInstance))
-            //      Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuGunLoadAction() returned false");
-            //   if (false == UpdateCanvasAnimateBattlePhase(gi))
-            //      Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
-            //   break;
             case GameAction.PreparationsTurret:
             case GameAction.BattleRoundSequenceTurretEnd:
                if (false == UpdateCanvasMain(gi, action))
@@ -496,7 +488,10 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequencePivotLeft:
             case GameAction.BattleRoundSequencePivotRight:
                foreach (Button b in myTankButtons)
-                  b.ContextMenu = null;
+               {
+                  if (null != b.ContextMenu)
+                     b.ContextMenu.IsEnabled = false;  //  BattleRoundSequencePivotRight
+               }
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -514,7 +509,10 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))  // show updated canvas if loading a game
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                foreach (Button b in myTankButtons)
-                  b.ContextMenu = null;
+               {
+                  if (null != b.ContextMenu)
+                     b.ContextMenu.IsEnabled = false;  //  BattleRoundSequenceShermanFiringSelectTarget
+               }
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
@@ -522,7 +520,10 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))  // show updated canvas if loading a game
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                foreach (Button b in myTankButtons)
-                  b.ContextMenu = null;
+               {
+                  if (null != b.ContextMenu)
+                     b.ContextMenu.IsEnabled = false;  //  BattleRoundSequenceShermanFiringSelectTargetMg
+               }
                if (false == UpdateCanvasShermanSelectTargetMg(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTargetMg() returned error ");
                break;
@@ -2278,7 +2279,10 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
                   foreach (Button b in myTankButtons)
-                     b.ContextMenu = null;
+                  {
+                     if( null != b.ContextMenu )
+                        b.ContextMenu.IsEnabled = false;  // BattleRoundSequenceAmmoOrders
+                  }
                   if (false == CreateContextMenuGunLoadAction(myGameInstance))
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): CreateContextMenuGunLoadAction() returned false");
                   if (false == UpdateCanvasAnimateBattlePhase(gi))
@@ -2484,6 +2488,17 @@ namespace Pattons_Best
       }
       private bool UpdateCanvasTankOrders(IGameInstance gi, GameAction action)
       {
+         foreach (Button b in myTankButtons)
+         {
+            foreach (IMapItem ca in gi.CrewActions)
+            {
+               if ( ca.Name == b.Name )
+               {
+                  if (null != b.ContextMenu)
+                     b.ContextMenu.IsEnabled = true;
+               }
+            }
+         }
          //--------------------------------
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
@@ -4472,7 +4487,7 @@ namespace Pattons_Best
       }
       private void MouseDownPolygonAmmoActions(object sender, MouseButtonEventArgs e)
       {
-         GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders; // MouseDownPolygonAmmoActions()
+         GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders; // MouseDown_PolygonAmmoActions()
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownEllipseSpottingLoader(object sender, MouseButtonEventArgs e)
@@ -4824,6 +4839,7 @@ namespace Pattons_Best
                   GameAction outAction = GameAction.Error;
                   if (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase)
                   {
+                     myGameInstance.UndoCmd = new UndoTargetSelectedMainGun(myGameInstance.TargetMainGun);
                      if (null == myGameInstance.TargetMainGun) // no previous target
                      {
                         Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): no previous target zeroize selectedMapItem.EnemyAcquiredShots.Clear()");
@@ -5633,7 +5649,7 @@ namespace Pattons_Best
             Canvas.SetZIndex(newButton, 900);
          }
          //--------------------------------------
-         GameAction outaction = GameAction.BattleRoundSequenceAmmoOrders;  // MenuItemAmmoReloadClick()
+         GameAction outaction = GameAction.BattleRoundSequenceAmmoOrders;  // MenuItem_AmmoReloadClick() - when clicking menu item
          myGameEngine.PerformAction(ref myGameInstance, ref outaction, 0);
       }
       private void PreviewMouseLeftButtonDownMapItem(object sender, System.Windows.Input.MouseEventArgs e)

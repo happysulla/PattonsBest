@@ -4996,8 +4996,7 @@ namespace Pattons_Best
             return false;
          }
          report.VictoryPtsFriendlyKiaPzVI = Convert.ToInt32(sVictoryPtsFriendlyKiaPzVI);
-         report.VictoryPtsFriendlyKiaPzV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzV);
-         //---------------------------------------------
+          //---------------------------------------------
          reader.Read();
          if (false == reader.IsStartElement())
          {

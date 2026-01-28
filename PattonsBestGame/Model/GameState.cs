@@ -2298,7 +2298,7 @@ namespace Pattons_Best
                      if (true == gi.IsAdvancingFireChosen)                            // TestingStartBattle
                      {
                         gi.AdvancingFireMarkerCount = 6;                              // TestingStartBattle
-                        action = GameAction.BattleAdvanceFireStart;                              // TestingStartBattle
+                        action = GameAction.BattleAdvanceFireStart;                   // TestingStartBattle
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e034"); // TestingStartBattle
                      }
                      else
@@ -5487,7 +5487,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementAdvanceFireAmmoUseCheck:
-                  gi.UndoCmd = null; // opted not to undo move command
+                  gi.UndoCmd = null; // GameStateMovement.PerformAction(MovementAdvanceFireAmmoUseCheck): opted not to undo move command
                   SetCommand(gi, action, GameAction.MovementAdvanceFireAmmoUseRoll, "e030");
                   gi.IsAdvancingFireChosen = true;
                   gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling(lastReport.VictoryPtsFriendlyTank / 3.0);  // six minus friendly tank/3 (rounded up)
@@ -5704,7 +5704,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_ChoicesForOperations(): ResetDieResults() returned false");
             return false;
          }
-         gi.UndoCmd = null; // no longer able to undo the move to new area
+         gi.UndoCmd = null; // SetChoicesForOperations() - no longer able to undo the move to new area
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
          if (false == gi.IsAirStrikePending)
@@ -6446,6 +6446,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleAdvanceFireStart:
+                  gi.UndoCmd = new UndoAdvanceFirePlacement();
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e034"); // GameViewerWindow.UpdateView() highlights regions to drop in Advance Markers if gi.IsAdvancingFireChosen=true
                   break; 
                case GameAction.BattleActivation:       // GameStateBattle.PerformAction(BattleActivation) - EventViewer takes over
@@ -6478,10 +6479,13 @@ namespace Pattons_Best
                      --gi.AdvancingFireMarkerCount;
                      if (0 < gi.AdvancingFireMarkerCount)
                      {
-                        action = GameAction.BattleAdvanceFireStart;        // GameViewerWindow.UpdateView() highlights regions for placing adv marker
+                        if (null == gi.UndoCmd)
+                           gi.UndoCmd = new UndoAdvanceFirePlacement();
+                        action = GameAction.BattleAdvanceFireStart;        // GameViewerWindow.UpdateView(BattlePlaceAdvanceFire) - highlights regions for placing adv marker
                      }
                      else
                      {
+                        gi.UndoCmd = null;                     // GameStateBattle.PerformAction(BattlePlaceAdvanceFire) - No longer able to undo Advance Fire Placement
                         gi.IsAdvancingFireChosen = false;      // end setting advance fire markers
                         action = GameAction.BattleActivation;  // GameStateBattle.PerformAction(BattlePlaceAdvanceFire) - finished placing Advance markers
                      }
@@ -7027,6 +7031,7 @@ namespace Pattons_Best
                         }
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e050");
                      }
+                     gi.UndoCmd = new UndoCmdCrewActionOrder();
                   }
                   break;
                case GameAction.BattleRoundSequenceEnemyArtilleryRoll:
@@ -7613,8 +7618,10 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanFiringMainGun:
                   Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanFiringMainGun): Target Selected");
                   SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToHitRoll, "e053b");
+
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGunEnd:  // due to missed target
+                  gi.UndoCmd = null;
                   if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
                   {
                      gi.IsMalfunctionedMainGun = true;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanFiringMainGunEnd) - due to missed target
@@ -7674,6 +7681,7 @@ namespace Pattons_Best
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.FiredAmmoType = gi.GetGunLoadType();  // used in EventViewer.UpdateEventContentToGetToHit()
+                     gi.UndoCmd = null;
                   }
                   else
                   {
@@ -8981,7 +8989,7 @@ namespace Pattons_Best
                }
                if (0 < gi.Targets.Count)
                {
-                  SetCommand(gi, outAction, GameAction.DieRollActionNone, "e053");
+                  SetCommand(gi, outAction, GameAction.DieRollActionNone, "e053"); // Main Gun Firing - Select Target
                   outAction = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                   Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "Conduct_CrewAction(): Select Target");
