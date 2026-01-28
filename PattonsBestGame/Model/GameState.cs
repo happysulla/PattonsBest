@@ -7499,7 +7499,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     //-----------------------------------------------
+                     gi.UndoCmd = new UndoAmmoActionOrder();
                      gi.CrewActionPhase = CrewActionPhase.Movement;
                      if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                      {

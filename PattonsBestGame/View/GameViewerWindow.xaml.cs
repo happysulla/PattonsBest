@@ -2272,7 +2272,7 @@ namespace Pattons_Best
                   foreach (Button b in myTankButtons)
                   {
                      if( null != b.ContextMenu )
-                        b.ContextMenu.IsEnabled = false;  // BattleRoundSequenceAmmoOrders
+                        b.ContextMenu.IsEnabled = false;  // BattleRoundSequence_AmmoOrders
                   }
                   if (false == CreateContextMenuGunLoadAction(myGameInstance))
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): CreateContextMenuGunLoadAction() returned false");
