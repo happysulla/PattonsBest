@@ -5524,6 +5524,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementBattleCheck:
+                  gi.UndoCmd = null;
                   SetCommand(gi, action, GameAction.MovementBattleCheckRoll, "e032"); // GameStateMovement.PerformAction(MovementBattleCheck)
                   break;
                case GameAction.MovementBattleCheckRoll:
@@ -6826,6 +6827,7 @@ namespace Pattons_Best
    //-----------------------------------------------------
    class GameStateBattleRoundSequence : GameState
    {
+      static bool theIsFirstCrewActionThisRound = true;
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
@@ -7031,7 +7033,8 @@ namespace Pattons_Best
                         }
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e050");
                      }
-                     gi.UndoCmd = new UndoCmdCrewActionOrder();
+                     if (null == gi.UndoCmd) // first BattleRoundSequenceAmmoOrders action shows the context menu for Ammo orders - after that do not allow undoing
+                        gi.UndoCmd = new UndoCmdCrewActionOrder(); // Set the undo for Crew orders
                   }
                   break;
                case GameAction.BattleRoundSequenceEnemyArtilleryRoll:

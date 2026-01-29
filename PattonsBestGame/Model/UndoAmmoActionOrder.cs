@@ -20,6 +20,8 @@ namespace Pattons_Best
          }
          Logger.Log(LogEnum.LE_UNDO_COMMAND, "UndoAmmoActionOrder.Undo(): a=" + cmd.Action.ToString() + " dra=" + cmd.ActionDieRoll.ToString() + " e=" + cmd.EventActive + " ca=" + gi.CrewActions.ToString());
          //----------------------------
+         gvw.UpdateViewAmmoOrderButtons(gi);
+         //----------------------------
          GameAction nextAction = cmd.Action;
          gi.GamePhase = cmd.Phase;
          gi.DieRollAction = cmd.ActionDieRoll;

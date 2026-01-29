@@ -20,6 +20,7 @@ namespace Pattons_Best
             return false;
          }
          Logger.Log(LogEnum.LE_UNDO_COMMAND, "UndoCrewOrder.Undo(): a=" + cmd.Action.ToString() + " dra=" + cmd.ActionDieRoll.ToString() + " e=" + cmd.EventActive + " ca=" + gi.CrewActions.ToString());
+         //----------------------------
          gvw.UpdateViewCrewOrderButtons(gi);
          //----------------------------
          GameAction nextAction = cmd.Action;

@@ -204,17 +204,6 @@ namespace Pattons_Best
          myDashArray.Add(4);  // used for dotted lines
          myDashArray.Add(2);  // used for dotted lines
          //---------------------------------------------------------------
-         myContextMenuCrewActions["Commander"] = new ContextMenu();
-         myContextMenuCrewActions["Gunner"] = new ContextMenu();
-         myContextMenuCrewActions["Loader"] = new ContextMenu();
-         myContextMenuCrewActions["Driver"] = new ContextMenu();
-         myContextMenuCrewActions["Assistant"] = new ContextMenu();
-         myContextMenuGunLoadActions["GunLoadHe"] = new ContextMenu();
-         myContextMenuGunLoadActions["GunLoadAp"] = new ContextMenu();
-         myContextMenuGunLoadActions["GunLoadHbci"] = new ContextMenu();
-         myContextMenuGunLoadActions["GunLoadWp"] = new ContextMenu();
-         myContextMenuGunLoadActions["GunLoadHvap"] = new ContextMenu();
-         //---------------------------------------------------------------
          myDieRoller = new DieRoller(myCanvasMain, CloseSplashScreen); // Close the splash screen when die resources are loaded
          if (true == myDieRoller.CtorError)
          {
@@ -735,6 +724,43 @@ namespace Pattons_Best
          }
          return true;
       }
+      public bool UpdateViewAmmoOrderButtons(IGameInstance gi)
+      {
+         if (false == CreateContextMenuGunLoadAction(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView_AmmoOrderButtons(): CreateContextMenu_GunLoadAction() returned false");
+            return false;
+         }
+         foreach (Button b in myTankButtons)
+         {
+            switch (b.Name)
+            {
+               case "GunLoadHe_AmmoReload":
+               case "GunLoadHe_ReadyRackAmmoReload":
+                  b.ContextMenu = myContextMenuGunLoadActions["GunLoadHe"];
+                  break;
+               case "GunLoadAp_AmmoReload":
+               case "GunLoadAp_ReadyRackAmmoReload":
+                  b.ContextMenu = myContextMenuGunLoadActions["GunLoadAp"];
+                  break;
+               case "GunLoadHbci_AmmoReload":
+               case "GunLoadHbci_ReadyRackAmmoReload":
+                  b.ContextMenu = myContextMenuGunLoadActions["GunLoadHbci"];
+                  break;
+               case "GunLoadWp_AmmoReload":
+               case "GunLoadWp_ReadyRackAmmoReload":
+                  b.ContextMenu = myContextMenuGunLoadActions["GunLoadWp"];
+                  break;
+               case "GunLoadHvap_AmmoReload":
+               case "GunLoadHvap_ReadyRackAmmoReload":
+                  b.ContextMenu = myContextMenuGunLoadActions["GunLoadHvap"];
+                  break;
+               default:
+                  break; // do nothing
+            }
+         }
+         return true;
+      }
       private string UpdateViewTitle(IGameInstance gi, IAfterActionReport report)
       {
          Option optionSingleDayScenario = gi.Options.Find("SingleDayScenario");
@@ -884,18 +910,13 @@ namespace Pattons_Best
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
          bool isShermanMoveAvailable = ( (false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch)) );
          //---------------------------------
-         MenuItem menuItem1 = new MenuItem();
-         myContextMenuCrewActions["Driver"].Items.Clear();
-         myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
-         myContextMenuCrewActions["Loader"].Items.Clear();
-         myContextMenuCrewActions["Loader"].Visibility = Visibility.Visible;
-         myContextMenuCrewActions["Assistant"].Items.Clear();
-         myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
-         myContextMenuCrewActions["Gunner"].Items.Clear();
-         myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
-         myContextMenuCrewActions["Commander"].Items.Clear();
-         myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
+         myContextMenuCrewActions["Driver"] = new ContextMenu();
+         myContextMenuCrewActions["Loader"] = new ContextMenu();
+         myContextMenuCrewActions["Assistant"] = new ContextMenu();
+         myContextMenuCrewActions["Gunner"] = new ContextMenu();
+         myContextMenuCrewActions["Commander"] = new ContextMenu();
          //---------------------------------
+         MenuItem menuItem1 = new MenuItem();
          ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if( null == loader )
          {
@@ -1334,14 +1355,12 @@ namespace Pattons_Best
          string gunLoadType = gi.GetGunLoadType();
          MenuItem menuitem = new MenuItem();
          //--------------------------------------------------
-         myContextMenuGunLoadActions["GunLoadHe"].Items.Clear();
+         myContextMenuGunLoadActions["GunLoadHe"] = new ContextMenu();
          int minCount = 0;
          if ("He" == gunLoadType)
             minCount = 1;
          if (minCount < lastReport.MainGunHE )
          {
-            myContextMenuGunLoadActions["GunLoadHe"].IsEnabled = true;
-            myContextMenuGunLoadActions["GunLoadHe"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHe_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -1362,14 +1381,12 @@ namespace Pattons_Best
             myContextMenuGunLoadActions["GunLoadHe"].Visibility = Visibility.Collapsed;
          }
          //--------------------------------------------------
-         myContextMenuGunLoadActions["GunLoadAp"].Items.Clear();
+         myContextMenuGunLoadActions["GunLoadAp"] = new ContextMenu();
          minCount = 0;
          if ("Ap" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
             minCount = 1;
          if (minCount < lastReport.MainGunAP)
          {
-            myContextMenuGunLoadActions["GunLoadAp"].IsEnabled = true;
-            myContextMenuGunLoadActions["GunLoadAp"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadAp_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -1390,14 +1407,13 @@ namespace Pattons_Best
             myContextMenuGunLoadActions["GunLoadAp"].Visibility = Visibility.Collapsed;
          }
          //--------------------------------------------------
+         myContextMenuGunLoadActions["GunLoadHbci"] = new ContextMenu();
          minCount = 0;
          if ("Hbci" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
             minCount = 1;
          myContextMenuGunLoadActions["GunLoadHbci"].Items.Clear();
          if (0 < lastReport.MainGunHBCI)
          {
-            myContextMenuGunLoadActions["GunLoadHbci"].IsEnabled = true;
-            myContextMenuGunLoadActions["GunLoadHbci"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHbci_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -1418,14 +1434,12 @@ namespace Pattons_Best
             myContextMenuGunLoadActions["GunLoadHbci"].Visibility = Visibility.Collapsed;
          }
          //--------------------------------------------------
-         myContextMenuGunLoadActions["GunLoadWp"].Items.Clear();
+         myContextMenuGunLoadActions["GunLoadWp"] = new ContextMenu();
          minCount = 0;
          if ("Wp" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
             minCount = 1;
          if (0 < lastReport.MainGunWP)
          {
-            myContextMenuGunLoadActions["GunLoadWp"].IsEnabled = true;
-            myContextMenuGunLoadActions["GunLoadWp"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadWp_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -1446,13 +1460,11 @@ namespace Pattons_Best
             myContextMenuGunLoadActions["GunLoadWp"].Visibility = Visibility.Collapsed;
          }
          //--------------------------------------------------
-         myContextMenuGunLoadActions["GunLoadHvap"].Items.Clear();
+         myContextMenuGunLoadActions["GunLoadHvap"] = new ContextMenu();
          if ("Hvap" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
             minCount = 1;
          if (0 < lastReport.MainGunHVAP)
          {
-            myContextMenuGunLoadActions["GunLoadHvap"].IsEnabled = true;
-            myContextMenuGunLoadActions["GunLoadHvap"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHvap_AmmoReload"; 
             menuitem.Header = "Place Ammo Reload";
@@ -2565,6 +2577,17 @@ namespace Pattons_Best
       }
       private bool UpdateCanvasTankAmmoOrders(IGameInstance gi, GameAction action)
       {
+         foreach (Button b in myTankButtons)
+         {
+            foreach (IMapItem gl in gi.GunLoads)
+            {
+               if (gl.Name == b.Name)
+               {
+                  if (null != b.ContextMenu)
+                     b.ContextMenu.IsEnabled = true;
+               }
+            }
+         }
          //--------------------------------
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
