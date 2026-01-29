@@ -16,8 +16,10 @@ namespace Pattons_Best
       public bool Undo(IGameInstance gi, IGameEngine ge, GameViewerWindow gvw)
       {
          gi.TargetMainGun = myPreviousTarget;
-         IGameCommand? cmd = gi.GameCommands.RemoveLast(); // Remove last command
+         gi.GameCommands.RemoveLast(); // Remove last command
+         IGameCommand? cmd = gi.GameCommands.GetLast(); // Repeat this command
          if (null == cmd)
+            if (null == cmd)
          {
             Logger.Log(LogEnum.LE_ERROR, "UndoTargetSelectedMainGun.Undo(): cmd=null");
             return false;

@@ -413,15 +413,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByName(): report=null");
             return null;
          }
-         if (name == report.Driver.Name) 
+         string condensedName = Utilities.RemoveSpaces(name);  
+         if ( (name == report.Driver.Name) || (name == condensedName) )
             return report.Driver;
-         if (name == report.Assistant.Name) 
+         if ((name == report.Assistant.Name) || (name == condensedName) )
             return report.Assistant;
-         if (name == report.Loader.Name) 
+         if ( (name == report.Loader.Name) || (name == condensedName) )
             return report.Loader;
-         if (name == report.Gunner.Name) 
+         if ( (name == report.Gunner.Name) || (name == condensedName) ) 
             return report.Gunner;
-         if (name == report.Commander.Name) 
+         if ( (name == report.Commander.Name) || (name == condensedName) ) 
             return report.Commander;
          Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByName(): reached default name=" + name.ToString());
          return null;

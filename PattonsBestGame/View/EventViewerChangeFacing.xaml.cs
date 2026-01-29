@@ -397,7 +397,7 @@ namespace Pattons_Best
       private Button CreateButton(IMapItem mi)
       {
          System.Windows.Controls.Button b = new Button { };
-         b.Name = mi.Name;
+         b.Name = Utilities.RemoveSpaces(mi.Name);
          b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
          b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
          b.BorderThickness = new Thickness(0);
