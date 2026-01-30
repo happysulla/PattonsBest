@@ -9,7 +9,11 @@ namespace Pattons_Best
 {
    internal class UndoCmdCrewActionOrder : IUndo
    {
-      public UndoCmdCrewActionOrder() { }
+
+      public UndoCmdCrewActionOrder()
+      {
+
+      }
       public bool Undo(IGameInstance gi, IGameEngine ge, GameViewerWindow gvw)
       {
          gi.GameCommands.RemoveLast(); // Remove last command

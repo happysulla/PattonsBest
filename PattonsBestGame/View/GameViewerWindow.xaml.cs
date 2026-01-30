@@ -846,6 +846,8 @@ namespace Pattons_Best
          //-------------------------------------------------------
          foreach (IMapItem mi in gi.CrewActions) // This menu is created on each crew action
          {
+            if (true == mi.Name.Contains("Loader_ChangeGunLoad"))
+               isLoaderChangingLoad = true;
             if (true == mi.Name.Contains("Commander_FireAaMg"))
                isCommanderFireAaMg = true;
             if (true == mi.Name.Contains("Loader_FireAaMg"))
@@ -1158,7 +1160,7 @@ namespace Pattons_Best
                   menuItem1.Click += MenuItemCrewActionClick;
                   myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
                }
-               if (true == isMainGunFiringAvailable)
+               if (true == isMainGunFiringAvailable) 
                {
                   menuItem1 = new MenuItem();
                   menuItem1.Name = "Commander_MainGunFire";
@@ -5289,6 +5291,8 @@ namespace Pattons_Best
          Canvas.SetZIndex(newButton, 900);
          //--------------------------------------
          MenuItemCrewActionSetLoad();
+         if( false ==  UpdateViewCrewOrderButtons(myGameInstance))
+            Logger.Log(LogEnum.LE_ERROR, "MenuItem_CrewActionClick(): UpdateView_CrewOrderButtons() returned false");
          GameAction outaction = GameAction.BattleRoundSequenceCrewOrders;
          myGameEngine.PerformAction(ref myGameInstance, ref outaction, 0);
       }
