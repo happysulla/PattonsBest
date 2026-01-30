@@ -2062,7 +2062,7 @@ namespace Pattons_Best
                      case 6: case 7: case 8: sb.Append("6-8."); sector = '6'; break;
                      case 9: case 10: sb.Append("9-10."); sector = '9'; break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default for gi.DieResults[key][0]=" + gi.DieResults[key][0].ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default for gi.DieResults[" + key + "][0]=" + gi.DieResults[key][0].ToString());
                         return false;
                   }
                   string tName = "B" + sector + "M";

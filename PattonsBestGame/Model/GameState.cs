@@ -32,6 +32,12 @@ namespace Pattons_Best
       }
       protected bool LoadGame(ref IGameInstance gi)
       {
+         if (false == ResetDieResults(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): ResetDieResults() returned false");
+            return false;
+         }
+         //--------------------------------------------
          IGameCommand? cmd = gi.GameCommands.GetLast();
          if (null == cmd)
          {
