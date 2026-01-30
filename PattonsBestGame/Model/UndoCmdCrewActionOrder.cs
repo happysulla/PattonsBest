@@ -9,10 +9,11 @@ namespace Pattons_Best
 {
    internal class UndoCmdCrewActionOrder : IUndo
    {
-
-      public UndoCmdCrewActionOrder()
+      private IMapItems myGunLoads = new MapItems();
+      public UndoCmdCrewActionOrder(IGameInstance gi)
       {
-
+         foreach (IMapItem gunload in gi.GunLoads)
+            myGunLoads.Add(gunload);
       }
       public bool Undo(IGameInstance gi, IGameEngine ge, GameViewerWindow gvw)
       {
@@ -24,6 +25,10 @@ namespace Pattons_Best
             return false;
          }
          Logger.Log(LogEnum.LE_UNDO_COMMAND, "UndoCrewOrder.Undo(): a=" + cmd.Action.ToString() + " dra=" + cmd.ActionDieRoll.ToString() + " e=" + cmd.EventActive + " ca=" + gi.CrewActions.ToString());
+         //----------------------------
+         gi.GunLoads.Clear();
+         foreach (IMapItem gunload in myGunLoads)
+            gi.GunLoads.Add(gunload);
          //----------------------------
          gvw.UpdateViewCrewOrderButtons(gi);
          //----------------------------

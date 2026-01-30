@@ -7530,7 +7530,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     gi.UndoCmd = new UndoCmdCrewActionOrder(); // Set the undo for Crew orders
+                     gi.UndoCmd = new UndoCmdCrewActionOrder(gi); // Set the undo for Crew orders
                      gi.CrewActionPhase = CrewActionPhase.Movement;
                      if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                      {
@@ -8925,7 +8925,7 @@ namespace Pattons_Best
          if (BattlePhase.ConductCrewAction == gi.BattlePhase) // if already thru once, do not allow undo command
             gi.UndoCmd = null;
          else
-            gi.UndoCmd = new UndoCmdCrewActionOrder(); // Set the undo for Crew orders
+            gi.UndoCmd = new UndoCmdCrewActionOrder(gi); // Set the undo for Crew orders
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Conduct_CrewAction");
          if (CrewActionPhase.Movement == gi.CrewActionPhase)
