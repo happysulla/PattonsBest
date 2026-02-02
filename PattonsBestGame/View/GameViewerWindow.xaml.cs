@@ -4713,10 +4713,14 @@ namespace Pattons_Best
             return;
          }
          GameAction outAction = GameAction.Error;
-         if(GamePhase.BattleRoundSequence == myGameInstance.GamePhase) 
+         if(GamePhase.BattleRoundSequence == myGameInstance.GamePhase)
+         {
             outAction = GameAction.BattleRoundSequenceMgPlaceAdvanceFire;
+         }
          else if( (GamePhase.Preparations == myGameInstance.GamePhase) || (GamePhase.Battle == myGameInstance.GamePhase) )
+         {
             outAction = GameAction.BattlePlaceAdvanceFire;
+         }
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonFriendlyAdvance(object sender, MouseButtonEventArgs e)
@@ -4882,6 +4886,7 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     myGameInstance.UndoCmd = new UndoTargetSelectedMachineGun(null);
                      myGameInstance.TargetMg = selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMachineGun;
                   }

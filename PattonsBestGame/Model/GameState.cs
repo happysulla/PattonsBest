@@ -7883,6 +7883,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequenceShermanFiringMachineGun): " + Utilities.PrintMgState(gi));
                   break;
                case GameAction.BattleRoundSequenceFireMachineGunRoll:
+                  gi.UndoCmd = null;
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
@@ -7983,6 +7984,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFireMachineGunRollEnd:
+                  gi.UndoCmd = null;
                   gi.DieResults["e054a"][0] = Utilities.NO_RESULT;
                   IMapItems shermanRemovals = new MapItems();
                   foreach (IStack stack in gi.BattleStacks) // remove killed enemy units
@@ -8013,6 +8015,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFireMgSkip:
+                  gi.UndoCmd = null;
                   gi.TargetMg = null;
                   gi.Targets.Clear();  // BattleRoundSequenceFireMgSkip
                   gi.AreaTargets.Clear();
@@ -8066,6 +8069,7 @@ namespace Pattons_Best
                      }
                      else
                      {
+                        gi.UndoCmd = new UndoTargetSelectedMachineGun(advanceMg);
                         advanceMg.Location = mpAdvance;
                         gi.BattleStacks.Add(advanceMg);
                         gi.AdvanceFire = null;
@@ -8074,6 +8078,7 @@ namespace Pattons_Best
                         Option optionAutoRollBowMgAdvance = gi.Options.Find("AutoRollBowMgFire");
                         if ((true == optionAutoRollBowMgAdvance.IsEnabled ) && (true == gi.IsShermanFiringBowMg) )
                         {
+                           gi.UndoCmd = null;
                            int diceRollAuto = 0;
                            int die1 = Utilities.RandomGenerator.Next(0, 10);
                            int die2 = Utilities.RandomGenerator.Next(0, 10);
@@ -8092,6 +8097,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceMgAdvanceFireRoll:
+                  gi.UndoCmd = null;
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
