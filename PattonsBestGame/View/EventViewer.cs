@@ -37,10 +37,10 @@ namespace Pattons_Best
       private IGameInstance? myGameInstance = null;
       private ITerritories? myTerritories = null;
       //--------------------------------------------------------------------
+      public RuleDialogViewer? myRulesMgr = null;
       private IDieRoller? myDieRoller = null;
       public int DieRoll { set; get; } = 0;
       //--------------------------------------------------------------------
-      public RuleDialogViewer? myRulesMgr = null;
       private AfterActionDialog? myAfterActionDialog = null;
       private ShowReportErrorDialog? myReportErrorDialog = null;
       private ShowAboutDialog? myDialogAbout = null;
@@ -59,6 +59,7 @@ namespace Pattons_Best
       public EventViewer(IGameEngine ge, IGameInstance gi, Canvas c, ScrollViewer sv, ITerritories territories, IDieRoller dr)
       {
          myDieRoller = dr;
+         //--------------------------------------------------------
          if (null == ge)
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer(): c=null");
@@ -66,6 +67,7 @@ namespace Pattons_Best
             return;
          }
          myGameEngine = ge;
+         //--------------------------------------------------------
          if (null == gi)
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer(): c=null");
@@ -73,6 +75,7 @@ namespace Pattons_Best
             return;
          }
          myGameInstance = gi;
+         //--------------------------------------------------------
          if (null == c)
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer(): c=null");
@@ -80,6 +83,7 @@ namespace Pattons_Best
             return;
          }
          myCanvasMain = c;
+         //--------------------------------------------------------
          if (null == territories)
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer(): territories=null");
@@ -87,6 +91,7 @@ namespace Pattons_Best
             return;
          }
          myTerritories = territories;
+         //--------------------------------------------------------
          if (null == sv)
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer(): sv=null");
@@ -147,6 +152,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Create_Events(): myRulesMgr.Events.Count=0");
                return false;
             }
+            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "Create_Events(): resetting die rolls gi.DieResults.Count=" + gi.DieResults.Count.ToString());
             foreach (string key in myRulesMgr.Events.Keys) // For each event, create a dictionary entry. There can be no more than three die rolls per event
                gi.DieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
          }
@@ -244,6 +250,7 @@ namespace Pattons_Best
                myScrollViewerTextBlock.Cursor = Cursors.Arrow;
                foreach (string key in myRulesMgr.Events.Keys) // For each event, create a dictionary entry. There can be no more than three die rolls per event
                   gi.DieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
+               Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "EventViewer.UpdateView(): resetting die rolls gi.DieResults.Count=" + gi.DieResults.Count.ToString());
                if (false == OpenEvent(gi, gi.EventActive))
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
@@ -2048,12 +2055,13 @@ namespace Pattons_Best
                }
                break;
             case "e044":
-               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               int e044dieRoll = gi.DieResults[key][0];
+               if (Utilities.NO_RESULT < e044dieRoll)
                {
                   StringBuilder sb = new StringBuilder();
                   sb.Append("Panzerfaust Attack Sector is ");
                   char sector = '1';
-                  switch (gi.DieResults[key][0])
+                  switch (e044dieRoll)
                   {
                      case 1: sb.Append("1."); sector = '1'; break;
                      case 2: sb.Append("2."); sector = '2'; break;
@@ -2062,7 +2070,7 @@ namespace Pattons_Best
                      case 6: case 7: case 8: sb.Append("6-8."); sector = '6'; break;
                      case 9: case 10: sb.Append("9-10."); sector = '9'; break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default for gi.DieResults[" + key + "][0]=" + gi.DieResults[key][0].ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): e044 PzAttack reached default for gi.DieResults[" + key + "][0]=" + e044dieRoll.ToString());
                         return false;
                   }
                   string tName = "B" + sector + "M";
@@ -7091,7 +7099,7 @@ namespace Pattons_Best
                break;
             case " Area ":
                myGameInstance.ShermanTypeOfFire = "Area";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Area Button
+               action = GameAction.BattleRoundSequenceShermanFiringMainGunArea; // Area Button
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "  AA MG   ":
@@ -7149,7 +7157,7 @@ namespace Pattons_Best
                break;
             case "Direct":
                myGameInstance.ShermanTypeOfFire = "Direct";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun;  // Direct Buttn
+               action = GameAction.BattleRoundSequenceShermanFiringMainGunDirect;  // Direct Buttn
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Enter":
@@ -7177,7 +7185,7 @@ namespace Pattons_Best
                break;
             case " Skip ":
                myGameInstance.ShermanTypeOfFire = "Skip";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGunNot;
+               action = GameAction.BattleRoundSequenceShermanFiringMainGunSkip;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Strength Check":

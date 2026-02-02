@@ -960,8 +960,10 @@ namespace Pattons_Best
 
             case "BattleRoundSequenceShermanFiringSelectTarget": return GameAction.BattleRoundSequenceShermanFiringSelectTarget;
             case "BattleRoundSequenceShermanFiringMainGun": return GameAction.BattleRoundSequenceShermanFiringMainGun;
+            case "BattleRoundSequenceShermanFiringMainGunArea": return GameAction.BattleRoundSequenceShermanFiringMainGunArea;
+            case "BattleRoundSequenceShermanFiringMainGunDirect": return GameAction.BattleRoundSequenceShermanFiringMainGunDirect;
             case "BattleRoundSequenceShermanFiringMainGunEnd": return GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
-            case "BattleRoundSequenceShermanFiringMainGunNot": return GameAction.BattleRoundSequenceShermanFiringMainGunNot;
+            case "BattleRoundSequenceShermanFiringMainGunSkip": return GameAction.BattleRoundSequenceShermanFiringMainGunSkip;
             case "BattleRoundSequenceShermanToHitRoll": return GameAction.BattleRoundSequenceShermanToHitRoll;
             case "BattleRoundSequenceShermanSkipRateOfFire": return GameAction.BattleRoundSequenceShermanSkipRateOfFire;
             case "BattleRoundSequenceShermanMissesLastShot": return GameAction.BattleRoundSequenceShermanMissesLastShot;

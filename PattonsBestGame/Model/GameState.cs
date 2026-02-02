@@ -32,11 +32,6 @@ namespace Pattons_Best
       }
       protected bool LoadGame(ref IGameInstance gi)
       {
-         if (false == ResetDieResults(gi))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): ResetDieResults() returned false");
-            return false;
-         }
          //--------------------------------------------
          IGameCommand? cmd = gi.GameCommands.GetLast();
          if (null == cmd)
@@ -122,7 +117,12 @@ namespace Pattons_Best
       {
          try
          {
-            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "ResetDieResults(): resetting die rolls");
+            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "Reset_DieResults(): resetting die rolls gi.DieResults.Count=" + gi.DieResults.Count.ToString());
+            if( 0 == gi.DieResults.Count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Reset_DieResults(): count=0;");
+               return false;
+            }
             foreach (KeyValuePair<string, int[]> kvp in gi.DieResults)
             {
                for (int i = 0; i < 3; ++i)
@@ -131,7 +131,7 @@ namespace Pattons_Best
          }
          catch (Exception)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetDieResults(): reset rolls");
+            Logger.Log(LogEnum.LE_ERROR, "Reset_DieResults(): reset rolls");
             return false;
          }
          return true;
@@ -3322,7 +3322,7 @@ namespace Pattons_Best
          gi.DieRollAction = GameAction.DieRollActionNone;
          if (false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): Reset_DieResults() returned false");
             return false;
          }
          //-------------------------------------------------------
@@ -3726,8 +3726,8 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.UpdateUndo:
-                  if( false == ResetDieResults(gi) )
+               case GameAction.UpdateUndo: // GameStateEnded.PerformAction(UpdateUndo)
+                  if ( false == ResetDieResults(gi) )
                   {
                      returnStatus = "Reset_DieResults() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
@@ -3876,7 +3876,6 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTankReplacementRoll:
                   if ( Utilities.NO_RESULT == gi.DieResults[key][0] )
                   {
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.DieResults[key][0] = dieRoll;
                      //-----------------------------------------
                      string[] crewmembers1 = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Driver" };
@@ -3924,6 +3923,7 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if ( (10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day) ) // must be Nov 44 before tanks have HVSS
                      {
                         gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
@@ -5460,11 +5460,11 @@ namespace Pattons_Best
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
-                     if(gi.DieResults[key][0]<8)
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (gi.DieResults[key][0]<8)
                      {
                         action = GameAction.MovementAmmoLoad;
                         gi.Fuel = 35; // when resupply, fuel set to 35
@@ -5634,10 +5634,10 @@ namespace Pattons_Best
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      int hoursElapsed = (int)Math.Floor(gi.DieResults[key][0] * 0.5) + 1;
                      gi.DieResults[key][0] = Utilities.NO_RESULT;
                      gi.MinSinceLastCheck = 0;
@@ -5726,7 +5726,7 @@ namespace Pattons_Best
       {
          if (false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Set_ChoicesForOperations(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Set_ChoicesForOperations(): Reset_DieResults() returned false");
             return false;
          }
          gi.UndoCmd = null; // SetChoicesForOperations() - no longer able to undo the move to new area
@@ -6135,7 +6135,7 @@ namespace Pattons_Best
          //--------------------------------------------------------------
          if (false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "MovementPhase_Restart(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "MovementPhase_Restart(): Reset_DieResults() returned false");
             return false;
          }
          return true;
@@ -6643,10 +6643,10 @@ namespace Pattons_Best
                      //dieRoll = 01; // <CGS> TEST - AdvanceRetreat - *********************RANDOM*************** 
                      //dieRoll = 35; // <CGS> TEST - Harrassing fire in Advance Scenario - Random Event 
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      bool isEnemyUnitLeft = false;
                      foreach (IStack stack in gi.BattleStacks)
                      {
@@ -6857,7 +6857,6 @@ namespace Pattons_Best
    //-----------------------------------------------------
    class GameStateBattleRoundSequence : GameState
    {
-      static bool theIsFirstCrewActionThisRound = true;
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
@@ -7075,7 +7074,6 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (dieRoll < 7)
                         lastReport.VictoryPtsFriendlySquad += 1;
                      else if (dieRoll < 10)
@@ -7085,6 +7083,7 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (false == CheckCrewMemberExposed(gi, ref action)) // calls SpottingPhase_Begin() if no collateral
                      {
                         returnStatus = "Check_CrewMemberExposed() returned false";
@@ -7097,10 +7096,10 @@ namespace Pattons_Best
                   {
                      //dieRoll = 2; // <CGS> TEST - minefield attack
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.Statistics.AddOne("NumMineAttack");
                      if (gi.DieResults[key][0] < 2)
                      {
@@ -7135,10 +7134,10 @@ namespace Pattons_Best
                   {
                      //dieRoll = 9; // <CGS> TEST - minefield results - driver wounded
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (9 == gi.DieResults[key][0])
                      {
                         SetCommand(gi, action, GameAction.BattleRoundSequenceMinefieldDriverWoundRoll, "e043c");
@@ -7161,10 +7160,10 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      ICrewMember? cm = gi.GetCrewMemberByRole("Driver");
                      if (null == cm)
                      {
@@ -7199,10 +7198,10 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      ICrewMember? cm = gi.GetCrewMemberByRole("Assistant");
                      if (null == cm)
                      {
@@ -7238,10 +7237,10 @@ namespace Pattons_Best
                   {
                      //dieRoll = 6; // <CGS> TEST - Panzerfaust attack sector
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      char sector = '0';
                      switch (gi.DieResults[key][0])
                      {
@@ -7315,10 +7314,10 @@ namespace Pattons_Best
                   {
                      //dieRoll = 1; // <CGS> TEST - Panzerfaust To Attack
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (null == gi.Panzerfaust)
                      {
                         returnStatus = "gi.Panzerfaust=null";
@@ -7366,10 +7365,10 @@ namespace Pattons_Best
                   {
                      //dieRoll = 1; // <CGS> TEST - Panzerfaust To Hit
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (null == gi.Panzerfaust)
                      {
                         returnStatus = "gi.Panzerfaust=null";
@@ -7402,10 +7401,10 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (null == gi.Panzerfaust)
                      {
                         returnStatus = "gi.Panzerfaust=null";
@@ -7582,10 +7581,10 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (100 == gi.DieResults[key][0]) //  unmodified roll of 100 means assistance needed
                      {
                         gi.Sherman.IsAssistanceNeeded = true;
@@ -7661,9 +7660,12 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGun:
-                  gi.UndoCmd = null;
-                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanFiringMainGun): Target Selected");
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanFiringMainGun): Target Selected");
                   SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToHitRoll, "e053b");
+                  break;
+               case GameAction.BattleRoundSequenceShermanFiringMainGunArea:
+               case GameAction.BattleRoundSequenceShermanFiringMainGunDirect:
+                  gi.UndoCmd = null;
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGunEnd:  // due to missed target
                   gi.UndoCmd = null;
@@ -7687,7 +7689,7 @@ namespace Pattons_Best
                      }
                   }
                   break;
-               case GameAction.BattleRoundSequenceShermanFiringMainGunNot:
+               case GameAction.BattleRoundSequenceShermanFiringMainGunSkip:
                   gi.UndoCmd = null;
                   gi.CrewActionPhase = CrewActionPhase.TankMgFire;
                   if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSherman_FiringMainGunEnd)
@@ -7729,11 +7731,11 @@ namespace Pattons_Best
                      //dieRoll = -20; // <CGS> TEST - KillEnemy - SHERMAN TO HIT Roll
                      gi.UndoCmd = null;
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.FiredAmmoType = gi.GetGunLoadType();  // used in EventViewer.UpdateEventContentToGetToHit()
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if (false == FireMainGunAtEnemyUnits(gi, ref action, gi.DieResults[key][0])) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanToHitRoll)
                      {
                         returnStatus = "Fire_MainGunAtEnemyUnits() returned false";
@@ -7757,10 +7759,10 @@ namespace Pattons_Best
                   {
                      //dieRoll = 98; // <CGS> TEST - Sherman To Hit Roll
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
                      {
                         gi.IsMalfunctionedMainGun = true; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing) - nothing to hit
@@ -7884,7 +7886,6 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.Targets.Clear();  // BattleRoundSequence_FireMachineGunRoll
                      if (null == gi.TargetMg)
                      {
@@ -7893,6 +7894,7 @@ namespace Pattons_Best
                      }
                      else
                      {
+                        gi.DieRollAction = GameAction.DieRollActionNone;
                         if ((1 == DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie)) // expend ammo if blue die = 1, 2, or 3
                         {
                            if (true == gi.IsShermanFiringAaMg) lastReport.Ammo50CalibreMG--;
@@ -8135,12 +8137,16 @@ namespace Pattons_Best
                   {
                      //dieRoll = 99; // <CGS> TEST - break main gun
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
-                  else if (false == RepairMainGunAttempt(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll)
+                  else
                   {
-                     returnStatus = "Repair_MainGunAttempt() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll): " + returnStatus);
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (false == RepairMainGunAttempt(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll)
+                     {
+
+                        returnStatus = "Repair_MainGunAttempt() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequenceRepairAaMgRoll:
@@ -8148,12 +8154,15 @@ namespace Pattons_Best
                   {
                      //dieRoll = 01; // <CGS> TEST - break AAMG
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
-                  else if (false == RepairAntiAircraftMgAttempt(gi, ref action))
+                  else
                   {
-                     returnStatus = "RepairAntiAircraftMgAttempt() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll): " + returnStatus);
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (false == RepairAntiAircraftMgAttempt(gi, ref action))
+                     {
+                        returnStatus = "RepairAntiAircraftMgAttempt() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequenceRepairBowMgRoll:
@@ -8161,12 +8170,15 @@ namespace Pattons_Best
                   {
                      //dieRoll = 01; // <CGS> TEST - break BMG
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
-                  else if (false == RepairBowMgAttempt(gi, ref action))
+                  else
                   {
-                     returnStatus = "RepairBowMgAttempt() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairBowMgRoll): " + returnStatus);
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (false == RepairBowMgAttempt(gi, ref action))
+                     {
+                        returnStatus = "RepairBowMgAttempt() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairBowMgRoll): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequenceRepairCoaxialMgRoll:
@@ -8174,12 +8186,15 @@ namespace Pattons_Best
                   {
                      //dieRoll = 01; // <CGS> TEST - break CMG
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
-                  else if (false == RepairCoaxialMgAttempt(gi, ref action))
+                  else
                   {
-                     returnStatus = "RepairCoaxialMgAttempt() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairCoaxialMgRoll): " + returnStatus);
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (false == RepairCoaxialMgAttempt(gi, ref action))
+                     {
+                        returnStatus = "RepairCoaxialMgAttempt() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairCoaxialMgRoll): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequenceReplacePeriscopes:
@@ -8447,10 +8462,10 @@ namespace Pattons_Best
                   {
                      //dieRoll = 01; // <CGS> TEST - AdvanceRetreat - Random Event - Time passes
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                      bool isEnemyUnitLeft = false;
                      foreach (IStack stack in gi.BattleStacks)
                      {
@@ -9376,7 +9391,6 @@ namespace Pattons_Best
             //dieRoll = 01;           // <CGS> TEST - AdvanceRetreat - Cause Movement
             //DieRoller.WhiteDie = 1; // <CGS> TEST - AdvanceRetreat - Cause Movement
             gi.DieResults[key][0] = dieRoll;
-            gi.DieRollAction = GameAction.DieRollActionNone;
             if( (DieRoller.BlueDie < 4) && (0 < gi.Fuel) )
                gi.Fuel--;
             gi.MovementEffectOnSherman = TableMgr.GetMovingResultSherman(gi, dieRoll);
@@ -9401,6 +9415,7 @@ namespace Pattons_Best
          else
          {
             Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Move_Sherman(): gi.MapItemMoves.Clear()");
+            gi.DieRollAction = GameAction.DieRollActionNone;
             gi.MapItemMoves.Clear();
             gi.ShermanAdvanceOrRetreatEnemies.Clear(); // any previous round units moved off board are not saved
             gi.IsShermanAdvancingOnMoveBoard = false;
@@ -10164,7 +10179,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "Resolve_ToKillEnemyUnit(): 2nd time through to kill ------V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V ");
             //dieRoll = 1; // <CGS> TEST - KillEnemyUnit - SHERMAN TO KILL Roll
             gi.DieResults[key][1] = dieRoll;
-            gi.DieRollAction = GameAction.DieRollActionNone;
+
             if (false == ResolveToKillEnemyUnitKill(gi, ref outAction, gi.DieResults[key][1]))
             {
                Logger.Log(LogEnum.LE_ERROR, "Resolve_ToKillEnemyUnit(): Resolve_ToKillEnemyUnitKill() returned false");
@@ -10174,6 +10189,7 @@ namespace Pattons_Best
          //-----------------------------------------------------------------------------------
          else // third time thru for vehicles hits this branch
          {
+            gi.DieRollAction = GameAction.DieRollActionNone;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "Resolve_ToKillEnemyUnit(): Finalize Kill Cleanup --------C C C C C C C C C C C C C C C C C C C C C C C C");
             IMapItems shermanKills = new MapItems(); // remove any killed units
             foreach (IStack stack in gi.BattleStacks)
@@ -10986,9 +11002,9 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          gi.DieRollAction = GameAction.DieRollActionNone;
-         if (false == ResetDieResults(gi))
+         if (false == ResetDieResults(gi)) // Reset_Round()
          {
-            Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): Reset_DieResults() returned false");
             return false;
          }
          //-------------------------------------------------------
@@ -11185,7 +11201,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.UpdateUndo:
-                  if (false == ResetDieResults(gi))
+                  if (false == ResetDieResults(gi))  // GameStateBattlePrep.PerformAction(UpdateUndo)
                   {
                      returnStatus = "Reset_DieResults() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
@@ -11642,9 +11658,9 @@ namespace Pattons_Best
          if (true == commander.IsKilled)
             gi.PromotionPointNum = 0;
          //-------------------------------------------------------
-         if (false == ResetDieResults(gi))
+         if (false == ResetDieResults(gi)) // EveningDebriefing_ResetDay()
          {
-            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Reset_DieResults() returned false");
             return false;
          }
          //-------------------------------------------------------

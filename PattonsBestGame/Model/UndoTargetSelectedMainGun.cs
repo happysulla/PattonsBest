@@ -28,7 +28,7 @@ namespace Pattons_Best
          gi.GamePhase = cmd.Phase;
          gi.DieRollAction = cmd.ActionDieRoll;
          gi.EventDisplayed = gi.EventActive = cmd.EventActive;
-         ge.PerformAction(ref gi, ref nextAction, 0);
+         ge.PerformAction(ref gi, ref nextAction, Utilities.NO_RESULT);
          return true;
       }
    }

@@ -380,8 +380,10 @@ namespace Pattons_Best
 
       BattleRoundSequenceShermanFiringSelectTarget,
       BattleRoundSequenceShermanFiringMainGun,
+      BattleRoundSequenceShermanFiringMainGunArea,
+      BattleRoundSequenceShermanFiringMainGunDirect,
       BattleRoundSequenceShermanFiringMainGunEnd,
-      BattleRoundSequenceShermanFiringMainGunNot,
+      BattleRoundSequenceShermanFiringMainGunSkip,
       BattleRoundSequenceShermanToHitRoll,
       BattleRoundSequenceShermanSkipRateOfFire,
       BattleRoundSequenceShermanMissesLastShot,

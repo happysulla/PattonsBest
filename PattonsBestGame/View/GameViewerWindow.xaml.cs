@@ -211,7 +211,7 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         //---------------------------------------------------------------
+         //----------------------------------------------------------------
          myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, Territories.theTerritories, myDieRoller);
          if (true == myEventViewer.CtorError)
          {
@@ -572,7 +572,7 @@ namespace Pattons_Best
          UpdateCanvasMainClear(myMoveButtons, gi.MoveStacks, action);
          UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
          myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
-         //---------------------------------- 
+         //----------------------------------
          GameAction nextAction = GameAction.Error;
          if ( GameAction.UpdateLoadingGame == action )
          {
@@ -606,6 +606,10 @@ namespace Pattons_Best
                   return false;
                }
             }
+            else if ("e044" == gi.EventActive)
+            {
+               gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustSectorRoll;
+            }
          }
          else if (GameAction.UpdateNewGame == action)
          {
@@ -616,7 +620,13 @@ namespace Pattons_Best
             mySplashScreen.Close();
             nextAction = GameAction.UpdateNewGameEnd;
          }
-         myGameEngine.PerformAction(ref gi, ref nextAction, 0);
+         //----------------------------------
+         if (false == UpdateCanvasMain(gi, action)) 
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView_ForNewGame(): UpdateCanvasMain() returned error ");
+            return false;
+         }
+         myGameEngine.PerformAction(ref gi, ref nextAction, Utilities.NO_RESULT);
          return true;
       }
       private bool UpdateViewUndo(ref IGameInstance gi)
