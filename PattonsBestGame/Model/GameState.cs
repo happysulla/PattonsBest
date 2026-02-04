@@ -7535,14 +7535,14 @@ namespace Pattons_Best
                         }
                      }
                   }
-                  if (false == SetDefaultCrewActions(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceConductCrewAction)
+                  if (false == SetDefaultCrewActions(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                   {
                      returnStatus = "Set_DefaultCrewActions() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceConductCrewAction): " + returnStatus);
                   }
                   else
                   {
-                     gi.UndoCmd = new UndoCmdCrewActionOrder(gi); // Set the undo for Crew orders
+                     gi.UndoCmd = new UndoCmdCrewActionOrder(gi); //  GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                      gi.CrewActionPhase = CrewActionPhase.Movement;
                      if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                      {
@@ -8961,7 +8961,7 @@ namespace Pattons_Best
          if (BattlePhase.ConductCrewAction == gi.BattlePhase) // if already thru once, do not allow undo command
             gi.UndoCmd = null;
          else
-            gi.UndoCmd = new UndoCmdCrewActionOrder(gi); // Set the undo for Crew orders
+            gi.UndoCmd = new UndoCmdCrewActionOrder(gi); // Conduct_CrewAction(): Set the undo for Crew orders on first pass through this function this round
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Conduct_CrewAction");
          if (CrewActionPhase.Movement == gi.CrewActionPhase)
