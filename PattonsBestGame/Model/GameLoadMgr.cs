@@ -1224,6 +1224,44 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsFirstSpottingOccurred) = false");
+               return null;
+            }
+            if (reader.Name != "IsFirstSpottingOccurred")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsFirstSpottingOccurred != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsFirstSpottingOccurred = reader.GetAttribute("value");
+            if (null == sIsFirstSpottingOccurred)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sIsFirstSpottingOccurred=null");
+               return null;
+            }
+            gi.IsFirstSpottingOccurred = Boolean.Parse(sIsFirstSpottingOccurred);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(Is1stEnemyStrengthCheckTerritory) = false");
+               return null;
+            }
+            if (reader.Name != "Is1stEnemyStrengthCheckTerritory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): Is1stEnemyStrengthCheckTerritory != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIs1stEnemyStrengthCheckTerritory = reader.GetAttribute("value");
+            if (null == sIs1stEnemyStrengthCheckTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sIs1stEnemyStrengthCheckTerritory=null");
+               return null;
+            }
+            gi.Is1stEnemyStrengthCheckTerritory = Boolean.Parse(sIs1stEnemyStrengthCheckTerritory);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsGridActive) = false");
                return null;
             }
@@ -7115,6 +7153,34 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(RoundsOfCombat) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsFirstSpottingOccurred");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsFirstSpottingOccurred) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsFirstSpottingOccurred.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsFirstSpottingOccurred) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("Is1stEnemyStrengthCheckTerritory");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(Is1stEnemyStrengthCheckTerritory) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.Is1stEnemyStrengthCheckTerritory.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(Is1stEnemyStrengthCheckTerritory) returned null");
             return null;
          }
          //------------------------------------------

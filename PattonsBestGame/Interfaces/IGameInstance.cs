@@ -17,6 +17,8 @@ namespace Pattons_Best
       int MaxRollsForArtillerySupport { get; set; }
       int MaxEnemiesInOneBattle { get; set; }
       int RoundsOfCombat { get; set; }
+      bool IsFirstSpottingOccurred { get; set; } // first spotting set per Battle Prep
+      bool Is1stEnemyStrengthCheckTerritory { get; set; }
       //----------------------------------------------
       bool IsMultipleSelectForDieResult { set; get; } // In EventViewer, show buttons instead of die results for user to choose from
       bool IsGridActive { set; get; } // True if there is some EventViewer manager active

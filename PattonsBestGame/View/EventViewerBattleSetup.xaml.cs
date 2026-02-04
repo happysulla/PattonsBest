@@ -254,6 +254,19 @@ namespace Pattons_Best
          //--------------------------------------------------
          if ( GamePhase.Battle == myGameInstance.GamePhase ) // Battle Phase setup initial forces 
          {
+            //--------------------------------------------------
+            IMapItems enemyUnitRemovals = new MapItems();  // If a game is loaded half way during battle setup, remove and start from beginnning
+            foreach (IStack stack in myGameInstance.BattleStacks)
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  if (true == mi.IsEnemyUnit())
+                     enemyUnitRemovals.Add(mi);
+               }
+            }
+            foreach (IMapItem removal in enemyUnitRemovals)
+               myGameInstance.BattleStacks.Remove(removal);
+            //--------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Setup_Battle(): reset 'unidentified' spotting units");
             myGameInstance.IdentifiedAtg = ""; // Setup_Battle()
             myGameInstance.IdentifiedTank = "";
@@ -424,16 +437,16 @@ namespace Pattons_Best
          else // Battle Sequence Round Phase adds reinforcements
          {
             //-----------------------------------------
-            IMapItems removals = new MapItems();
+            IMapItems advanceFireRemovals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks) // Remove all advance fire markers that are not MG fire
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
                   if ((true == mapItem.TerritoryCurrent.Name.Contains("Advance")) && (false == mapItem.TerritoryCurrent.Name.Contains("Mg")) )
-                     removals.Add(mapItem);
+                     advanceFireRemovals.Add(mapItem);
                }
             }
-            foreach (IMapItem mi in removals)
+            foreach (IMapItem mi in advanceFireRemovals)
                myGameInstance.BattleStacks.Remove(mi);
             //-----------------------------------------
             if (EnumScenario.Advance == lastReport.Scenario) // activate one additional for Advance and two additional for Battle | Counterattack

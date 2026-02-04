@@ -233,7 +233,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
          //SetOn(LogEnum.LE_SHOW_VP_TOTAL);
          //-------------------------------
-         SetOn(LogEnum.LE_RESET_ROLL_STATE);
+         //SetOn(LogEnum.LE_RESET_ROLL_STATE);
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE);

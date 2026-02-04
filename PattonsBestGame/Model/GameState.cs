@@ -12,7 +12,6 @@ namespace Pattons_Best
 {
    public abstract class GameState : IGameState
    {
-      protected static bool theIs1stEnemyStrengthCheckTerritory = true;
       abstract public string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll); // abstract function...GameEngine calls PerformAction() 
       static public IGameState? GetGameState(GamePhase phase) // static method that returns the next GameState object based on GamePhase
       {
@@ -1137,7 +1136,7 @@ namespace Pattons_Best
          //-------------------------------------
          if ( true == isUnidentifiedUnit )
          {
-            if ( 1 < gi.RoundsOfCombat ) 
+            if (true == gi.IsFirstSpottingOccurred) 
             {
                if (false == gi.IsLoaderSpotThisTurn) 
                {
@@ -1233,8 +1232,7 @@ namespace Pattons_Best
                   outAction = GameAction.BattleRoundSequenceSpotting; // Targets are found, need to spot
                   gi.IsLoaderSpotThisTurn = false;
                   gi.IsCommanderSpotThisTurn = false;
-                  gi.RoundsOfCombat++; // SpottingPhase_Begin(): Entering Spotting Dialog
-                  Logger.Log(LogEnum.LE_SHOW_ROUND_COMBAT, "SpottingPhase_Begin(): ++gi.RoundsOfCombat=" + gi.RoundsOfCombat.ToString() + " SPOTTING STARTS");
+                  gi.IsFirstSpottingOccurred = true;
                   return true;
                }
             }
@@ -1247,8 +1245,7 @@ namespace Pattons_Best
          gi.BattlePhase = BattlePhase.MarkCrewAction;
          gi.IsLoaderSpotThisTurn = false;
          gi.IsCommanderSpotThisTurn = false;
-         gi.RoundsOfCombat++; // // SpottingPhase_Begin() - skipping spotting b/c nobody to find since sottedTerritories.Count = 0
-         Logger.Log(LogEnum.LE_SHOW_ROUND_COMBAT, "SpottingPhase_Begin(): ++gi.RoundsOfCombat=" + gi.RoundsOfCombat.ToString() + " START CREW ACTIONS");
+         gi.IsFirstSpottingOccurred = true;
          return true;
       }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport lastReport, ref GameAction action)
@@ -1453,7 +1450,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PrepareFor_Battle(): lastReport=null");
             return false;
          }
-         theIs1stEnemyStrengthCheckTerritory = true; // PrepareFor_Battle(): Allow one free strength check at end of each preparations phase
+         gi.Is1stEnemyStrengthCheckTerritory = true; // PrepareFor_Battle(): Allow one free strength check at end of each preparations phase
+         gi.IsFirstSpottingOccurred = false;
          //---------------------------------
          gi.AdvancingEnemies.Clear();
          //---------------------------------
@@ -5058,7 +5056,8 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.PreparationsFinalSkip:
-                  theIs1stEnemyStrengthCheckTerritory = true; // GameStateMovement.PerformAction(Preparations_FinalSkip): at the end of each battle, get one free enemy strength check
+                  gi.Is1stEnemyStrengthCheckTerritory = true; // GameStateMovement.PerformAction(Preparations_FinalSkip): at the end of each battle, get one free enemy strength check
+                  gi.IsFirstSpottingOccurred = false;
                   if (false == PerformAutoBattlePreparationsSetup(gi, ref action))
                   {
                      returnStatus = "Perform_BattlePreparationsSetup() returned false";
@@ -5162,7 +5161,8 @@ namespace Pattons_Best
                case GameAction.MovementStartAreaSet:
                case GameAction.MovementStartAreaRestart: // No fight occurs
                case GameAction.MovementStartAreaRestartAfterBattle: // Win a battle resulting in empty battle board
-                  theIs1stEnemyStrengthCheckTerritory = true; // GameStateMovement.PerformAction() - free emeny enemy strength check after moving to new board
+                  gi.Is1stEnemyStrengthCheckTerritory = true; // GameStateMovement.PerformAction() - free emeny enemy strength check after moving to new board
+                  gi.IsFirstSpottingOccurred = false;
                   if (false == MovementPhaseRestart(gi, lastReport, action))
                   {
                      returnStatus = "MovementPhaseRestart() returned false";
@@ -5217,7 +5217,7 @@ namespace Pattons_Best
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e020");
                   break;
                case GameAction.MovementEnemyStrengthCheckTerritory:
-                  if ( false == theIs1stEnemyStrengthCheckTerritory ) // MovementEnemyStrengthCheckTerritory
+                  if ( false == gi.Is1stEnemyStrengthCheckTerritory) // MovementEnemyStrengthCheckTerritory
                   {
                      if(false == gi.IsAirStrikePending)
                      {
@@ -5260,7 +5260,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementEnemyStrengthCheckTerritoryRoll:
-                  theIs1stEnemyStrengthCheckTerritory = false; // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritoryRoll) - free check over
+                  gi.Is1stEnemyStrengthCheckTerritory = false; // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritoryRoll) - free check over
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == SetEnemyStrengthCounter(gi, dieRoll)) // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritoryRoll)
@@ -5801,7 +5801,7 @@ namespace Pattons_Best
       }
       private bool EnterMoveBoardArea(IGameInstance gi, GameAction action)
       {
-         theIs1stEnemyStrengthCheckTerritory = true;
+         gi.Is1stEnemyStrengthCheckTerritory = true;
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Enter_MoveBoardArea(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.IsShermanAdvancingOnMoveBoard = false;
@@ -6117,7 +6117,8 @@ namespace Pattons_Best
       private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report, GameAction action)
       {
          //--------------------------------------------------------------
-         theIs1stEnemyStrengthCheckTerritory = true; // MovementPhaseRestart()
+         gi.Is1stEnemyStrengthCheckTerritory = true; // MovementPhaseRestart()
+         gi.IsFirstSpottingOccurred = false;
          SetCommand(gi, action, GameAction.MovementStartAreaSetRoll, "e018");
          //--------------------------------------------------------------
          gi.EnemyStrengthCheckTerritory = null;
@@ -6548,7 +6549,6 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
                   {
-                     gi.RoundsOfCombat++;  // ambush round occurs
                      Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
                      gi.BattlePhase = BattlePhase.Ambush;  // GameStateBattle.PerformAction(BattleAmbushRoll)
                      if ( EnumScenario.Counterattack == lastReport.Scenario) // GameStateBattle.PerformAction(BattleAmbushRoll) - indicate a counterattack ambush
@@ -6635,7 +6635,6 @@ namespace Pattons_Best
                   gi.DieResults["e039a"][0] = Utilities.NO_RESULT;
                   gi.DieResults["e039b"][0] = Utilities.NO_RESULT;
                   gi.DieResults["e039c"][0] = Utilities.NO_RESULT;
-                  gi.IsCounterattackAmbush = false; // done with counterattack ambush
                   break;
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -6646,6 +6645,12 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     if (true == gi.IsCounterattackAmbush)
+                     {
+                        gi.IsCounterattackAmbush = false; // done with counterattack ambush
+                        Logger.Log(LogEnum.LE_SHOW_ROUND_COMBAT, "GameStateBattle.PerformAction(BattleRandomEventRoll)  ++gi.RoundsOfCombat=" + gi.RoundsOfCombat.ToString() + " END COUNTERATTACK");
+                     }
+                     //------------------------------------------
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      bool isEnemyUnitLeft = false;
                      foreach (IStack stack in gi.BattleStacks)
@@ -6659,6 +6664,7 @@ namespace Pattons_Best
                            }
                         }
                      }
+                     //------------------------------------------
                      gi.GamePhase = GamePhase.BattleRoundSequence;                              // <<<<<<<<<<<<< Change to BattleRoundSequence
                      string randomEvent = TableMgr.GetRandomEvent(gi, lastReport.Scenario, gi.DieResults[key][0]);
                      switch (randomEvent)
@@ -6667,7 +6673,7 @@ namespace Pattons_Best
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e040");
                            gi.MinSinceLastCheck += 15;
                            AdvanceTime(lastReport, 15);     // GameStateBattle.PerformAction(BattleRandomEventRoll) - Time Passes
-                           Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "ameStateBattle.PerformAction(BattleRandomEventRoll) : +15 for time passes -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" +gi.MinSinceLastCheck.ToString());
+                           Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateBattle.PerformAction(BattleRandomEventRoll) : +15 for time passes -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" +gi.MinSinceLastCheck.ToString());
                            if (false == NextStepAfterRandomEventBattle(gi, ref action))
                            {
                               returnStatus = "NextStep_AfterRandomEvent() returned false";
@@ -6851,6 +6857,7 @@ namespace Pattons_Best
                return false;
             }
          }
+
          return true;
       }
    }
@@ -8713,7 +8720,7 @@ namespace Pattons_Best
       }
       private bool StartSmokeDepletion(IGameInstance gi, ref GameAction action)
       {
-         // At the end of this routine, SpottingPhase_Begin() marks the start of each combat round including ambush attacks as one round
+
          //-------------------------------------------------------
          GameFeat changedFeat1;
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Start_SmokeDepletion():\n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
@@ -8739,6 +8746,7 @@ namespace Pattons_Best
          if (true == isBattleBoardEmpty) 
             return true;                  // ResetRound() shows what event to show user
          //-------------------------------------------------------
+         gi.RoundsOfCombat++; // StartSmokeDepletion
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Start_SmokeDepletion(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
          gi.BattlePhase = BattlePhase.Spotting;
          int smokeCount = 0;
@@ -8759,6 +8767,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Start_SmokeDepletion(): SpottingPhase_Begin() returned false");
             return false;
          }
+
          return true;
       }
       private void DepleteSmoke(IGameInstance gi)
