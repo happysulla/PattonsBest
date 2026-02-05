@@ -294,7 +294,7 @@ namespace Pattons_Best
       public void MenuItemEditRecoverCheckpoint_Click(object sender, RoutedEventArgs e)
       {
          GameLoadMgr loadMgr = new GameLoadMgr();
-         IGameInstance? gi = loadMgr.OpenGame();
+         IGameInstance? gi = loadMgr.OpenGame("RevertCheckpoint.pbg");
          if (null != gi)
          {
             myGameInstance = gi;
@@ -312,7 +312,7 @@ namespace Pattons_Best
       public void MenuItemEditRecoverRound_Click(object sender, RoutedEventArgs e)
       {
          GameLoadMgr loadMgr = new GameLoadMgr();
-         IGameInstance? gi = loadMgr.OpenGame();
+         IGameInstance? gi = loadMgr.OpenGame("RevertRound.pbg");
          if (null != gi)
          {
             myGameInstance = gi;

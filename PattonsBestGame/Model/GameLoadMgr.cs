@@ -20,13 +20,12 @@ namespace Pattons_Best
       //--------------------------------------------------
       public GameLoadMgr() { }
       //--------------------------------------------------
-      public IGameInstance? OpenGame()
+      public IGameInstance? OpenGame(string filename)
       {
          try
          {
             if (false == Directory.Exists(theGamesDirectory)) // create directory if does not exists
                Directory.CreateDirectory(theGamesDirectory);
-            string filename = theGamesDirectory + "Checkpoint.pbg";
             //-------------------------------------
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -48,7 +47,7 @@ namespace Pattons_Best
          }
       }
       //--------------------------------------------------
-      public bool SaveGameToFile(IGameInstance gi)
+      public bool SaveGame(IGameInstance gi, string filename)
       {
          try
          {
@@ -57,12 +56,11 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): path=" + theGamesDirectory + " e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Save_Game(): path=" + theGamesDirectory + " e=" + e.ToString());
             return false;
          }
          try
          {
-            string filename = theGamesDirectory + "Checkpoint.pbg";
             //--------------------------------------
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -71,7 +69,7 @@ namespace Pattons_Best
             //--------------------------------------
             if (null == aXmlDocument)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): CreateXmlGameInstance() returned null for path=" + theGamesDirectory);
+               Logger.Log(LogEnum.LE_ERROR, "Save_Game(): CreateXmlGameInstance() returned null for path=" + theGamesDirectory);
                return false;
             }
             using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
@@ -87,7 +85,7 @@ namespace Pattons_Best
          }
          catch (Exception ex)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): path=" + theGamesDirectory + " e =" + ex.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Save_Game(): path=" + theGamesDirectory + " e =" + ex.ToString());
             System.Diagnostics.Debug.WriteLine(ex.ToString());
             return false;
          }
@@ -770,8 +768,6 @@ namespace Pattons_Best
             case "UpdateNewGameEnd": return GameAction.UpdateNewGameEnd;
             case "UpdateGameOptions": return GameAction.UpdateGameOptions;
             case "UpdateLoadingGame": return GameAction.UpdateLoadingGame;
-            case "UpdateRevertCheckpoint": return GameAction.UpdateRevertCheckpoint;
-            case "UpdateRevertRound": return GameAction.UpdateRevertRound;
             case "UpdateUndo": return GameAction.UpdateUndo;
 
             case "TestingStartMorningBriefing": return GameAction.TestingStartMorningBriefing;

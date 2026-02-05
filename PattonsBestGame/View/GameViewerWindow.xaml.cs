@@ -5820,9 +5820,6 @@ namespace Pattons_Best
          base.OnClosing(e);
          System.Diagnostics.Debug.WriteLine("GameViewerWindow.ClosedGameViewerWindow(): Called Save_DefaultsToSettings()");
          SaveDefaultsToSettings();
-         GameLoadMgr loadMgr = new GameLoadMgr();
-         if (false == loadMgr.SaveGameToFile(myGameInstance))
-            Logger.Log(LogEnum.LE_ERROR, "OnClosing(): SaveGameToFile() returned false");
       }
       //-------------CONTROLLER HELPER FUNCTIONS---------------------------------
       private bool AddHotKeys(MainMenuViewer mmv)

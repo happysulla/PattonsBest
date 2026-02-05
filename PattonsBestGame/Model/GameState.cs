@@ -6912,7 +6912,7 @@ namespace Pattons_Best
                   if (false == LoadGame(ref gi))
                   {
                      returnStatus = "Load_Game() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(UpdateLoadingGame): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(Update_LoadingGame): " + returnStatus);
                   }
                   break;
                case GameAction.UpdateUndo:
@@ -11157,6 +11157,13 @@ namespace Pattons_Best
                SetCommand(gi, action, GameAction.DieRollActionNone, "e036");  // Battle Board Empty and Counter Attack, Go To 'Battle Board Empty'
             }
          }
+         //-----------------------------
+         GameLoadMgr loadMgr = new GameLoadMgr();
+         if ( false == loadMgr.SaveGame(gi, "RevertRound.pbg"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): SaveGame() returned false");
+            return false;
+         }
          return true;
       }
    }
@@ -11783,7 +11790,6 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameClose:
                break;
-
             case GameAction.UpdateLoadingGame:
                if (false == LoadGame(ref gi))
                {
