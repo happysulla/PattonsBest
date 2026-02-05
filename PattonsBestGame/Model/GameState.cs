@@ -7542,7 +7542,6 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     gi.UndoCmd = new UndoCmdCrewActionOrder(gi); //  GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                      gi.CrewActionPhase = CrewActionPhase.Movement;
                      if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                      {
@@ -8936,6 +8935,7 @@ namespace Pattons_Best
       }
       private bool ConductCrewAction(IGameInstance gi, ref GameAction outAction)
       {
+         gi.UndoCmd = null;
          Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): Entering++++++++++++ bp=" + gi.BattlePhase.ToString() + " cp=" + gi.CrewActionPhase.ToString());
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -8958,10 +8958,6 @@ namespace Pattons_Best
                return true;
             }
          }
-         if (BattlePhase.ConductCrewAction == gi.BattlePhase) // if already thru once, do not allow undo command
-            gi.UndoCmd = null;
-         else
-            gi.UndoCmd = new UndoCmdCrewActionOrder(gi); // Conduct_CrewAction(): Set the undo for Crew orders on first pass through this function this round
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Conduct_CrewAction");
          if (CrewActionPhase.Movement == gi.CrewActionPhase)

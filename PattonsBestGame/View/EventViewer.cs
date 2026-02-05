@@ -6686,6 +6686,7 @@ namespace Pattons_Best
                               if (true == crewAction.Name.Contains("Gunner_RotateFireMainGun"))
                                  isGunnerFiring = true;
                            }
+                           myGameInstance.UndoCmd = new UndoCmdCrewActionOrder(myGameInstance);
                            if ( (true == isLoaderLoading) || (true == isGunnerFiring) ) // do not show ammo orders screen if gunner is not firing or loader is not loading
                               action = GameAction.BattleRoundSequenceAmmoOrders;
                            else
