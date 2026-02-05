@@ -20,6 +20,7 @@ namespace Pattons_Best
       private readonly MenuItem myMenuItemTopLevel4 = new MenuItem();
       private readonly MenuItem myMenuItemTopLevel21 = new MenuItem();
       private readonly MenuItem myMenuItemTopLevel22 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel23 = new MenuItem();
       private readonly MenuItem myMenuItemTopLevel31 = new MenuItem();
       private readonly MenuItem myMenuItemTopLevel36 = new MenuItem();
       private readonly IGameEngine myGameEngine;
@@ -53,11 +54,16 @@ namespace Pattons_Best
                   myMenuItemTopLevel21.IsEnabled = false;
                   myMenuItemTopLevel21.Click += MenuItemEditUndo_Click;
                   myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel21);
-                  myMenuItemTopLevel22.Header = "_Revert To Daybreak";
-                  myMenuItemTopLevel22.InputGestureText = "Ctrl+R";
-                  myMenuItemTopLevel22.Click += MenuItemEditRecover_Click;
+                  myMenuItemTopLevel22.Header = "Revert _Checkpoint";
+                  myMenuItemTopLevel22.InputGestureText = "Ctrl+C";
+                  myMenuItemTopLevel22.Click += MenuItemEditRecoverCheckpoint_Click;
                   myMenuItemTopLevel22.IsEnabled = false;
                   myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel22);
+                  myMenuItemTopLevel23.Header = "Revert _Round";
+                  myMenuItemTopLevel23.InputGestureText = "Ctrl+R";
+                  myMenuItemTopLevel23.Click += MenuItemEditRecoverRound_Click;
+                  myMenuItemTopLevel23.IsEnabled = false;
+                  myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel23);
                }
                //------------------------------------------------
                if (menuItem.Name == "myMenuItemTopLevel3")
@@ -285,7 +291,7 @@ namespace Pattons_Best
          else
             e.CanExecute = true;
       }
-      public void MenuItemEditRecover_Click(object sender, RoutedEventArgs e)
+      public void MenuItemEditRecoverCheckpoint_Click(object sender, RoutedEventArgs e)
       {
          GameLoadMgr loadMgr = new GameLoadMgr();
          IGameInstance? gi = loadMgr.OpenGame();
@@ -296,7 +302,25 @@ namespace Pattons_Best
             myGameEngine.PerformAction(ref gi, ref action);
          }
       }
-      public void MenuItemEditRecover_ClickCanExecute(object sender, CanExecuteRoutedEventArgs e)
+      public void MenuItemEditRecoverCheckpoint_ClickCanExecute(object sender, CanExecuteRoutedEventArgs e)
+      {
+         if (true == GameLoadMgr.theIsCheckFileExist)
+            e.CanExecute = true;
+         else
+            e.CanExecute = false;
+      }
+      public void MenuItemEditRecoverRound_Click(object sender, RoutedEventArgs e)
+      {
+         GameLoadMgr loadMgr = new GameLoadMgr();
+         IGameInstance? gi = loadMgr.OpenGame();
+         if (null != gi)
+         {
+            myGameInstance = gi;
+            GameAction action = GameAction.UpdateLoadingGame;
+            myGameEngine.PerformAction(ref gi, ref action);
+         }
+      }
+      public void MenuItemEditRecoverRound_ClickCanExecute(object sender, CanExecuteRoutedEventArgs e)
       {
          if (true == GameLoadMgr.theIsCheckFileExist)
             e.CanExecute = true;

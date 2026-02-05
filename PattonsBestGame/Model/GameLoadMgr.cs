@@ -770,6 +770,8 @@ namespace Pattons_Best
             case "UpdateNewGameEnd": return GameAction.UpdateNewGameEnd;
             case "UpdateGameOptions": return GameAction.UpdateGameOptions;
             case "UpdateLoadingGame": return GameAction.UpdateLoadingGame;
+            case "UpdateRevertCheckpoint": return GameAction.UpdateRevertCheckpoint;
+            case "UpdateRevertRound": return GameAction.UpdateRevertRound;
             case "UpdateUndo": return GameAction.UpdateUndo;
 
             case "TestingStartMorningBriefing": return GameAction.TestingStartMorningBriefing;

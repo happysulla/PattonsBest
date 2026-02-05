@@ -5852,14 +5852,20 @@ namespace Pattons_Best
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.U, ModifierKeys.Control);
             InputBindings.Add(new KeyBinding(command, keyGesture));
-            CommandBinding undoCmdBinding = new CommandBinding(command, mmv.MenuItemEditRecover_Click, mmv.MenuItemEditRecover_ClickCanExecute);
+            CommandBinding undoCmdBinding = new CommandBinding(command, mmv.MenuItemEditUndo_Click, mmv.MenuItemEditUndo_ClickCanExecute);
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemEditUndo_Click));
+            //------------------------------------------------
+            command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.C, ModifierKeys.Control);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBinding recoverCmdBinding = new CommandBinding(command, mmv.MenuItemEditRecoverCheckpoint_Click, mmv.MenuItemEditRecoverCheckpoint_ClickCanExecute);
+            CommandBindings.Add(recoverCmdBinding);
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.R, ModifierKeys.Control);
             InputBindings.Add(new KeyBinding(command, keyGesture));
-            CommandBinding recoverCmdBinding = new CommandBinding(command, mmv.MenuItemEditRecover_Click, mmv.MenuItemEditRecover_ClickCanExecute);
-            CommandBindings.Add(recoverCmdBinding);
+            CommandBinding recoverRoundCmdBinding = new CommandBinding(command, mmv.MenuItemEditRecoverRound_Click, mmv.MenuItemEditRecoverRound_ClickCanExecute);
+            CommandBindings.Add(recoverRoundCmdBinding);
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.O, ModifierKeys.Control | ModifierKeys.Shift);

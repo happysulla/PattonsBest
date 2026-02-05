@@ -190,6 +190,8 @@ namespace Pattons_Best
       UpdateNewGameEnd,           // finish setting up for new game
       UpdateGameOptions, 
       UpdateLoadingGame,
+      UpdateRevertCheckpoint,
+      UpdateRevertRound,
       UpdateUndo,
 
       TestingStartMorningBriefing,
