@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -15,7 +16,8 @@ namespace Pattons_Best
    internal class GameLoadMgr
    {
       public static string theGamesDirectory = "";
-      public static bool theIsCheckFileExist = false;
+      public static bool theIsRevertCheckFileExist = false;
+      public static bool theIsRevertRoundFileExist = false;
       public static IMapItems theMapItems = new MapItems();
       //--------------------------------------------------
       public GameLoadMgr() { }
@@ -78,9 +80,21 @@ namespace Pattons_Best
                using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
                {
                   aXmlDocument.Save(xmlWriter);
+                  if("CheckpointLastDay.pbg" == filename )
+                  {
+                     theIsRevertCheckFileExist = true;
+                  }
+                  else if ("CheckpointLastRound.pbg" == filename)
+                  {
+                     theIsRevertRoundFileExist = true;
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Save_Game(): reached default filename=" + filename);
+                     return false;
+                  }
                }
             }
-            theIsCheckFileExist = true;
             return true;
          }
          catch (Exception ex)

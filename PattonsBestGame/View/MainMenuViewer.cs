@@ -1,5 +1,6 @@
 ﻿
-using System.Drawing.Drawing2D;
+using System;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -202,9 +203,14 @@ namespace Pattons_Best
                }
                break;
             default:
-               if (true == GameLoadMgr.theIsCheckFileExist)
+               if (true == GameLoadMgr.theIsRevertCheckFileExist)
                   myMenuItemTopLevel22.IsEnabled = true;
-
+               else
+                  myMenuItemTopLevel22.IsEnabled = false;
+               if (true == GameLoadMgr.theIsRevertRoundFileExist)
+                  myMenuItemTopLevel23.IsEnabled = true;
+               else
+                  myMenuItemTopLevel23.IsEnabled = false;
                if (null == myGameInstance.UndoCmd)
                {
                   myMenuItemTopLevel21.IsEnabled = false;
@@ -294,7 +300,7 @@ namespace Pattons_Best
       public void MenuItemEditRecoverCheckpoint_Click(object sender, RoutedEventArgs e)
       {
          GameLoadMgr loadMgr = new GameLoadMgr();
-         IGameInstance? gi = loadMgr.OpenGame("RevertCheckpoint.pbg");
+         IGameInstance? gi = loadMgr.OpenGame("CheckpointLastDay.pbg");
          if (null != gi)
          {
             myGameInstance = gi;
@@ -304,15 +310,26 @@ namespace Pattons_Best
       }
       public void MenuItemEditRecoverCheckpoint_ClickCanExecute(object sender, CanExecuteRoutedEventArgs e)
       {
-         if (true == GameLoadMgr.theIsCheckFileExist)
-            e.CanExecute = true;
-         else
+         try
+         {
+            if (false == Directory.Exists(GameLoadMgr.theGamesDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(GameLoadMgr.theGamesDirectory);
+            string filepath = GameLoadMgr.theGamesDirectory + "CheckpointLastDay.pbg";
+            if (true == File.Exists(filepath))
+               e.CanExecute = true;
+            else
+               e.CanExecute = false;
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Save_Game(): path=" + GameLoadMgr.theGamesDirectory + " ex=" + ex.ToString());
             e.CanExecute = false;
+         }
       }
       public void MenuItemEditRecoverRound_Click(object sender, RoutedEventArgs e)
       {
          GameLoadMgr loadMgr = new GameLoadMgr();
-         IGameInstance? gi = loadMgr.OpenGame("RevertRound.pbg");
+         IGameInstance? gi = loadMgr.OpenGame("CheckpointLastRound.pbg");
          if (null != gi)
          {
             myGameInstance = gi;
@@ -322,10 +339,21 @@ namespace Pattons_Best
       }
       public void MenuItemEditRecoverRound_ClickCanExecute(object sender, CanExecuteRoutedEventArgs e)
       {
-         if (true == GameLoadMgr.theIsCheckFileExist)
-            e.CanExecute = true;
-         else
+         try
+         {
+            if (false == Directory.Exists(GameLoadMgr.theGamesDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(GameLoadMgr.theGamesDirectory);
+            string filepath = GameLoadMgr.theGamesDirectory + "CheckpointLastRound.pbg";
+            if( true == File.Exists(filepath))
+               e.CanExecute = true;
+            else
+               e.CanExecute = false;
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Save_Game(): path=" + GameLoadMgr.theGamesDirectory + " ex=" + ex.ToString());
             e.CanExecute = false;
+         }
       }
       public void MenuItemViewPath_Click(object sender, RoutedEventArgs e)
       {
