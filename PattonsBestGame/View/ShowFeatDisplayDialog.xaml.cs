@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 
 namespace Pattons_Best
@@ -28,7 +29,7 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         if( 299 < GameEngine.theInGameFeats.Count )
+         if( 70 < GameEngine.theInGameFeats.Count )
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowFeatDisplayDialog(): Too many feats=" + GameEngine.theInGameFeats.Count.ToString() );
             CtorError = true;
@@ -57,13 +58,26 @@ namespace Pattons_Best
          if( true == myIsAllFeatsShown )
             myButtonShowAll.Visibility = Visibility.Hidden;
          //------------------------------------------------------------
-         for(int i=0; i< GameEngine.theInGameFeats.Count; ++i)
+         int numRect = 0;
+         Thickness tickness = new Thickness(5, 2, 1, 2);
+         for(int i=0; i < GameEngine.theInGameFeats.Count ; ++i)
          {
-            int rowNum = i + 2;
-            GameFeat? feat = GameEngine.theInGameFeats[i];
-            if( null == feat)
+            int rowNum = i + 2 + numRect; // 2=header stuff to bypass
+            if ((8 == rowNum) || (26 == rowNum) || (44 == rowNum) || (50 == rowNum) || (58 == rowNum))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowFeatDisplayDialog(): feat=null for i=" + i.ToString() );
+               Rectangle r = new Rectangle() { Width = 500, Height = 1, Fill = Brushes.Black, Stroke = Brushes.Black, HorizontalAlignment=HorizontalAlignment.Left, Margin = tickness };
+               myGrid.Children.Add(r);
+               Grid.SetRow(r, rowNum);
+               Grid.SetColumn(r, 0);
+               Grid.SetColumnSpan(r, 2);
+               numRect++;
+               rowNum++;
+            }
+            //---------------------------------------
+            GameFeat? feat = GameEngine.theInGameFeats[i];
+            if (null == feat)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowFeatDisplayDialog(): feat=null for i=" + i.ToString());
                return false;
             }
             bool isFeatChecked = false;

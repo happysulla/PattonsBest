@@ -77,7 +77,17 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+         </Grid.RowDefinitions>
          <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="10*"/>
@@ -96,33 +106,34 @@
          <CheckBox x:Name="myFeat5" Grid.Row="7" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
          <CheckBox x:Name="myFeat6" Grid.Row="8" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
          <CheckBox x:Name="myFeat7" Grid.Row="9" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat8" Grid.Row="10" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat9" Grid.Row="11" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat10" Grid.Row="12" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat11" Grid.Row="13" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat12" Grid.Row="14" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat13" Grid.Row="15" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat14" Grid.Row="16" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat15" Grid.Row="17" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat16" Grid.Row="18" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat17" Grid.Row="19" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat18" Grid.Row="20" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat19" Grid.Row="21" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat20" Grid.Row="22" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat21" Grid.Row="23" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat22" Grid.Row="24" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat23" Grid.Row="25" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat24" Grid.Row="26" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat25" Grid.Row="27" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat26" Grid.Row="28" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat27" Grid.Row="29" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat28" Grid.Row="30" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat29" Grid.Row="31" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat30" Grid.Row="32" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat31" Grid.Row="33" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat32" Grid.Row="34" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat33" Grid.Row="35" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-         <CheckBox x:Name="myFeat34" Grid.Row="36" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <Rectangle                 Grid.Row="10" Grid.ColumnSpan="2" Margin="5" Height="1" Fill="Black"/>
+         <CheckBox x:Name="myFeat8" Grid.Row="11" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat9" Grid.Row="12" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat10" Grid.Row="13" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat11" Grid.Row="14" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat12" Grid.Row="15" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat13" Grid.Row="16" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat14" Grid.Row="17" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat15" Grid.Row="18" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat16" Grid.Row="19" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat17" Grid.Row="20" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat18" Grid.Row="21" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat19" Grid.Row="22" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat20" Grid.Row="23" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat21" Grid.Row="24" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat22" Grid.Row="25" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat23" Grid.Row="26" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat24" Grid.Row="27" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat25" Grid.Row="28" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat26" Grid.Row="29" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat27" Grid.Row="30" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat28" Grid.Row="31" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat29" Grid.Row="32" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat30" Grid.Row="33" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat31" Grid.Row="34" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat32" Grid.Row="35" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat33" Grid.Row="36" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat34" Grid.Row="37" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
       </Grid>
    </ScrollViewer>
 </Window>
