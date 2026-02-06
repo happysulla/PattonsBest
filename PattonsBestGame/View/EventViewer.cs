@@ -3037,7 +3037,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imgEndGame1 = new Image { Name = "ExitGame", Source = MapItem.theMapImages.GetBitmapImage("DecorationEasternCampaign"), Width = 150, Height = 300 };
-                  myTextBlock.Inlines.Add(new Run("                            "));
+                  myTextBlock.Inlines.Add(new Run("                                      "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGame1));
                }
                else
@@ -3046,7 +3046,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imgEndGame2 = new Image { Name = "ExitGame", Source = MapItem.theMapImages.GetBitmapImage("DecorationVictoryMedal"), Width = 300, Height = 300 };
-                  myTextBlock.Inlines.Add(new Run("               "));
+                  myTextBlock.Inlines.Add(new Run("                    "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGame2));
                }
                myTextBlock.Inlines.Add(new LineBreak());
@@ -4907,10 +4907,11 @@ namespace Pattons_Best
             modifierDecoration += 5;
          }
          myTextBlock.Inlines.Add(new Run(sbe103.ToString()));
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new LineBreak());
          //----------------------------------------
          if (modifierDecoration < 100)
          {
-            myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add("Do not qualify for decoration. Click image to continue.");
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
@@ -4920,7 +4921,6 @@ namespace Pattons_Best
          }
          else if (Utilities.NO_RESULT == gi.DieResults[key][0])
          {
-            myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add("Roll for Decoration: ");
             BitmapImage bmi = new BitmapImage();
             bmi.BeginInit();
@@ -4933,6 +4933,12 @@ namespace Pattons_Best
          else if (Utilities.NO_RESULT < gi.DieResults[key][0])
          {
             int combo = gi.DieResults[key][0] + modifierDecoration;
+            myTextBlock.Inlines.Add("Roll for Decoration: ");
+            myTextBlock.Inlines.Add(gi.DieResults[key][0].ToString());
+            myTextBlock.Inlines.Add(" + " );
+            myTextBlock.Inlines.Add(modifierDecoration.ToString());
+            myTextBlock.Inlines.Add(" = ");
+            myTextBlock.Inlines.Add(combo.ToString());
             if (199 < combo)
             {
                myTextBlock.Inlines.Add(new LineBreak());
