@@ -128,6 +128,9 @@ namespace Pattons_Best
       {
          Option option = this.Find("CustomGame");
          if (true == option.IsEnabled)
+            return 4;
+         option = this.Find("Generalv25No3PlusTactic");
+         if (true == option.IsEnabled)
             return 3;
          option = this.Find("TacticsGame");
          if (true == option.IsEnabled)

@@ -784,9 +784,11 @@ namespace Pattons_Best
          if( 0 == index )
             sb.Append("Original Game:    ");
          else if ( 1 == index )
-            sb.Append("General v24 No3 Game:    ");
+            sb.Append("Generalv24#3 Game:    ");
          else if (2 == index)
-            sb.Append("Enhanced Game:    ");
+            sb.Append("Tactics Game:    ");
+         else if (3 == index)
+            sb.Append("Generalv24#3 + Tactics Game:    ");
          else 
             sb.Append("Custom Game:    ");
          sb.Append(TableMgr.GetDate(gi.Day));
@@ -2774,6 +2776,19 @@ namespace Pattons_Best
          }
          else
          {
+            myBattleButtons.Clear();
+            myMoveButtons.Clear();
+            List<UIElement> buttonRemovals = new List<UIElement>();
+            foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
+            {
+               if (ui is Button button)
+               {
+                  if (false == button.Name.Contains("Die"))  // die buttons never disappear - only one copy of them
+                     buttonRemovals.Add(button);
+               }
+            }
+            foreach (UIElement ui1 in buttonRemovals)
+               myCanvasMain.Children.Remove(ui1);
             return true;
          }
          //-------------------------------------------------------

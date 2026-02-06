@@ -3037,7 +3037,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imgEndGame1 = new Image { Name = "ExitGame", Source = MapItem.theMapImages.GetBitmapImage("DecorationEasternCampaign"), Width = 150, Height = 300 };
-                  myTextBlock.Inlines.Add(new Run("                                      "));
+                  myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGame1));
                }
                else
@@ -3046,12 +3046,16 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imgEndGame2 = new Image { Name = "ExitGame", Source = MapItem.theMapImages.GetBitmapImage("DecorationVictoryMedal"), Width = 300, Height = 300 };
-                  myTextBlock.Inlines.Add(new Run("                    "));
+                  myTextBlock.Inlines.Add(new Run("                        "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGame2));
                }
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("Select 'File | New' menu option to play again --or-- Click image to exit the game."));
+               myTextBlock.Inlines.Add(new Run("Select "));
+               myTextBlock.Inlines.Add(new Run("'File | New'") { FontWeight = FontWeights.Bold });
+               myTextBlock.Inlines.Add(new Run(" menu option to play again --or--"));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to exit the game."));
                break;
             default:
                break;

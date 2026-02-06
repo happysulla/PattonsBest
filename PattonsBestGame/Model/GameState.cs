@@ -3373,7 +3373,7 @@ namespace Pattons_Best
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
          //-------------------------------------------------------
-         gi.Death = null;
+         gi.Death = null; // Setup_NewGame()
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
          gi.TargetMainGun = null;
@@ -11155,7 +11155,6 @@ namespace Pattons_Best
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
          //-------------------------------------------------------
-         gi.Death = null;
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
          if (null != gi.TargetMainGun)
@@ -11591,176 +11590,176 @@ namespace Pattons_Best
       public bool EveningDebriefingResetDay(IGameInstance gi, IAfterActionReport report, ref GameAction action)
       {
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
-         gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefingResetDay()
-         gi.CrewActionPhase = CrewActionPhase.Movement;
-         gi.MovementEffectOnSherman = "unit";
-         gi.MovementEffectOnEnemy = "unit";
-         //-------------------------------------------------------
-         gi.ReadyRacks.Clear();
-         gi.Hatches.Clear();
-         gi.CrewActions.Clear();            // EveningDebriefing_ResetDay()
-         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "EveningDebriefing_ResetDay(): clear all crewactions");
-         gi.GunLoads.Clear();
-         gi.TargetMainGun = null;           // EveningDebriefing_ResetDay()
-         gi.IsShermanFiringAtFront = false; // EveningDebriefing_ResetDay()
-         //-------------------------------------------------------
-         gi.EnemyStrengthCheckTerritory = null;
-         gi.ArtillerySupportCheck = null;
-         gi.AirStrikeCheckTerritory = null;
-         gi.EnteredArea = null;
-         gi.AdvanceFire = null;
-         //-------------------------------------------------------
-         gi.IsHatchesActive = false;
-         gi.IsShermanAdvancingOnBattleBoard = false; // EveningDebriefing_ResetDay()
-         //-------------------------------------------------------
-         gi.IsFallingSnowStopped = false;
-         gi.HoursOfRainThisDay = 0;
-         gi.MinSinceLastCheck = 0;
-         //-------------------------------------------------------
-         gi.IsMinefieldAttack = false;                    // EveningDebriefing_ResetDay()
-         gi.IsHarrassingFireBonus = false;
-         gi.IsFlankingFire = false;
-         gi.IsEnemyAdvanceComplete = false;
-         //-------------------------------------------------------
-         gi.IsShermanFiringAtFront = false;              // EveningDebriefing_ResetDay()
-         gi.IsShermanDeliberateImmobilization = false;
-         gi.ShermanTypeOfFire = "";
-         gi.NumSmokeAttacksThisRound = 0;
-         gi.IsMainGunRepairAttempted = false;
-         //---------------------------------
-         gi.IsMinefieldAttack = false;
-         gi.IsHarrassingFireBonus = false;
-         gi.IsFlankingFire = false;
-         gi.IsEnemyAdvanceComplete = false;
-         gi.Panzerfaust = null;
-         gi.NumCollateralDamage = 0;
-         //-------------------------------------------------------
-         gi.TargetMainGun = null;                      // EveningDebriefing_ResetDay()
-         if ( (true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun) )
-            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "EveningDebriefing_ResetDay(): Main Gun Repaired");
-         gi.IsMalfunctionedMainGun = false; // EveningDebriefing_ResetDay()
-         gi.IsBrokenMainGun = false;
-         gi.IsBrokenGunSight = false;
-         gi.FirstShots.Clear();                     // EveningDebriefing_ResetDay()
-         gi.ShermanHits.Clear();
-         //--------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "EveningDebriefing_ResetDay(): reset identified to empty string");
-         gi.IdentifiedAtg = ""; // EveningDebriefing_ResetDay()
-         gi.IdentifiedTank = "";
-         gi.IdentifiedSpg = "";
-         //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;       // EveningDebriefing_ResetDay()
-         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "EveningDebriefing_ResetDay():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
-         gi.IsShermanFiringAaMg = false;
-         gi.IsShermanFiringBowMg = false;
-         gi.IsShermanFiringCoaxialMg = false;  // EveningDebriefing_ResetDay()
-         gi.IsShermanFiringSubMg = false;
-         gi.IsShermanFiredAaMg = false;
-         gi.IsShermanFiredBowMg = false;
-         gi.IsShermanFiredCoaxialMg = false;   // EveningDebriefing_ResetDay()
-         gi.IsShermanFiredSubMg = false;
-         gi.IsMalfunctionedMgAntiAircraft = false;
-         gi.IsMalfunctionedMgBow = false;
-         gi.IsMalfunctionedMgCoaxial = false;
-         gi.IsBrokenMgAntiAircraft = false;
-         gi.IsBrokenMgCoaxial = false;
-         gi.IsBrokenMgAntiAircraft = false;
-         //-------------------------------------------------------
-         gi.IsBrokenPeriscopeDriver = false;
-         gi.IsBrokenPeriscopeLoader = false;
-         gi.IsBrokenPeriscopeAssistant = false;
-         gi.IsBrokenPeriscopeGunner = false;
-         gi.IsBrokenPeriscopeCommander = false;
-         //-------------------------------------------------------
-         gi.ShermanTurretRotationOld = 0.0;
-         gi.IsShermanTurretRotatedThisRound = false;       // EveningDebriefing_ResetDay()
-         gi.ShermanConsectiveMoveAttempt = 0;              // EveningDebriefing_ResetDay()
-         //-------------------------------------------------------
-         gi.IsLeadTank = false;
-         gi.IsAirStrikePending = false;
-         gi.IsAdvancingFireChosen = false;
-         gi.AdvancingFireMarkerCount = 0;
-         //-------------------------------------------------------
-         gi.IsMinefieldAttack = false;
-         gi.IsHarrassingFireBonus = false;
-         gi.IsFlankingFire = false;
-         gi.IsEnemyAdvanceComplete = false;
-         //-------------------------------------------------------
-         gi.IsCommanderRescuePerformed = false;
-         gi.IsPromoted = false;
-         //-------------------------------------------------------
-         gi.BattleResistance = EnumResistance.None;                      // EveningDebriefing_ResetDay()
-         gi.Death = null;
-         gi.Panzerfaust = null;
-         gi.NumCollateralDamage = 0;
-         //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "EveningDebriefing_ResetDay(): gi.MapItemMoves.Clear()");
-         gi.MapItemMoves.Clear();
-         gi.MoveStacks.Clear();
-         gi.BattleStacks.Clear();
-         gi.EnteredHexes.Clear();
-         //-------------------------------------------------------
-         gi.Sherman.IsMoved = false;
-         gi.Sherman.RotationOffsetHull = 0.0;
-         gi.Sherman.RotationTurret = 0.0;
-         gi.Sherman.RotationHull = 0.0;
-         gi.Sherman.IsMoving = false;
-         gi.Sherman.IsHullDown = false;
-         gi.Sherman.IsBoggedDown = false;  // EveningDebriefing_ResetDay()
-         gi.Sherman.IsAssistanceNeeded = false;
-         //-------------------------------------------------------
-         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
-         if (null == commander)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): commander=null");
-            return false;
-         }
-         if (true == commander.IsKilled)
-            gi.PromotionPointNum = 0;
-         //-------------------------------------------------------
-         if (false == ResetDieResults(gi)) // EveningDebriefing_ResetDay()
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Reset_DieResults() returned false");
-            return false;
-         }
-         //-------------------------------------------------------
-         ++gi.Day;
-         gi.GameTurn++;
-         gi.GamePhase = GamePhase.MorningBriefing;
-         action = GameAction.EveningDebriefingResetDay;
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): lastReport=null");
-            return false;
-         }
-         //-------------------------------------------------------
-         ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
-         if (null == newEntry)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): newEntry=null");
-            return false;
-         }
-         IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // EveningDebriefingResetDay()
-         if (true == gi.Sherman.IsKilled)
-            newReport.Name = "To be determined";
-         gi.Reports.Add(newReport); // EveningDebriefing_ResetDay()
-         if (false == TableMgr.InitializeTimeTrackForNewDay(gi))  // EveningDebriefing_ResetDay()
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Initialize_TimeTrackForNewDay() returned false");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
-         //-------------------------------------------------------
          if (false == PerformEndCheck(gi, ref action))
          {
             Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Perform_EndCheck() returned false");
             return false;
          }
-         //----------------------------------------------------------
          if (GamePhase.EndGame != gi.GamePhase)
          {
+            //-------------------------------------------------------
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
+            gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefingResetDay()
+            gi.CrewActionPhase = CrewActionPhase.Movement;
+            gi.MovementEffectOnSherman = "uninit";
+            gi.MovementEffectOnEnemy = "uninit";
+            //-------------------------------------------------------
+            gi.ReadyRacks.Clear();
+            gi.Hatches.Clear();
+            gi.CrewActions.Clear();            // EveningDebriefing_ResetDay()
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "EveningDebriefing_ResetDay(): clear all crewactions");
+            gi.GunLoads.Clear();
+            gi.TargetMainGun = null;           // EveningDebriefing_ResetDay()
+            gi.IsShermanFiringAtFront = false; // EveningDebriefing_ResetDay()
+            //-------------------------------------------------------
+            gi.EnemyStrengthCheckTerritory = null;
+            gi.ArtillerySupportCheck = null;
+            gi.AirStrikeCheckTerritory = null;
+            gi.EnteredArea = null;
+            gi.AdvanceFire = null;
+            //-------------------------------------------------------
+            gi.IsHatchesActive = false;
+            gi.IsShermanAdvancingOnBattleBoard = false; // EveningDebriefing_ResetDay()
+            //-------------------------------------------------------
+            gi.IsFallingSnowStopped = false;
+            gi.HoursOfRainThisDay = 0;
+            gi.MinSinceLastCheck = 0;
+            //-------------------------------------------------------
+            gi.IsMinefieldAttack = false;                    // EveningDebriefing_ResetDay()
+            gi.IsHarrassingFireBonus = false;
+            gi.IsFlankingFire = false;
+            gi.IsEnemyAdvanceComplete = false;
+            //-------------------------------------------------------
+            gi.IsShermanFiringAtFront = false;              // EveningDebriefing_ResetDay()
+            gi.IsShermanDeliberateImmobilization = false;
+            gi.ShermanTypeOfFire = "";
+            gi.NumSmokeAttacksThisRound = 0;
+            gi.IsMainGunRepairAttempted = false;
+            //---------------------------------
+            gi.IsMinefieldAttack = false;
+            gi.IsHarrassingFireBonus = false;
+            gi.IsFlankingFire = false;
+            gi.IsEnemyAdvanceComplete = false;
+            gi.Panzerfaust = null;
+            gi.NumCollateralDamage = 0;
+            //-------------------------------------------------------
+            gi.TargetMainGun = null;                      // EveningDebriefing_ResetDay()
+            if ((true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun))
+               Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "EveningDebriefing_ResetDay(): Main Gun Repaired");
+            gi.IsMalfunctionedMainGun = false; // EveningDebriefing_ResetDay()
+            gi.IsBrokenMainGun = false;
+            gi.IsBrokenGunSight = false;
+            gi.FirstShots.Clear();                     // EveningDebriefing_ResetDay()
+            gi.ShermanHits.Clear();
+            //--------------------------------------------------
+            Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "EveningDebriefing_ResetDay(): reset identified to empty string");
+            gi.IdentifiedAtg = ""; // EveningDebriefing_ResetDay()
+            gi.IdentifiedTank = "";
+            gi.IdentifiedSpg = "";
+            //-------------------------------------------------------
+            gi.IsCommanderDirectingMgFire = false;       // EveningDebriefing_ResetDay()
+            Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "EveningDebriefing_ResetDay():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
+            gi.IsShermanFiringAaMg = false;
+            gi.IsShermanFiringBowMg = false;
+            gi.IsShermanFiringCoaxialMg = false;  // EveningDebriefing_ResetDay()
+            gi.IsShermanFiringSubMg = false;
+            gi.IsShermanFiredAaMg = false;
+            gi.IsShermanFiredBowMg = false;
+            gi.IsShermanFiredCoaxialMg = false;   // EveningDebriefing_ResetDay()
+            gi.IsShermanFiredSubMg = false;
+            gi.IsMalfunctionedMgAntiAircraft = false;
+            gi.IsMalfunctionedMgBow = false;
+            gi.IsMalfunctionedMgCoaxial = false;
+            gi.IsBrokenMgAntiAircraft = false;
+            gi.IsBrokenMgCoaxial = false;
+            gi.IsBrokenMgAntiAircraft = false;
+            //-------------------------------------------------------
+            gi.IsBrokenPeriscopeDriver = false;
+            gi.IsBrokenPeriscopeLoader = false;
+            gi.IsBrokenPeriscopeAssistant = false;
+            gi.IsBrokenPeriscopeGunner = false;
+            gi.IsBrokenPeriscopeCommander = false;
+            //-------------------------------------------------------
+            gi.ShermanTurretRotationOld = 0.0;
+            gi.IsShermanTurretRotatedThisRound = false;       // EveningDebriefing_ResetDay()
+            gi.ShermanConsectiveMoveAttempt = 0;              // EveningDebriefing_ResetDay()
+            //-------------------------------------------------------
+            gi.IsLeadTank = false;
+            gi.IsAirStrikePending = false;
+            gi.IsAdvancingFireChosen = false;
+            gi.AdvancingFireMarkerCount = 0;
+            //-------------------------------------------------------
+            gi.IsMinefieldAttack = false;
+            gi.IsHarrassingFireBonus = false;
+            gi.IsFlankingFire = false;
+            gi.IsEnemyAdvanceComplete = false;
+            //-------------------------------------------------------
+            gi.IsCommanderRescuePerformed = false;
+            gi.IsPromoted = false;
+            //-------------------------------------------------------
+            gi.BattleResistance = EnumResistance.None;                      // EveningDebriefing_ResetDay()
+            gi.Death = null; // EveningDebriefing_ResetDay()
+            gi.Panzerfaust = null;
+            gi.NumCollateralDamage = 0;
+            //-------------------------------------------------------
+            Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "EveningDebriefing_ResetDay(): gi.MapItemMoves.Clear()");
+            gi.MapItemMoves.Clear();
+            gi.MoveStacks.Clear();
+            gi.BattleStacks.Clear();
+            gi.EnteredHexes.Clear();
+            //-------------------------------------------------------
+            gi.Sherman.IsMoved = false;
+            gi.Sherman.RotationOffsetHull = 0.0;
+            gi.Sherman.RotationTurret = 0.0;
+            gi.Sherman.RotationHull = 0.0;
+            gi.Sherman.IsMoving = false;
+            gi.Sherman.IsHullDown = false;
+            gi.Sherman.IsBoggedDown = false;  // EveningDebriefing_ResetDay()
+            gi.Sherman.IsAssistanceNeeded = false;
+            //-------------------------------------------------------
+            ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
+            if (null == commander)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): commander=null");
+               return false;
+            }
+            if (true == commander.IsKilled)
+               gi.PromotionPointNum = 0;
+            //-------------------------------------------------------
+            if (false == ResetDieResults(gi)) // EveningDebriefing_ResetDay()
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Reset_DieResults() returned false");
+               return false;
+            }
+            //-------------------------------------------------------
+            ++gi.Day;
+            gi.GameTurn++;
+            gi.GamePhase = GamePhase.MorningBriefing;
+            action = GameAction.EveningDebriefingResetDay;
+            IAfterActionReport? lastReport = gi.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): lastReport=null");
+               return false;
+            }
+            //-------------------------------------------------------
+            ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
+            if (null == newEntry)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): newEntry=null");
+               return false;
+            }
+            IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // EveningDebriefingResetDay()
+            if (true == gi.Sherman.IsKilled)
+               newReport.Name = "To be determined";
+            gi.Reports.Add(newReport); // EveningDebriefing_ResetDay()
+            if (false == TableMgr.InitializeTimeTrackForNewDay(gi))  // EveningDebriefing_ResetDay()
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Initialize_TimeTrackForNewDay() returned false");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
+            //-------------------------------------------------------
             bool isCrewmanReplaced;
             if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  // Reset_Day() - TODO: Check feats process
             {
@@ -11769,17 +11768,16 @@ namespace Pattons_Best
             }
             if (true == isCrewmanReplaced)
             {
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e007b"); // Crew Replacement
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e007b"); // EveningDebriefing_ResetDay() - crew replacement
             }
             else
             {
                if (EnumScenario.Retrofit == newReport.Scenario)
-                  SetCommand(gi, action, GameAction.DieRollActionNone, "e006a"); // Reset_Day()
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e006a"); // EveningDebriefing_ResetDay() - Show user reset day screen
                else
                   SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006");
             }
          }
-         //----------------------------------------------------------
          gi.Statistics.AddOne("NumDays");
          return true;
       }
