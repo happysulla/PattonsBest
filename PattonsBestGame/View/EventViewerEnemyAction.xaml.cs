@@ -1592,10 +1592,12 @@ namespace Pattons_Best
                //----------------------------------------
                if ( (true == enemyAction.Contains("Move") ) && (false == mi.IsThrownTrack) && (false == mi.IsInterdicted))
                {
-                  if ( (EnumSpottingResult.HIDDEN == mi.Spotting)  || (EnumSpottingResult.SPOTTED == mi.Spotting) )// Hidden units that move become unspotted
+                  if ( (EnumSpottingResult.HIDDEN == mi.Spotting)  || (EnumSpottingResult.SPOTTED == mi.Spotting) )// Hidden units or spotted units that move become unspotted
                   {
                      mi.Spotting = EnumSpottingResult.UNSPOTTED;
                      mi.IsSpotted = false;
+                     if ((EnumSpottingResult.SPOTTED == mi.Spotting))// Hidden units that move become unspotted
+                        mi.EnemyAcquiredShots.Remove(myGameInstance.Sherman.Name); // Sherman no longer has acquired target
                   }
                   mi.IsMoved = true;
                   mi.IsHullDown = false;

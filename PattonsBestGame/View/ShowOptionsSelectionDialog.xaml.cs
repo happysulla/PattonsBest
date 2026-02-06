@@ -49,18 +49,18 @@ namespace Pattons_Best
          myCheckBoxAutoRollEnemySetup.ToolTip = "Automatically roll die rolls for sector, terrain, and facing when activating an enemy.";
          myCheckBoxAutoAmmoLoad.ToolTip = "Automatically assign Ammo Reload to the same box as the Gun Load assignment. User still allowed to change.";
          //-----------------------------
-         myCheckBoxAirInterdiction.ToolTip = "Air strikes were rarely used to lay smoke. If that result is rolled, replaced with no enemy movement due to interdiction.";
+         myCheckBoxAirInterdiction.ToolTip = "Air strikes were rarely used to lay smoke. If that result is rolled, replaced with no enemy movement due to interdiction. An interdicted move is indicated with (I).";
          myCheckBoxTerrainPointValue.ToolTip = "Increase incentive for attacking strategic areas: Area A = 1 point, Area B = 1 point, Area C = 3 points, Area D = 2 points.";
-         myCheckBoxTankCoverArc.ToolTip = "Ingore 'First Shot +10' die roll modifier (DRM). Use +10 DRM when enemy is side facing. Use +20 DRM when using rear facing.";
+         myCheckBoxTankCoverArc.ToolTip = "Ingore 'First Shot +10' die roll modifier (DRM) for enemy SPG/Tank attacks. Use +10 DRM when enemy is side facing. Use +20 DRM when using rear facing.";
          myCheckBoxSlowTransverseCoverArc.ToolTip = "Tiger and King Tiger add additional +15 DRM since they are slow turrent-transverse AFVs.";
          myCheckBoxSpgCoverArc.ToolTip = "Self Propelled Guns (SPGs) is ingored if the current facing is side or rear.";
          myCheckBoxAtgCoverArc.ToolTip = "Anti-Tank Guns (ATGs) using facings equivalent to AFVs. Pake38/Pak40 add +25 to change facing. Pak43 are on 360-degree mounts and only add +10 dice roll modifer per sector.";
          //-----------------------------
-         myCheckBoxContinueMove.ToolTip = "Enemy units tend to move in straight line. Increase by 66& chances that same movement order occurs in consecutive moves.";
+         myCheckBoxContinueMove.ToolTip = "Enemy units tend to move in straight line. Increase by 66& chances that same movement order occurs in consecutive moves. An continued move is indicated with (c).";
          myCheckBoxRearFacingAfterMoveAway.ToolTip = "Enemy units when retreating have increase chances of rear facing.";
          myCheckBoxIncreasedMove.ToolTip = "Ever consecutive turn the Sherman attempts to move, increase chance it does move.";
          myCheckBoxEnhancedMgFire.ToolTip = "Increase the MG fire effectivity against close (6-12%) and medium range (4-7%) targets.";
-         myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs cause interdiction to prevent them from moving for one round.";
+         myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs cause interdiction to prevent them from moving for one round. An interdicted move is indicated with (I).";
          myCheckBoxMovingFwdIncreaseAdvanceChances.ToolTip = "Sherman advancing on Battle Board increase Friendly Advance by ~7% in Random Event.";
          myCheckBoxTerrainPointValueCenter.ToolTip = "Capturing/Losing Board Center adds/subtracts random points of 0 to 2 points.";
          //-----------------------------

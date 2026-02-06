@@ -247,7 +247,7 @@ namespace Pattons_Best
                if ((GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn)) // crewmen are not replaced if light wound and evening debrief
                {
                   cm.IsIncapacitated = false;
-                  cm.IsUnconscious = false;
+                  cm.IsUnconscious = false; // Replace_InjuredCrewmen() - evening debriefing and no wound days
                   continue;
                }
                isCrewmanReplaced = true;  // inform calling routine that crewman replaced
@@ -3088,10 +3088,10 @@ namespace Pattons_Best
          //lastReport.SunriseHour = 18;  // <CGS> TEST - EndOfDay - start at end of day
          //lastReport.SunriseMin = 00;   // <CGS> TEST - EndOfDay - start at end of day
          //--------------------------------
-         //lastReport.Driver.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
-         //lastReport.Driver.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
-         //lastReport.Driver.WoundDaysUntilReturn = 7;       // <CGS> TEST - wounded crewmen
-         //gi.SetIncapacitated(lastReport.Driver);           // <CGS> TEST - wounded crewmen
+         lastReport.Driver.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
+         lastReport.Driver.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
+         lastReport.Driver.IsUnconscious = true;           // <CGS> TEST - wounded crewmen
+         gi.SetIncapacitated(lastReport.Driver);           // <CGS> TEST - wounded crewmen
          //--------------------------------
          //lastReport.Gunner.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
          //lastReport.Gunner.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
@@ -7556,7 +7556,7 @@ namespace Pattons_Best
                         int dr = Utilities.RandomGenerator.Next(1, 11);
                         if (dr < 6)
                         {
-                           cm.IsUnconscious = false;
+                           cm.IsUnconscious = false; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction) - roll to remove
                            cm.IsIncapacitated = false;
                            cm.SetBloodSpots(0);
                            if( false == String.IsNullOrEmpty(gi.SwitchedCrewMemberRole) )
@@ -11597,6 +11597,12 @@ namespace Pattons_Best
          }
          if (GamePhase.EndGame != gi.GamePhase)
          {
+            IAfterActionReport? lastReport = gi.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): lastReport=null");
+               return false;
+            }
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
             gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefingResetDay()
@@ -11736,12 +11742,6 @@ namespace Pattons_Best
             gi.GameTurn++;
             gi.GamePhase = GamePhase.MorningBriefing;
             action = GameAction.EveningDebriefingResetDay;
-            IAfterActionReport? lastReport = gi.Reports.GetLast();
-            if (null == lastReport)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): lastReport=null");
-               return false;
-            }
             //-------------------------------------------------------
             ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
             if (null == newEntry)
@@ -11760,6 +11760,11 @@ namespace Pattons_Best
             }
             Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
             //-------------------------------------------------------
+            lastReport.Commander.IsUnconscious = false;
+            lastReport.Gunner.IsUnconscious = false;
+            lastReport.Loader.IsUnconscious = false;
+            lastReport.Driver.IsUnconscious = false;
+            lastReport.Assistant.IsUnconscious = false;
             bool isCrewmanReplaced;
             if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  // Reset_Day() - TODO: Check feats process
             {

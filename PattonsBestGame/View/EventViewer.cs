@@ -3537,7 +3537,7 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): acq=" + numShots.ToString() + " isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + " commander.IsButtonedUp=" + commander.IsButtonedUp.ToString() + " for enemyUnit=" + enemyUnit.Name);
             if ( (false == isCommanderDirectingFire) || (true == commander.IsButtonedUp) )
-               sb51.Append("+10 for first shot\n");
+               sb51.Append("+10 for first shot w/out cmdr directing fire\n");
          }
          else if (1 == numShots)
          {
