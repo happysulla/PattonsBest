@@ -3088,25 +3088,25 @@ namespace Pattons_Best
          //lastReport.SunriseHour = 18;  // <CGS> TEST - EndOfDay - start at end of day
          //lastReport.SunriseMin = 00;   // <CGS> TEST - EndOfDay - start at end of day
          //--------------------------------
-         lastReport.Driver.SetBloodSpots(10);              // <cgs> TEST - wounded crewmen
-         lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
-         lastReport.Driver.IsUnconscious = true;           // <cgs> TEST - unconscious crewmen
-         gi.SetIncapacitated(lastReport.Driver);           // <cgs> TEST - wounded crewmen
-         if( false == gi.SetCrewActionTerritory(lastReport.Driver))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): SetCrewActionTerritory(Driver) returned false");
-            return false;
-         }
+         //lastReport.Driver.SetBloodSpots(10);              // <CGS> TEST - wounded crewmen
+         //lastReport.Driver.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
+         //lastReport.Driver.IsUnconscious = true;           // <CGS> TEST - unconscious crewmen
+         //gi.SetIncapacitated(lastReport.Driver);           // <CGS> TEST - wounded crewmen
+         //if( false == gi.SetCrewActionTerritory(lastReport.Driver))
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): SetCrewActionTerritory(Driver) returned false");
+         //   return false;
+         //}
          //--------------------------------
-         lastReport.Gunner.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
-         lastReport.Gunner.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
-         lastReport.Gunner.WoundDaysUntilReturn = 14;      // <CGS> TEST - wounded crewmen
-         gi.SetIncapacitated(lastReport.Gunner);           // <CGS> TEST - wounded crewmen
-         if (false == gi.SetCrewActionTerritory(lastReport.Gunner))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): SetCrewActionTerritory(Gunner) returned false");
-            return false;
-         }
+         //lastReport.Gunner.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
+         //lastReport.Gunner.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
+         //lastReport.Gunner.WoundDaysUntilReturn = 14;      // <CGS> TEST - wounded crewmen
+         //gi.SetIncapacitated(lastReport.Gunner);           // <CGS> TEST - wounded crewmen
+         //if (false == gi.SetCrewActionTerritory(lastReport.Gunner))
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): SetCrewActionTerritory(Gunner) returned false");
+         //   return false;
+         //}
          //gi.TrainedGunners.Add(lastReport.Gunner.Name);    // <CGS> TEST - wounded crewmen
          //--------------------------------
          //lastReport.Commander.SetBloodSpots(10);           // <CGS> TEST - wounded crewmen
