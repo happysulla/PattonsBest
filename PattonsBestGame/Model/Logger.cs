@@ -204,7 +204,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD);
          SetOn(LogEnum.LE_SHOW_PROMOTION);
          //-------------------------------
-         SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
+         //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
          SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD);

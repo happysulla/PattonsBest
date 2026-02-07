@@ -7569,7 +7569,7 @@ namespace Pattons_Best
                            {
                               if (false == gi.SwitchMembers("Assistant")) // return assistant back to original position if moved
                               {
-                                 returnStatus = "gi.SwitchMembers() returned false";
+                                 returnStatus = "gi.Switch_Members() returned false";
                                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction): gi.GetCrewMemberByRole() returned null" + returnStatus);
                               }
                            }
@@ -7665,7 +7665,7 @@ namespace Pattons_Best
                            }
                            else if (combo51a < 91)
                            {
-                              gi.Sherman.IsThrownTrack = true;
+                              gi.Sherman.IsThrownTrack = true; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll)
                            }
                            else
                            {
@@ -7773,10 +7773,30 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if ((true == gi.TargetMainGun.Name.Contains("LW")) || (true == gi.TargetMainGun.Name.Contains("MG")) || (true == gi.TargetMainGun.Name.Contains("Pak")) || (true == gi.TargetMainGun.Name.Contains("ATG")))
-                        SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToKillRoll, "e053d"); // resolve attack
+                     gi.TargetMainGun.SetBloodSpots(0);
+                     gi.TargetMainGun.IsKilled = false;
+                     if( 0 == gi.ShermanHits.Count )
+                     {
+                        returnStatus = "gi.ShermanHits.Count=0";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanSkipRateOfFire): " + returnStatus);
+                     }
                      else
-                        SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToKillRoll, "e053e"); // resolve attack
+                     {
+                        if ("Direct" == gi.ShermanHits[0].myAttackType)
+                        {
+                           gi.TargetMainGun.IsApHit = true;
+                           gi.TargetMainGun.IsHeHit = false;
+                        }
+                        else
+                        {
+                           gi.TargetMainGun.IsApHit = false;
+                           gi.TargetMainGun.IsHeHit = true;
+                        }
+                        if ((true == gi.TargetMainGun.Name.Contains("LW")) || (true == gi.TargetMainGun.Name.Contains("MG")) || (true == gi.TargetMainGun.Name.Contains("Pak")) || (true == gi.TargetMainGun.Name.Contains("ATG")))
+                           SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToKillRoll, "e053d"); // resolve attack
+                        else
+                           SetCommand(gi, action, GameAction.BattleRoundSequenceShermanToKillRoll, "e053e"); // resolve attack
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequenceShermanToHitRoll:
@@ -10183,7 +10203,7 @@ namespace Pattons_Best
          else if (true == hit.myIsImmobilization)
          {
             hit.myHitLocation = "Thrown Track";
-            gi.TargetMainGun.IsThrownTrack = true;
+            gi.TargetMainGun.IsThrownTrack = true;   // Resolve_ToKillEnemyUnit()
             gi.TargetMainGun.IsMoving = false;
             gi.TargetMainGun.IsApHit = false;
             gi.TargetMainGun.IsHeHit = false;
@@ -10213,11 +10233,15 @@ namespace Pattons_Best
                {
                   if (9 < gi.DieResults[key][0])
                   {
-                     hit.myHitLocation = "Thrown Track";
-                     if (true == gi.TargetMainGun.Name.Contains("Truck"))
+                     if (true == gi.TargetMainGun.Name.Contains("TRUCK"))
+                     {
                         hit.myHitLocation = "Hull";
+                     }
                      else
-                        gi.TargetMainGun.IsThrownTrack = true;
+                     {
+                        hit.myHitLocation = "Thrown Track";
+                        gi.TargetMainGun.IsThrownTrack = true;  // "Resolve_ToKillEnemyUnit() - if not a truck
+                     }
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.IsApHit = false;
                   }

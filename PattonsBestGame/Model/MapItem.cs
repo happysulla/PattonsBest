@@ -983,7 +983,8 @@ namespace Pattons_Best
             return null;
       }
    }
-   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   //============================================
+   //============================================
    public class CrewMember : MapItem, ICrewMember
    {
       public string Role { get; set; } = string.Empty;

@@ -448,7 +448,7 @@ namespace Pattons_Best
          cm.TerritoryCurrent = cm.TerritoryStarting = t;
          cm.Location.X = t.CenterPoint.X - Utilities.theMapItemOffset;
          cm.Location.Y = t.CenterPoint.Y - Utilities.theMapItemOffset;
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Set_CrewActionTerritory(): cm=" + cm.Name + " role=" + cm.Role + " move to t=" + t.Name);
+         Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Set_CrewActionTerritory(): cm=" + cm.Name + " role=" + cm.Role + " move to t=" + t.Name);
          return true;
       }
       public void SetIncapacitated(ICrewMember cm)
@@ -499,7 +499,7 @@ namespace Pattons_Best
             sb.Append(mi.TerritoryCurrent.Name);
             sb.Append("  ");
          }
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): ++++++++++++++++++++++++++++++++++++ sb=" + sb.ToString());
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): ++++++++++++++++++++++++++++++++++++ sb=" + sb.ToString() + " switchingMemberRole=" + switchingMemberRole);
          //--------------------------------------------
          foreach (IMapItem mi in this.CrewActions) // Remove switch counter
          {

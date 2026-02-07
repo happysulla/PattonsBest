@@ -785,20 +785,20 @@ namespace Pattons_Best
          StringBuilder sb = new StringBuilder();
          sb.Append("Patton's Best  -  ");
          if( true == optionSingleDayScenario.IsEnabled )
-            sb.Append("Single Day, ");
+            sb.Append("Single Day - ");
          else
-            sb.Append("Campaign Game, ");
+            sb.Append("Campaign Game - ");
          int index= gi.Options.GetGameIndex();
          if( 0 == index )
-            sb.Append("Original Game:    ");
+            sb.Append("Original Game - ");
          else if ( 1 == index )
-            sb.Append("Generalv24#3 Game:    ");
+            sb.Append("Generalv24#3 Game - ");
          else if (2 == index)
-            sb.Append("Tactics Game:    ");
+            sb.Append("Tactics Game - ");
          else if (3 == index)
-            sb.Append("Generalv24#3 + Tactics Game:    ");
+            sb.Append("Generalv24#3 + Tactics Game - ");
          else 
-            sb.Append("Custom Game:    ");
+            sb.Append("Custom Game - ");
          sb.Append(TableMgr.GetDate(gi.Day));
          sb.Append(" ");
          sb.Append(TableMgr.GetTime(report));
@@ -2269,15 +2269,6 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------------------------
-         StringBuilder sb = new StringBuilder();
-         foreach(IMapItem mi in gi.CrewActions)
-         {
-            sb.Append(mi.Name);
-            sb.Append("@");
-            sb.Append(mi.TerritoryCurrent.Name);
-            sb.Append("  ");
-         }
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "UpdateCanvasTank(): sb=" + sb.ToString());
          if (false == UpdateCanvasTankMapItems(gi.CrewActions))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(CrewActions) returned false");
@@ -5885,7 +5876,7 @@ namespace Pattons_Best
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemEditUndo_Click));
             //------------------------------------------------
             command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.C, ModifierKeys.Control);
+            keyGesture = new KeyGesture(Key.D, ModifierKeys.Control);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBinding recoverCmdBinding = new CommandBinding(command, mmv.MenuItemEditRecoverCheckpoint_Click, mmv.MenuItemEditRecoverCheckpoint_ClickCanExecute);
             CommandBindings.Add(recoverCmdBinding);

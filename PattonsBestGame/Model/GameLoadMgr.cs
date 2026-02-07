@@ -16,8 +16,6 @@ namespace Pattons_Best
    internal class GameLoadMgr
    {
       public static string theGamesDirectory = "";
-      public static bool theIsRevertCheckFileExist = false;
-      public static bool theIsRevertRoundFileExist = false;
       public static IMapItems theMapItems = new MapItems();
       //--------------------------------------------------
       public GameLoadMgr() { }
@@ -28,10 +26,11 @@ namespace Pattons_Best
          {
             if (false == Directory.Exists(theGamesDirectory)) // create directory if does not exists
                Directory.CreateDirectory(theGamesDirectory);
+            string filenamePlusFilepath = theGamesDirectory + filename;
             //-------------------------------------
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            IGameInstance? gi = ReadXmlGameInstance(filename);
+            IGameInstance? gi = ReadXmlGameInstance(filenamePlusFilepath);
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             //-------------------------------------
             if (null == gi)
@@ -74,25 +73,13 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Save_Game(): CreateXmlGameInstance() returned null for path=" + theGamesDirectory);
                return false;
             }
-            using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
+            string filenamePlusPath = theGamesDirectory + filename;
+            using (FileStream writer = new FileStream(filenamePlusPath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
                using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
                {
                   aXmlDocument.Save(xmlWriter);
-                  if("CheckpointLastDay.pbg" == filename )
-                  {
-                     theIsRevertCheckFileExist = true;
-                  }
-                  else if ("CheckpointLastRound.pbg" == filename)
-                  {
-                     theIsRevertRoundFileExist = true;
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Save_Game(): reached default filename=" + filename);
-                     return false;
-                  }
                }
             }
             return true;
@@ -1934,9 +1921,9 @@ namespace Pattons_Best
             else
             {
                gi.EnemyAdvance = Territories.theTerritories.Find(sEnemyAdvanceName, sEnemyAdvanceType);
-               if (null == gi.AdvanceFire)
+               if (null == gi.EnemyAdvance)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): Territories.theTerritories.Find(sEnemyAdvanceName, sEnemyAdvanceType)");
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): Territories.theTerritories.Find(sEnemyAdvanceName, sEnemyAdvanceType) sEnemyAdvanceName=" + sEnemyAdvanceName + " sEnemyAdvanceType=" + sEnemyAdvanceType);
                   return null;
                }
             }
@@ -9608,20 +9595,6 @@ namespace Pattons_Best
             //------------------------------------------
             if( true == report.IsActionThisDay )
             {
-               elem = aXmlDocument.CreateElement("Weather");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Weather) returned false");
-                  return false;
-               }
-               elem.SetAttribute("value", report.Weather);
-               node = reportNode.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Weather) returned false");
-                  return false;
-               }
-               //------------------------------------------
                elem = aXmlDocument.CreateElement("Name");
                if (null == elem)
                {
@@ -9647,6 +9620,20 @@ namespace Pattons_Best
                if (null == node)
                {
                   Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(TankCardNum) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("Weather");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Weather) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.Weather);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Weather) returned false");
                   return false;
                }
                //------------------------------------------

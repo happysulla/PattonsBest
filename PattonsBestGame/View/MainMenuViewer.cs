@@ -35,6 +35,10 @@ namespace Pattons_Best
          myGameEngine = ge;
          myGameInstance = gi;
          myMainMenu = mi;
+         if (false == Directory.Exists(GameLoadMgr.theGamesDirectory)) // create directory if does not exists
+            Directory.CreateDirectory(GameLoadMgr.theGamesDirectory);
+         string filepath1 = GameLoadMgr.theGamesDirectory + "CheckpointLastDay.pbg";
+         string filepath2 = GameLoadMgr.theGamesDirectory + "CheckpointLastRound.pbg";
          foreach (Control item in myMainMenu.Items) // Initialize all the menu items
          {
             if (item is MenuItem menuItem)
@@ -55,15 +59,21 @@ namespace Pattons_Best
                   myMenuItemTopLevel21.IsEnabled = false;
                   myMenuItemTopLevel21.Click += MenuItemEditUndo_Click;
                   myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel21);
-                  myMenuItemTopLevel22.Header = "Revert _Checkpoint";
-                  myMenuItemTopLevel22.InputGestureText = "Ctrl+C";
+                  myMenuItemTopLevel22.Header = "Revert Last _Day";
+                  myMenuItemTopLevel22.InputGestureText = "Ctrl+D";
                   myMenuItemTopLevel22.Click += MenuItemEditRecoverCheckpoint_Click;
-                  myMenuItemTopLevel22.IsEnabled = false;
+                  if (true == File.Exists(filepath1))
+                     myMenuItemTopLevel22.IsEnabled = true;
+                  else
+                     myMenuItemTopLevel22.IsEnabled = false;
                   myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel22);
                   myMenuItemTopLevel23.Header = "Revert _Round";
                   myMenuItemTopLevel23.InputGestureText = "Ctrl+R";
                   myMenuItemTopLevel23.Click += MenuItemEditRecoverRound_Click;
-                  myMenuItemTopLevel23.IsEnabled = false;
+                  if (true == File.Exists(filepath2))
+                     myMenuItemTopLevel23.IsEnabled = true;
+                  else
+                     myMenuItemTopLevel23.IsEnabled = false;
                   myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel23);
                }
                //------------------------------------------------
@@ -203,14 +213,20 @@ namespace Pattons_Best
                }
                break;
             default:
-               if (true == GameLoadMgr.theIsRevertCheckFileExist)
+               if (false == Directory.Exists(GameLoadMgr.theGamesDirectory)) // create directory if does not exists
+                  Directory.CreateDirectory(GameLoadMgr.theGamesDirectory);
+               string filepath = GameLoadMgr.theGamesDirectory + "CheckpointLastDay.pbg";
+               if (true == File.Exists(filepath))
                   myMenuItemTopLevel22.IsEnabled = true;
                else
                   myMenuItemTopLevel22.IsEnabled = false;
-               if (true == GameLoadMgr.theIsRevertRoundFileExist)
+               //----------------------------------------
+               filepath = GameLoadMgr.theGamesDirectory + "CheckpointLastRound.pbg";
+               if (true == File.Exists(filepath))
                   myMenuItemTopLevel23.IsEnabled = true;
                else
                   myMenuItemTopLevel23.IsEnabled = false;
+               //----------------------------------------
                if (null == myGameInstance.UndoCmd)
                {
                   myMenuItemTopLevel21.IsEnabled = false;
