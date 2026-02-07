@@ -4539,28 +4539,8 @@ namespace Pattons_Best
             default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sResistance=" + sResistance); return false;
          }
          //----------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Weather) returned false");
-            return false;
-         }
-         if (reader.Name != "Weather")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-            return false;
-         }
-         string? sWeather = reader.GetAttribute("value");
-         if (null == sWeather)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sWeather=null");
-            return false;
-         }
-         report.Weather = sWeather;
-         //----------------------------------------------
          if( true == report.IsActionThisDay )
          {
-            //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
             {
@@ -4598,6 +4578,25 @@ namespace Pattons_Best
                return false;
             }
             report.TankCardNum = Convert.ToInt32(sTankCardNum);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Weather) returned false");
+               return false;
+            }
+            if (reader.Name != "Weather")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+               return false;
+            }
+            string? sWeather = reader.GetAttribute("value");
+            if (null == sWeather)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sWeather=null");
+               return false;
+            }
+            report.Weather = sWeather;
             //----------------------------------------------
             ICrewMember? cm = null;
             if (false == ReadXmlCrewMember(reader, ref cm))
@@ -9606,24 +9605,22 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Resistance) returned false");
                return false;
             }
-
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("Weather");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Weather) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.Weather);
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Weather) returned false");
-               return false;
-            }
             //------------------------------------------
             if( true == report.IsActionThisDay )
             {
+               elem = aXmlDocument.CreateElement("Weather");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Weather) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.Weather);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Weather) returned false");
+                  return false;
+               }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("Name");
                if (null == elem)
