@@ -2110,6 +2110,7 @@ namespace Pattons_Best
                   else
                   {
                      IAfterActionReport report1 = new AfterActionReport(entry, lastReportSetupDecreaseDate);
+                     report1.IsActionThisDay = true;
                      gi.Reports.Add(report1);
                      if (false == TableMgr.InitializeTimeTrackForNewDay(gi))
                      {
@@ -2161,7 +2162,8 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     IAfterActionReport report1 = new AfterActionReport(entry, lastReportSetupIncreaseDate); 
+                     IAfterActionReport report1 = new AfterActionReport(entry, lastReportSetupIncreaseDate);
+                     report1.IsActionThisDay = true;
                      gi.Reports.Add(report1);
                      if (false == TableMgr.InitializeTimeTrackForNewDay(gi)) 
                      {
@@ -3397,6 +3399,7 @@ namespace Pattons_Best
             return false;
          }
          IAfterActionReport report1 = new AfterActionReport(entry); // Setup_NewGame()
+         report1.IsActionThisDay = true;
          gi.Reports.Add(report1); // Setup_NewGame()
          if (false == TableMgr.InitializeTimeTrackForNewDay(gi)) // Setup_NewGame()
          {
@@ -4034,21 +4037,18 @@ namespace Pattons_Best
                   //dieRoll = 6; // <CGS> TEST - NO COMBAT - stay on move board
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
-               case GameAction.MorningBriefingWeatherRoll: 
+               case GameAction.MorningBriefingWeatherRoll:
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
+                  lastReport.IsActionThisDay = true;
                   gi.MaxDayBetweenCombat++;
                   break;
                case GameAction.MorningBriefingWeatherRollEnd:
                   if (true == lastReport.Weather.Contains("Snow"))
-                  {
                      SetCommand(gi, action, GameAction.MorningBriefingSnowRoll, "e008a"); // first need to roll for snow
-                  }
                   else
-                  {
                      SetCommand(gi, action, GameAction.DieRollActionNone, "e009");
-                  }
                   break;
                case GameAction.MorningBriefingSnowRoll:
                   lastReport.Weather = TableMgr.GetWeatherSnow(gi.Day, dieRoll);

@@ -4442,6 +4442,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
             return false;
          }
+         string? sIsActionThisDay = reader.GetAttribute("IsActionThisDay");
+         if (null == sIsActionThisDay)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sIsActionThisDay=null");
+            return false;
+         }
+         report.IsActionThisDay = Boolean.Parse(sIsActionThisDay);
          //----------------------------------------------
          reader.Read();
          if (false == reader.IsStartElement())
@@ -4535,44 +4542,6 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Name) returned false");
-            return false;
-         }
-         if (reader.Name != "Name")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-            return false;
-         }
-         string? sName = reader.GetAttribute("value");
-         if (null == sName)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sName=null");
-            return false;
-         }
-         report.Name = sName;
-         //----------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(TankCardNum) returned false");
-            return false;
-         }
-         if (reader.Name != "TankCardNum")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-            return false;
-         }
-         string? sTankCardNum = reader.GetAttribute("value");
-         if (null == sTankCardNum)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): TankCardNum=null");
-            return false;
-         }
-         report.TankCardNum = Convert.ToInt32(sTankCardNum);
-         //----------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Weather) returned false");
             return false;
          }
@@ -4589,998 +4558,1040 @@ namespace Pattons_Best
          }
          report.Weather = sWeather;
          //----------------------------------------------
-         ICrewMember? cm = null;
-         if( false == ReadXmlCrewMember(reader, ref cm))
+         if( true == report.IsActionThisDay )
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Commander) returned false");
-            return false;
-         }
-         if( null == cm )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Commander) cm = null");
-            return false;
-         }
-         report.Commander = cm;
-         //----------------------------------------------
-         if (false == ReadXmlCrewMember(reader, ref cm))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Gunner) returned false");
-            return false;
-         }
-         if (null == cm)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Gunner) cm = null");
-            return false;
-         }
-         report.Gunner = cm;
-         //----------------------------------------------
-         if (false == ReadXmlCrewMember(reader, ref cm))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Loader) returned false");
-            return false;
-         }
-         if (null == cm)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Loader) cm = null");
-            return false;
-         }
-         report.Loader = cm;
-         //----------------------------------------------
-         if (false == ReadXmlCrewMember(reader, ref cm))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Driver) returned false");
-            return false;
-         }
-         if (null == cm)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Driver) cm = null");
-            return false;
-         }
-         report.Driver = cm;
-         //----------------------------------------------
-         if (false == ReadXmlCrewMember(reader, ref cm))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Assistant) returned false");
-            return false;
-         }
-         if (null == cm)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Assistant) cm = null");
-            return false;
-         }
-         report.Assistant = cm;
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "SunriseHour")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseHour != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sSunriseHour = reader.GetAttribute("value");
-         if (null == sSunriseHour)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sSunriseHour=null");
-            return false;
-         }
-         report.SunriseHour = Convert.ToInt32(sSunriseHour);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "SunriseMin")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseMin != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sSunriseMin = reader.GetAttribute("value");
-         if (null == sSunriseMin)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseMin=null");
-            return false;
-         }
-         report.SunriseMin = Convert.ToInt32(sSunriseMin);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "SunsetHour")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetHour != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sSunsetHour = reader.GetAttribute("value");
-         if (null == sSunsetHour)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetHour=null");
-            return false;
-         }
-         report.SunsetHour = Convert.ToInt32(sSunsetHour);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "SunsetMin")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetMin != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sSunsetMin = reader.GetAttribute("value");
-         if (null == sSunsetMin)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetMin=null");
-            return false;
-         }
-         report.SunsetMin = Convert.ToInt32(sSunsetMin);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "Ammo30CalibreMG")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo30CalibreMG != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sAmmo30CalibreMG = reader.GetAttribute("value");
-         if (null == sAmmo30CalibreMG)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo30CalibreMG=null");
-            return false;
-         }
-         report.Ammo30CalibreMG = Convert.ToInt32(sAmmo30CalibreMG);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "Ammo50CalibreMG")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo50CalibreMG != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sAmmo50CalibreMG = reader.GetAttribute("value");
-         if (null == sAmmo50CalibreMG)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo50CalibreMG=null");
-            return false;
-         }
-         report.Ammo50CalibreMG = Convert.ToInt32(sAmmo50CalibreMG);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "AmmoSmokeBomb")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeBomb != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sAmmoSmokeBomb = reader.GetAttribute("value");
-         if (null == sAmmoSmokeBomb)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeBomb=null");
-            return false;
-         }
-         report.AmmoSmokeBomb = Convert.ToInt32(sAmmoSmokeBomb);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "AmmoSmokeGrenade")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sAmmoSmokeGrenade = reader.GetAttribute("value");
-         if (null == sAmmoSmokeGrenade)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade=null");
-            return false;
-         }
-         report.AmmoSmokeGrenade = Convert.ToInt32(sAmmoSmokeGrenade);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "AmmoPeriscope")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sAmmoPeriscope = reader.GetAttribute("value");
-         if (null == sAmmoPeriscope)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoPeriscope=null");
-            return false;
-         }
-         report.AmmoPeriscope = Convert.ToInt32(sAmmoPeriscope);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "MainGunHE")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHE != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sMainGunHE = reader.GetAttribute("value");
-         if (null == sMainGunHE)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHE=null");
-            return false;
-         }
-         report.MainGunHE = Convert.ToInt32(sMainGunHE);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "MainGunAP")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunAP != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sMainGunAP = reader.GetAttribute("value");
-         if (null == sMainGunAP)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunAP=null");
-            return false;
-         }
-         report.MainGunAP = Convert.ToInt32(sMainGunAP);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "MainGunWP")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunWP != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sMainGunWP = reader.GetAttribute("value");
-         if (null == sMainGunWP)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunWP=null");
-            return false;
-         }
-         report.MainGunWP = Convert.ToInt32(sMainGunWP);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "MainGunHBCI")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHBCI != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sMainGunHBCI = reader.GetAttribute("value");
-         if (null == sMainGunHBCI)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHBCI=null");
-            return false;
-         }
-         report.MainGunHBCI = Convert.ToInt32(sMainGunHBCI);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "MainGunHVAP")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHVAP != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sMainGunHVAP = reader.GetAttribute("value");
-         if (null == sMainGunHVAP)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHVAP=null");
-            return false;
-         }
-         report.MainGunHVAP = Convert.ToInt32(sMainGunHVAP);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaLightWeapon")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaLightWeapon != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaLightWeapon = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaLightWeapon)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaLightWeapon=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaLightWeapon = Convert.ToInt32(sVictoryPtsFriendlyKiaLightWeapon);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaTruck")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaTruck != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaTruck = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaTruck)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaTruck=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaTruck = Convert.ToInt32(sVictoryPtsFriendlyKiaTruck);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaSpwOrPsw")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSpwOrPsw != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaSpwOrPsw = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaSpwOrPsw)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaSpwOrPsw=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaSpwOrPsw = Convert.ToInt32(sVictoryPtsFriendlyKiaSpwOrPsw);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaSPGun) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaSPGun")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSPGun != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaSPGun = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaSPGun)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSPGun=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaSPGun = Convert.ToInt32(sVictoryPtsFriendlyKiaSPGun);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzIV) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaPzIV")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzIV != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaPzIV = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaPzIV)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzIV=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaPzIV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzIV);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzV) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaPzV")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzV != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaPzV = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaPzV)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzV=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaPzV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzV);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzVI) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaPzVI")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzVI != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaPzVI = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaPzVI)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzVI=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaPzVI = Convert.ToInt32(sVictoryPtsFriendlyKiaPzVI);
-          //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaAtGun) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaAtGun")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaAtGun != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaAtGun = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaAtGun)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaAtGun=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaAtGun = Convert.ToInt32(sVictoryPtsFriendlyKiaAtGun);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaFortifiedPosition) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyKiaFortifiedPosition")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaFortifiedPosition != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyKiaFortifiedPosition = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyKiaFortifiedPosition)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaFortifiedPosition=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyKiaFortifiedPosition = Convert.ToInt32(sVictoryPtsFriendlyKiaFortifiedPosition);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaLightWeapon) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaLightWeapon")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaLightWeapon != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaLightWeapon = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaLightWeapon)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaLightWeapon=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaLightWeapon = Convert.ToInt32(sVictoryPtsYourKiaLightWeapon);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaTruck) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaTruck")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaTruck != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaTruck = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaTruck)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaTruck=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaTruck = Convert.ToInt32(sVictoryPtsYourKiaTruck);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaSpwOrPsw) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaSpwOrPsw")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSpwOrPsw != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaSpwOrPsw = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaSpwOrPsw)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSpwOrPsw=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaSpwOrPsw = Convert.ToInt32(sVictoryPtsYourKiaSpwOrPsw);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaSPGun) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaSPGun")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSPGun != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaSPGun = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaSPGun)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSPGun=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaSPGun = Convert.ToInt32(sVictoryPtsYourKiaSPGun);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzIV) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaPzIV")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzIV != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaPzIV = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaPzIV)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzIV=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaPzIV = Convert.ToInt32(sVictoryPtsYourKiaPzIV);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzV) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaPzV")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzV != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaPzV = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaPzV)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzV=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaPzV = Convert.ToInt32(sVictoryPtsYourKiaPzV);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzVI) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaPzVI")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzVI != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaPzVI = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaPzVI)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzVI=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaPzVI = Convert.ToInt32(sVictoryPtsYourKiaPzVI);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaAtGun) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaAtGun")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaAtGun != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaAtGun = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaAtGun)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaAtGun=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaAtGun = Convert.ToInt32(sVictoryPtsYourKiaAtGun);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaFortifiedPosition) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsYourKiaFortifiedPosition")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaFortifiedPosition != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsYourKiaFortifiedPosition = reader.GetAttribute("value");
-         if (null == sVictoryPtsYourKiaFortifiedPosition)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaFortifiedPosition=null");
-            return false;
-         }
-         report.VictoryPtsYourKiaFortifiedPosition = Convert.ToInt32(sVictoryPtsYourKiaFortifiedPosition);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsCaptureArea) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsCaptureArea")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCaptureArea != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsCaptureArea = reader.GetAttribute("value");
-         if (null == sVictoryPtsCaptureArea)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCaptureArea=null");
-            return false;
-         }
-         report.VictoryPtsCaptureArea = Convert.ToInt32(sVictoryPtsCaptureArea);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsCapturedExitArea) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsCapturedExitArea")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCapturedExitArea != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsCapturedExitArea = reader.GetAttribute("value");
-         if (null == sVictoryPtsCapturedExitArea)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCapturedExitArea=null");
-            return false;
-         }
-         report.VictoryPtsCapturedExitArea = Convert.ToInt32(sVictoryPtsCapturedExitArea);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsLostArea) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsLostArea")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsLostArea != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsLostArea = reader.GetAttribute("value");
-         if (null == sVictoryPtsLostArea)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsLostArea=null");
-            return false;
-         }
-         report.VictoryPtsLostArea = Convert.ToInt32(sVictoryPtsLostArea);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyTank) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlyTank")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyTank != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlyTank = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlyTank)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyTank=null");
-            return false;
-         }
-         report.VictoryPtsFriendlyTank = Convert.ToInt32(sVictoryPtsFriendlyTank);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlySquad) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsFriendlySquad")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlySquad != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsFriendlySquad = reader.GetAttribute("value");
-         if (null == sVictoryPtsFriendlySquad)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlySquad=null");
-            return false;
-         }
-         report.VictoryPtsFriendlySquad = Convert.ToInt32(sVictoryPtsFriendlySquad);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalYourTank) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsTotalYourTank")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalYourTank != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsTotalYourTank = reader.GetAttribute("value");
-         if (null == sVictoryPtsTotalYourTank)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalYourTank=null");
-            return false;
-         }
-         report.VictoryPtsTotalYourTank = Convert.ToInt32(sVictoryPtsTotalYourTank);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalFriendlyForces) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsTotalFriendlyForces")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalFriendlyForces != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsTotalFriendlyForces = reader.GetAttribute("value");
-         if (null == sVictoryPtsTotalFriendlyForces)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalFriendlyForces=null");
-            return false;
-         }
-         report.VictoryPtsTotalFriendlyForces = Convert.ToInt32(sVictoryPtsTotalFriendlyForces);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalTerritory) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsTotalTerritory")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalTerritory != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsTotalTerritory = reader.GetAttribute("value");
-         if (null == sVictoryPtsTotalTerritory)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalTerritory=null");
-            return false;
-         }
-         report.VictoryPtsTotalTerritory = Convert.ToInt32(sVictoryPtsTotalTerritory);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalEngagement) = false");
-            return false;
-         }
-         if (reader.Name != "VictoryPtsTotalEngagement")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalEngagement != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sVictoryPtsTotalEngagement = reader.GetAttribute("value");
-         if (null == sVictoryPtsTotalEngagement)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalEngagement=null");
-            return false;
-         }
-         report.VictoryPtsTotalEngagement = Convert.ToInt32(sVictoryPtsTotalEngagement);
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Decorations) = false");
-            return false;
-         }
-         if (reader.Name != "Decorations")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-            return false;
-         }
-         string? sCountDecoration = reader.GetAttribute("count");
-         if (null == sCountDecoration)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sCountDecoration=null");
-            return false;
-         }
-         int countDecoration = Convert.ToInt32(sCountDecoration);   
-         for(int i=0; i< countDecoration; ++i)
-         {
+            //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Decoration) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Name) returned false");
                return false;
             }
-            if (reader.Name != "Decoration")
+            if (reader.Name != "Name")
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
                return false;
             }
-            string? sDecoration = reader.GetAttribute("value");
-            if (null == sDecoration)
+            string? sName = reader.GetAttribute("value");
+            if (null == sName)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sDecoration=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sName=null");
                return false;
             }
-            EnumDecoration decoration = EnumDecoration.WW2Victory;
-            switch (sDecoration)
-            {
-               case "BronzeStar": decoration = EnumDecoration.BronzeStar; break;
-               case "SilverStar": decoration = EnumDecoration.SilverStar; break;
-               case "DistinguisedServiceCross": decoration = EnumDecoration.DistinguisedServiceCross; break;
-               case "MedalOfHonor": decoration = EnumDecoration.MedalOfHonor; break;
-               case "PurpleHeart": decoration = EnumDecoration.PurpleHeart; break;
-               case "EuropeanCampain": decoration = EnumDecoration.EuropeanCampain; break;
-               case "WW2Victory": decoration = EnumDecoration.WW2Victory; break;
-               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sDecoration=" + sDecoration); return false;
-            }
-            report.Decorations.Add(decoration);
-         }
-         if (0 < countDecoration)
-            reader.Read();
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Notes) = false");
-            return false;
-         }
-         if (reader.Name != "Notes")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-            return false;
-         }
-         string? sCountNote = reader.GetAttribute("count");
-         if (null == sCountNote)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sCountNote=null");
-            return false;
-         }
-         int countNote = Convert.ToInt32(sCountNote);
-         for (int i = 0; i < countNote; ++i)
-         {
+            report.Name = sName;
+            //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Note) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(TankCardNum) returned false");
                return false;
             }
-            if (reader.Name != "Note")
+            if (reader.Name != "TankCardNum")
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
                return false;
             }
-            string? sNote = reader.GetAttribute("value");
-            if (null == sNote)
+            string? sTankCardNum = reader.GetAttribute("value");
+            if (null == sTankCardNum)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sNote=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): TankCardNum=null");
                return false;
             }
-            report.Notes.Add(sNote);
-         }
-         if (0 < countNote)
+            report.TankCardNum = Convert.ToInt32(sTankCardNum);
+            //----------------------------------------------
+            ICrewMember? cm = null;
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Commander) returned false");
+               return false;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Commander) cm = null");
+               return false;
+            }
+            report.Commander = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Gunner) returned false");
+               return false;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Gunner) cm = null");
+               return false;
+            }
+            report.Gunner = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Loader) returned false");
+               return false;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Loader) cm = null");
+               return false;
+            }
+            report.Loader = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Driver) returned false");
+               return false;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Driver) cm = null");
+               return false;
+            }
+            report.Driver = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Assistant) returned false");
+               return false;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Assistant) cm = null");
+               return false;
+            }
+            report.Assistant = cm;
+            //---------------------------------------------
             reader.Read();
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(DayEndedTime) = false");
-            return false;
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "SunriseHour")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseHour != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sSunriseHour = reader.GetAttribute("value");
+            if (null == sSunriseHour)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sSunriseHour=null");
+               return false;
+            }
+            report.SunriseHour = Convert.ToInt32(sSunriseHour);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "SunriseMin")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseMin != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sSunriseMin = reader.GetAttribute("value");
+            if (null == sSunriseMin)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseMin=null");
+               return false;
+            }
+            report.SunriseMin = Convert.ToInt32(sSunriseMin);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "SunsetHour")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetHour != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sSunsetHour = reader.GetAttribute("value");
+            if (null == sSunsetHour)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetHour=null");
+               return false;
+            }
+            report.SunsetHour = Convert.ToInt32(sSunsetHour);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "SunsetMin")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetMin != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sSunsetMin = reader.GetAttribute("value");
+            if (null == sSunsetMin)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetMin=null");
+               return false;
+            }
+            report.SunsetMin = Convert.ToInt32(sSunsetMin);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "Ammo30CalibreMG")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo30CalibreMG != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAmmo30CalibreMG = reader.GetAttribute("value");
+            if (null == sAmmo30CalibreMG)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo30CalibreMG=null");
+               return false;
+            }
+            report.Ammo30CalibreMG = Convert.ToInt32(sAmmo30CalibreMG);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "Ammo50CalibreMG")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo50CalibreMG != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAmmo50CalibreMG = reader.GetAttribute("value");
+            if (null == sAmmo50CalibreMG)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo50CalibreMG=null");
+               return false;
+            }
+            report.Ammo50CalibreMG = Convert.ToInt32(sAmmo50CalibreMG);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "AmmoSmokeBomb")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeBomb != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAmmoSmokeBomb = reader.GetAttribute("value");
+            if (null == sAmmoSmokeBomb)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeBomb=null");
+               return false;
+            }
+            report.AmmoSmokeBomb = Convert.ToInt32(sAmmoSmokeBomb);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "AmmoSmokeGrenade")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAmmoSmokeGrenade = reader.GetAttribute("value");
+            if (null == sAmmoSmokeGrenade)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade=null");
+               return false;
+            }
+            report.AmmoSmokeGrenade = Convert.ToInt32(sAmmoSmokeGrenade);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "AmmoPeriscope")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAmmoPeriscope = reader.GetAttribute("value");
+            if (null == sAmmoPeriscope)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoPeriscope=null");
+               return false;
+            }
+            report.AmmoPeriscope = Convert.ToInt32(sAmmoPeriscope);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "MainGunHE")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHE != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sMainGunHE = reader.GetAttribute("value");
+            if (null == sMainGunHE)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHE=null");
+               return false;
+            }
+            report.MainGunHE = Convert.ToInt32(sMainGunHE);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "MainGunAP")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunAP != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sMainGunAP = reader.GetAttribute("value");
+            if (null == sMainGunAP)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunAP=null");
+               return false;
+            }
+            report.MainGunAP = Convert.ToInt32(sMainGunAP);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "MainGunWP")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunWP != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sMainGunWP = reader.GetAttribute("value");
+            if (null == sMainGunWP)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunWP=null");
+               return false;
+            }
+            report.MainGunWP = Convert.ToInt32(sMainGunWP);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "MainGunHBCI")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHBCI != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sMainGunHBCI = reader.GetAttribute("value");
+            if (null == sMainGunHBCI)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHBCI=null");
+               return false;
+            }
+            report.MainGunHBCI = Convert.ToInt32(sMainGunHBCI);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "MainGunHVAP")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHVAP != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sMainGunHVAP = reader.GetAttribute("value");
+            if (null == sMainGunHVAP)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHVAP=null");
+               return false;
+            }
+            report.MainGunHVAP = Convert.ToInt32(sMainGunHVAP);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaLightWeapon")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaLightWeapon != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaLightWeapon = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaLightWeapon)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaLightWeapon=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaLightWeapon = Convert.ToInt32(sVictoryPtsFriendlyKiaLightWeapon);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaTruck")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaTruck != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaTruck = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaTruck)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaTruck=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaTruck = Convert.ToInt32(sVictoryPtsFriendlyKiaTruck);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaSpwOrPsw")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSpwOrPsw != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaSpwOrPsw = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaSpwOrPsw)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaSpwOrPsw=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaSpwOrPsw = Convert.ToInt32(sVictoryPtsFriendlyKiaSpwOrPsw);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaSPGun) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaSPGun")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSPGun != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaSPGun = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaSPGun)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSPGun=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaSPGun = Convert.ToInt32(sVictoryPtsFriendlyKiaSPGun);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzIV) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaPzIV")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzIV != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaPzIV = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaPzIV)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzIV=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaPzIV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzIV);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzV) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaPzV")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzV != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaPzV = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaPzV)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzV=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaPzV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzV);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzVI) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaPzVI")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzVI != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaPzVI = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaPzVI)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzVI=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaPzVI = Convert.ToInt32(sVictoryPtsFriendlyKiaPzVI);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaAtGun) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaAtGun")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaAtGun != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaAtGun = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaAtGun)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaAtGun=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaAtGun = Convert.ToInt32(sVictoryPtsFriendlyKiaAtGun);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaFortifiedPosition) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyKiaFortifiedPosition")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaFortifiedPosition != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyKiaFortifiedPosition = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyKiaFortifiedPosition)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaFortifiedPosition=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyKiaFortifiedPosition = Convert.ToInt32(sVictoryPtsFriendlyKiaFortifiedPosition);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaLightWeapon) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaLightWeapon")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaLightWeapon != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaLightWeapon = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaLightWeapon)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaLightWeapon=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaLightWeapon = Convert.ToInt32(sVictoryPtsYourKiaLightWeapon);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaTruck) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaTruck")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaTruck != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaTruck = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaTruck)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaTruck=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaTruck = Convert.ToInt32(sVictoryPtsYourKiaTruck);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaSpwOrPsw) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaSpwOrPsw")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSpwOrPsw != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaSpwOrPsw = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaSpwOrPsw)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSpwOrPsw=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaSpwOrPsw = Convert.ToInt32(sVictoryPtsYourKiaSpwOrPsw);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaSPGun) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaSPGun")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSPGun != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaSPGun = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaSPGun)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSPGun=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaSPGun = Convert.ToInt32(sVictoryPtsYourKiaSPGun);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzIV) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaPzIV")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzIV != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaPzIV = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaPzIV)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzIV=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaPzIV = Convert.ToInt32(sVictoryPtsYourKiaPzIV);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzV) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaPzV")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzV != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaPzV = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaPzV)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzV=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaPzV = Convert.ToInt32(sVictoryPtsYourKiaPzV);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzVI) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaPzVI")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzVI != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaPzVI = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaPzVI)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzVI=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaPzVI = Convert.ToInt32(sVictoryPtsYourKiaPzVI);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaAtGun) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaAtGun")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaAtGun != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaAtGun = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaAtGun)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaAtGun=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaAtGun = Convert.ToInt32(sVictoryPtsYourKiaAtGun);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaFortifiedPosition) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsYourKiaFortifiedPosition")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaFortifiedPosition != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsYourKiaFortifiedPosition = reader.GetAttribute("value");
+            if (null == sVictoryPtsYourKiaFortifiedPosition)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaFortifiedPosition=null");
+               return false;
+            }
+            report.VictoryPtsYourKiaFortifiedPosition = Convert.ToInt32(sVictoryPtsYourKiaFortifiedPosition);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsCaptureArea) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsCaptureArea")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCaptureArea != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsCaptureArea = reader.GetAttribute("value");
+            if (null == sVictoryPtsCaptureArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCaptureArea=null");
+               return false;
+            }
+            report.VictoryPtsCaptureArea = Convert.ToInt32(sVictoryPtsCaptureArea);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsCapturedExitArea) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsCapturedExitArea")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCapturedExitArea != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsCapturedExitArea = reader.GetAttribute("value");
+            if (null == sVictoryPtsCapturedExitArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCapturedExitArea=null");
+               return false;
+            }
+            report.VictoryPtsCapturedExitArea = Convert.ToInt32(sVictoryPtsCapturedExitArea);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsLostArea) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsLostArea")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsLostArea != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsLostArea = reader.GetAttribute("value");
+            if (null == sVictoryPtsLostArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsLostArea=null");
+               return false;
+            }
+            report.VictoryPtsLostArea = Convert.ToInt32(sVictoryPtsLostArea);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyTank) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlyTank")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyTank != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlyTank = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlyTank)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyTank=null");
+               return false;
+            }
+            report.VictoryPtsFriendlyTank = Convert.ToInt32(sVictoryPtsFriendlyTank);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlySquad) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsFriendlySquad")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlySquad != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsFriendlySquad = reader.GetAttribute("value");
+            if (null == sVictoryPtsFriendlySquad)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlySquad=null");
+               return false;
+            }
+            report.VictoryPtsFriendlySquad = Convert.ToInt32(sVictoryPtsFriendlySquad);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalYourTank) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsTotalYourTank")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalYourTank != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsTotalYourTank = reader.GetAttribute("value");
+            if (null == sVictoryPtsTotalYourTank)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalYourTank=null");
+               return false;
+            }
+            report.VictoryPtsTotalYourTank = Convert.ToInt32(sVictoryPtsTotalYourTank);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalFriendlyForces) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsTotalFriendlyForces")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalFriendlyForces != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsTotalFriendlyForces = reader.GetAttribute("value");
+            if (null == sVictoryPtsTotalFriendlyForces)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalFriendlyForces=null");
+               return false;
+            }
+            report.VictoryPtsTotalFriendlyForces = Convert.ToInt32(sVictoryPtsTotalFriendlyForces);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalTerritory) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsTotalTerritory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalTerritory != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsTotalTerritory = reader.GetAttribute("value");
+            if (null == sVictoryPtsTotalTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalTerritory=null");
+               return false;
+            }
+            report.VictoryPtsTotalTerritory = Convert.ToInt32(sVictoryPtsTotalTerritory);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalEngagement) = false");
+               return false;
+            }
+            if (reader.Name != "VictoryPtsTotalEngagement")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalEngagement != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sVictoryPtsTotalEngagement = reader.GetAttribute("value");
+            if (null == sVictoryPtsTotalEngagement)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalEngagement=null");
+               return false;
+            }
+            report.VictoryPtsTotalEngagement = Convert.ToInt32(sVictoryPtsTotalEngagement);
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Decorations) = false");
+               return false;
+            }
+            if (reader.Name != "Decorations")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+               return false;
+            }
+            string? sCountDecoration = reader.GetAttribute("count");
+            if (null == sCountDecoration)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sCountDecoration=null");
+               return false;
+            }
+            int countDecoration = Convert.ToInt32(sCountDecoration);
+            for (int i = 0; i < countDecoration; ++i)
+            {
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Decoration) = false");
+                  return false;
+               }
+               if (reader.Name != "Decoration")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+                  return false;
+               }
+               string? sDecoration = reader.GetAttribute("value");
+               if (null == sDecoration)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sDecoration=null");
+                  return false;
+               }
+               EnumDecoration decoration = EnumDecoration.WW2Victory;
+               switch (sDecoration)
+               {
+                  case "BronzeStar": decoration = EnumDecoration.BronzeStar; break;
+                  case "SilverStar": decoration = EnumDecoration.SilverStar; break;
+                  case "DistinguisedServiceCross": decoration = EnumDecoration.DistinguisedServiceCross; break;
+                  case "MedalOfHonor": decoration = EnumDecoration.MedalOfHonor; break;
+                  case "PurpleHeart": decoration = EnumDecoration.PurpleHeart; break;
+                  case "EuropeanCampain": decoration = EnumDecoration.EuropeanCampain; break;
+                  case "WW2Victory": decoration = EnumDecoration.WW2Victory; break;
+                  default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sDecoration=" + sDecoration); return false;
+               }
+               report.Decorations.Add(decoration);
+            }
+            if (0 < countDecoration)
+               reader.Read();
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Notes) = false");
+               return false;
+            }
+            if (reader.Name != "Notes")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+               return false;
+            }
+            string? sCountNote = reader.GetAttribute("count");
+            if (null == sCountNote)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sCountNote=null");
+               return false;
+            }
+            int countNote = Convert.ToInt32(sCountNote);
+            for (int i = 0; i < countNote; ++i)
+            {
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Note) = false");
+                  return false;
+               }
+               if (reader.Name != "Note")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+                  return false;
+               }
+               string? sNote = reader.GetAttribute("value");
+               if (null == sNote)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sNote=null");
+                  return false;
+               }
+               report.Notes.Add(sNote);
+            }
+            if (0 < countNote)
+               reader.Read();
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(DayEndedTime) = false");
+               return false;
+            }
+            if (reader.Name != "DayEndedTime")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): DayEndedTime != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sDayEndedTime = reader.GetAttribute("value");
+            if (null == sDayEndedTime)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): DayEndedTime=null");
+               return false;
+            }
+            report.DayEndedTime = sDayEndedTime;
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Breakdown) = false");
+               return false;
+            }
+            if (reader.Name != "Breakdown")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Breakdown != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sBreakdown = reader.GetAttribute("value");
+            if (null == sBreakdown)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Breakdown=null");
+               return false;
+            }
+            report.Breakdown = sBreakdown;
+            //---------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(KnockedOut) = false");
+               return false;
+            }
+            if (reader.Name != "KnockedOut")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): KnockedOut != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sKnockedOut = reader.GetAttribute("value");
+            if (null == sKnockedOut)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): KnockedOut=null");
+               return false;
+            }
+            report.KnockedOut = sKnockedOut;
          }
-         if (reader.Name != "DayEndedTime")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): DayEndedTime != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sDayEndedTime = reader.GetAttribute("value");
-         if (null == sDayEndedTime)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): DayEndedTime=null");
-            return false;
-         }
-         report.DayEndedTime = sDayEndedTime;
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Breakdown) = false");
-            return false;
-         }
-         if (reader.Name != "Breakdown")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Breakdown != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sBreakdown = reader.GetAttribute("value");
-         if (null == sBreakdown)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Breakdown=null");
-            return false;
-         }
-         report.Breakdown = sBreakdown;
-         //---------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(KnockedOut) = false");
-            return false;
-         }
-         if (reader.Name != "KnockedOut")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): KnockedOut != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sKnockedOut = reader.GetAttribute("value");
-         if (null == sKnockedOut)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): KnockedOut=null");
-            return false;
-         }
-         report.KnockedOut = sKnockedOut;
          reader.Read(); // get past </Report>
          return true;
       }
@@ -9532,6 +9543,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Report) returned false");
                return false;
             }
+            reportElem.SetAttribute("IsActionThisDay", report.IsActionThisDay.ToString());
             XmlNode? reportNode = reportsNode.AppendChild(reportElem);
             if (null == reportNode)
             {
@@ -9594,34 +9606,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Resistance) returned false");
                return false;
             }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("Name");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Name) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.Name);
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Name) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("TankCardNum");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(TankCardNum) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.TankCardNum.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(TankCardNum) returned false");
-               return false;
-            }
+
             //------------------------------------------
             elem = aXmlDocument.CreateElement("Weather");
             if (null == elem)
@@ -9637,710 +9622,742 @@ namespace Pattons_Best
                return false;
             }
             //------------------------------------------
-            if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Commander))
+            if( true == report.IsActionThisDay )
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Commander) returned false");
-               return false;
-            }
-            //------------------------------------------
-            if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Gunner))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Gunner) returned false");
-               return false;
-            }
-            //------------------------------------------
-            if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Loader))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Loader) returned false");
-               return false;
-            }
-            //------------------------------------------
-            if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Driver))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Driver) returned false");
-               return false;
-            }
-            //------------------------------------------
-            if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Assistant))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Assistant) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("SunriseHour");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunriseHour) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.SunriseHour.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseHour) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("SunriseMin");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunriseMin) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.SunriseMin.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseMin) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("SunsetHour");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunsetHour) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.SunsetHour.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetHour) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("SunsetMin");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunsetMin) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.SunsetMin.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetMin) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("Ammo30CalibreMG");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Ammo30CalibreMG) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.Ammo30CalibreMG.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo30CalibreMG) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("Ammo50CalibreMG");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Ammo50CalibreMG) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.Ammo50CalibreMG.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo50CalibreMG) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("AmmoSmokeBomb");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoSmokeBomb) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.AmmoSmokeBomb.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeBomb) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("AmmoSmokeGrenade");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoSmokeGrenade) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.AmmoSmokeGrenade.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeGrenade) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("AmmoPeriscope");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoPeriscope) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.AmmoPeriscope.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoPeriscope) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("MainGunHE");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHE) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.MainGunHE.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHE) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("MainGunAP");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunAP) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.MainGunAP.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunAP) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("MainGunWP");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunWP) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.MainGunWP.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunWP) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("MainGunHBCI");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHBCI) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.MainGunHBCI.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHBCI) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("MainGunHVAP");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHVAP) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.MainGunHVAP.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHVAP) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaLightWeapon");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaLightWeapon) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaLightWeapon.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaLightWeapon) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaTruck");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaTruck) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaTruck.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaTruck) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaSpwOrPsw");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSpwOrPsw.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaSPGun");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaSPGun) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSPGun.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSPGun) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzIV");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzIV) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzIV.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzIV) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzV");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzV) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzV.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzV) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzVI");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzVI) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzVI.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzVI) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaAtGun");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaAtGun) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaAtGun.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaAtGun) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaFortifiedPosition");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyKiaFortifiedPosition.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaLightWeapon");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaLightWeapon) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaLightWeapon.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaLightWeapon) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaTruck");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaTruck) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaTruck.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaTruck) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaSpwOrPsw");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaSpwOrPsw) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaSpwOrPsw.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSpwOrPsw) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaSPGun");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaSPGun) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaSPGun.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSPGun) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzIV");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzIV) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaPzIV.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzIV) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzV");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzV) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaPzV.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzV) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzVI");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzVI) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaPzVI.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzVI) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaAtGun");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaAtGun) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaAtGun.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaAtGun) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsYourKiaFortifiedPosition");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaFortifiedPosition) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsYourKiaFortifiedPosition.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaFortifiedPosition) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsCaptureArea");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsCaptureArea) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsCaptureArea.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCaptureArea) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsCapturedExitArea");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsCapturedExitArea) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsCapturedExitArea.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCapturedExitArea) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsLostArea");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsLostArea) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsLostArea.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsLostArea) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlyTank");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyTank) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlyTank.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyTank) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsFriendlySquad");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlySquad) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsFriendlySquad.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlySquad) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsTotalYourTank");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalYourTank) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsTotalYourTank.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalYourTank) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsTotalFriendlyForces");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalFriendlyForces) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsTotalFriendlyForces.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalFriendlyForces) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsTotalTerritory");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalTerritory) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsTotalTerritory.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalTerritory) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("VictoryPtsTotalEngagement");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPts_TotalEngagement) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.VictoryPtsTotalEngagement.ToString());
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalEngagement) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("Decorations");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decorations) returned false");
-               return false;
-            }
-            elem.SetAttribute("count", report.Decorations.Count.ToString());
-            XmlNode? decorationsNode = reportNode.AppendChild(elem);
-            if (null == decorationsNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Decorations) returned false");
-               return false;
-            }
-            for (int k1 = 0; k1 < report.Decorations.Count; ++k1)
-            {
-               elem = aXmlDocument.CreateElement("Decoration");
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("Name");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decoration) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Name) returned false");
                   return false;
                }
-               elem.SetAttribute("value", report.Decorations[k1].ToString());
-               XmlNode? decorationNode = decorationsNode.AppendChild(elem);
-               if (null == decorationNode)
+               elem.SetAttribute("value", report.Name);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(decorationNode) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Name) returned false");
                   return false;
                }
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("Notes");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Notes) returned false");
-               return false;
-            }
-            elem.SetAttribute("count", report.Notes.Count.ToString());
-            XmlNode? notesNode = reportNode.AppendChild(elem);
-            if (null == notesNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Notes) returned false");
-               return false;
-            }
-            for (int k1 = 0; k1 < report.Notes.Count; ++k1)
-            {
-               elem = aXmlDocument.CreateElement("Note");
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("TankCardNum");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decoration) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(TankCardNum) returned false");
                   return false;
                }
-               elem.SetAttribute("value", report.Notes[k1].ToString());
-               XmlNode? noteNode = notesNode.AppendChild(elem);
-               if (null == noteNode)
+               elem.SetAttribute("value", report.TankCardNum.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(noteNode) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(TankCardNum) returned false");
                   return false;
                }
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("DayEndedTime");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(DayEndedTime) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.DayEndedTime);
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(DayEndedTime) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("Breakdown");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Breakdown) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.Breakdown);
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Breakdown) returned false");
-               return false;
-            }
-            //------------------------------------------
-            elem = aXmlDocument.CreateElement("KnockedOut");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(KnockedOut) returned false");
-               return false;
-            }
-            elem.SetAttribute("value", report.KnockedOut);
-            node = reportNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(KnockedOut) returned false");
-               return false;
+               //------------------------------------------
+               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Commander))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Commander) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Gunner))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Gunner) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Loader))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Loader) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Driver))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Driver) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Assistant))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Assistant) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("SunriseHour");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunriseHour) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.SunriseHour.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseHour) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("SunriseMin");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunriseMin) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.SunriseMin.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseMin) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("SunsetHour");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunsetHour) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.SunsetHour.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetHour) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("SunsetMin");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunsetMin) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.SunsetMin.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetMin) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("Ammo30CalibreMG");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Ammo30CalibreMG) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.Ammo30CalibreMG.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo30CalibreMG) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("Ammo50CalibreMG");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Ammo50CalibreMG) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.Ammo50CalibreMG.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo50CalibreMG) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("AmmoSmokeBomb");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoSmokeBomb) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.AmmoSmokeBomb.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeBomb) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("AmmoSmokeGrenade");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoSmokeGrenade) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.AmmoSmokeGrenade.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeGrenade) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("AmmoPeriscope");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoPeriscope) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.AmmoPeriscope.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoPeriscope) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("MainGunHE");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHE) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.MainGunHE.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHE) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("MainGunAP");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunAP) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.MainGunAP.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunAP) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("MainGunWP");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunWP) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.MainGunWP.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunWP) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("MainGunHBCI");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHBCI) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.MainGunHBCI.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHBCI) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("MainGunHVAP");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHVAP) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.MainGunHVAP.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHVAP) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaLightWeapon");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaLightWeapon) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaLightWeapon.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaLightWeapon) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaTruck");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaTruck) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaTruck.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaTruck) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaSpwOrPsw");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSpwOrPsw.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaSPGun");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaSPGun) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSPGun.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSPGun) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzIV");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzIV) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzIV.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzIV) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzV");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzV) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzV.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzV) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzVI");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzVI) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzVI.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzVI) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaAtGun");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaAtGun) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaAtGun.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaAtGun) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaFortifiedPosition");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyKiaFortifiedPosition.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaLightWeapon");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaLightWeapon) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaLightWeapon.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaLightWeapon) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaTruck");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaTruck) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaTruck.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaTruck) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaSpwOrPsw");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaSpwOrPsw) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaSpwOrPsw.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSpwOrPsw) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaSPGun");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaSPGun) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaSPGun.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSPGun) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzIV");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzIV) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaPzIV.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzIV) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzV");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzV) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaPzV.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzV) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzVI");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzVI) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaPzVI.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzVI) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaAtGun");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaAtGun) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaAtGun.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaAtGun) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsYourKiaFortifiedPosition");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaFortifiedPosition) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsYourKiaFortifiedPosition.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaFortifiedPosition) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsCaptureArea");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsCaptureArea) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsCaptureArea.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCaptureArea) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsCapturedExitArea");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsCapturedExitArea) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsCapturedExitArea.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCapturedExitArea) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsLostArea");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsLostArea) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsLostArea.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsLostArea) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlyTank");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyTank) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlyTank.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyTank) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsFriendlySquad");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlySquad) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsFriendlySquad.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlySquad) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsTotalYourTank");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalYourTank) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsTotalYourTank.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalYourTank) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsTotalFriendlyForces");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalFriendlyForces) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsTotalFriendlyForces.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalFriendlyForces) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsTotalTerritory");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalTerritory) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsTotalTerritory.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalTerritory) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("VictoryPtsTotalEngagement");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPts_TotalEngagement) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.VictoryPtsTotalEngagement.ToString());
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalEngagement) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("Decorations");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decorations) returned false");
+                  return false;
+               }
+               elem.SetAttribute("count", report.Decorations.Count.ToString());
+               XmlNode? decorationsNode = reportNode.AppendChild(elem);
+               if (null == decorationsNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Decorations) returned false");
+                  return false;
+               }
+               for (int k1 = 0; k1 < report.Decorations.Count; ++k1)
+               {
+                  elem = aXmlDocument.CreateElement("Decoration");
+                  if (null == elem)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decoration) returned false");
+                     return false;
+                  }
+                  elem.SetAttribute("value", report.Decorations[k1].ToString());
+                  XmlNode? decorationNode = decorationsNode.AppendChild(elem);
+                  if (null == decorationNode)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(decorationNode) returned false");
+                     return false;
+                  }
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("Notes");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Notes) returned false");
+                  return false;
+               }
+               elem.SetAttribute("count", report.Notes.Count.ToString());
+               XmlNode? notesNode = reportNode.AppendChild(elem);
+               if (null == notesNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Notes) returned false");
+                  return false;
+               }
+               for (int k1 = 0; k1 < report.Notes.Count; ++k1)
+               {
+                  elem = aXmlDocument.CreateElement("Note");
+                  if (null == elem)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decoration) returned false");
+                     return false;
+                  }
+                  elem.SetAttribute("value", report.Notes[k1].ToString());
+                  XmlNode? noteNode = notesNode.AppendChild(elem);
+                  if (null == noteNode)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(noteNode) returned false");
+                     return false;
+                  }
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("DayEndedTime");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(DayEndedTime) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.DayEndedTime);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(DayEndedTime) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("Breakdown");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Breakdown) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.Breakdown);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Breakdown) returned false");
+                  return false;
+               }
+               //------------------------------------------
+               elem = aXmlDocument.CreateElement("KnockedOut");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(KnockedOut) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", report.KnockedOut);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(KnockedOut) returned false");
+                  return false;
+               }
             }
          }
          return true;

@@ -10,6 +10,7 @@ namespace Pattons_Best
 {
    public class AfterActionReport : IAfterActionReport
    {
+      public bool IsActionThisDay { get; set; } = true;
       public string Day { get; set; } = "07/27/44";
       public EnumScenario Scenario { get; set; } = EnumScenario.Advance;
       public int Probability { get; set; } = 3;
@@ -90,6 +91,7 @@ namespace Pattons_Best
       }
       public AfterActionReport(ICombatCalendarEntry entry, IAfterActionReport aar)
       {
+         IsActionThisDay = false;
          TankCardNum = aar.TankCardNum;
          //------------------------------
          Day = entry.Date;

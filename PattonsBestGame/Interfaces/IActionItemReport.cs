@@ -8,7 +8,7 @@ namespace Pattons_Best
 {
    public interface IAfterActionReport
    {
-
+      bool IsActionThisDay { get; set; }
       string Day { get; set; }
       EnumScenario Scenario { get; set; }
       int Probability { get; set; }

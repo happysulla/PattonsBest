@@ -187,7 +187,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          //SetOn(LogEnum.LE_SHOW_ROTATION);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
-         SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);
+         //SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);
          //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_START_BATTLE);
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
@@ -199,7 +199,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
          SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
-         SetOn(LogEnum.LE_SHOW_CREW_RETURN);
+         //SetOn(LogEnum.LE_SHOW_CREW_RETURN);
          //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD);
          SetOn(LogEnum.LE_SHOW_PROMOTION);
