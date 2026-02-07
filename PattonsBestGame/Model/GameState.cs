@@ -3088,15 +3088,25 @@ namespace Pattons_Best
          //lastReport.SunriseHour = 18;  // <CGS> TEST - EndOfDay - start at end of day
          //lastReport.SunriseMin = 00;   // <CGS> TEST - EndOfDay - start at end of day
          //--------------------------------
-         lastReport.Driver.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
-         lastReport.Driver.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
-         lastReport.Driver.IsUnconscious = true;           // <CGS> TEST - wounded crewmen
-         gi.SetIncapacitated(lastReport.Driver);           // <CGS> TEST - wounded crewmen
+         lastReport.Driver.SetBloodSpots(10);              // <cgs> TEST - wounded crewmen
+         lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
+         lastReport.Driver.IsUnconscious = true;           // <cgs> TEST - unconscious crewmen
+         gi.SetIncapacitated(lastReport.Driver);           // <cgs> TEST - wounded crewmen
+         if( false == gi.SetCrewActionTerritory(lastReport.Driver))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): SetCrewActionTerritory(Driver) returned false");
+            return false;
+         }
          //--------------------------------
-         //lastReport.Gunner.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
-         //lastReport.Gunner.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
-         //lastReport.Gunner.WoundDaysUntilReturn = 14;      // <CGS> TEST - wounded crewmen
-         //gi.SetIncapacitated(lastReport.Gunner);           // <CGS> TEST - wounded crewmen
+         lastReport.Gunner.SetBloodSpots(20);              // <CGS> TEST - wounded crewmen
+         lastReport.Gunner.Wound = "Light Wound";          // <CGS> TEST - wounded crewmen
+         lastReport.Gunner.WoundDaysUntilReturn = 14;      // <CGS> TEST - wounded crewmen
+         gi.SetIncapacitated(lastReport.Gunner);           // <CGS> TEST - wounded crewmen
+         if (false == gi.SetCrewActionTerritory(lastReport.Gunner))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): SetCrewActionTerritory(Gunner) returned false");
+            return false;
+         }
          //gi.TrainedGunners.Add(lastReport.Gunner.Name);    // <CGS> TEST - wounded crewmen
          //--------------------------------
          //lastReport.Commander.SetBloodSpots(10);           // <CGS> TEST - wounded crewmen
@@ -3318,11 +3328,6 @@ namespace Pattons_Best
          gi.GunLoads.Clear();
          //-------------------------------------------------------
          gi.DieRollAction = GameAction.DieRollActionNone;
-         if (false == ResetDieResults(gi))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): Reset_DieResults() returned false");
-            return false;
-         }
          //-------------------------------------------------------
          gi.BattleStacks.Clear();
          gi.Hatches.Clear();
@@ -7554,6 +7559,7 @@ namespace Pattons_Best
                      else if (true == cm.IsUnconscious) // unconscious men may become conscious at beginning of each Crew Action Phase
                      {
                         int dr = Utilities.RandomGenerator.Next(1, 11);
+                        dr = 7; // <CGS> Test - keep unconscious
                         if (dr < 6)
                         {
                            cm.IsUnconscious = false; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction) - roll to remove
@@ -9374,6 +9380,15 @@ namespace Pattons_Best
                   return false;
                }
             }
+            StringBuilder sb = new StringBuilder();
+            foreach (IMapItem mi in gi.CrewActions)
+            {
+               sb.Append(mi.Name);
+               sb.Append("@");
+               sb.Append(mi.TerritoryCurrent.Name);
+               sb.Append("  ");
+            }
+            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Conduct_CrewAction(): sb=" + sb.ToString());
          }
          //---------------------------------------------------------
          if (CrewActionPhase.None == gi.CrewActionPhase)

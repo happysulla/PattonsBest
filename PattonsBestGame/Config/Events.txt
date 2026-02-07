@@ -909,7 +909,7 @@ Since the battle did not end, reset and return back to Spotting Round. Click ima
 e061	"<Bold>e061 Crew Switch</Bold> 
 <InlineUIContainer><Button Content='r19.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-The assistant driver moves through the tank to replace the incapacitated crewman. The assistant driver takes on the role but at half rating. Click image to  continue.
+The assistant driver moves through the tank to replace the incapacitated crewman. The assistant driver takes on the role but at half rating unless switching with Driver. Click image to  continue.
 <LineBreak/><LineBreak/>
                                                  <InlineUIContainer><Image Name='CarryingMan' Height='200' Width='80'></Image></InlineUIContainer>"
 e061a	"<Bold>e061a Return Assistant</Bold> 

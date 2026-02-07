@@ -3626,7 +3626,7 @@ namespace Pattons_Best
       {
          if (100 == dieRoll) // unmodified die roll 100 is always a kill
          {
-            gi.SetIncapacitated(cm);
+            gi.SetIncapacitated(cm); // Set_Wounds() - rolled 100
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             if ("Commander" == cm.Role)
@@ -3661,7 +3661,7 @@ namespace Pattons_Best
             cm.SetBloodSpots(5);
             if ((true == gi.IsMinefieldAttack) || (null == gi.Death))
             {
-               gi.SetIncapacitated(cm);
+               gi.SetIncapacitated(cm); // Set_Wounds() - minefield attack
                cm.IsUnconscious = true;
                return "Unconscious";
             }
@@ -3681,7 +3681,7 @@ namespace Pattons_Best
          }
          else if (dieRoll < 88)
          {
-            gi.SetIncapacitated(cm);
+            gi.SetIncapacitated(cm); // Set_Wounds() - rolled 74-87
             cm.SetBloodSpots(20);
             if ("None" == cm.Wound)
                cm.Wound = "Light Wound";
@@ -3689,7 +3689,7 @@ namespace Pattons_Best
          }
          else if (dieRoll < 93)
          {
-            gi.SetIncapacitated(cm);
+            gi.SetIncapacitated(cm); // Set_Wounds() - rolled 88-92
             cm.SetBloodSpots(30);
             if ("Killed" != cm.Wound)
                cm.Wound = "Serious Wound";
@@ -3697,7 +3697,7 @@ namespace Pattons_Best
          }
          else if (dieRoll < 98)
          {
-            gi.SetIncapacitated(cm);
+            gi.SetIncapacitated(cm); // Set_Wounds() - rolled 93-97
             cm.SetBloodSpots(35);
             if ("Killed" != cm.Wound)
                cm.Wound = "Serious Wound";
@@ -3705,7 +3705,7 @@ namespace Pattons_Best
          }
          else
          {
-            gi.SetIncapacitated(cm);
+            gi.SetIncapacitated(cm); // Set_Wounds() - rolled 98+
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             cm.Wound = "Killed";

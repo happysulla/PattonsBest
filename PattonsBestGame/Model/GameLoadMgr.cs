@@ -6099,7 +6099,7 @@ namespace Pattons_Best
             hits.Add(attack);
          }
          if( 0 < count )
-            reader.Read(); // get past </ShermanHits> tag
+            reader.Read(); // get past </Sherman Hits> tag
          return true;
       }
       private bool ReadXmlShermanDeath(XmlReader reader, ref ShermanDeath? death)
@@ -8657,25 +8657,63 @@ namespace Pattons_Best
       }
       private bool CreateXmlListingOfMapItems(XmlDocument aXmlDocument, IGameInstance gi)
       {
+         for (int k = 0; k < gi.Reports.Count; k++)
+         {
+            IAfterActionReport? report = gi.Reports[k];
+            if (null == report)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): report=null");
+               return false;
+            }
+            if (null == theMapItems.Find(report.Commander.Name))
+               theMapItems.Add((IMapItem)report.Commander);
+            if (null == theMapItems.Find(report.Gunner.Name))
+               theMapItems.Add((IMapItem)report.Gunner);
+            if (null == theMapItems.Find(report.Loader.Name))
+               theMapItems.Add((IMapItem)report.Loader);
+            if (null == theMapItems.Find(report.Driver.Name))
+               theMapItems.Add((IMapItem)report.Driver);
+            if (null == theMapItems.Find(report.Assistant.Name))
+               theMapItems.Add((IMapItem)report.Assistant);
+         }
+         //-----------------------------------
          foreach (IMapItem mi in gi.ReadyRacks)
             theMapItems.Add(mi);
          foreach (IMapItem mi in gi.Hatches)
             theMapItems.Add(mi);
          foreach (IMapItem mi in gi.CrewActions)
-            theMapItems.Add(mi);
+         {
+            if (null == theMapItems.Find(mi.Name))
+               theMapItems.Add(mi);
+         }
          foreach (IMapItem mi in gi.GunLoads)
             theMapItems.Add(mi);
          foreach (IMapItem mi in gi.Targets)
-            theMapItems.Add(mi);
+         {
+            if (null == theMapItems.Find(mi.Name))
+               theMapItems.Add(mi);
+         }
          foreach (IMapItem mi in gi.AdvancingEnemies)
-            theMapItems.Add(mi);
+         {
+            if (null == theMapItems.Find(mi.Name))
+               theMapItems.Add(mi);
+         }
          foreach (IMapItem mi in gi.ShermanAdvanceOrRetreatEnemies)
-            theMapItems.Add(mi);
+         {
+            if (null == theMapItems.Find(mi.Name))
+               theMapItems.Add(mi);
+         }
          //-----------------------------------
          foreach (IMapItem mi in gi.NewMembers) // only saving off the IMapItem portion of ICrewMember
-            theMapItems.Add(mi);
+         {
+            if (null == theMapItems.Find(mi.Name))
+               theMapItems.Add(mi);
+         }
          foreach (IMapItem mi in gi.InjuredCrewMembers) // only saving off the IMapItem portion of ICrewMember
-            theMapItems.Add(mi);
+         {
+            if (null == theMapItems.Find(mi.Name))
+               theMapItems.Add(mi);
+         }
          foreach (IMapItem mi in gi.BattlePrep.myHatches) 
             theMapItems.Add(mi);
          //-----------------------------------
@@ -8711,28 +8749,14 @@ namespace Pattons_Best
          }
          theMapItems.Add(gi.Sherman);
          if (null != gi.Death)
-            theMapItems.Add(gi.Death.myEnemyUnit);
-         if (null != gi.Panzerfaust)
-            theMapItems.Add(gi.Panzerfaust.myEnemyUnit);
-         //======================================================
-         for (int k = 0; k < gi.Reports.Count; k++)
          {
-            IAfterActionReport? report = gi.Reports[k];
-            if (null == report)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): report=null");
-               return false;
-            }
-            if (null == theMapItems.Find(report.Commander.Name))
-               theMapItems.Add((IMapItem)report.Commander);
-            if (null == theMapItems.Find(report.Gunner.Name))
-               theMapItems.Add((IMapItem)report.Gunner);
-            if (null == theMapItems.Find(report.Loader.Name))
-               theMapItems.Add((IMapItem)report.Loader);
-            if (null == theMapItems.Find(report.Driver.Name))
-               theMapItems.Add((IMapItem)report.Driver);
-            if (null == theMapItems.Find(report.Assistant.Name))
-               theMapItems.Add((IMapItem)report.Assistant);
+            if (null == theMapItems.Find(gi.Death.myEnemyUnit.Name))
+               theMapItems.Add(gi.Death.myEnemyUnit);
+         }
+         if (null != gi.Panzerfaust)
+         {
+            if (null == theMapItems.Find(gi.Panzerfaust.myEnemyUnit.Name))
+               theMapItems.Add(gi.Panzerfaust.myEnemyUnit);
          }
          //======================================================
          XmlNode? root = aXmlDocument.DocumentElement;

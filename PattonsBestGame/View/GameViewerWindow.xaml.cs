@@ -568,6 +568,14 @@ namespace Pattons_Best
          myMoveButtons.Clear();
          myBattleButtons.Clear();
          myTankButtons.Clear();
+         List<UIElement> elementRemovals = new List<UIElement>();
+         foreach (UIElement ui in myCanvasTank.Children)
+         {
+            if (ui is Button b)
+               elementRemovals.Add(ui);
+         }
+         foreach (UIElement ui1 in elementRemovals)
+            myCanvasTank.Children.Remove(ui1);
          Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateViewForNewGame(): Clearing action=" + action.ToString());
          UpdateCanvasMainClear(myMoveButtons, gi.MoveStacks, action);
          UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
@@ -2261,6 +2269,15 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------------------------
+         StringBuilder sb = new StringBuilder();
+         foreach(IMapItem mi in gi.CrewActions)
+         {
+            sb.Append(mi.Name);
+            sb.Append("@");
+            sb.Append(mi.TerritoryCurrent.Name);
+            sb.Append("  ");
+         }
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "UpdateCanvasTank(): sb=" + sb.ToString());
          if (false == UpdateCanvasTankMapItems(gi.CrewActions))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(CrewActions) returned false");

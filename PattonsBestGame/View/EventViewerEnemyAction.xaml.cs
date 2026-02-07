@@ -33,6 +33,7 @@ namespace Pattons_Best
       private const int NO_FIRE_YOUR_TANK = 105;
       private const int NO_FIRE_THROWN_TRACK = 106;
       private const int NO_FIRE_MISSED_TURRET = 107;
+      private const int KIA = 108;
       public enum E0475Enum
       {
          ENEMY_ACTION_SELECT,
@@ -286,6 +287,17 @@ namespace Pattons_Best
                      myGridRows[i].myTerrain = "Moving";
                   else
                      myGridRows[i].myTerrain = "Open";
+                  //-------------------------------------
+                  if( true == mi.IsKilled )
+                  {
+                     myGridRows[i].myDieRollEnemyAction = KIA;
+                     myGridRows[i].myDieRollTerrain = NO_MOVE;
+                     myGridRows[i].myDieRollFacing = NO_MOVE;
+                     myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks or infantry
+                     myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK; // not firing at your tank either
+                     myGridRows[i].myDieRollHitLocationYourTank = NO_FIRE_YOUR_TANK;
+                     myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK; 
+                  }
                   ++i;
                }
             }
@@ -823,7 +835,23 @@ namespace Pattons_Best
             Grid.SetRow(label2, rowNum);
             Grid.SetColumn(label2, 2);
             //----------------------------------
-            if (Utilities.NO_RESULT < myGridRows[i].myDieRollEnemyAction)
+            if( true == mi.IsKilled )
+            {
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               int dieRollPlusModifier = myGridRows[i].myDieRollEnemyAction + myGridRows[i].myModifierEnemyAction;
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA"};
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "KIA" };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
+            }
+            else if (Utilities.NO_RESULT < myGridRows[i].myDieRollEnemyAction)
             {
                Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollEnemyAction.ToString() };
                myGrid.Children.Add(label3);
