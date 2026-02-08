@@ -4471,6 +4471,51 @@ namespace Pattons_Best
          }
          if (0 < count)
             reader.Read(); // get past </Reports> tag
+         //------------------------------------------
+         IAfterActionReport? lastReport = reports.GetLast();
+         if(null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): lastReport=null");
+            return false;
+         }
+         if( false == lastReport.IsActionThisDay )
+         {
+            for (int i = reports.Count - 1; i >= 0; i--)
+            {
+               IAfterActionReport? report = reports[i];
+               if (null == report)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): report=null for i=" + i.ToString());
+                  return false;
+               }
+               if( true ==  report.IsActionThisDay )
+               {
+                  lastReport.Name = report.Name;
+                  lastReport.TankCardNum = report.TankCardNum;
+                  lastReport.Weather = report.Weather;
+                  lastReport.Commander = report.Commander;
+                  lastReport.Gunner = report.Gunner;
+                  lastReport.Loader = report.Loader;
+                  lastReport.Driver = report.Driver;
+                  lastReport.Assistant = report.Assistant;
+                  lastReport.SunriseHour = report.SunriseHour;
+                  lastReport.SunriseMin = report.SunriseMin;
+                  lastReport.SunsetHour = report.SunsetHour;
+                  lastReport.SunsetMin = report.SunsetMin;
+                  lastReport.Ammo30CalibreMG = report.Ammo30CalibreMG;
+                  lastReport.Ammo50CalibreMG = report.Ammo50CalibreMG;
+                  lastReport.AmmoSmokeBomb = report.AmmoSmokeBomb;
+                  lastReport.AmmoSmokeGrenade = report.AmmoSmokeGrenade;
+                  lastReport.AmmoPeriscope = report.AmmoPeriscope;
+                  lastReport.MainGunHE = report.MainGunHE;
+                  lastReport.MainGunAP = report.MainGunAP;
+                  lastReport.MainGunWP = report.MainGunWP;
+                  lastReport.MainGunHBCI = report.MainGunHBCI;
+                  lastReport.MainGunHVAP = report.MainGunHVAP;
+                  return true;
+               }
+            }
+         }
          return true;
       }
       private bool ReadXmlReportsReport(XmlReader reader, IAfterActionReport report)
