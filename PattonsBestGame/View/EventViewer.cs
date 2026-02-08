@@ -4732,7 +4732,7 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                "));
+            myTextBlock.Inlines.Add(new Run("                           "));
          }
          else if (null != gi.Death)
          {
@@ -6398,11 +6398,6 @@ namespace Pattons_Best
                               myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006a";       
                               myGameInstance.DieRollAction = GameAction.DieRollActionNone;   
                            }
-                           if (EnumScenario.Counterattack == lastReport.Scenario)
-                           {
-                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006a";
-                              myGameInstance.DieRollAction = GameAction.DieRollActionNone;
-                           }
                            else
                            {
                               myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";                  
@@ -6892,11 +6887,11 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "EngagementOver":
-                           action = GameAction.EveningDebriefingVictoryPointsCalculated;
+                           action = GameAction.EveningDebriefingPromoPointsCalculated;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "EventDebriefVictoryPts":
-                           action = GameAction.EveningDebriefingVictoryPointsCalculated;
+                           action = GameAction.EveningDebriefingPromoPointsCalculated;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "EventDebriefPromotion":

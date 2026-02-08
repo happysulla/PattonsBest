@@ -460,7 +460,7 @@ namespace Pattons_Best
       EveningDebriefingRatingImprovement,
       EveningDebriefingRatingImprovementEnd,
       EveningDebriefingCrewReplacedEnd,
-      EveningDebriefingVictoryPointsCalculated,
+      EveningDebriefingPromoPointsCalculated,
       EventDebriefPromotion,
       EventDebriefDecorationStart,
       EventDebriefDecorationContinue,
@@ -470,6 +470,7 @@ namespace Pattons_Best
       EventDebriefDecorationHonor,
       EventDebriefDecorationHeart,
       EveningDebriefingResetDay,
+      EveningDebriefingReplaceCrew,
       EveningDebriefingShowFeat,
       EveningDebriefingShowFeatEnd,
       Error

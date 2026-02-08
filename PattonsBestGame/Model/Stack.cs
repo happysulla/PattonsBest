@@ -110,7 +110,7 @@ namespace Pattons_Best
             IStack stack = (IStack)o;
             foreach (MapItem mapItem in stack.MapItems)
             {
-               if (mapItem.Name == name)
+               if (true == mapItem.Name.Contains(name))
                   return mapItem;
             }
          }

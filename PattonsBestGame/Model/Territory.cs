@@ -175,7 +175,7 @@ namespace Pattons_Best
       {
          if (0 == t.Points.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetClosestPoint(): t.Points.Count=0 for t.Name=" + t.Name);
+            //Logger.Log(LogEnum.LE_ERROR, "GetClosestPoint(): t.Points.Count=0 for t.Name=" + t.Name);
             return false;
          }
          int intersections = 0;

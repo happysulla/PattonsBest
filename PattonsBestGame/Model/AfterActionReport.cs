@@ -100,11 +100,11 @@ namespace Pattons_Best
          Resistance = entry.Resistance;
          //------------------------------
          Name = aar.Name;
-         Commander = aar.Commander;
-         Gunner = aar.Gunner;
-         Loader = aar.Loader;
-         Driver = aar.Driver;
-         Assistant = aar.Assistant;
+         Commander=aar.Commander;
+         Gunner=aar.Gunner;
+         Loader=aar.Loader;
+         Driver=aar.Driver;
+         Assistant=aar.Assistant;
          //------------------------------
          MainGunHBCI = aar.MainGunHBCI;
          MainGunHVAP = aar.MainGunHVAP;

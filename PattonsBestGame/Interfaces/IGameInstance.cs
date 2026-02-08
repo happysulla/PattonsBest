@@ -147,8 +147,11 @@ namespace Pattons_Best
       int TankReplacementNumber { set; get; }
       int Fuel { set; get; }
       int VictoryPtsTotalCampaign { get; set; }
+      bool IsVictoryPointsCalculatedThisDay { set; get; }
       int PromotionPointNum { get; set; }
       int PromotionDay { get; set; }
+      bool IsMedalsCalculatedThisDay { set; get; }
+      bool IsPurpleHeartCalculatedThisDay { set; get; }
       int NumPurpleHeart { get; set; }
       bool IsCommanderRescuePerformed { set; get; }
       bool IsCommanderKilled { set; get; }

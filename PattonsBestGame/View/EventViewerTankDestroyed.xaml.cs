@@ -519,9 +519,12 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): cast of mi to cm failed");
                         return false;
                      }
-                     Button b = CreateButton(cm, false);
-                     b.Click += Button_Click;
-                     myStackPanelAssignable.Children.Add(b);
+                     if( false == cm.IsIncapacitated )
+                     {
+                        Button b = CreateButton(cm, false);
+                        b.Click += Button_Click;
+                        myStackPanelAssignable.Children.Add(b);
+                     }
                   }
                }
                else

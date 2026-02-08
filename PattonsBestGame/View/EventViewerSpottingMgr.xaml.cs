@@ -164,7 +164,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): lastReport=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "Perform_Spotting(): crew=" + lastReport.Commander.Name);
+         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "Perform_Spotting(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
          //--------------------------------------------------
          myCallback = callback;
          myState = E0472Enum.SELECT_CREWMAN;

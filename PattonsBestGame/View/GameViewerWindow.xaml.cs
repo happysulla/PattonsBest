@@ -402,6 +402,7 @@ namespace Pattons_Best
             case GameAction.TestingStartBattle:
             case GameAction.TestingStartAmbush:
             case GameAction.EveningDebriefingResetDay:
+            case GameAction.EveningDebriefingReplaceCrew:
             case GameAction.MorningBriefingBegin:
             case GameAction.MorningBriefingCrewmanHealing:
             case GameAction.MorningBriefingExistingCrewman:
@@ -2211,9 +2212,9 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (true == gi.Sherman.IsKilled)
          {
-            double offsetHeight = myCanvasTank.ActualHeight / 2.0 - 125;
-            double offsetWidth = myCanvasTank.ActualWidth / 2.0 - 125;
-            Image imgDeny = new Image { Name = "TankKilled", Source = MapItem.theMapImages.GetBitmapImage("Deny"), Height = 250, Width = 250 };
+            double offsetHeight = myCanvasTank.ActualHeight / 2.0 - 100;
+            double offsetWidth = 30;
+            Image imgDeny = new Image { Name = "TankKilled", Source = MapItem.theMapImages.GetBitmapImage("DestroyedTank"), Height = 250, Width = 250 };
             myCanvasTank.Children.Add(imgDeny);
             Canvas.SetLeft(imgDeny, offsetWidth);
             Canvas.SetTop(imgDeny, offsetHeight);

@@ -244,15 +244,17 @@ namespace Pattons_Best
             cm.SetBloodSpots(0);
             if (true == cm.IsIncapacitated)
             {
-               if ((GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn)) // crewmen are not replaced if light wound and evening debrief
+               if (false == cm.IsKilled)
                {
-                  cm.IsIncapacitated = false;
-                  cm.IsUnconscious = false; // Replace_InjuredCrewmen() - evening debriefing and no wound days
-                  continue;
+                  gi.InjuredCrewMembers.Add(cm);
+                  if ((GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn)) // crewmen are not replaced if light wound and evening debrief
+                  {
+                     cm.IsIncapacitated = false;
+                     cm.IsUnconscious = false; // Replace_InjuredCrewmen() - evening debriefing and no wound days
+                     continue;
+                  }
                }
                isCrewmanReplaced = true;  // inform calling routine that crewman replaced
-               if( false == cm.IsKilled )
-                  gi.InjuredCrewMembers.Add(cm);
                int dieRoll = Utilities.RandomGenerator.Next(1, 11);
                switch (cm.Role)
                {
@@ -353,7 +355,7 @@ namespace Pattons_Best
       }
       protected bool SetWeatherCounters(IGameInstance gi)
       {
-         IAfterActionReport? report = gi.Reports.GetLast(); // remove it from list
+         IAfterActionReport? report = gi.Reports.GetLast(); 
          if (null == report)
          {
             Logger.Log(LogEnum.LE_ERROR, "Set_WeatherCounters(): report=null");
@@ -632,7 +634,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): startArea not found for " + name);
             return false;
          }
-         IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", tStartEdge);
+         string startAreaName = "StartArea" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         IMapItem startArea = new MapItem(startAreaName, 1.0, "c33StartArea", tStartEdge);
          startArea.Count = dieRoll;
          gi.MoveStacks.Add(startArea);
          //-----------------------------------------
@@ -649,7 +653,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Set_StartArea(): taskForceArea tStart=" + tStartEdge.Adjacents[0]);
                return false;
             }
-            IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tStart); // add task for to adjacent area
+            string tfName = "TaskForce" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem taskForce = new MapItem(tfName, 1.2, "c35TaskForce", tStart); // add taskforce for to adjacent start area for advance/battle sceanrio
             gi.MoveStacks.Add(taskForce);
             //---------------------------------------------
             double offset = taskForce.Zoom * Utilities.theMapItemOffset;
@@ -811,7 +817,18 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------
-         IMapItem? miStart = gi.MoveStacks.FindMapItem("StartArea");
+         IMapItem? miStart = null;
+         foreach(IStack stack in gi.MoveStacks)
+         {
+            foreach(IMapItem mi in stack.MapItems)
+            {
+               if( true == mi.Name.Contains("StartArea"))
+               {
+                  miStart = mi;
+                  break;
+               }
+            }
+         }
          if (null == miStart)
          {
             Logger.Log(LogEnum.LE_ERROR, "Set_ExitArea(): mi=null for StartArea");
@@ -849,7 +866,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Set_ExitArea(): taskForceArea tStart=" + tExitEdge.Adjacents[0]);
                return false;
             }
-            IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tExit); // add task for to adjacent area
+            string tfName = "TaskForce" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem taskForce = new MapItem(tfName, 1.2, "c35TaskForce", tExit); // add task for to adjacent exit area for counterattack scenario
             gi.MoveStacks.Add(taskForce);
             //---------------------------------------------
             gi.EnteredArea = tExit;
@@ -1924,27 +1943,52 @@ namespace Pattons_Best
          }
          Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
          Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
-         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day + " o?=" + optionCommanderDeath.IsEnabled.ToString() + " k?=" + gi.IsCommanderKilled.ToString());
+         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day + " optionDeath?=" + optionCommanderDeath.IsEnabled.ToString() + " k?=" + gi.IsCommanderKilled.ToString());
          //----------------------------------------------------------
          if (null != gi.Death)
          {
             Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck():  gi.Death=" + gi.Death.ToString());
-            if ((true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled))
+            if (true == optionSingleDayGame.IsEnabled)
             {
-               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Game Ends!!!!! TankExplodes");
-               GameEngine.theInGameFeats.AddOne("EndGameExplode");
-               if (false == optionSingleDayGame.IsEnabled)
-                  GameEngine.theInGameFeats.AddOne("EndCampaignGame");
-               gi.GamePhase = GamePhase.EndGame;
-               action = GameAction.EndGameLost;
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+               if (true == gi.Death.myIsExplosion)
+               {
+                  Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Single Day Game Ends!!!!! TankExplodes");
+                  GameEngine.theInGameFeats.AddOne("EndGameExplode");
+                  if (false == optionSingleDayGame.IsEnabled)
+                     GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+                  gi.GamePhase = GamePhase.EndGame;
+                  action = GameAction.EndGameLost;
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Single Day Game Ends!!!!! Lost Tank");
+                  gi.GamePhase = GamePhase.EndGame;
+                  action = GameAction.EndGameLost;
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+               }
             }
-            else if (true == optionSingleDayGame.IsEnabled)
+            else if ( (true == optionCommanderDeath.IsEnabled) && ((true == gi.IsCommanderKilled) || (TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn)) )
             {
-               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Game Ends!!!!! Lost Tank");
-               gi.GamePhase = GamePhase.EndGame;
-               action = GameAction.EndGameLost;
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+               if (true == gi.Death.myIsExplosion)
+               {
+                  Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! TankExplodes");
+                  GameEngine.theInGameFeats.AddOne("EndGameExplode");
+                  if (false == optionSingleDayGame.IsEnabled)
+                     GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+                  gi.GamePhase = GamePhase.EndGame;
+                  action = GameAction.EndGameLost;
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
+                  if (true == gi.IsCommanderKilled)
+                     GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+                  gi.GamePhase = GamePhase.EndGame;
+                  action = GameAction.EndGameLost;
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+               }
             }
          }
          //----------------------------------------------------------
@@ -2111,7 +2155,7 @@ namespace Pattons_Best
                   {
                      IAfterActionReport report1 = new AfterActionReport(entry, lastReportSetupDecreaseDate);
                      report1.IsActionThisDay = true;
-                     gi.Reports.Add(report1);
+                     gi.Reports.Add(report1); // GameStateSetup.PerformAction(SetupDecreaseDate)
                      if (false == TableMgr.InitializeTimeTrackForNewDay(gi))
                      {
                         returnStatus = "GetNextTankNum() returned false";
@@ -2164,7 +2208,7 @@ namespace Pattons_Best
                   {
                      IAfterActionReport report1 = new AfterActionReport(entry, lastReportSetupIncreaseDate);
                      report1.IsActionThisDay = true;
-                     gi.Reports.Add(report1);
+                     gi.Reports.Add(report1); // GameStateSetup.PerformAction(SetupIncreaseDate)
                      if (false == TableMgr.InitializeTimeTrackForNewDay(gi)) 
                      {
                         returnStatus = "GetNextTankNum() returned false";
@@ -2409,6 +2453,7 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
@@ -3260,7 +3305,18 @@ namespace Pattons_Best
       }
       private bool AddStartingTestingStateEnemyRetreatAreas(IGameInstance gi)
       {
-         IMapItem? startEdge = gi.MoveStacks.FindMapItem("StartArea"); // Set Task Force into one area outside of start area
+         IMapItem? startEdge = null;
+         foreach (IStack stack1 in gi.MoveStacks)
+         {
+            foreach (IMapItem mi in stack1.MapItems)
+            {
+               if (true == mi.Name.Contains("StartArea"))
+               {
+                  startEdge = mi;
+                  break;
+               }
+            }
+         }
          if (null == startEdge)
          {
             Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingStateEnemyRetreatAreas(): startEdge=null");
@@ -3701,7 +3757,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateMorningBriefing.PerformAction(): crew=" + lastReport.Commander.Name);
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateMorningBriefing.PerformAction(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
             switch (action)
             {
                case GameAction.ShowTankForcePath:
@@ -3724,6 +3780,7 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.EveningDebriefingResetDay:
+               case GameAction.EveningDebriefingReplaceCrew:
                   break;
                case GameAction.UpdateLoadingGame:
                   if (false == LoadGame(ref gi))
@@ -3754,6 +3811,9 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.MorningBriefingBegin:
+                  gi.IsVictoryPointsCalculatedThisDay = false; // it is a new day
+                  gi.IsMedalsCalculatedThisDay = false; // it is a new day
+                  gi.IsPurpleHeartCalculatedThisDay = false; // it is a new day
                   GameLoadMgr loadMgr = new GameLoadMgr();
                   if (false == loadMgr.SaveGame(gi, "CheckpointLastDay.pbg"))
                   {
@@ -4161,6 +4221,7 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
@@ -4217,7 +4278,7 @@ namespace Pattons_Best
       }
       protected bool CheckCrewReturning(IGameInstance gi, IAfterActionReport lastReport, ref GameAction action)
       {
-         Logger.Log(LogEnum.LE_SHOW_CREW_RETURN, "CheckCrewReturning(): ++++++++++++++setting gi.ReturningCrewman=null");
+         Logger.Log(LogEnum.LE_SHOW_CREW_RETURN, "Check_CrewReturning(): ++++++++++++++setting gi.ReturningCrewman=null");
          gi.ReturningCrewman = null;
          foreach (IMapItem mi in gi.InjuredCrewMembers) // Check_CrewReturning()
          {
@@ -4237,7 +4298,7 @@ namespace Pattons_Best
          if (null != gi.ReturningCrewman)
          {
             SetCommand(gi, action, GameAction.DieRollActionNone, "e007c"); // Returning Crewmen
-            Logger.Log(LogEnum.LE_SHOW_CREW_RETURN, "CheckCrewReturning(): show choice to user on crewman=" + gi.ReturningCrewman.Name);
+            Logger.Log(LogEnum.LE_SHOW_CREW_RETURN, "Check_CrewReturning(): show choice to user on crewman=" + gi.ReturningCrewman.Name);
             return true;
          }
          //------------------------------------------------------------------------
@@ -4249,7 +4310,7 @@ namespace Pattons_Best
          }
          else
          {
-            SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // CheckCrewReturning() - Weather Roll
+            SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // Check_CrewReturning() - Weather Roll
             action = GameAction.UpdateEventViewerActive;
          }
          return true;
@@ -4560,7 +4621,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattlePrep.PerformAction(): crew=" + lastReport.Commander.Name);
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattlePrep.PerformAction(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
             TankCard card = new TankCard(lastReport.TankCardNum);
             switch (action)
             {
@@ -4973,6 +5034,9 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
+         if (previousBattlePhase != gi.BattlePhase)
+         { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -5026,7 +5090,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateMovement.PerformAction(): crew=" + lastReport.Commander.Name);
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateMovement.PerformAction(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
             string key = gi.EventActive;
             switch (action)
             {
@@ -5171,7 +5235,7 @@ namespace Pattons_Best
                      SetCommand(gi, action, GameAction.DieRollActionNone, "e022"); // MovementSnowRollEnd
                   break;
                case GameAction.MovementStartAreaSet:
-               case GameAction.MovementStartAreaRestart: // No fight occurs
+               case GameAction.MovementStartAreaRestart:            // No fight occurs in exit hex
                case GameAction.MovementStartAreaRestartAfterBattle: // Win a battle resulting in empty battle board
                   if (false == MovementPhaseRestart(gi, lastReport, action))
                   {
@@ -5745,6 +5809,7 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
@@ -6155,6 +6220,10 @@ namespace Pattons_Best
             {
                foreach (IMapItem mi in stack.MapItems)
                {
+                  if (true == mi.Name.Contains("Exit"))
+                     startAreaRemovals.Add(mi);
+                  if (true == mi.Name.Contains("UsControl"))
+                     startAreaRemovals.Add(mi);
                   if (true == mi.Name.Contains("Start"))
                      startAreaRemovals.Add(mi);
                   else if (true == mi.Name.Contains("TaskForce"))
@@ -6371,9 +6440,10 @@ namespace Pattons_Best
             return false;
          }
          //-----------------------------------------------------
-         //case GameAction.MovementStartAreaSet:
-         //case GameAction.MovementStartAreaRestart: // No fight occurs
-         //case GameAction.MovementStartAreaRestartAfterBattle: // Win a battle resulting in empty battle board
+         // Following actions occurred to reach this point...
+         // --GameAction.Movement_StartAreaSet:
+         // --GameAction.Movement_StartAreaRestart:            // No fight occurs in exit hex
+         // --GameAction.Movement_StartAreaRestartAfterBattle: // Win a battle resulting in empty battle board
          if (EnumScenario.Counterattack == lastReport.Scenario) // Perform_BattlePreparationsSetup()
          {
             bool isStartAreaReached = false;
@@ -6481,7 +6551,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattle.PerformAction(): crew=" + lastReport.Commander.Name);
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattle.PerformAction(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
             string key = gi.EventActive;
             switch (action)
             {
@@ -6853,6 +6923,7 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
@@ -6928,7 +6999,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattleRoundSequence.PerformAction(): crew=" + lastReport.Commander.Name);
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattleRoundSequence.PerformAction(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
             string key = gi.EventActive;
             switch (action)
             {
@@ -8777,6 +8848,7 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
@@ -11345,22 +11417,22 @@ namespace Pattons_Best
                   gi.BattleStacks.Clear();
                   gi.MoveStacks.Clear();
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e101");
-                  if (false == UpdateForEveningDebriefing(gi, lastReport))
+                  if (false == VictoryPointsCalculated(gi, lastReport))
                   {
-                     returnStatus = "UpdateForEveningDebriefing() returned false";
+                     returnStatus = "VictoryPointsCalculated() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
                   lastReport.DayEndedTime = TableMgr.GetTime(lastReport);
                   break;
                case GameAction.EveningDebriefingCrewReplacedEnd:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e101");
-                  if (false == UpdateForEveningDebriefing(gi, lastReport))
+                  if (false == VictoryPointsCalculated(gi, lastReport))
                   {
-                     returnStatus = "UpdateForEveningDebriefing() returned false";
+                     returnStatus = "VictoryPointsCalculated() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.EveningDebriefingVictoryPointsCalculated:
+               case GameAction.EveningDebriefingPromoPointsCalculated:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e102");
                   //----------------------------------------------
                   if (false == UpdatePromotion(gi, lastReport))
@@ -11381,15 +11453,19 @@ namespace Pattons_Best
                case GameAction.EventDebriefDecorationSilverStar:
                case GameAction.EventDebriefDecorationCross:
                case GameAction.EventDebriefDecorationHonor:
-                  if (false == UpdateDecoration(gi, lastReport, action))
+                  if (false == UpdateDecoration(gi, lastReport, ref action))
                   {
                      returnStatus = "Update_Decoration() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.EventDebriefDecorationHeart:
-                  GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
-                  gi.Statistics.AddOne("NumPurpleHearts");
+                  if( false == gi.IsPurpleHeartCalculatedThisDay )
+                  {
+                     gi.IsPurpleHeartCalculatedThisDay = true;
+                     GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
+                     gi.Statistics.AddOne("NumPurpleHearts");
+                  }
                   if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
                   {
                      returnStatus = "EveningDebriefing_ResetDay() returned false";
@@ -11421,6 +11497,8 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
@@ -11430,8 +11508,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
       }
-      public bool UpdateForEveningDebriefing(IGameInstance gi, IAfterActionReport lastReport)
+      public bool VictoryPointsCalculated(IGameInstance gi, IAfterActionReport lastReport)
       {
+         if (true == gi.IsVictoryPointsCalculatedThisDay) // only do once
+            return true;
+         gi.IsVictoryPointsCalculatedThisDay = true;
          int scenarioMultiplierKOGermanUnit = 1;
          int scenarioMultiplierCapturedMapArea = 1;
          int scenarioMultiplierLoseMapArea = 1;
@@ -11447,7 +11528,7 @@ namespace Pattons_Best
             scenarioMultiplierCapturedMapArea = 2;
             scenarioMultiplierLoseMapArea = 3;
          }
-         else if (EnumScenario.Counterattack == lastReport.Scenario) // UpdateFor_EveningDebriefing() - set victory points based on scenario
+         else if (EnumScenario.Counterattack == lastReport.Scenario) // VictoryPoints_Calculated() - set victory points based on scenario
          {
             scenarioMultiplierKOGermanUnit = 2;
             scenarioMultiplierCapturedMapArea = 0;
@@ -11455,10 +11536,10 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateFor_EveningDebriefing(): report.Scenario=" + lastReport.Scenario.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "VictoryPoints_Calculated(): report.Scenario=" + lastReport.Scenario.ToString());
             return false;
          }
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "UpdateFor_EveningDebriefing(): koX=" + scenarioMultiplierKOGermanUnit.ToString() + " captureX=" + scenarioMultiplierCapturedMapArea.ToString() + " lostX=" + scenarioMultiplierLoseMapArea.ToString());
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): koX=" + scenarioMultiplierKOGermanUnit.ToString() + " captureX=" + scenarioMultiplierCapturedMapArea.ToString() + " lostX=" + scenarioMultiplierLoseMapArea.ToString());
          //----------------------------------
          int totalYourKia = lastReport.VictoryPtsYourKiaLightWeapon;
          totalYourKia += lastReport.VictoryPtsYourKiaTruck;
@@ -11470,7 +11551,7 @@ namespace Pattons_Best
          totalYourKia += lastReport.VictoryPtsYourKiaAtGun * 4;
          totalYourKia += lastReport.VictoryPtsYourKiaFortifiedPosition * 2;
          lastReport.VictoryPtsTotalYourTank = totalYourKia * scenarioMultiplierKOGermanUnit;
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "UpdateFor_EveningDebriefing(): report.VictoryPtsTotalYourTank=" + lastReport.VictoryPtsTotalYourTank.ToString());
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalYourTank=" + lastReport.VictoryPtsTotalYourTank.ToString());
          //----------------------------------
          int totalFriendlyKia = lastReport.VictoryPtsFriendlyKiaLightWeapon;
          totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaTruck;
@@ -11484,11 +11565,11 @@ namespace Pattons_Best
          totalFriendlyKia -= lastReport.VictoryPtsFriendlyTank * 5;
          totalFriendlyKia -= lastReport.VictoryPtsFriendlySquad * 3;
          lastReport.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "UpdateFor_EveningDebriefing(): report.VictoryPtsTotalFriendlyForces=" + lastReport.VictoryPtsTotalFriendlyForces.ToString());
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalFriendlyForces=" + lastReport.VictoryPtsTotalFriendlyForces.ToString());
          //----------------------------------
          lastReport.VictoryPtsTotalTerritory = (lastReport.VictoryPtsCaptureArea + 10 * lastReport.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
          lastReport.VictoryPtsTotalTerritory -= (lastReport.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "UpdateFor_EveningDebriefing(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
          //----------------------------------
          lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory;
          gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
@@ -11562,7 +11643,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_PROMOTION, "UpdatePromotion(): oldRank=" + oldRank + " promoDate=" + lastPromoDate.ToString() + " diffInDates=" + diffInDates.ToString() + " isPromoted=" + gi.IsPromoted);
          return true;
       }
-      public bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, GameAction action)
+      public bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, ref GameAction outAction)
       {
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
@@ -11574,51 +11655,67 @@ namespace Pattons_Best
          sb1.Append(TableMgr.GetTime(report));
          sb1.Append(", ");
          sb1.Append(commander.Name);
-         //----------------------------------------------------
-         switch (action)
+         switch (outAction)
          {
             case GameAction.EventDebriefDecorationContinue:  // UpdateDecoration()
                break;
             case GameAction.EventDebriefDecorationBronzeStar:
-               GameEngine.theInGameFeats.AddOne("NumBronzeStars");
-               gi.Statistics.AddOne("NumBronzeStars");
+               if( false == gi.IsMedalsCalculatedThisDay )
+               {
+                  gi.IsMedalsCalculatedThisDay = true;
+                  GameEngine.theInGameFeats.AddOne("NumBronzeStars");
+                  gi.Statistics.AddOne("NumBronzeStars");
+               }
                sb1.Append(" received the Bronze Star.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationSilverStar:
-               GameEngine.theInGameFeats.AddOne("NumSilverStars");
-               gi.Statistics.AddOne("NumSilverStars");
+               if (false == gi.IsMedalsCalculatedThisDay)
+               {
+                  gi.IsMedalsCalculatedThisDay = true;
+                  GameEngine.theInGameFeats.AddOne("NumSilverStars");
+                  gi.Statistics.AddOne("NumSilverStars");
+               }
                sb1.Append(" received the Silver Star.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationCross:
-               GameEngine.theInGameFeats.AddOne("NumDistinguishedCrosses");
-               gi.Statistics.AddOne("NumDistinguishedCrosses");
+               if (false == gi.IsMedalsCalculatedThisDay)
+               {
+                  gi.IsMedalsCalculatedThisDay = true;
+                  GameEngine.theInGameFeats.AddOne("NumDistinguishedCrosses");
+                  gi.Statistics.AddOne("NumDistinguishedCrosses");
+               }
                sb1.Append(" received the Distinguished Cross.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationHonor:
-               GameEngine.theInGameFeats.AddOne("NumMedalOfHonors");
-               gi.Statistics.AddOne("NumMedalOfHonors");
+               if (false == gi.IsMedalsCalculatedThisDay)
+               {
+                  gi.IsMedalsCalculatedThisDay = true;
+                  GameEngine.theInGameFeats.AddOne("NumMedalOfHonors");
+                  gi.Statistics.AddOne("NumMedalOfHonors");
+               }
                sb1.Append(" received the Medal of Honor.");
                report.Notes.Add(sb1.ToString());
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): reached default action=" + action.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): reached default action=" + outAction.ToString());
                return false;
          }
          //---------------------------------------------
-         if ("None" != commander.Wound)
+         if ("None" != commander.Wound) 
          {
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e104");
-            gi.NumPurpleHeart++;
+            SetCommand(gi, outAction, GameAction.DieRollActionNone, "e104");
+            if (false == gi.IsPurpleHeartCalculatedThisDay)
+               gi.NumPurpleHeart++;
             StringBuilder sb2 = new StringBuilder(commander.Name);
             sb2.Append(" received the Purple Heart.");
             report.Notes.Add(sb2.ToString());  // Update_Decoration(): commnader received purple heart
          }
          else
          {
-            if (false == EveningDebriefingResetDay(gi, report, ref action))
+            if (false == EveningDebriefingResetDay(gi, report, ref outAction))
             {
                Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): EveningDebriefing_ResetDay(=null) returned false");
                return false;
@@ -11626,10 +11723,10 @@ namespace Pattons_Best
          }
          return true;
       }
-      public bool EveningDebriefingResetDay(IGameInstance gi, IAfterActionReport report, ref GameAction action)
+      public bool EveningDebriefingResetDay(IGameInstance gi, IAfterActionReport report, ref GameAction outAction)
       {
          //-------------------------------------------------------
-         if (false == PerformEndCheck(gi, ref action))
+         if (false == PerformEndCheck(gi, ref outAction))
          {
             Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Perform_EndCheck() returned false");
             return false;
@@ -11644,7 +11741,7 @@ namespace Pattons_Best
             }
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
-            gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefingResetDay()
+            gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefing_ResetDay()
             gi.CrewActionPhase = CrewActionPhase.Movement;
             gi.MovementEffectOnSherman = "uninit";
             gi.MovementEffectOnEnemy = "uninit";
@@ -11779,8 +11876,6 @@ namespace Pattons_Best
             //-------------------------------------------------------
             ++gi.Day;
             gi.GameTurn++;
-            gi.GamePhase = GamePhase.MorningBriefing;
-            action = GameAction.EveningDebriefingResetDay;
             //-------------------------------------------------------
             ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
             if (null == newEntry)
@@ -11788,7 +11883,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): newEntry=null");
                return false;
             }
-            IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // EveningDebriefingResetDay()
+            IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // EveningDebriefing_ResetDay()
             if (true == gi.Sherman.IsKilled)
                newReport.Name = "To be determined";
             gi.Reports.Add(newReport); // EveningDebriefing_ResetDay()
@@ -11799,27 +11894,31 @@ namespace Pattons_Best
             }
             Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
             //-------------------------------------------------------
-            lastReport.Commander.IsUnconscious = false;
-            lastReport.Gunner.IsUnconscious = false;
-            lastReport.Loader.IsUnconscious = false;
-            lastReport.Driver.IsUnconscious = false;
-            lastReport.Assistant.IsUnconscious = false;
+            newReport.Commander.IsUnconscious = false;
+            newReport.Gunner.IsUnconscious = false;
+            newReport.Loader.IsUnconscious = false;
+            newReport.Driver.IsUnconscious = false;
+            newReport.Assistant.IsUnconscious = false;
             bool isCrewmanReplaced;
-            if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  // Reset_Day() - TODO: Check feats process
+            if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  
             {
                Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Replace_InjuredCrewmen() returned false");
                return false;
             }
             if (true == isCrewmanReplaced)
             {
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e007b"); // EveningDebriefing_ResetDay() - crew replacement
+               gi.GamePhase = GamePhase.MorningBriefing; // need to put this here so that ReplaceInjuredCrewmen() does not add 30 minutes
+               outAction = GameAction.EveningDebriefingReplaceCrew;
+               SetCommand(gi, outAction, GameAction.DieRollActionNone, "e007b"); // EveningDebriefing_ResetDay() - crew replacement
             }
             else
             {
+               gi.GamePhase = GamePhase.MorningBriefing;
+               outAction = GameAction.EveningDebriefingResetDay;
                if (EnumScenario.Retrofit == newReport.Scenario)
-                  SetCommand(gi, action, GameAction.DieRollActionNone, "e006a"); // EveningDebriefing_ResetDay() - Show user reset day screen
+                  SetCommand(gi, outAction, GameAction.DieRollActionNone, "e006a"); // EveningDebriefing_ResetDay() - Show user Retrofit Period screen
                else
-                  SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006");
+                  SetCommand(gi, outAction, GameAction.MorningBriefingCalendarRoll, "e006"); // EveningDebriefing_ResetDay() - Show user Combat calander Check screen
             }
          }
          gi.Statistics.AddOne("NumDays");
@@ -11906,6 +12005,7 @@ namespace Pattons_Best
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
@@ -12002,6 +12102,7 @@ namespace Pattons_Best
          sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" bp="); sb12.Append(gi.BattlePhase.ToString());
          if (previousBattlePhase != gi.BattlePhase)
          { sb12.Append("=>"); sb12.Append(gi.BattlePhase); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());

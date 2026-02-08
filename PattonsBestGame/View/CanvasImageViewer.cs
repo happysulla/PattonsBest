@@ -160,12 +160,15 @@ namespace Pattons_Best
                            ShowEndGameFail(myCanvas);
                            break;
                         default:
-                           if (false == ShowAfterActionReportDialog(gi, myCanvas, true)) // GameAction.UpdateLoadingGame
-                              Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for cmd.Action=" + cmd.Action.ToString());
+                           if (null != myAarUserControl)
+                           {
+                              myAarUserControl.IsEditable = false;
+                              myAarUserControl.UpdateReport(gi);
+                           }
                            break;
                      }
                      break;
-                  default: Logger.Log(LogEnum.LE_ERROR, "UpdateView(): reached default cmd.MainImage=" + cmd.MainImage.ToString()); return;
+                  default: Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer.UpdateView(): reached default cmd.MainImage=" + cmd.MainImage.ToString()); return;
                }
                break;
             case GameAction.UpdateUndo:
@@ -175,18 +178,41 @@ namespace Pattons_Best
                this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
                break;
             case GameAction.UpdateAfterActionReport:
-            case GameAction.MorningBriefingTankReplacementRoll:
-            case GameAction.MorningBriefingCalendarRoll:
-            case GameAction.MorningBriefingDayOfRest:
-            case GameAction.EveningDebriefingResetDay:
+
             case GameAction.EventDebriefDecorationHeart:
             case GameAction.EventDebriefDecorationContinue:
             case GameAction.EventDebriefDecorationBronzeStar:
             case GameAction.EventDebriefDecorationSilverStar:
             case GameAction.EventDebriefDecorationCross:
             case GameAction.EventDebriefDecorationHonor:
+            case GameAction.MorningBriefingCalendarRoll:
+            case GameAction.MorningBriefingDayOfRest:
+            case GameAction.EveningDebriefingResetDay:
                if (null != myAarUserControl)
+               {
+                  myAarUserControl.IsEditable = false;
                   myAarUserControl.UpdateReport(gi);
+                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+               }
+               return;
+            case GameAction.EveningDebriefingReplaceCrew:
+               if (null != myAarUserControl)
+               {
+                  myAarUserControl.IsEditable = true;
+                  myAarUserControl.UpdateReport(gi);
+                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+               }
+               return;
+            case GameAction.MorningBriefingTankReplacementRoll:
+               if (null != myAarUserControl)
+               {
+                  if( GameAction.MorningBriefingWeatherRoll == gi.DieRollAction )
+                     myAarUserControl.IsEditable = false;
+                  else
+                     myAarUserControl.IsEditable = true;
+                  myAarUserControl.UpdateReport(gi);
+                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+               }
                return;
             case GameAction.UpdateTankExplosion:
                ShowTankExploding(gi, myCanvas);

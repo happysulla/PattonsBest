@@ -173,7 +173,7 @@ namespace Pattons_Best
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_ROUND_COMBAT);
          SetOn(LogEnum.LE_SHOW_UPLOAD_GAME);
-         //SetOn(LogEnum.LE_SHOW_CREW_NAME);
+         SetOn(LogEnum.LE_SHOW_CREW_NAME);
          //SetOn(LogEnum.LE_SHOW_CREW_BU);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);

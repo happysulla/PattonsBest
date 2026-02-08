@@ -115,8 +115,8 @@ The following crewmen are convalesing in a medical hosptial and may rejoin your 
 e007b	"<Bold>e007b Crew Replacement</Bold> 
 <InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-When you tank is knocked out, wounded crewmen are replaced in the first morning briefing that occurs as a result of a Combat Calender check
-<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue to Combat Calender Check.  
+When you tank is knocked out, wounded crewmen are replaced automatically on the next After Action Report 
+<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.  
 <LineBreak/><LineBreak/>
                           <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"
 e007c	"<Bold>e007c Returning Crewmen</Bold> 
@@ -996,7 +996,7 @@ You are promoted when promotion points reach these values. However, cannot be pr
 100 = Staff Sergeant<LineBreak/>
 200 = 2nd Lieutenant<LineBreak/>
 300 = 1st Lieutenant<LineBreak/>
-400 = Captian
+400 = Captain
 <LineBreak/><LineBreak/>"
 e103	"<Bold>e103 Evening Debriefing - Decorations</Bold> 
 <InlineUIContainer><Button Content='r26.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

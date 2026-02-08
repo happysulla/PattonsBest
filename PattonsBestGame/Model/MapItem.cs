@@ -1003,6 +1003,17 @@ namespace Pattons_Best
          Role = role;
          Rank = rank;
       }
+      public void Copy(ICrewMember cm)
+      {
+         IMapItem mi = cm as IMapItem;
+         this.Copy(mi);
+         this.Role = cm.Role;
+         this.Rank = cm.Rank;
+         this.Rating = cm.Rating;
+         this.IsButtonedUp = cm.IsButtonedUp;
+         this.Wound = cm.Wound;
+         this.WoundDaysUntilReturn = cm.WoundDaysUntilReturn;
+      }
       public static void SetButtonContent(Button b, ICrewMember cm, bool isMapItemZoom = true, bool isDecoration = true, bool isBloodSpotsShown = true)
       {
          double zoom = Utilities.ZOOM;
