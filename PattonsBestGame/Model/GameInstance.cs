@@ -15,6 +15,10 @@ namespace Pattons_Best
 { 
    public class GameInstance : IGameInstance
    {
+      static public bool theIsMedalsCalculatedThisDay = false;
+      static public bool theIsPurpleHeartCalculatedThisDay = false;
+      static public bool theIsVictoryPointsCalculatedThisDay = false;
+      //------------------------------------------------
       static public Logger Logger = new Logger();
       public bool CtorError { get; } = false;
       private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
@@ -158,11 +162,8 @@ namespace Pattons_Best
       public int TankReplacementNumber { set; get; } = 0;
       public int Fuel { set; get; } = 35;
       public int VictoryPtsTotalCampaign { get; set; } = 0;
-      public bool IsVictoryPointsCalculatedThisDay { set; get; } = false; 
       public int PromotionPointNum { get; set; } = 0;
       public int PromotionDay { get; set; } = -1;
-      public bool IsMedalsCalculatedThisDay { set; get; } = false;
-      public bool IsPurpleHeartCalculatedThisDay { set; get; } = false;
       public int NumPurpleHeart { get; set; } = 0;
       public bool IsCommanderRescuePerformed { set; get; } = false;
       public bool IsCommanderKilled { set; get; } = false;

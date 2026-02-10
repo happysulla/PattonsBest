@@ -3157,25 +3157,6 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsVictoryPointsCalculatedThisDay) = false");
-               return null;
-            }
-            if (reader.Name != "IsVictoryPointsCalculatedThisDay")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsVictoryPointsCalculatedThisDay != (node=" + reader.Name + ")");
-               return null;
-            }
-            string? sIsVictoryPointsCalculatedThisDay = reader.GetAttribute("value");
-            if (null == sIsVictoryPointsCalculatedThisDay)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sIsVictoryPointsCalculatedThisDay=null");
-               return null;
-            }
-            gi.IsVictoryPointsCalculatedThisDay = Boolean.Parse(sIsVictoryPointsCalculatedThisDay);
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(PromotionPointNum) = false");
                return null;
             }
@@ -3210,44 +3191,6 @@ namespace Pattons_Best
                return null;
             }
             gi.PromotionDay = Convert.ToInt32(sPromotionDay);
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsMedalsCalculatedThisDay) = false");
-               return null;
-            }
-            if (reader.Name != "IsMedalsCalculatedThisDay")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsMedalsCalculatedThisDay != (node=" + reader.Name + ")");
-               return null;
-            }
-            string? sIsMedalsCalculatedThisDay = reader.GetAttribute("value");
-            if (null == sIsMedalsCalculatedThisDay)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sIsMedalsCalculatedThisDay=null");
-               return null;
-            }
-            gi.IsMedalsCalculatedThisDay = Boolean.Parse(sIsMedalsCalculatedThisDay);
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsPurpleHeartCalculatedThisDay) = false");
-               return null;
-            }
-            if (reader.Name != "IsPurpleHeartCalculatedThisDay")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsPurpleHeartCalculatedThisDay != (node=" + reader.Name + ")");
-               return null;
-            }
-            string? sIsPurpleHeartCalculatedThisDay = reader.GetAttribute("value");
-            if (null == sIsPurpleHeartCalculatedThisDay)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sIsPurpleHeartCalculatedThisDay=null");
-               return null;
-            }
-            gi.IsPurpleHeartCalculatedThisDay = Boolean.Parse(sIsPurpleHeartCalculatedThisDay);
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -7182,19 +7125,19 @@ namespace Pattons_Best
          //------------------------------------------
          if (false == CreateXmlGameCommands(aXmlDocument, gi.GameCommands))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlGameCommands() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): Create_XmlGameCommands() returned false");
             return null;
          }
          //------------------------------------------
          if (false == CreateXmlGameOptions(aXmlDocument, gi.Options))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlOptions() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): Create_XmlOptions() returned false");
             return null;
          }
          //------------------------------------------
          if (false == CreateXmlGameStatistics(aXmlDocument, gi.Statistics))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlGameStat() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): Create_XmlGameStat() returned false");
             return null;
          }
          //------------------------------------------
@@ -8646,20 +8589,6 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         elem = aXmlDocument.CreateElement("IsVictoryPointsCalculatedThisDay");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsVictoryPointsCalculatedThisDay) returned null");
-            return null;
-         }
-         elem.SetAttribute("value", gi.IsVictoryPointsCalculatedThisDay.ToString());
-         node = root.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsVictoryPointsCalculatedThisDay) returned null");
-            return null;
-         }
-         //------------------------------------------
          elem = aXmlDocument.CreateElement("PromotionPointNum");
          if (null == elem)
          {
@@ -8685,34 +8614,6 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(PromotionDay) returned null");
-            return null;
-         }
-         //------------------------------------------
-         elem = aXmlDocument.CreateElement("IsMedalsCalculatedThisDay");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsMedalsCalculatedThisDay) returned null");
-            return null;
-         }
-         elem.SetAttribute("value", gi.IsMedalsCalculatedThisDay.ToString());
-         node = root.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsMedalsCalculatedThisDay) returned null");
-            return null;
-         }
-         //------------------------------------------
-         elem = aXmlDocument.CreateElement("IsPurpleHeartCalculatedThisDay");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsPurpleHeartCalculatedThisDay) returned null");
-            return null;
-         }
-         elem.SetAttribute("value", gi.IsPurpleHeartCalculatedThisDay.ToString());
-         node = root.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsPurpleHeartCalculatedThisDay) returned null");
             return null;
          }
          //------------------------------------------
@@ -9633,6 +9534,47 @@ namespace Pattons_Best
             if (null == statNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameStatistics(): AppendChild(statNode) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlGameFeats(XmlDocument aXmlDocument, GameFeats feats)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameFeats(): root is null");
+            return false;
+         }
+         XmlElement? gameFeatElem = aXmlDocument.CreateElement("GameFeats");
+         if (null == gameFeatElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameFeats(): CreateElement(gameFeatElem) returned null");
+            return false;
+         }
+         gameFeatElem.SetAttribute("count", feats.Count.ToString());
+         XmlNode? featsNode = root.AppendChild(gameFeatElem);
+         if (null == featsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameFeats(): AppendChild(featsNode) returned null");
+            return false;
+         }
+         //--------------------------------
+         foreach (GameFeat feat in feats)
+         {
+            XmlElement? featElem = aXmlDocument.CreateElement("GameFeat");
+            if (null == featElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameFeats(): CreateElement(GameFeat) returned null");
+               return false;
+            }
+            featElem.SetAttribute("Key", feat.Key);
+            featElem.SetAttribute("Value", feat.Value.ToString());
+            XmlNode? featNode = featsNode.AppendChild(featElem);
+            if (null == featNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlGameFeats(): AppendChild(featNode) returned null");
                return false;
             }
          }

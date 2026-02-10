@@ -181,14 +181,14 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 470;
                this.MinHeight = this.MaxHeight = 430;
                break;
-            case "HE to Kill (75)":
-               this.Title = "HE to Kill (75) Vehicles";
+            case "HE To Kill (75)":
+               this.Title = "HE To Kill (75) Vehicles";
                this.Background = theBrushGreen;
                this.Width = this.MinWidth = this.MaxWidth = 680;
                this.MinHeight = this.MaxHeight = 510;
                break;
-            case "HE to Kill (76)":
-               this.Title = "HE to Kill (75) Vehicles";
+            case "HE To Kill (76)":
+               this.Title = "HE To Kill (75) Vehicles";
                this.Background = theBrushGreen;
                this.Width = this.MinWidth = this.MaxWidth = 680;
                this.MinHeight = this.MaxHeight = 510;

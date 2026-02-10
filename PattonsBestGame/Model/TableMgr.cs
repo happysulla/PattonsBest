@@ -4581,7 +4581,7 @@ namespace Pattons_Best
          //---------------------------------------------
          Option optionShermanIncreaseMoveChance = gi.Options.Find("ShermanIncreaseMoveChances");
          if( true == optionShermanIncreaseMoveChance.IsEnabled)
-            dieRoll -= gi.ShermanConsectiveMoveAttempt;
+            dieRoll -= (gi.ShermanConsectiveMoveAttempt-1);
          //---------------------------------------------
          foreach (IMapItem crewAction in gi.CrewActions)
          {

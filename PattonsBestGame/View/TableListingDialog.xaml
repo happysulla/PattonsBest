@@ -82,8 +82,8 @@
             <Button Grid.Row="1" Grid.Column="0" Content="AP To Kill (76L)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="2" Grid.Column="0" Content="AP To Kill (76LL)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="3" Grid.Column="0" Content="Gun Malfunction" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="4" Grid.Column="0" Content="HE to Kill (75)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="5" Grid.Column="0" Content="HE to Kill (76)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="HE To Kill (75)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="HE To Kill (76)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="6" Grid.Column="0" Content="Hit Location" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="7" Grid.Column="0" Content="Rate of Fire" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="8" Grid.Column="0" Content="Sherman MG" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>

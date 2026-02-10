@@ -606,7 +606,7 @@ namespace Pattons_Best
             {
                if (false == UpdateCanvasTank(gi, action))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasTank() returned error for action=" + action.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView_ForNewGame(): Update_CanvasTank() returned error for action=" + action.ToString());
                   return false;
                }
                if ( false == UpdateViewCrewOrderButtons(gi))
@@ -618,6 +618,51 @@ namespace Pattons_Best
             else if ("e044" == gi.EventActive)
             {
                gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustSectorRoll;
+            }
+            else if (("e045" == gi.EventActive) && (0==gi.NumCollateralDamage) ) // Collateral Damage already taken - move to next action
+            {
+               //-----------------------------------------
+               if (null != myGameInstance.Death)
+               {
+                  nextAction = GameAction.BattleShermanKilled; // UpdateView_ForNewGame()
+               }
+               else if (BattlePhase.Ambush == myGameInstance.BattlePhase) // UpdateView_ForNewGame() - (Ambush==BattlePhase)  ==> BattleRandomEvent
+               {
+                  nextAction = GameAction.BattleRandomEvent; // UpdateView_ForNewGame() - (Ambush==BattlePhase)  ==> BattleRandomEvent
+               }
+               else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) // UpdateView_ForNewGame() - (AmbushRandomEvent==BattlePhase)  ==> start round
+               {
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "UpdateView_ForNewGame(): Collateraly Damage during Ambush e=" + gi.EventActive);
+                  nextAction = GameAction.BattleRoundSequenceRoundStart;   // UpdateView_ForNewGame() - BattlePhase.AmbushRandomEvent
+               }
+               else if (BattlePhase.EnemyAction == myGameInstance.BattlePhase) // UpdateView_ForNewGame() - (EnemyAction==BattlePhase)  ==> BattleRoundSequence_FriendlyAction
+               {
+                  nextAction = GameAction.BattleRoundSequenceFriendlyAction; // 4.76 - UpdateView_ForNewGame() - (EnemyAction==BattlePhase)  ==> BattleRoundSequence_FriendlyAction
+               }
+               else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase)  // UpdateView_ForNewGame() - (RandomEvent==BattlePhase) ==> BattleRoundSequence_BackToSpotting
+               {
+                  nextAction = GameAction.BattleRoundSequenceBackToSpotting; // UpdateView_ForNewGame() - (RandomEvent==BattlePhase) ==> BattleRoundSequence_BackToSpotting
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView_ForNewGame(): reached default BattlePhase=" + gi.BattlePhase.ToString());
+                  return false;
+               }
+               //-----------------------------------------
+               bool isBattleBoardEmpty = true;
+               foreach (IStack stack in myGameInstance.BattleStacks)
+               {
+                  foreach (IMapItem mi in stack.MapItems)
+                  {
+                     if (true == mi.IsEnemyUnit())
+                     {
+                        isBattleBoardEmpty = false;
+                        break;
+                     }
+                  }
+               }
+               if (true == isBattleBoardEmpty)
+                  nextAction = GameAction.BattleEmpty;  // UpdateView_ForNewGame()
             }
          }
          else if (GameAction.UpdateNewGame == action)

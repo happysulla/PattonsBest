@@ -619,6 +619,17 @@ namespace Pattons_Best
       }
       protected bool SetStartArea(IGameInstance gi, int dieRoll)
       {
+         IMapItems removals = new MapItems();
+         foreach (IStack stack in gi.MoveStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("StartArea"))
+                  removals.Add(mi);
+            }
+         }
+         foreach (IMapItem removal in removals)
+            gi.MoveStacks.Remove(removal);
          //---------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -803,6 +814,18 @@ namespace Pattons_Best
       }
       protected bool SetExitArea(IGameInstance gi, int dieRoll)
       {
+         IMapItems removals = new MapItems();
+         foreach (IStack stack in gi.MoveStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("ExitArea"))
+                  removals.Add(mi);
+            }
+         }
+         foreach (IMapItem removal in removals)
+            gi.MoveStacks.Remove(removal);
+         //-------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -3811,9 +3834,9 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.MorningBriefingBegin:
-                  gi.IsVictoryPointsCalculatedThisDay = false; // it is a new day
-                  gi.IsMedalsCalculatedThisDay = false; // it is a new day
-                  gi.IsPurpleHeartCalculatedThisDay = false; // it is a new day
+                  GameInstance.theIsMedalsCalculatedThisDay = false; // it is a new day
+                  GameInstance.theIsPurpleHeartCalculatedThisDay = false; // it is a new day
+                  GameInstance.theIsVictoryPointsCalculatedThisDay = false; // it is a new day
                   GameLoadMgr loadMgr = new GameLoadMgr();
                   if (false == loadMgr.SaveGame(gi, "CheckpointLastDay.pbg"))
                   {
@@ -5252,27 +5275,25 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementExitAreaSet:
-                  if( EnumScenario.Counterattack == lastReport.Scenario)
+                  IMapItems exitAreaRemovals = new MapItems();
+                  foreach (IStack stack in gi.MoveStacks)
                   {
-                     IMapItems exitAreaRemovals = new MapItems();
-                     foreach (IStack stack in gi.MoveStacks)
+                     foreach (IMapItem mi in stack.MapItems)
                      {
-                        foreach (IMapItem mi in stack.MapItems)
+                        if (true == mi.Name.Contains("Exit"))
                         {
-                           if (true == mi.Name.Contains("Exit"))
-                           {
-                              exitAreaRemovals.Add(mi);
+                           exitAreaRemovals.Add(mi);
+                           if (EnumScenario.Counterattack == lastReport.Scenario)
                               gi.EnteredHexes.RemoveAt(gi.EnteredHexes.Count - 1);
-                           }
-                           else if (true == mi.Name.Contains("TaskForce"))
-                           {
-                              exitAreaRemovals.Add(mi);
-                           }
+                        }
+                        else if ( (true == mi.Name.Contains("TaskForce")) && (EnumScenario.Counterattack == lastReport.Scenario) )
+                        {
+                           exitAreaRemovals.Add(mi);
                         }
                      }
-                     foreach (IMapItem removal in exitAreaRemovals)
-                        gi.MoveStacks.Remove(removal);
                   }
+                  foreach (IMapItem removal in exitAreaRemovals)
+                     gi.MoveStacks.Remove(removal);
                   //---------------------------------
                   SetCommand(gi, action, GameAction.MovementExitAreaSetRoll, "e019");
                   break;
@@ -6433,11 +6454,27 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------------------
-         bool isEnemyInMoveArea;
-         if (false == gi.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
+         bool isTaskForceExist = false;
+         foreach (IStack stack in gi.MoveStacks)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Perform_AutoBattlePreparationsSetup(): IsTaskForceInEnemyArea() returned false");
-            return false;
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("TaskForce"))
+               {
+                  isTaskForceExist = true;
+                  break;
+               }
+            }
+         }
+         //-----------------------------------------------------
+         bool isEnemyInMoveArea = false;
+         if( true == isTaskForceExist)
+         {
+            if (false == gi.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Perform_AutoBattlePreparationsSetup(): IsTaskForceInEnemyArea() returned false");
+               return false;
+            }
          }
          //-----------------------------------------------------
          // Following actions occurred to reach this point...
@@ -9142,7 +9179,7 @@ namespace Pattons_Best
             {
                gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                gi.Sherman.IsMoving = false;
-               gi.ShermanConsectiveMoveAttempt = 0;
+               gi.ShermanConsectiveMoveAttempt = 0; // Conduct_CrewAction()
             }
             else
             {
@@ -9150,7 +9187,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 1-phase=" + gi.CrewActionPhase.ToString() + "  isMove=" + isTankMoving.ToString() + " isPivot=" + isTankPivoting.ToString());
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
-               gi.ShermanConsectiveMoveAttempt++;
+               gi.ShermanConsectiveMoveAttempt++; // Conduct_CrewAction()
                //--------------------------------------------------
                if ( ((false == isGunnerTrainedInHvss) || (null == gi.ShermanHvss)) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
@@ -11460,9 +11497,9 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.EventDebriefDecorationHeart:
-                  if( false == gi.IsPurpleHeartCalculatedThisDay )
+                  if( false == GameInstance.theIsPurpleHeartCalculatedThisDay)
                   {
-                     gi.IsPurpleHeartCalculatedThisDay = true;
+                     GameInstance.theIsPurpleHeartCalculatedThisDay = true;
                      GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
                      gi.Statistics.AddOne("NumPurpleHearts");
                   }
@@ -11510,9 +11547,9 @@ namespace Pattons_Best
       }
       public bool VictoryPointsCalculated(IGameInstance gi, IAfterActionReport lastReport)
       {
-         if (true == gi.IsVictoryPointsCalculatedThisDay) // only do once
+         if (true == GameInstance.theIsVictoryPointsCalculatedThisDay) // only do once
             return true;
-         gi.IsVictoryPointsCalculatedThisDay = true;
+         GameInstance.theIsVictoryPointsCalculatedThisDay = true;
          int scenarioMultiplierKOGermanUnit = 1;
          int scenarioMultiplierCapturedMapArea = 1;
          int scenarioMultiplierLoseMapArea = 1;
@@ -11660,9 +11697,9 @@ namespace Pattons_Best
             case GameAction.EventDebriefDecorationContinue:  // UpdateDecoration()
                break;
             case GameAction.EventDebriefDecorationBronzeStar:
-               if( false == gi.IsMedalsCalculatedThisDay )
+               if( false == GameInstance.theIsMedalsCalculatedThisDay)
                {
-                  gi.IsMedalsCalculatedThisDay = true;
+                  GameInstance.theIsMedalsCalculatedThisDay = true;
                   GameEngine.theInGameFeats.AddOne("NumBronzeStars");
                   gi.Statistics.AddOne("NumBronzeStars");
                }
@@ -11670,9 +11707,9 @@ namespace Pattons_Best
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationSilverStar:
-               if (false == gi.IsMedalsCalculatedThisDay)
+               if (false == GameInstance.theIsMedalsCalculatedThisDay)
                {
-                  gi.IsMedalsCalculatedThisDay = true;
+                  GameInstance.theIsMedalsCalculatedThisDay = true;
                   GameEngine.theInGameFeats.AddOne("NumSilverStars");
                   gi.Statistics.AddOne("NumSilverStars");
                }
@@ -11680,9 +11717,9 @@ namespace Pattons_Best
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationCross:
-               if (false == gi.IsMedalsCalculatedThisDay)
+               if (false == GameInstance.theIsMedalsCalculatedThisDay)
                {
-                  gi.IsMedalsCalculatedThisDay = true;
+                  GameInstance.theIsMedalsCalculatedThisDay = true;
                   GameEngine.theInGameFeats.AddOne("NumDistinguishedCrosses");
                   gi.Statistics.AddOne("NumDistinguishedCrosses");
                }
@@ -11690,9 +11727,9 @@ namespace Pattons_Best
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationHonor:
-               if (false == gi.IsMedalsCalculatedThisDay)
+               if (false == GameInstance.theIsMedalsCalculatedThisDay)
                {
-                  gi.IsMedalsCalculatedThisDay = true;
+                  GameInstance.theIsMedalsCalculatedThisDay = true;
                   GameEngine.theInGameFeats.AddOne("NumMedalOfHonors");
                   gi.Statistics.AddOne("NumMedalOfHonors");
                }
@@ -11707,7 +11744,7 @@ namespace Pattons_Best
          if ("None" != commander.Wound) 
          {
             SetCommand(gi, outAction, GameAction.DieRollActionNone, "e104");
-            if (false == gi.IsPurpleHeartCalculatedThisDay)
+            if (false == GameInstance.theIsPurpleHeartCalculatedThisDay)
                gi.NumPurpleHeart++;
             StringBuilder sb2 = new StringBuilder(commander.Name);
             sb2.Append(" received the Purple Heart.");

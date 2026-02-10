@@ -1575,7 +1575,7 @@ r15.6	"<Bold>r15.6 Harassing Fire</Bold>
 <LineBreak/><LineBreak/>
 This event represents the random spraying of fire at your tank in the hopes of causing casualties to exposed crewmen. 
 <LineBreak/><LineBreak/>
-It was also possible for tis type of fire to cause collateral damage to your tank such as the damaging of periscopes, sights, adn the AA MG. 
+It was also possible for this type of fire to cause collateral damage to your tank such as the damaging of periscopes, sights, and the AA MG. 
 <LineBreak/><LineBreak/>
 When this event is rolled, roll on the 
 <InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table."

@@ -2253,7 +2253,7 @@ namespace Pattons_Best
                   Option optionShermanIncreaseMoveChance = gi.Options.Find("ShermanIncreaseMoveChances");
                   if (true == optionShermanIncreaseMoveChance.IsEnabled)
                   {
-                     int total = DieRoller.WhiteDie - gi.ShermanConsectiveMoveAttempt;
+                     int total = DieRoller.WhiteDie - (gi.ShermanConsectiveMoveAttempt-1);
                      string sTotal = " - " + gi.ShermanConsectiveMoveAttempt.ToString() + " (move option) = " + total.ToString();
                      myTextBlock.Inlines.Add(new Run(sTotal));
                   }
@@ -4943,10 +4943,10 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(modifierDecoration.ToString());
             myTextBlock.Inlines.Add(" = ");
             myTextBlock.Inlines.Add(combo.ToString());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
             if (199 < combo)
             {
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
                Image imgBronze = new Image { Name = "DecorationBronzeStar", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationBronzeStar") };
                Image imgSilver = new Image { Name = "DecorationSilverStar", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationSilverStar") };
                Image imgCross = new Image { Name = "DecorationDistinguishedCross", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationDistinguishedCross") };
