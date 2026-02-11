@@ -313,7 +313,7 @@
                </InlineUIContainer>
                <Run Text=' Table:  Movement +15m during mud, fog, rain, ground snow, or deep snow.'></Run>
                <LineBreak/>
-               <Run Text='    (3) Reduced HE effect'></Run>
+               <Run Text='    (3) +5 for Reduced HE effect'></Run>
             </Paragraph>
          </TableCell>
       </TableRow>

@@ -976,7 +976,7 @@ namespace Pattons_Best
          bool isTargetInCurrentMainGunSector = Territory.IsEnemyUnitInSector(gi, sector);
          bool iMainGunAbleAbleToFireDueToMoving = ( (false == isTankMoving) || (true == isGunnerTrainedInHvss) );
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
-         bool isShermanMoveAvailable = ( (false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch)) );
+         bool isShermanMoveAvailable = ( (false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.Sherman.IsFuelNeeded) && ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch)) );
          //---------------------------------
          myContextMenuCrewActions["Driver"] = new ContextMenu();
          myContextMenuCrewActions["Loader"] = new ContextMenu();
@@ -1125,7 +1125,7 @@ namespace Pattons_Best
                         myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
                      }
                      if (0 == gi.Fuel)
-                        gi.Sherman.IsAssistanceNeeded = true;
+                        gi.Sherman.IsFuelNeeded = true;
                   }
                }
             }
@@ -1284,7 +1284,7 @@ namespace Pattons_Best
                myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
             }
          }
-         if( (true == gi.Sherman.IsThrownTrack) || (true == gi.Sherman.IsAssistanceNeeded) )
+         if( (true == gi.Sherman.IsThrownTrack) || (true == gi.Sherman.IsAssistanceNeeded) || (true == gi.Sherman.IsFuelNeeded))
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Commander_Bail";

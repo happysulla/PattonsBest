@@ -1975,7 +1975,12 @@ namespace Pattons_Best
          }
          if (left.IsAssistanceNeeded != right.IsAssistanceNeeded)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsBoggedDown != right.IsBoggedDown");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsAssistanceNeeded != right.IsAssistanceNeeded");
+            return false;
+         }
+         if (left.IsFuelNeeded != right.IsFuelNeeded)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.IsFuelNeeded != right.IsFuelNeeded");
             return false;
          }
          //-------------------------------------------------

@@ -55,6 +55,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theThrownTrack = theMapImages.GetBitmapImage("OTrack");
       [NonSerialized] protected static BitmapImage? theBoggedDown = theMapImages.GetBitmapImage("OBogged");
       [NonSerialized] protected static BitmapImage? theBoggedDownStuck = theMapImages.GetBitmapImage("OBoggedStuck");
+      [NonSerialized] protected static BitmapImage? theFuelEmpty = theMapImages.GetBitmapImage("OFuel");
       [NonSerialized] protected static BitmapImage? theHeHit = theMapImages.GetBitmapImage("OHeHit");
       [NonSerialized] protected static BitmapImage? theApHit = theMapImages.GetBitmapImage("OApHit");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
@@ -142,6 +143,7 @@ namespace Pattons_Best
       public bool IsThrownTrack { get; set; } = false;
       public bool IsBoggedDown { get; set; } = false;
       public bool IsAssistanceNeeded { get; set; } = false;
+      public bool IsFuelNeeded { get; set; } = false;
       //--------------------------------------------------
       public bool IsHeHit { get; set; } = false;
       public bool IsApHit { get; set; } = false;
@@ -251,6 +253,7 @@ namespace Pattons_Best
          this.IsThrownTrack = mi.IsThrownTrack;
          this.IsBoggedDown = mi.IsBoggedDown;
          this.IsAssistanceNeeded = mi.IsAssistanceNeeded;
+         this.IsFuelNeeded = mi.IsFuelNeeded;
          //--------------------------------------
          this.IsHeHit = mi.IsHeHit;
          this.IsApHit = mi.IsApHit;
@@ -287,6 +290,7 @@ namespace Pattons_Best
          this.IsThrownTrack = mi.IsThrownTrack;
          this.IsBoggedDown = mi.IsBoggedDown;
          this.IsAssistanceNeeded = mi.IsAssistanceNeeded;
+         this.IsFuelNeeded = mi.IsFuelNeeded;
          //--------------------------------------
          this.IsHeHit = mi.IsHeHit;
          this.IsApHit = mi.IsApHit;
@@ -781,6 +785,15 @@ namespace Pattons_Best
                   c.Children.Add(imgTerrain);
                   Canvas.SetLeft(imgTerrain, -15);
                   Canvas.SetTop(imgTerrain, -15);
+               }
+               else if( true == mi.IsFuelNeeded )
+               {
+                  double width = zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgFuel = new Image() { Height = height, Width = width, Source = theFuelEmpty };
+                  g.Children.Add(imgFuel);
+                  Canvas.SetLeft(imgFuel, 0);
+                  Canvas.SetTop(imgFuel, height);
                }
                //-------------------------------
                int i = 0;

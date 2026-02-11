@@ -2253,8 +2253,9 @@ namespace Pattons_Best
                   Option optionShermanIncreaseMoveChance = gi.Options.Find("ShermanIncreaseMoveChances");
                   if (true == optionShermanIncreaseMoveChance.IsEnabled)
                   {
-                     int total = DieRoller.WhiteDie - (gi.ShermanConsectiveMoveAttempt-1);
-                     string sTotal = " - " + gi.ShermanConsectiveMoveAttempt.ToString() + " (move option) = " + total.ToString();
+                     int minusOne = gi.ShermanConsectiveMoveAttempt - 1;
+                     int total = DieRoller.WhiteDie - minusOne;
+                     string sTotal = " - " + minusOne.ToString() + " (move option) = " + total.ToString();
                      myTextBlock.Inlines.Add(new Run(sTotal));
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -3223,7 +3224,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentGetMovingModifier(): lastReport=null");
             return "ERROR";
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -3231,14 +3232,14 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentGetMovingModifier(): commander=null");
             return "ERROR";
          }
          //-------------------------------------------------
          ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): driver=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentGetMovingModifier(): driver=null");
             return "ERROR";
          }
          //-------------------------------------------------
@@ -3290,7 +3291,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentGetMovingModifier(): lastReport=null");
             return "ERROR";
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -3298,14 +3299,14 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentGetMovingModifier(): commander=null");
             return "ERROR";
          }
          //-------------------------------------------------
          ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): driver=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentGetMovingModifier(): driver=null");
             return "ERROR";
          }
          //-------------------------------------------------
@@ -3973,19 +3974,19 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_ToKillInfantryModifier(): lastReport=null");
             return "ERROR";
          }
          //-------------------------------------------------
          if (null == gi.TargetMainGun)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantryModifier(): gi.TargetMainGun=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_ToKillInfantryModifier(): gi.TargetMainGun=null");
             return "ERROR";
          }
          //-------------------------------------------------
          if (0 == gi.ShermanHits.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantryModifier(): gi.Sherman_Hits.Count=0");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_ToKillInfantryModifier(): gi.Sherman_Hits.Count=0");
             return "ERROR";
          }
          ShermanAttack hit = gi.ShermanHits[0];

@@ -1666,11 +1666,38 @@ namespace Pattons_Best
                if ( 2 == myRollResultColNum )
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
-                  myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll); 
-                  if ("ERROR" == myGridRows[i].myFacing)
+                  Option optionEnemyRearFacingOnMove = myGameInstance.Options.Find("EnemyRearFacingOnMove");
+                  if (true == optionEnemyRearFacingOnMove.IsEnabled)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
-                     return;
+                     if (true == mi.LastMoveAction.Contains("Move-B")) // 75% chance continue on same path
+                     {
+                        int randomNum = Utilities.RandomGenerator.Next(0, 5);
+                        if (true == mi.IsTurret())
+                        {
+                           if (randomNum < 2)
+                           {
+                              myGridRows[i].myEnemyAction = "Move-B(r)";
+                              myGridRows[i].myFacing = "Rear";
+                           }
+                        }
+                        else
+                        {
+                           if (randomNum < 4)
+                           {
+                              myGridRows[i].myEnemyAction = "Move-B(r)";
+                              myGridRows[i].myFacing = "Rear";
+                           }
+                        }
+                     }
+                  }
+                  else
+                  {
+                     myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
+                     if ("ERROR" == myGridRows[i].myFacing)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
+                        return;
+                     }
                   }
                   if (false == ShowDieResultUpdateFacing(i))
                   {

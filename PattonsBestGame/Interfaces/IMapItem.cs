@@ -47,6 +47,7 @@ namespace Pattons_Best
       bool IsThrownTrack { get; set; }
       bool IsBoggedDown { get; set; }
       bool IsAssistanceNeeded { get; set; }
+      bool IsFuelNeeded { get; set; }
       //----------------------------------------
       bool IsHeHit { get; set; }
       bool IsApHit { get; set; } 

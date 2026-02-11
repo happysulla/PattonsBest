@@ -24,13 +24,13 @@ namespace Pattons_Best
       private const int PREVIOUSLY_KIA = 100;
       public enum E0464Enum
       {
-         ROLL_ARTILLERY_FIRE,
+         ROLL_AIR_STRIKE,
          SHOW_RESULTS,
          END
       };
       public bool CtorError { get; } = false;
       private EndResolveAirStrikeCallback? myCallback = null;
-      private E0464Enum myState = E0464Enum.ROLL_ARTILLERY_FIRE;
+      private E0464Enum myState = E0464Enum.ROLL_AIR_STRIKE;
       private int myMaxRowCount = 0;
       private int myRollResultRowNum = 0;
       private bool myIsRollInProgress = false;
@@ -326,7 +326,7 @@ namespace Pattons_Best
          myTextBlockInstructions.Inlines.Clear();
          switch (myState)
          {
-            case E0464Enum.ROLL_ARTILLERY_FIRE:
+            case E0464Enum.ROLL_AIR_STRIKE:
                myTextBlockInstructions.Inlines.Add(new Run("Roll on "));
                Button b4 = new Button() { Content = "Friendly Action", FontFamily = myFontFam1, FontSize = 8 };
                b4.Click += ButtonRule_Click;
@@ -347,7 +347,7 @@ namespace Pattons_Best
          myStackPanelAssignable.Children.Clear(); // clear out assignable panel 
          switch (myState)
          {
-            case E0464Enum.ROLL_ARTILLERY_FIRE:
+            case E0464Enum.ROLL_AIR_STRIKE:
                Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r1);
                if (null == myMapItemAirStrike)
@@ -531,7 +531,7 @@ namespace Pattons_Best
          for (int j = 0; j < myMaxRowCount; ++j)
          {
             if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
-               myState = E0464Enum.ROLL_ARTILLERY_FIRE;
+               myState = E0464Enum.ROLL_AIR_STRIKE;
          }
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");

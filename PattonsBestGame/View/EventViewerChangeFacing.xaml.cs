@@ -465,13 +465,17 @@ namespace Pattons_Best
          myGridRows[i].myDieRollFacing = dieRoll;
          IMapItem mi = myGridRows[i].myMapItem;
          if (true == mi.IsThrownTrack)
-            myGridRows[i].myFacingNew = myGridRows[i].myFacingOld;  // do not change facing if thrown track
-         else
-            myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
-         if ("ERROR" == myGridRows[i].myFacingNew)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
-            return;
+            myGridRows[i].myFacingNew = myGridRows[i].myFacingOld;  // do not change facing if thrown track
+         }
+         else
+         {
+            myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
+            if ("ERROR" == myGridRows[i].myFacingNew)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
+               return;
+            }
          }
          if (false == ShowDieResultUpdateFacing(i))
          {

@@ -5585,6 +5585,7 @@ namespace Pattons_Best
                      {
                         action = GameAction.MovementAmmoLoad;
                         gi.Fuel = 35; // when resupply, fuel set to 35
+                        gi.Sherman.IsFuelNeeded = false;
                         lastReport.Ammo50CalibreMG = 6;
                         lastReport.AmmoSmokeBomb = 14;
                         lastReport.AmmoSmokeGrenade = 6;
@@ -7750,7 +7751,7 @@ namespace Pattons_Best
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      if (100 == gi.DieResults[key][0]) //  unmodified roll of 100 means assistance needed
                      {
-                        gi.Sherman.IsAssistanceNeeded = true;
+                        gi.Sherman.IsAssistanceNeeded = true; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll)
                      }
                      else
                      {
@@ -7777,7 +7778,7 @@ namespace Pattons_Best
                            }
                            else
                            {
-                              gi.Sherman.IsAssistanceNeeded = true;
+                              gi.Sherman.IsAssistanceNeeded = true; // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll)
                            }
                            //---------------------------------------------------
                            gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
@@ -11895,6 +11896,7 @@ namespace Pattons_Best
             gi.Sherman.IsHullDown = false;
             gi.Sherman.IsBoggedDown = false;  // EveningDebriefing_ResetDay()
             gi.Sherman.IsAssistanceNeeded = false;
+            gi.Sherman.IsFuelNeeded = false;
             //-------------------------------------------------------
             ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)

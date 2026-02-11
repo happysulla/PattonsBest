@@ -4741,7 +4741,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Get_FriendlyActionModifier(): reached default with enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
-         Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): ------------------------------ for " + mi.Name);
+         Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): ------------------------------ for " + mi.Name + " a?=" + isAirStrike.ToString() + " adv?=" + isAdvancingFire.ToString() + " on?=" + isOnBoardArtilleryFire.ToString() + " off?=" + isOffBoardArillery.ToString());
          //----------------------------------------------------
          if ( (true == isTargetVehicle) && (true == isAirStrike) )
          {

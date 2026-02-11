@@ -304,7 +304,7 @@ namespace Pattons_Best
          }
          //---------------------------------
          bool isMainGunFiringAvailable = ((false == isTankMoving) && (false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()) && (false == isLoaderChangingLoad));
-         bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
+         bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.Sherman.IsFuelNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
          switch (crewRole)
          {
             case "Assistant":
