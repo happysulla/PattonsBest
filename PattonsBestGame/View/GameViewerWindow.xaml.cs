@@ -281,29 +281,29 @@ namespace Pattons_Best
          if( myTankCardNum != lastReport.TankCardNum) // switch out tank mat if do not match
          {
             myTankCardNum = lastReport.TankCardNum;
-            List<UIElement> elements = new List<UIElement>();
             foreach (UIElement ui in myCanvasTank.Children) // Clean the Canvas of all marks
             {
                if (ui is Image img)
                {
                   if (true == img.Name.Contains("TankMat"))
-                     elements.Add(img);
+                  {
+                     myCanvasTank.Children.Remove(img);
+                     break;
+                  }
                }
             }
-            foreach( UIElement ui in elements )
-               myCanvasTank.Children.Remove(ui);
             //-------------------------------------------------------
-            elements.Clear();
-            foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of Sherman
-            {
-               if (ui is Button b)
-               {
-                  if (true == b.Name.Contains("Sherman"))
-                     elements.Add(b); // Remove the old buttons
-               }
-            }
-            foreach (UIElement ui in elements)
-               myCanvasMain.Children.Remove(ui);
+            //foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of Sherman
+            //{
+            //   if (ui is Button b)
+            //   {
+            //      if (true == b.Name.Contains("Sherman"))
+            //      {
+            //         myCanvasTank.Children.Remove(b);
+            //         break;
+            //      }
+            //   }
+            //}
             //-------------------------------------------------------
             string appendText = "";
             if (9 < myTankCardNum)
@@ -3111,7 +3111,7 @@ namespace Pattons_Best
                   if (true == b.Name.Contains("Smoke"))
                      Canvas.SetZIndex(b, 100);
                   else if (true == b.Name.Contains("Sherman"))
-                     Canvas.SetZIndex(b, 9999);
+                     Canvas.SetZIndex(b, 10000);
                   else
                      Canvas.SetZIndex(b, 1000);
                   RotateTransform rotateTransform = new RotateTransform();

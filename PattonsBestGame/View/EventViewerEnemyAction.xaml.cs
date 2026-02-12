@@ -1667,6 +1667,7 @@ namespace Pattons_Best
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
                   Option optionEnemyRearFacingOnMove = myGameInstance.Options.Find("EnemyRearFacingOnMove");
+                  bool isFacingSet = false;
                   if (true == optionEnemyRearFacingOnMove.IsEnabled)
                   {
                      if (true == mi.LastMoveAction.Contains("Move-B")) // 75% chance continue on same path
@@ -1678,6 +1679,7 @@ namespace Pattons_Best
                            {
                               myGridRows[i].myEnemyAction = "Move-B(r)";
                               myGridRows[i].myFacing = "Rear";
+                              isFacingSet = true;
                            }
                         }
                         else
@@ -1686,12 +1688,13 @@ namespace Pattons_Best
                            {
                               myGridRows[i].myEnemyAction = "Move-B(r)";
                               myGridRows[i].myFacing = "Rear";
+                              isFacingSet = true;
                            }
                         }
                      }
                   }
-                  else
-                  {
+                  if( false == isFacingSet)
+                  { 
                      myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
                      if ("ERROR" == myGridRows[i].myFacing)
                      {

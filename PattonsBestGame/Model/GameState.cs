@@ -150,7 +150,7 @@ namespace Pattons_Best
          IAfterActionReport? aar = gi.Reports.GetLast();
          if (null == aar)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): aar is null");
+            Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): aar is null");
             return false;
          }
          foreach (IMapItem mi in gi.NewMembers)
@@ -158,7 +158,7 @@ namespace Pattons_Best
             ICrewMember? crewMember = mi as ICrewMember;
             if (crewMember == null)
             {
-               Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): crewMember is null");
+               Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): crewMember is null");
                return false;
             }
             switch (crewMember.Role)
@@ -167,7 +167,7 @@ namespace Pattons_Best
                   aar.Commander = crewMember;
                   if (false == gi.SetCrewActionTerritory(aar.Commander))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Set_CrewActionTerritory(Commander) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): Set_CrewActionTerritory(Commander) returned false");
                      return false;
                   }
                   break;
@@ -175,7 +175,7 @@ namespace Pattons_Best
                   aar.Gunner = crewMember;
                   if (false == gi.SetCrewActionTerritory(aar.Gunner))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Set_CrewActionTerritory(Gunner) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): Set_CrewActionTerritory(Gunner) returned false");
                      return false;
                   }
                   break;
@@ -183,7 +183,7 @@ namespace Pattons_Best
                   aar.Loader = crewMember;
                   if (false == gi.SetCrewActionTerritory(aar.Loader))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Set_CrewActionTerritory(Loader) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): Set_CrewActionTerritory(Loader) returned false");
                      return false;
                   }
                   break;
@@ -191,7 +191,7 @@ namespace Pattons_Best
                   aar.Driver = crewMember;
                   if (false == gi.SetCrewActionTerritory(aar.Driver))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Set_CrewActionTerritory(Driver) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): Set_CrewActionTerritory(Driver) returned false");
                      return false;
                   }
                   break;
@@ -199,16 +199,16 @@ namespace Pattons_Best
                   aar.Assistant = crewMember;
                   if (false == gi.SetCrewActionTerritory(aar.Assistant))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Set_CrewActionTerritory(Assistant) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): Set_CrewActionTerritory(Assistant) returned false");
                      return false;
                   }
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Reached Default with role= " + crewMember.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "AssignNew_CrewMembers(): Reached Default with role= " + crewMember.Role);
                   return false;
             }
          }
-         gi.NewMembers.Clear();
+         gi.NewMembers.Clear(); //AssignNewCrewMembers()
          return true;
       }
       protected bool ReplaceInjuredCrewmen(IGameInstance gi, out bool isCrewmanReplaced, string caller)
@@ -2527,7 +2527,7 @@ namespace Pattons_Best
             int dieRoll = Utilities.RandomGenerator.Next(1, 11);
             cm.Rating = (int)Math.Ceiling(dieRoll / 2.0);
          }
-         gi.NewMembers.Clear();
+         gi.NewMembers.Clear(); // PerformAutoSetupCrewRatings()
          return true;
       }
       private bool PerformAutoSetupSkipMorningBriefing(IGameInstance gi)
@@ -3750,7 +3750,7 @@ namespace Pattons_Best
          }
          //------------------------------
          gi.BattleStacks.Add(gi.Sherman);  // GameStateSetup.PerformAction(Setup_AssignCrewRating)
-         gi.NewMembers.Clear();
+         gi.NewMembers.Clear();                   // GameStateSetup.PerformAction(Setup_AssignCrewRating)
          gi.NewMembers.Add(lastReport.Commander); // GameStateSetup.PerformAction(Setup_AssignCrewRating)
          gi.NewMembers.Add(lastReport.Gunner);    // GameStateSetup.PerformAction(Setup_AssignCrewRating)
          gi.NewMembers.Add(lastReport.Loader);    // GameStateSetup.PerformAction(Setup_AssignCrewRating)
@@ -4195,7 +4195,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingDayOfRest:
                   ++gi.Day;
                   gi.MaxDayBetweenCombat++;
-                  gi.NewMembers.Clear();
+                  gi.NewMembers.Clear(); // GameStateMorningBriefing.PerformAction(MorningBriefingDayOfRest)
                   ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
                   if (null == newEntry)
                   {

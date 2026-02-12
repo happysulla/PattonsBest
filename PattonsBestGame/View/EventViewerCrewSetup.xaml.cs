@@ -221,6 +221,14 @@ namespace Pattons_Best
                }
                crewMember.Rating = (int) Math.Ceiling((double)(myGridRows[i].myDieRoll)/2.0);
             }
+            //----------------------------------
+            if (null == myGameInstance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myGameInstance=null");
+               return false;
+            }
+            myGameInstance.NewMembers.Clear();
+            //----------------------------------
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
