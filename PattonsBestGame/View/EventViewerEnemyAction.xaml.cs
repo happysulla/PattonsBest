@@ -1673,10 +1673,12 @@ namespace Pattons_Best
                      if (true == mi.LastMoveAction.Contains("Move-B")) // 75% chance continue on same path
                      {
                         int randomNum = Utilities.RandomGenerator.Next(0, 5);
+                        Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): rn=" + randomNum + " for mi=" + mi.Name + " eu=" + mi.GetEnemyUnit() + " isTurret=" + mi.IsTurret());
                         if (true == mi.IsTurret())
                         {
                            if (randomNum < 2)
                            {
+                              Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): myGridRows[i].myFacing=Rear");
                               myGridRows[i].myEnemyAction = "Move-B(r)";
                               myGridRows[i].myFacing = "Rear";
                               isFacingSet = true;
@@ -1686,6 +1688,7 @@ namespace Pattons_Best
                         {
                            if (randomNum < 4)
                            {
+                              Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): myGridRows[i].myFacing=Rear");
                               myGridRows[i].myEnemyAction = "Move-B(r)";
                               myGridRows[i].myFacing = "Rear";
                               isFacingSet = true;

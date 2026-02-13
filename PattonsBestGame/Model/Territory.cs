@@ -853,10 +853,13 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi in stack.MapItems)
             {
-               if (true == isFriendlyAdvance)
-                  return true;
-               else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
-                  return true;
+               if (true == mi.IsEnemyUnit())
+               {
+                  if (true == isFriendlyAdvance)
+                     return true;
+                  else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
+                     return true;
+               }
             }
          }
          //--------------------------------------
@@ -866,10 +869,13 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi in stack.MapItems)
             {
-               if (true == isFriendlyAdvance)
-                  return true;
-               else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
-                  return true;
+               if (true == mi.IsEnemyUnit())
+               {
+                  if (true == isFriendlyAdvance)
+                     return true;
+                  else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
+                     return true;
+               }
             }
          }
          return false;
