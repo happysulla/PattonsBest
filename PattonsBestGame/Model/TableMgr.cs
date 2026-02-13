@@ -1691,7 +1691,21 @@ namespace Pattons_Best
          {
             int randomNum = Utilities.RandomGenerator.Next(0, 3);
             if ((true == returnValue.Contains("Move")) && (true == mi.LastMoveAction.Contains("Move")) && (randomNum < 2) ) // 66% chance continue on same path
+            {
                returnValue = "Move-" + mi.LastMoveAction[5] + " (c)";
+               //-----------------------------------------
+               if ( 3 != mi.TerritoryCurrent.Name.Length )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Set_EnemyActionResult(): length != 3 for mi=" + mi.Name + " in t=" + mi.TerritoryCurrent.Name);
+                  return "ERROR";
+               }
+               char sector = mi.TerritoryCurrent.Name[1];
+               if( true == returnValue.Contains("-F")) // if in zones 1,2,3, and get a Move-F results, assume this is advancing troops overrunning and penetrating further in US zones, i.e. toward offboard
+               {
+                  if (('1' == sector) || ('2' == sector) || ('3' == sector))
+                     returnValue = "Move-B (c)";
+               }
+            }
          }
          if (true == returnValue.Contains("Move"))
             mi.LastMoveAction = returnValue;
