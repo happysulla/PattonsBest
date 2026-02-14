@@ -18,11 +18,11 @@ namespace Pattons_Best
       public string Name { get; set; } = Utilities.GetNickName();
       public int TankCardNum { get; set; } = 1;  
       public string Weather { get; set; } = "Clear";
-      public ICrewMember Commander { get; set; } = new CrewMember("Commander", "Sgt", "c07Commander");
-      public ICrewMember Gunner { get; set; } = new CrewMember("Gunner", "Cpl", "c11Gunner");
-      public ICrewMember Loader { get; set; } = new CrewMember("Loader", "Cpl", "c09Loader");
-      public ICrewMember Driver { get; set; } = new CrewMember("Driver", "Pvt", "c08Driver");
-      public ICrewMember Assistant { get; set; } = new CrewMember("Assistant", "Pvt", "c10Assistant");
+      public string Commander { get; set; } = "";
+      public string Gunner { get; set; } = "";
+      public string Loader { get; set; } = "";
+      public string Driver { get; set; } = "";
+      public string Assistant { get; set; } = "";
       //----------------------------------------
       public int SunriseHour { get; set; } = 5;
       public int SunriseMin { get; set; } = 0;

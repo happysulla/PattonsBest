@@ -103,7 +103,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): lastReport=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "UpdateReport(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "UpdateReport(): cmdr=" + gi.Commander.Name + " driver=" + gi.Driver.Name);
          String s = AddSpaces(lastReport.Day, HEADER_INFO_LEN);
          mySpanDate.Inlines.Clear();
          mySpanDate.Inlines.Add(new Run(s));
@@ -129,47 +129,47 @@ namespace Pattons_Best
          mySpanWeather.Inlines.Clear();
          mySpanWeather.Inlines.Add(new Run(s));
          //----------------------------------
-         myRunCommanderRank.Text = lastReport.Commander.Rank;
-         myRunCommanderRating.Text = lastReport.Commander.Rating.ToString();
-         s = AddSpaces(lastReport.Commander.Name, CREW_NAME_LEN);
+         myRunCommanderRank.Text = gi.Commander.Rank;
+         myRunCommanderRating.Text = gi.Commander.Rating.ToString();
+         s = AddSpaces(gi.Commander.Name, CREW_NAME_LEN);
          mySpanCommanderName.Inlines.Clear();
          mySpanCommanderName.Inlines.Add(new Run(s));
          mySpanCommanderName.IsEnabled = myIsEditable;
          if (true == mySpanCommanderName.IsEnabled)
             mySpanCommanderName.Background = theBrushInActive;
-         if (false == gi.SetCrewActionTerritory(lastReport.Commander))
+         if (false == gi.SetCrewActionTerritory(gi.Commander))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------
-         myRunGunnerRating.Text = lastReport.Gunner.Rating.ToString();
-         s = AddSpaces(lastReport.Gunner.Name, CREW_NAME_LEN);
+         myRunGunnerRating.Text = gi.Gunner.Rating.ToString();
+         s = AddSpaces(gi.Gunner.Name, CREW_NAME_LEN);
          mySpanGunnerName.Inlines.Clear();
          mySpanGunnerName.Inlines.Add(new Run(s));
          mySpanGunnerName.IsEnabled = myIsEditable;
          if (true == mySpanGunnerName.IsEnabled)
             mySpanGunnerName.Background = theBrushInActive;
-         if (false == gi.SetCrewActionTerritory(lastReport.Gunner))
+         if (false == gi.SetCrewActionTerritory(gi.Gunner))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------
-         myRunLoaderRating.Text = lastReport.Loader.Rating.ToString();
-         s = AddSpaces(lastReport.Loader.Name, CREW_NAME_LEN);
+         myRunLoaderRating.Text = gi.Loader.Rating.ToString();
+         s = AddSpaces(gi.Loader.Name, CREW_NAME_LEN);
          mySpanLoaderName.Inlines.Clear();
          mySpanLoaderName.Inlines.Add(new Run(s));
          mySpanLoaderName.IsEnabled = myIsEditable;
          if (true == mySpanLoaderName.IsEnabled)
             mySpanLoaderName.Background = theBrushInActive;
-         if (false == gi.SetCrewActionTerritory(lastReport.Loader))
+         if (false == gi.SetCrewActionTerritory(gi.Loader))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------
-         ICrewMember? driver = lastReport.Driver as ICrewMember;
+         ICrewMember? driver = gi.Driver as ICrewMember;
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): loader=null");
@@ -188,14 +188,14 @@ namespace Pattons_Best
             return false;
          }
          //----------------------------------
-         myRunAssistantRating.Text = lastReport.Assistant.Rating.ToString();
-         s = AddSpaces(lastReport.Assistant.Name, CREW_NAME_LEN);
+         myRunAssistantRating.Text = gi.Assistant.Rating.ToString();
+         s = AddSpaces(gi.Assistant.Name, CREW_NAME_LEN);
          mySpanAssistantName.Inlines.Clear();
          mySpanAssistantName.Inlines.Add(new Run(s));
          mySpanAssistantName.IsEnabled = myIsEditable;
          if (true == mySpanAssistantName.IsEnabled)
             mySpanAssistantName.Background = theBrushInActive;
-         if (false == gi.SetCrewActionTerritory(lastReport.Assistant))
+         if (false == gi.SetCrewActionTerritory(gi.Assistant))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
@@ -279,7 +279,7 @@ namespace Pattons_Best
             mySpanKnockedOut.Inlines.Clear();
             mySpanKnockedOut.Inlines.Add(new Run(s));
          }
-         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "UpdateReport(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "UpdateReport(): cmdr=" + gi.Commander.Name + " driver=" + gi.Driver.Name);
          return true;
       }
       private bool UpdateReportTimeTrack(IAfterActionReport report)
@@ -566,6 +566,7 @@ namespace Pattons_Best
       }
       private void ResetTextBoxes()
       {
+         char[] trimChars = new char[] { ' ', '*', '_' };
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
@@ -582,7 +583,8 @@ namespace Pattons_Best
                {
                   if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
                   {
-                     string trimString = textbox.Text.TrimStart(new char[] { ' ', '*', '_' });
+                     string trimStart = textbox.Text.TrimStart(trimChars);
+                     string trimString = trimStart.TrimEnd(trimChars);
                      if ( false == String.IsNullOrEmpty(trimString) )
                         lastReport.Name = trimString;
                      else
@@ -607,17 +609,19 @@ namespace Pattons_Best
                {
                   if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
                   {
-                     string trimString = textbox.Text.TrimStart(new char[] { ' ', '*', '_' });
+                     string trimStart = textbox.Text.TrimStart(trimChars);
+                     string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Commander.Name = trimString;
+                        lastReport.Commander = trimString;
                      else
-                        textbox.Text = lastReport.Commander.Name;
+                        textbox.Text = myGameInstance.Commander.Name;
                   }
                }
             }
+            myGameInstance.Commander.Name = lastReport.Commander;
             mySpanCommanderName.Background = theBrushInActive;
             mySpanCommanderName.Inlines.Clear();
-            String s = AddSpaces(lastReport.Commander.Name, CREW_NAME_LEN);
+            String s = AddSpaces(lastReport.Commander, CREW_NAME_LEN);
             mySpanCommanderName.Inlines.Clear();
             mySpanCommanderName.Inlines.Add(new Run(s));
          }
@@ -632,17 +636,19 @@ namespace Pattons_Best
                {
                   if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
                   {
-                     string trimString = textbox.Text.TrimStart(new char[] { ' ', '*', '_' });
+                     string trimStart = textbox.Text.TrimStart(trimChars);
+                     string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Gunner.Name = trimString;
+                        lastReport.Gunner = trimString;
                      else
-                        textbox.Text = lastReport.Gunner.Name;
+                        textbox.Text = myGameInstance.Gunner.Name;
                   }
                }
             }
+            myGameInstance.Gunner.Name = lastReport.Gunner;
             mySpanGunnerName.Background = theBrushInActive;
             mySpanGunnerName.Inlines.Clear();
-            String s = AddSpaces(lastReport.Gunner.Name, CREW_NAME_LEN);
+            String s = AddSpaces(lastReport.Gunner, CREW_NAME_LEN);
             mySpanGunnerName.Inlines.Clear();
             mySpanGunnerName.Inlines.Add(new Run(s));
          }
@@ -657,17 +663,19 @@ namespace Pattons_Best
                {
                   if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
                   {
-                     string trimString = textbox.Text.TrimStart(new char[] { ' ', '*', '_' });
+                     string trimStart = textbox.Text.TrimStart(trimChars);
+                     string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Loader.Name = trimString;
+                        lastReport.Loader = trimString;
                      else
-                        textbox.Text = lastReport.Loader.Name;
+                        textbox.Text = myGameInstance.Loader.Name;
                   }
                }
             }
+            myGameInstance.Loader.Name = lastReport.Loader;
             mySpanLoaderName.Background = theBrushInActive;
             mySpanLoaderName.Inlines.Clear();
-            String s = AddSpaces(lastReport.Loader.Name, CREW_NAME_LEN);
+            String s = AddSpaces(lastReport.Loader, CREW_NAME_LEN);
             mySpanLoaderName.Inlines.Clear();
             mySpanLoaderName.Inlines.Add(new Run(s));
          }
@@ -682,18 +690,20 @@ namespace Pattons_Best
                {
                   if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
                   {
-                     string trimString = textbox.Text.TrimStart(new char[] { ' ', '*', '_' });
+                     string trimStart = textbox.Text.TrimStart(trimChars);
+                     string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Driver.Name = trimString;
+                        lastReport.Driver = trimString;
                      else
-                        textbox.Text = lastReport.Driver.Name;
-                     Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "ResetTextBoxes(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+                        textbox.Text = myGameInstance.Driver.Name;
+                     Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "ResetTextBoxes(): cmdr=" + myGameInstance.Commander.Name + " driver=" + myGameInstance.Driver.Name);
                   }
                }
             }
+            myGameInstance.Driver.Name = lastReport.Driver;
             mySpanDriverName.Background = theBrushInActive;
             mySpanDriverName.Inlines.Clear();
-            String s = AddSpaces(lastReport.Driver.Name, CREW_NAME_LEN);
+            String s = AddSpaces(lastReport.Driver, CREW_NAME_LEN);
             mySpanDriverName.Inlines.Clear();
             mySpanDriverName.Inlines.Add(new Run(s));
          }
@@ -708,21 +718,23 @@ namespace Pattons_Best
                {
                   if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
                   {
-                     string trimString = textbox.Text.TrimStart(new char[] { ' ', '*', '_' });
+                     string trimStart = textbox.Text.TrimStart(trimChars);
+                     string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Assistant.Name = trimString;
+                        lastReport.Assistant = trimString;
                      else
-                        textbox.Text = lastReport.Assistant.Name;
+                        textbox.Text = myGameInstance.Assistant.Name;
                   }
                }
             }
+            myGameInstance.Assistant.Name = lastReport.Assistant;
             mySpanAssistantName.Background = theBrushInActive;
             mySpanAssistantName.Inlines.Clear();
-            String s = AddSpaces(lastReport.Assistant.Name, CREW_NAME_LEN);
+            String s = AddSpaces(lastReport.Assistant, CREW_NAME_LEN);
             mySpanAssistantName.Inlines.Clear();
             mySpanAssistantName.Inlines.Add(new Run(s));
          }
-         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "ResetTextBoxes(): END cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "ResetTextBoxes(): END cmdr=" + myGameInstance.Commander.Name + " driver=" + myGameInstance.Driver.Name);
       }
    }
 }

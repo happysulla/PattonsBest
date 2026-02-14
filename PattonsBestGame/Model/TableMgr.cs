@@ -4369,14 +4369,14 @@ namespace Pattons_Best
                {
                   string name = "PzVIe" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
-                  appearingMapItem = new MapItem(name, mi.Zoom, "c81PzVIe", mi.TerritoryCurrent);
+                  appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIe", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                }
                else
                {
                   string name = "PzVIb" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
-                  appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
+                  appearingMapItem = new MapItem(name, mi.Zoom, "c81PzVIb", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                }
             }
@@ -4520,7 +4520,7 @@ namespace Pattons_Best
                   case "Driver_Reverse":
                      if (dieRoll < 98)
                      {
-                        gi.Sherman.IsMoving = true;
+                        gi.Sherman.IsMoving = true; // Get_MovingResultSherman()
                         return "No Accident";
                      }
                      else if (dieRoll < 100)
@@ -4541,7 +4541,7 @@ namespace Pattons_Best
                      }
                      else if (dieRoll < 98)
                      {
-                        gi.Sherman.IsMoving = true;
+                        gi.Sherman.IsMoving = true; // Get_MovingResultSherman()
                         return "No Accident";
                      }
                      else if (dieRoll < 100)
@@ -4562,7 +4562,7 @@ namespace Pattons_Best
                      }
                      else if (dieRoll < 98)
                      {
-                        gi.Sherman.IsMoving = true;
+                        gi.Sherman.IsMoving = true; // Get_MovingResultSherman()
                         return "No Accident";
                      }
                      else if (dieRoll < 100)
@@ -5473,6 +5473,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "Get_ShermanFireDirection(): 2-reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
                      return returnValue;
                }
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): eu=" + enemyUnit.Name + " enemySector=" + enemySector.ToString() + " hitLocation=" + hitLocation + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
             }
             else if ("Turret" == hitLocation)
             {
@@ -5481,7 +5482,6 @@ namespace Pattons_Best
                   totalRotation += 360.0;
                if (359.9 < totalRotation)
                   totalRotation = totalRotation - 360.0;
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
                switch (totalRotation)
                {
                   case 0.0: returnValue = "Rear"; break;
@@ -5494,8 +5494,8 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "Get_ShermanFireDirection(): reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
                      return returnValue;
                }
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): eu=" + enemyUnit.Name + " enemySector=" + enemySector.ToString() + " hitLocation=" + hitLocation + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
             }
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
          }
          return returnValue;
       }

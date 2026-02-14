@@ -1666,43 +1666,38 @@ namespace Pattons_Best
                if ( 2 == myRollResultColNum )
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
+                  myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
+                  Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): GetEnemyNewFacing() returned " + myGridRows[i].myFacing + " for dr=" + dieRoll.ToString() + " for mi=" + mi.Name + " eu=" + mi.GetEnemyUnit() + " isTurret=" + mi.IsTurret());
+                  if ("ERROR" == myGridRows[i].myFacing)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
+                     return;
+                  }
                   Option optionEnemyRearFacingOnMove = myGameInstance.Options.Find("EnemyRearFacingOnMove");
-                  bool isFacingSet = false;
                   if (true == optionEnemyRearFacingOnMove.IsEnabled)
                   {
-                     if (true == mi.LastMoveAction.Contains("Move-B")) // 75% chance continue on same path
+                     if ( (true == myGridRows[i].myEnemyAction.Contains("Move-B")) && (true == myGridRows[i].myFacing.Contains("Rear")) )
                      {
                         int randomNum = Utilities.RandomGenerator.Next(0, 5);
                         Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): rn=" + randomNum + " for mi=" + mi.Name + " eu=" + mi.GetEnemyUnit() + " isTurret=" + mi.IsTurret());
                         if (true == mi.IsTurret())
                         {
-                           if (randomNum < 2)
+                           if (randomNum < 2) // 33% chance shows rear facing when moving away
                            {
-                              Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): myGridRows[i].myFacing=Rear");
+                              Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): Setting turreted vehicle to myGridRows[i].myFacing=Rear");
                               myGridRows[i].myEnemyAction = "Move-B(r)";
                               myGridRows[i].myFacing = "Rear";
-                              isFacingSet = true;
                            }
                         }
                         else
                         {
-                           if (randomNum < 4)
+                           if (randomNum < 4) // 80% chance shows rear facing when moving away
                            {
-                              Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): myGridRows[i].myFacing=Rear");
+                              Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): Setting non turreted vehicle to myGridRows[i].myFacing=Rear");
                               myGridRows[i].myEnemyAction = "Move-B(r)";
                               myGridRows[i].myFacing = "Rear";
-                              isFacingSet = true;
                            }
                         }
-                     }
-                  }
-                  if( false == isFacingSet)
-                  { 
-                     myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi, dieRoll);
-                     if ("ERROR" == myGridRows[i].myFacing)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyNewFacing() returned ERROR");
-                        return;
                      }
                   }
                   if (false == ShowDieResultUpdateFacing(i))

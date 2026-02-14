@@ -1454,29 +1454,29 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         if (false == IsEqual(left.Commander, right.Commander))
+         if (left.Commander != right.Commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Commander != rReport.Commander");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Commander != right.Commander");
             return false;
          }
-         if (false == IsEqual(left.Gunner, right.Gunner))
+         if (left.Gunner != right.Gunner)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Gunner != rReport.Gunner");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Gunner != right.Gunner");
             return false;
          }
-         if (false == IsEqual(left.Loader, right.Loader))
+         if (left.Loader != right.Loader)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Loader != rReport.Loader");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Loader != right.Loader");
             return false;
          }
-         if (false == IsEqual(left.Driver, right.Driver))
+         if (left.Driver != right.Driver)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Driver != rReport.Driver");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Driver != right.Driver");
             return false;
          }
-         if (false == IsEqual(left.Assistant, right.Assistant))
+         if (left.Assistant != right.Assistant)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Assistant != rReport.CommaAssistantnder");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Assistant != right.Assistant");
             return false;
          }
          //------------------------------------

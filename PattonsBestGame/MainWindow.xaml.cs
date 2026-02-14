@@ -111,6 +111,18 @@ namespace Pattons_Best
             Uri iconUri = new Uri(iconFilename, UriKind.Absolute);
             this.Icon = BitmapFrame.Create(iconUri);
             //--------------------------------------------
+            if (false == Logger.SetInitial()) // tsetup logger
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MainWindow(): SetInitial() returned false");
+               Application.Current.Shutdown();
+               return;
+            }
+            if (false == SurnameMgr.SetInitial())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MainWindow(): SurnameMgr.SetInitial() returned false");
+               Application.Current.Shutdown();
+               return;
+            }
             IGameInstance gi = new GameInstance();
             if (true == gi.CtorError)
             {

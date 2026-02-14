@@ -57,6 +57,11 @@ namespace Pattons_Best
       IMapItem? TargetMg { set; get; }
       IMapItem? ShermanHvss { set; get; }
       ICrewMember? ReturningCrewman { set; get; }
+      ICrewMember Commander { get; set; }
+      ICrewMember Gunner { get; set; }
+      ICrewMember Loader { get; set; }
+      ICrewMember Driver { get; set; }
+      ICrewMember Assistant { get; set; }
       //------------------------------------------------
       ITerritories AreaTargets { get; set; }
       ITerritories CounterattachRetreats { get; set; }

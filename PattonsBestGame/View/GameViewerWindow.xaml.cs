@@ -972,7 +972,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): GetMainGunSector() returned ERROR");
             return false;
          }
-         bool isGunnerTrainedInHvss = ( (true == gi.TrainedGunners.Contains(lastReport.Gunner.Name)) && (false == lastReport.Gunner.IsIncapacitated) );
+         bool isGunnerTrainedInHvss = ( (true == gi.TrainedGunners.Contains(gi.Gunner.Name)) && (false == gi.Gunner.IsIncapacitated) );
          bool isTargetInCurrentMainGunSector = Territory.IsEnemyUnitInSector(gi, sector);
          bool iMainGunAbleAbleToFireDueToMoving = ( (false == isTankMoving) || (true == isGunnerTrainedInHvss) );
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
@@ -3748,7 +3748,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_ShowStatsText(): lastReport=null");
                return false;
             }
-            int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
+            int crewRating = myGameInstance.Commander.Rating + myGameInstance.Gunner.Rating + myGameInstance.Loader.Rating + myGameInstance.Driver.Rating + myGameInstance.Assistant.Rating;
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Crew Rating = " + crewRating.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             //-------------------------------------
@@ -5113,7 +5113,7 @@ namespace Pattons_Best
             return;
          }
          string tType = lastReport.TankCardNum.ToString();
-         bool isGunnerTrainedInHvss = ( (true == myGameInstance.TrainedGunners.Contains(lastReport.Gunner.Name)) && (false == lastReport.Gunner.IsIncapacitated) );
+         bool isGunnerTrainedInHvss = ( (true == myGameInstance.TrainedGunners.Contains(myGameInstance.Gunner.Name)) && (false == myGameInstance.Gunner.IsIncapacitated) );
          //--------------------------------------
          MenuItem? menuitem = sender as MenuItem;
          if( null == menuitem)

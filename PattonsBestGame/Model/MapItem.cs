@@ -62,8 +62,8 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theSherman76Turret = theMapImages.GetBitmapImage("c16TurretSherman76");
       [NonSerialized] protected static BitmapImage? thePzIVTurret = theMapImages.GetBitmapImage("c79PzIVTurret");
       [NonSerialized] protected static BitmapImage? thePzVTurret = theMapImages.GetBitmapImage("c80PzVTurret");
-      [NonSerialized] protected static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
-      [NonSerialized] protected static BitmapImage? thePzVIeTurret = theMapImages.GetBitmapImage("c82PzVIeTurret");
+      [NonSerialized] protected static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c81PzVIbTurret");  // King Tiger
+      [NonSerialized] protected static BitmapImage? thePzVIeTurret = theMapImages.GetBitmapImage("c82PzVIeTurret");  // Tiger
       [NonSerialized] protected static BitmapImage?[] theAcquiredOne = new BitmapImage?[7] { theMapImages.GetBitmapImage("c103Acquired1_0"), theMapImages.GetBitmapImage("c103Acquired1_1"), theMapImages.GetBitmapImage("c103Acquired1_2"), theMapImages.GetBitmapImage("c103Acquired1_3"), theMapImages.GetBitmapImage("c103Acquired1_4"), theMapImages.GetBitmapImage("c103Acquired1_5"), theMapImages.GetBitmapImage("c103Acquired1_6") };
       [NonSerialized] protected static BitmapImage?[] theAcquiredTwo = new BitmapImage?[7] { theMapImages.GetBitmapImage("c104Acquired2_0"), theMapImages.GetBitmapImage("c104Acquired2_1"), theMapImages.GetBitmapImage("c104Acquired2_2"), theMapImages.GetBitmapImage("c104Acquired2_3"), theMapImages.GetBitmapImage("c104Acquired2_4"), theMapImages.GetBitmapImage("c104Acquired2_5"), theMapImages.GetBitmapImage("c104Acquired2_6") };
       //--------------------------------------------------
@@ -304,7 +304,7 @@ namespace Pattons_Best
             return true;
          else if ( (true == this.Name.Contains("SPG")) || (true == this.Name.Contains("STuGIIIg")) )
             return true;
-         else if ( (true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVI")) )
+         else if ( (true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVIe")) || (true == this.Name.Contains("PzVIb")) )
             return true;
          else if (true == this.Name.Contains("MG"))
             return true;
@@ -314,13 +314,13 @@ namespace Pattons_Best
             return true;
          else if (true == this.Name.Contains("MARDER"))
             return true;
-         else if (true == this.Name.Contains("PzIV"))
-            return true;
          else if (true == this.Name.Contains("PzV"))
             return true;
          else if (true == this.Name.Contains("JdgPzIV"))
             return true;
          else if (true == this.Name.Contains("JdgPz38t"))
+            return true;
+         else if (true == this.Name.Contains("PzIV"))
             return true;
          return false;
       }
@@ -336,8 +336,6 @@ namespace Pattons_Best
             return true;
          else if (true == this.Name.Contains("SPW"))
             return true;
-         else if (true == this.Name.Contains("PzIV"))
-            return true;
          else if (true == this.Name.Contains("PzV"))
             return true;
          else if (true == this.Name.Contains("MARDER"))
@@ -346,16 +344,18 @@ namespace Pattons_Best
             return true;
          else if (true == this.Name.Contains("JdgPz38t"))
             return true;
+         else if (true == this.Name.Contains("PzIV"))
+            return true;
          return false;
       }
       public bool IsTurret()
       {
          if (true == this.Name.Contains("Sherman"))
             return true;
-         if ((true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVI")))
+         if ((true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVIe")) || (true == this.Name.Contains("PzVIb")))
             return true;
-         else if (true == this.Name.Contains("PzIV"))
-            return true;
+         else if ( (true == this.Name.Contains("PzIV")) && (false == this.Name.Contains("JdgPzIV")) )
+               return true;
          else if (true == this.Name.Contains("PzV"))
             return true;
          return false;
@@ -403,8 +403,6 @@ namespace Pattons_Best
             enemyUnit = "Pak40";
          else if (true == this.Name.Contains("Pak43"))
             enemyUnit = "Pak43";
-         else if (true == this.Name.Contains("PzIV"))
-            enemyUnit = "PzIV";
          else if (true == this.Name.Contains("PzV"))
             enemyUnit = "PzV";
          else if (true == this.Name.Contains("PzVIb"))
@@ -421,6 +419,8 @@ namespace Pattons_Best
             enemyUnit = "JdgPzIV";
          else if (true == this.Name.Contains("JdgPz38t") )
             enemyUnit = "JdgPz38t";
+         else if (true == this.Name.Contains("PzIV"))
+            enemyUnit = "PzIV";
          else if (true == this.Name.Contains("Panzerfaust"))
             enemyUnit = "Panzerfaust";
          else
@@ -637,14 +637,14 @@ namespace Pattons_Best
                   imgTurret = new Image() { Height = height, Width = width, Source = theSherman75Turret };
                else if (true == mi.Name.Contains("Sherman76"))
                   imgTurret = new Image() { Height = height, Width = width, Source = theSherman76Turret };
-               else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVIe"))
-                  imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
                else if (true == mi.Name.Contains("PzIV"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzIVTurret };
                else if (true == mi.Name.Contains("PzV"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVTurret };
-               else if (true == mi.Name.Contains("PzVI"))
+               else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVIe"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVIeTurret };
+               else if (true == mi.Name.Contains("PzVIb"))
+                  imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
                if (null == imgTurret)
                {
                   Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null mi=" + mi.Name);

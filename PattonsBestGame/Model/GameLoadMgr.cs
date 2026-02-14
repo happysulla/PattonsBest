@@ -1628,6 +1628,67 @@ namespace Pattons_Best
             }
             gi.ReturningCrewman = crewMember;
             //----------------------------------------------
+            ICrewMember? cm = null;
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Commander) returned false");
+               return null;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Commander) cm = null");
+               return null;
+            }
+            gi.Commander = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Gunner) returned false");
+               return null;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Gunner) cm = null");
+               return null;
+            }
+            gi.Gunner = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Loader) returned false");
+               return null;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Loader) cm = null");
+               return null;
+            }
+            gi.Loader = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Driver) returned false");
+               return null;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Driver) cm = null");
+               return null;
+            }
+            gi.Driver = cm;
+            //----------------------------------------------
+            if (false == ReadXmlCrewMember(reader, ref cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Assistant) returned false");
+               return null;
+            }
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlCrewMember(Assistant) cm = null");
+               return null;
+            }
+            gi.Assistant = cm;
+            //----------------------------------------------
             if (false == ReadXmlTerritories(reader, gi.AreaTargets, "AreaTargets"))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlTerritories(AreaTargets) returned null");
@@ -4650,66 +4711,100 @@ namespace Pattons_Best
             }
             report.Weather = sWeather;
             //----------------------------------------------
-            ICrewMember? cm = null;
-            if (false == ReadXmlCrewMember(reader, ref cm))
+            reader.Read();
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Commander) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(CommanderName) returned false");
                return false;
             }
-            if (null == cm)
+            if (reader.Name != "CommanderName")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Commander) cm = null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
                return false;
             }
-            report.Commander = cm;
+            string? sCommanderName = reader.GetAttribute("value");
+            if (null == sCommanderName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sCommanderName=null");
+               return false;
+            }
+            report.Commander = sCommanderName;
             //----------------------------------------------
-            if (false == ReadXmlCrewMember(reader, ref cm))
+            reader.Read();
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Gunner) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(GunnerName) returned false");
                return false;
             }
-            if (null == cm)
+            if (reader.Name != "GunnerName")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Gunner) cm = null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
                return false;
             }
-            report.Gunner = cm;
+            string? sGunnerName = reader.GetAttribute("value");
+            if (null == sGunnerName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sGunnerName=null");
+               return false;
+            }
+            report.Gunner = sGunnerName;
             //----------------------------------------------
-            if (false == ReadXmlCrewMember(reader, ref cm))
+            reader.Read();
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Loader) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(LoaderName) returned false");
                return false;
             }
-            if (null == cm)
+            if (reader.Name != "LoaderName")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Loader) cm = null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
                return false;
             }
-            report.Loader = cm;
+            string? sLoaderName = reader.GetAttribute("value");
+            if (null == sLoaderName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sLoaderName=null");
+               return false;
+            }
+            report.Loader = sLoaderName;
             //----------------------------------------------
-            if (false == ReadXmlCrewMember(reader, ref cm))
+            reader.Read();
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Driver) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(DriverName) returned false");
                return false;
             }
-            if (null == cm)
+            if (reader.Name != "DriverName")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Driver) cm = null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
                return false;
             }
-            report.Driver = cm;
+            string? sDriverName = reader.GetAttribute("value");
+            if (null == sDriverName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sDriverName=null");
+               return false;
+            }
+            report.Driver = sDriverName;
             //----------------------------------------------
-            if (false == ReadXmlCrewMember(reader, ref cm))
+            reader.Read();
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Assistant) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(AssistantName) returned false");
                return false;
             }
-            if (null == cm)
+            if (reader.Name != "AssistantName")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Assistant) cm = null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
                return false;
             }
-            report.Assistant = cm;
+            string? sAssistantName = reader.GetAttribute("value");
+            if (null == sAssistantName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sAssistantName=null");
+               return false;
+            }
+            report.Assistant = sAssistantName;
             //---------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -7356,9 +7451,9 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if( false == CreateXmlGameReports(aXmlDocument, gi.Reports))
+         if( false == CreateXmlGameReports(aXmlDocument, gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlGameReports() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXml_GameReports() returned false");
             return null;
          }
          //------------------------------------------
@@ -7513,6 +7608,32 @@ namespace Pattons_Best
          if (false == CreateXmlCrewMember(aXmlDocument, root, gi.ReturningCrewman))
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlMapItem(ReturningCrewman) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlCrewMember(aXmlDocument, root, gi.Commander))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlCrewMember(Commander) returned false");
+            return null;
+         }
+         if (false == CreateXmlCrewMember(aXmlDocument, root, gi.Gunner))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlCrewMember(Gunner) returned false");
+            return null;
+         }
+         if (false == CreateXmlCrewMember(aXmlDocument, root, gi.Loader))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlCrewMember(Loader) returned false");
+            return null;
+         }
+         if (false == CreateXmlCrewMember(aXmlDocument, root, gi.Driver))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlCrewMember(Driver) returned false");
+            return null;
+         }
+         if (false == CreateXmlCrewMember(aXmlDocument, root, gi.Assistant))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlCrewMember(Assistant) returned false");
             return null;
          }
          //------------------------------------------
@@ -8720,25 +8841,22 @@ namespace Pattons_Best
       private bool CreateXmlListingOfMapItems(XmlDocument aXmlDocument, IGameInstance gi)
       {
          theMapItems.Clear();
-         for (int k = 0; k < gi.Reports.Count; k++)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
-            IAfterActionReport? report = gi.Reports[k];
-            if (null == report)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): report=null");
-               return false;
-            }
-            if (null == theMapItems.Find(report.Commander.Name))
-               theMapItems.Add((IMapItem)report.Commander);
-            if (null == theMapItems.Find(report.Gunner.Name))
-               theMapItems.Add((IMapItem)report.Gunner);
-            if (null == theMapItems.Find(report.Loader.Name))
-               theMapItems.Add((IMapItem)report.Loader);
-            if (null == theMapItems.Find(report.Driver.Name))
-               theMapItems.Add((IMapItem)report.Driver);
-            if (null == theMapItems.Find(report.Assistant.Name))
-               theMapItems.Add((IMapItem)report.Assistant);
+            Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): report=null");
+            return false;
          }
+         if (null == theMapItems.Find(gi.Commander.Name)) 
+            theMapItems.Add((IMapItem)gi.Commander);
+         if (null == theMapItems.Find(gi.Gunner.Name))
+            theMapItems.Add((IMapItem)gi.Gunner);
+         if (null == theMapItems.Find(gi.Loader.Name))
+            theMapItems.Add((IMapItem)gi.Loader);
+         if (null == theMapItems.Find(gi.Driver.Name))
+            theMapItems.Add((IMapItem)gi.Driver);
+         if (null == theMapItems.Find(gi.Assistant.Name))
+            theMapItems.Add((IMapItem)gi.Assistant);
          //-----------------------------------
          foreach (IMapItem mi in gi.ReadyRacks)
             theMapItems.Add(mi);
@@ -9109,7 +9227,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(IsHullDown) returned null");
                return false;
             }
-            elem.SetAttribute("value", mi.IsMoving.ToString());
+            elem.SetAttribute("value", mi.IsHullDown.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
@@ -9614,765 +9732,812 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateXmlGameReports(XmlDocument aXmlDocument, IAfterActionReports reports)
+      private bool CreateXmlGameReports(XmlDocument aXmlDocument, IGameInstance gi)
       {
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): root is null");
             return false;
          }
          XmlElement? reportsElem = aXmlDocument.CreateElement("Reports");
          if (null == reportsElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Reports) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Reports) returned null");
             return false;
          }
-         reportsElem.SetAttribute("count", reports.Count.ToString());
+         reportsElem.SetAttribute("count", gi.Reports.Count.ToString());
          XmlNode? reportsNode = root.AppendChild(reportsElem);
          if (null == reportsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(reportsNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(reportsNode) returned null");
             return false;
          }
-         //--------------------------------
-         for (int k = 0; k < reports.Count; k++)
+         //-----------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
-            IAfterActionReport? report = reports[k];
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): report=null");
+            return false;
+         }
+         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+         for (int k = 0; k < gi.Reports.Count; k++)
+         {
+            IAfterActionReport? report = gi.Reports[k];
             if (null == report)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): report=null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): report=null");
                return false;
             }
             XmlElement? reportElem = aXmlDocument.CreateElement("Report");
             if (null == reportElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Report) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Report) returned false");
                return false;
             }
             reportElem.SetAttribute("IsActionThisDay", report.IsActionThisDay.ToString());
             XmlNode? reportNode = reportsNode.AppendChild(reportElem);
             if (null == reportNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(reportNode) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(reportNode) returned false");
                return false;
             }
             //------------------------------------------
             XmlElement? elem = aXmlDocument.CreateElement("Day");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Day) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Day) returned false");
                return false;
             }
             elem.SetAttribute("value", report.Day);
             XmlNode? node = reportNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Day) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Day) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("Scenario");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Scenario) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Scenario) returned false");
                return false;
             }
             elem.SetAttribute("value", report.Scenario.ToString());
             node = reportNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Scenario) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Scenario) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("Probability");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Probability) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Probability) returned false");
                return false;
             }
             elem.SetAttribute("value", report.Probability.ToString());
             node = reportNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Probability) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Probability) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("Resistance");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Resistance) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Resistance) returned false");
                return false;
             }
             elem.SetAttribute("value", report.Resistance.ToString());
             node = reportNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Resistance) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Resistance) returned false");
                return false;
             }
-            //------------------------------------------
+            //=======================================================
             if( true == report.IsActionThisDay )
             {
                elem = aXmlDocument.CreateElement("Name");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Name) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Name) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.Name);
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Name) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Name) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("TankCardNum");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(TankCardNum) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(TankCardNum) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.TankCardNum.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(TankCardNum) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(TankCardNum) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("Weather");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Weather) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Weather) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.Weather);
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Weather) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Weather) returned false");
                   return false;
                }
                //------------------------------------------
-               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Commander))
+               elem = aXmlDocument.CreateElement("CommanderName");
+               if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Commander) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(CommanderName) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", gi.Commander.Name);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(CommanderName) returned false");
                   return false;
                }
                //------------------------------------------
-               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Gunner))
+               elem = aXmlDocument.CreateElement("GunnerName");
+               if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Gunner) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(GunnerName) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", gi.Gunner.Name);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(GunnerName) returned false");
                   return false;
                }
                //------------------------------------------
-               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Loader))
+               elem = aXmlDocument.CreateElement("LoaderName");
+               if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Loader) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(LoaderName) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", gi.Loader.Name);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(LoaderName) returned false");
                   return false;
                }
                //------------------------------------------
-               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Driver))
+               elem = aXmlDocument.CreateElement("DriverName");
+               if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Driver) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(DriverName) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", gi.Driver.Name);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(DriverName) returned false");
                   return false;
                }
                //------------------------------------------
-               if (false == CreateXmlCrewMember(aXmlDocument, reportNode, report.Assistant))
+               elem = aXmlDocument.CreateElement("AssistantName");
+               if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateXmlCrewMember(Assistant) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(AssistantName) returned false");
+                  return false;
+               }
+               elem.SetAttribute("value", gi.Assistant.Name);
+               node = reportNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(AssistantName) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("SunriseHour");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunriseHour) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(SunriseHour) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.SunriseHour.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseHour) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(SunriseHour) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("SunriseMin");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunriseMin) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(SunriseMin) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.SunriseMin.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseMin) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(SunriseMin) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("SunsetHour");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunsetHour) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(SunsetHour) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.SunsetHour.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetHour) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(SunsetHour) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("SunsetMin");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(SunsetMin) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(SunsetMin) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.SunsetMin.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetMin) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(SunsetMin) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("Ammo30CalibreMG");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Ammo30CalibreMG) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Ammo30CalibreMG) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.Ammo30CalibreMG.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo30CalibreMG) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Ammo30CalibreMG) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("Ammo50CalibreMG");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Ammo50CalibreMG) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Ammo50CalibreMG) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.Ammo50CalibreMG.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo50CalibreMG) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Ammo50CalibreMG) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("AmmoSmokeBomb");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoSmokeBomb) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(AmmoSmokeBomb) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.AmmoSmokeBomb.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeBomb) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(AmmoSmokeBomb) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("AmmoSmokeGrenade");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoSmokeGrenade) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(AmmoSmokeGrenade) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.AmmoSmokeGrenade.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeGrenade) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(AmmoSmokeGrenade) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("AmmoPeriscope");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(AmmoPeriscope) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(AmmoPeriscope) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.AmmoPeriscope.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoPeriscope) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(AmmoPeriscope) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("MainGunHE");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHE) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(MainGunHE) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.MainGunHE.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHE) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(MainGunHE) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("MainGunAP");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunAP) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(MainGunAP) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.MainGunAP.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunAP) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(MainGunAP) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("MainGunWP");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunWP) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(MainGunWP) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.MainGunWP.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunWP) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(MainGunWP) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("MainGunHBCI");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHBCI) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(MainGunHBCI) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.MainGunHBCI.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHBCI) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(MainGunHBCI) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("MainGunHVAP");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MainGunHVAP) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(MainGunHVAP) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.MainGunHVAP.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHVAP) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(MainGunHVAP) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaLightWeapon");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaLightWeapon) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaLightWeapon) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaLightWeapon.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaLightWeapon) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaLightWeapon) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaTruck");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaTruck) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaTruck) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaTruck.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaTruck) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaTruck) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaSpwOrPsw");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSpwOrPsw.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaSPGun");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaSPGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaSPGun) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSPGun.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSPGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaSPGun) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzIV");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzIV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaPzIV) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzIV.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzIV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaPzIV) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzV");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaPzV) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzV.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaPzV) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaPzVI");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaPzVI) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaPzVI) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzVI.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzVI) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaPzVI) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaAtGun");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaAtGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaAtGun) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaAtGun.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaAtGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaAtGun) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyKiaFortifiedPosition");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyKiaFortifiedPosition.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaLightWeapon");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaLightWeapon) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaLightWeapon) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaLightWeapon.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaLightWeapon) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaLightWeapon) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaTruck");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaTruck) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaTruck) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaTruck.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaTruck) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaTruck) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaSpwOrPsw");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaSpwOrPsw) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameCreateXml_GameReportseports(): CreateElement(VictoryPtsYourKiaSpwOrPsw) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaSpwOrPsw.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSpwOrPsw) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaSpwOrPsw) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaSPGun");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaSPGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaSPGun) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaSPGun.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSPGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaSPGun) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzIV");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzIV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaPzIV) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaPzIV.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzIV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaPzIV) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzV");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaPzV) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaPzV.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzV) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaPzV) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaPzVI");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaPzVI) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaPzVI) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaPzVI.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzVI) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaPzVI) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaAtGun");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaAtGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaAtGun) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaAtGun.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaAtGun) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaAtGun) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsYourKiaFortifiedPosition");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsYourKiaFortifiedPosition) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsYourKiaFortifiedPosition) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsYourKiaFortifiedPosition.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaFortifiedPosition) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsYourKiaFortifiedPosition) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsCaptureArea");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsCaptureArea) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsCaptureArea) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsCaptureArea.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCaptureArea) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsCaptureArea) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsCapturedExitArea");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsCapturedExitArea) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsCapturedExitArea) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsCapturedExitArea.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCapturedExitArea) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsCapturedExitArea) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsLostArea");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsLostArea) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsLostArea) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsLostArea.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsLostArea) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsLostArea) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlyTank");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlyTank) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlyTank) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlyTank.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyTank) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlyTank) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsFriendlySquad");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsFriendlySquad) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsFriendlySquad) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsFriendlySquad.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlySquad) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsFriendlySquad) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsTotalYourTank");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalYourTank) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsTotalYourTank) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsTotalYourTank.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalYourTank) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsTotalYourTank) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsTotalFriendlyForces");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalFriendlyForces) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsTotalFriendlyForces) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsTotalFriendlyForces.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalFriendlyForces) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPtsTotalFriendlyForces) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsTotalTerritory");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPtsTotalTerritory) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPtsTotalTerritory) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsTotalTerritory.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalTerritory) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPts_TotalTerritory) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("VictoryPtsTotalEngagement");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(VictoryPts_TotalEngagement) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(VictoryPts_TotalEngagement) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.VictoryPtsTotalEngagement.ToString());
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPts_TotalEngagement) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(VictoryPts_TotalEngagement) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("Decorations");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decorations) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Decorations) returned false");
                   return false;
                }
                elem.SetAttribute("count", report.Decorations.Count.ToString());
                XmlNode? decorationsNode = reportNode.AppendChild(elem);
                if (null == decorationsNode)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Decorations) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Decorations) returned false");
                   return false;
                }
                for (int k1 = 0; k1 < report.Decorations.Count; ++k1)
@@ -10380,14 +10545,14 @@ namespace Pattons_Best
                   elem = aXmlDocument.CreateElement("Decoration");
                   if (null == elem)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decoration) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Decoration) returned false");
                      return false;
                   }
                   elem.SetAttribute("value", report.Decorations[k1].ToString());
                   XmlNode? decorationNode = decorationsNode.AppendChild(elem);
                   if (null == decorationNode)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(decorationNode) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(decorationNode) returned false");
                      return false;
                   }
                }
@@ -10395,14 +10560,14 @@ namespace Pattons_Best
                elem = aXmlDocument.CreateElement("Notes");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Notes) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Notes) returned false");
                   return false;
                }
                elem.SetAttribute("count", report.Notes.Count.ToString());
                XmlNode? notesNode = reportNode.AppendChild(elem);
                if (null == notesNode)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Notes) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Notes) returned false");
                   return false;
                }
                for (int k1 = 0; k1 < report.Notes.Count; ++k1)
@@ -10410,14 +10575,14 @@ namespace Pattons_Best
                   elem = aXmlDocument.CreateElement("Note");
                   if (null == elem)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Decoration) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Decoration) returned false");
                      return false;
                   }
                   elem.SetAttribute("value", report.Notes[k1].ToString());
                   XmlNode? noteNode = notesNode.AppendChild(elem);
                   if (null == noteNode)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(noteNode) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(noteNode) returned false");
                      return false;
                   }
                }
@@ -10425,42 +10590,42 @@ namespace Pattons_Best
                elem = aXmlDocument.CreateElement("DayEndedTime");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(DayEndedTime) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(DayEndedTime) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.DayEndedTime);
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(DayEndedTime) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(DayEndedTime) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("Breakdown");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Breakdown) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Breakdown) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.Breakdown);
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Breakdown) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Breakdown) returned false");
                   return false;
                }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("KnockedOut");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(KnockedOut) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(KnockedOut) returned false");
                   return false;
                }
                elem.SetAttribute("value", report.KnockedOut);
                node = reportNode.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(KnockedOut) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(KnockedOut) returned false");
                   return false;
                }
             }
@@ -11373,20 +11538,20 @@ namespace Pattons_Best
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlEnteredHexes(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): root is null");
             return false;
          }
          XmlElement? enteredHexesElem = aXmlDocument.CreateElement("EnteredHexes");
          if (null == enteredHexesElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlEnteredHexes(): CreateElement(EnteredHexes) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(EnteredHexes) returned null");
             return false;
          }
          enteredHexesElem.SetAttribute("count", enteredHexes.Count.ToString());
          XmlNode? enteredHexesNode = root.AppendChild(enteredHexesElem);
          if (null == enteredHexesNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlEnteredHexes(): AppendChild(EnteredHexes) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(EnteredHexes) returned null");
             return false;
          }
          for( int i=0; i< enteredHexes.Count; ++i )
@@ -11395,77 +11560,77 @@ namespace Pattons_Best
             XmlElement? enteredHexElem = aXmlDocument.CreateElement("EnteredHex");  // name of territory
             if (null == enteredHexElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlTerritories(): CreateElement(enteredHexElem) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(enteredHexElem) returned null");
                return false;
             }
             enteredHexElem.SetAttribute("value", enteredHex.Identifer.ToString());
             XmlNode? enteredHexNode = enteredHexesNode.AppendChild(enteredHexElem);
             if (null == enteredHexNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlTerritories(): AppendChild(enteredHexNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(enteredHexNode) returned null");
                return false;
             }
             //------------------------------------------
             XmlElement? elem = aXmlDocument.CreateElement("Day");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Day) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(Day) returned false");
                return false;
             }
             elem.SetAttribute("value", enteredHex.Day.ToString());
             XmlNode? node = enteredHexNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Day) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(Day) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("Date");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Date) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(Date) returned false");
                return false;
             }
             elem.SetAttribute("value", enteredHex.Date);
             node = enteredHexNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Date) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(Date) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("Time");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Time) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(Time) returned false");
                return false;
             }
             elem.SetAttribute("value", enteredHex.Time);
             node = enteredHexNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Time) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(Time) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("TerritoryName");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(TerritoryName) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(TerritoryName) returned false");
                return false;
             }
             elem.SetAttribute("value", enteredHex.TerritoryName);
             node = enteredHexNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(TerritoryName) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(TerritoryName) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("MapPoint");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(MapPoint) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(MapPoint) returned false");
                return false;
             }
             elem.SetAttribute("X", enteredHex.MapPoint.X.ToString());
@@ -11473,21 +11638,21 @@ namespace Pattons_Best
             node = enteredHexNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MapPoint) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(MapPoint) returned false");
                return false;
             }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("ColorAction");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(ColorAction) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): CreateElement(ColorAction) returned false");
                return false;
             }
             elem.SetAttribute("value", enteredHex.ColorAction.ToString());
             node = enteredHexNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(ColorAction) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredHexes(): AppendChild(ColorAction) returned false");
                return false;
             }
          }

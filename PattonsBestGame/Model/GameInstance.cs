@@ -17,7 +17,6 @@ namespace Pattons_Best
    {
       static public bool theIsMedalsCalculatedThisDay = false;
       static public bool theIsPurpleHeartCalculatedThisDay = false;
-      static public bool theIsVictoryPointsCalculatedThisDay = false;
       //------------------------------------------------
       static public Logger Logger = new Logger();
       public bool CtorError { get; } = false;
@@ -66,6 +65,11 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public ICrewMembers NewMembers { set; get; } = new CrewMembers();
       public ICrewMembers InjuredCrewMembers { set; get; } = new CrewMembers();
+      public ICrewMember Commander { get; set; } = new CrewMember("Commander", "Sgt", "c07Commander");
+      public ICrewMember Gunner { get; set; } = new CrewMember("Gunner", "Cpl", "c11Gunner");
+      public ICrewMember Loader { get; set; } = new CrewMember("Loader", "Cpl", "c09Loader");
+      public ICrewMember Driver { get; set; } = new CrewMember("Driver", "Pvt", "c08Driver");
+      public ICrewMember Assistant { get; set; } = new CrewMember("Assistant", "Pvt", "c10Assistant");
       //---------------------------------------------------------------
       public IMapItem Sherman { set; get; } = new MapItem("Sherman75" + Utilities.MapItemNum.ToString(), 2.0, "t01", new Territory());
       public IMapItem? TargetMainGun { set; get; } = null;
@@ -180,12 +184,6 @@ namespace Pattons_Best
       //==============================================================
       public GameInstance() // Constructor - set log levels
       {
-         if (false == Logger.SetInitial()) // tsetup logger
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GameInstance(): SetInitial() returned false");
-            CtorError = true;
-            return;
-         }
          try
          {
             GameLoadMgr gameLoadMgr = new GameLoadMgr();
@@ -207,13 +205,6 @@ namespace Pattons_Best
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() exception=\n" + e.ToString());
-            return;
-         }
-         //------------------------------------------------------------------------------------
-         if (false == SurnameMgr.SetInitial())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GameInstance(): SurnameMgr.SetInitial() returned false");
-            CtorError = true;
             return;
          }
       }
@@ -392,44 +383,32 @@ namespace Pattons_Best
       }
       public ICrewMember? GetCrewMemberByRole(string role)
       {
-         IAfterActionReport? report = Reports.GetLast();
-         if (null == report)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByRole(): report=null");
-            return null;
-         }
          if (role == "Driver")
-            return report.Driver;
+            return this.Driver;
          if (role == "Assistant")
-            return report.Assistant;
+            return this.Assistant;
          if  (role == "Loader")
-            return report.Loader;
+            return this.Loader;
          if  (role == "Gunner")
-            return report.Gunner;
+            return this.Gunner;
          if (role == "Commander")
-            return report.Commander;
+            return this.Commander;
          Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByRole(): reached default name=" + role.ToString());
          return null;
       }
       public ICrewMember? GetCrewMemberByName(string name)
       {
-         IAfterActionReport? report = Reports.GetLast();
-         if (null == report)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByName(): report=null");
-            return null;
-         }
          string condensedName = Utilities.RemoveSpaces(name);  
-         if ( (name == report.Driver.Name) || (name == condensedName) )
-            return report.Driver;
-         if ((name == report.Assistant.Name) || (name == condensedName) )
-            return report.Assistant;
-         if ( (name == report.Loader.Name) || (name == condensedName) )
-            return report.Loader;
-         if ( (name == report.Gunner.Name) || (name == condensedName) ) 
-            return report.Gunner;
-         if ( (name == report.Commander.Name) || (name == condensedName) ) 
-            return report.Commander;
+         if ( (name == this.Driver.Name) || (name == condensedName) )
+            return this.Driver;
+         if ((name == this.Assistant.Name) || (name == condensedName) )
+            return this.Assistant;
+         if ( (name == this.Loader.Name) || (name == condensedName) )
+            return this.Loader;
+         if ( (name == this.Gunner.Name) || (name == condensedName) ) 
+            return this.Gunner;
+         if ( (name == this.Commander.Name) || (name == condensedName) ) 
+            return this.Commander;
          Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByName(): reached default name=" + name.ToString());
          return null;
       }
@@ -537,56 +516,56 @@ namespace Pattons_Best
             switch (this.SwitchedCrewMemberRole)
             {
                case "Driver":
-                  lastReport.Assistant = lastReport.Driver; // switch driver (acting as assistant) back to Driver roll
-                  lastReport.Driver = switchedMember;
-                  lastReport.Driver.Role = "Driver";
-                  if (false == SetCrewActionTerritory(lastReport.Driver))
+                  this.Assistant = this.Driver; // switch driver (acting as assistant) back to Driver roll
+                  this.Driver = switchedMember;
+                  this.Driver.Role = "Driver";
+                  if (false == SetCrewActionTerritory(this.Driver))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(lastReport.Driver) returned false");
                      return false;
                   }
-                  this.CrewActions.Add(lastReport.Driver);
+                  this.CrewActions.Add(this.Driver);
                   break;
                case "Loader":
-                  lastReport.Assistant = lastReport.Loader;
-                  lastReport.Loader = switchedMember;
-                  lastReport.Loader.Role = "Loader";
-                  if (false == SetCrewActionTerritory(lastReport.Loader))
+                  this.Assistant = this.Loader;
+                  this.Loader = switchedMember;
+                  this.Loader.Role = "Loader";
+                  if (false == SetCrewActionTerritory(this.Loader))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(lastReport.Loader) returned false");
                      return false;
                   }
-                  this.CrewActions.Add(lastReport.Loader);
+                  this.CrewActions.Add(this.Loader);
                   break;
                case "Gunner":
-                  lastReport.Assistant = lastReport.Gunner;
-                  lastReport.Gunner = switchedMember;
-                  lastReport.Gunner.Role = "Gunner";
-                  if (false == SetCrewActionTerritory(lastReport.Gunner))
+                  this.Assistant = this.Gunner;
+                  this.Gunner = switchedMember;
+                  this.Gunner.Role = "Gunner";
+                  if (false == SetCrewActionTerritory(this.Gunner))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(lastReport.Gunner) returned false");
                      return false;
                   }
-                  this.CrewActions.Add(lastReport.Gunner);
+                  this.CrewActions.Add(this.Gunner);
                   break;
                case "Commander":
-                  lastReport.Assistant = lastReport.Commander;
-                  lastReport.Commander = switchedMember;
-                  lastReport.Commander.Role = "Commander";
-                  if (false == SetCrewActionTerritory(lastReport.Commander))
+                  this.Assistant = this.Commander;
+                  this.Commander = switchedMember;
+                  this.Commander.Role = "Commander";
+                  if (false == SetCrewActionTerritory(this.Commander))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(lastReport.Commander) returned false");
                      return false;
                   }
-                  this.CrewActions.Add(lastReport.Commander);
+                  this.CrewActions.Add(this.Commander);
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): reached default name=" + switchedMember.Role);
                   return false;
             }
-            lastReport.Assistant.Rating = this.AssistantOriginalRating; // switch assistant back to assistant role
-            lastReport.Assistant.Role = "Assistant";
-            if (false == SetCrewActionTerritory(lastReport.Assistant))
+            this.Assistant.Rating = this.AssistantOriginalRating; // switch assistant back to assistant role
+            this.Assistant.Role = "Assistant";
+            if (false == SetCrewActionTerritory(this.Assistant))
             {
                Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                return false;
@@ -616,18 +595,18 @@ namespace Pattons_Best
                break;
             }
          }
-         lastReport.Assistant.IsButtonedUp = true;
+         this.Assistant.IsButtonedUp = true;
          //--------------------------------------------
-         this.AssistantOriginalRating = lastReport.Assistant.Rating;
+         this.AssistantOriginalRating = this.Assistant.Rating;
          if("Driver" != switchingMemberRole)  // any member being switched other than driver reduces rating by half
-             lastReport.Assistant.Rating = (int)Math.Floor((double)(lastReport.Assistant.Rating * 0.5));
+            this.Assistant.Rating = (int)Math.Floor((double)(this.Assistant.Rating * 0.5));
          ICrewMember? switchingMember;
          switch(switchingMemberRole)
          {
-            case "Commander":switchingMember = lastReport.Commander; break;
-            case "Gunner": switchingMember = lastReport.Gunner; break;
-            case "Loader": switchingMember = lastReport.Loader; break;
-            case "Driver": switchingMember = lastReport.Driver; break;
+            case "Commander":switchingMember = this.Commander; break;
+            case "Gunner": switchingMember = this.Gunner; break;
+            case "Loader": switchingMember = this.Loader; break;
+            case "Driver": switchingMember = this.Driver; break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): reached default with role=" + switchingMemberRole);
                return false;
@@ -639,39 +618,39 @@ namespace Pattons_Best
          switch (this.SwitchedCrewMemberRole)
          {
             case "Driver":
-               lastReport.Driver = lastReport.Assistant;  // assistant becomes driver
-               lastReport.Driver.Role = "Driver";
-               if (false == SetCrewActionTerritory(lastReport.Driver)) // puts assistant in proper spot
+               this.Driver = this.Assistant;  // assistant becomes driver
+               this.Driver.Role = "Driver";
+               if (false == SetCrewActionTerritory(this.Driver)) // puts assistant in proper spot
                {
                   Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
                }
                break;
             case "Loader":
-               ICrewMember loader = lastReport.Loader;
-               lastReport.Loader = lastReport.Assistant;
-               lastReport.Loader.Role = "Loader";
-               if (false == SetCrewActionTerritory(lastReport.Loader)) // puts assistant in proper spot
+               ICrewMember loader = this.Loader;
+               this.Loader = this.Assistant;
+               this.Loader.Role = "Loader";
+               if (false == SetCrewActionTerritory(this.Loader)) // puts assistant in proper spot
                {
                   Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
                }
                break;
             case "Gunner":
-               ICrewMember gunner = lastReport.Gunner;
-               lastReport.Gunner = lastReport.Assistant;
-               lastReport.Gunner.Role = "Gunner";
-               if (false == SetCrewActionTerritory(lastReport.Gunner)) // puts assistant in proper spot
+               ICrewMember gunner = this.Gunner;
+               this.Gunner = this.Assistant;
+               this.Gunner.Role = "Gunner";
+               if (false == SetCrewActionTerritory(this.Gunner)) // puts assistant in proper spot
                {
                   Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
                }
                break;
             case "Commander":
-               ICrewMember commander = lastReport.Commander;
-               lastReport.Commander = lastReport.Assistant;
-               lastReport.Commander.Role = "Commander";
-               if (false == SetCrewActionTerritory(lastReport.Commander)) // puts assistant in proper spot
+               ICrewMember commander = this.Commander;
+               this.Commander = this.Assistant;
+               this.Commander.Role = "Commander";
+               if (false == SetCrewActionTerritory(this.Commander)) // puts assistant in proper spot
                {
                   Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
@@ -682,15 +661,15 @@ namespace Pattons_Best
                break;
          }
          //-----------------------------------------------------
-         lastReport.Assistant = switchingMember; // switching member becomes assistant
-         lastReport.Assistant.Role = "Assistant";
-         if (false == SetCrewActionTerritory(lastReport.Assistant)) // puts assistant in proper spot
+         this.Assistant = switchingMember; // switching member becomes assistant
+         this.Assistant.Role = "Assistant";
+         if (false == SetCrewActionTerritory(this.Assistant)) // puts assistant in proper spot
          {
             Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
             return false;
          }
-         this.CrewActions.Add(lastReport.Assistant);
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): SetCrewMemberTerritory() for name=" + lastReport.Assistant.Name + " role=" + lastReport.Assistant.Role + " to " + lastReport.Assistant.TerritoryCurrent.Name + " W?=" + lastReport.Assistant.IsIncapacitated);
+         this.CrewActions.Add(this.Assistant);
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): SetCrewMemberTerritory() for name=" + this.Assistant.Name + " role=" + this.Assistant.Role + " to " + this.Assistant.TerritoryCurrent.Name + " W?=" + this.Assistant.IsIncapacitated);
          StringBuilder sb2 = new StringBuilder();
          foreach (IMapItem mi in this.CrewActions)
          {
@@ -875,7 +854,7 @@ namespace Pattons_Best
             return false;
          }
          //----------------------------------
-         if( true == lastReport.Loader.IsIncapacitated )
+         if( true == this.Loader.IsIncapacitated )
          {
             Logger.Log(LogEnum.LE_ERROR, "Reload_Gun(): Loader is incapacitated - cannot reload gun");
             return false;

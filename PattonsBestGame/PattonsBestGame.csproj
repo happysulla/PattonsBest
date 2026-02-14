@@ -733,16 +733,16 @@
     <None Update="Images\c80PzVTurret.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c81PzVIe.gif">
+    <None Update="Images\c81PzVIb.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c81PzVIeTurret.gif">
+    <None Update="Images\c81PzVIbTurret.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c82PzVIb.gif">
+    <None Update="Images\c82PzVIe.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c82PzVIbTurret.gif">
+    <None Update="Images\c82PzVIeTurret.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\c83MarderII.gif">

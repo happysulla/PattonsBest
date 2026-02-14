@@ -158,13 +158,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): myDieRoller=null");
             return false;
          }
-         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): lastReport=null");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "Perform_Spotting(): cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "Perform_Spotting(): cmdr=" + myGameInstance.Commander.Name + " driver=" + myGameInstance.Driver.Name);
          //--------------------------------------------------
          myCallback = callback;
          myState = E0472Enum.SELECT_CREWMAN;
@@ -208,6 +202,12 @@ namespace Pattons_Best
                }
                sb.Append("]");
                Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  cm=" + cm.Role + " spottedTerritories=" + sb.ToString());
+            }
+            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+            if( null  == lastReport )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): lastReport=null");
+               return false;
             }
             if ( 0 < spottedTerritories.Count)
             {

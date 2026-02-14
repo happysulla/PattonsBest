@@ -192,7 +192,7 @@ namespace Pattons_Best
                {
                   myAarUserControl.IsEditable = false;
                   myAarUserControl.UpdateReport(gi);
-                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + gi.Commander.Name + " driver=" + gi.Driver.Name);
                }
                return;
             case GameAction.EveningDebriefingReplaceCrew:
@@ -200,7 +200,7 @@ namespace Pattons_Best
                {
                   myAarUserControl.IsEditable = true;
                   myAarUserControl.UpdateReport(gi);
-                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + gi.Commander.Name + " driver=" + gi.Driver.Name);
                }
                return;
             case GameAction.MorningBriefingTankReplacementRoll:
@@ -211,7 +211,7 @@ namespace Pattons_Best
                   else
                      myAarUserControl.IsEditable = true;
                   myAarUserControl.UpdateReport(gi);
-                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + lastReport.Commander.Name + " driver=" + lastReport.Driver.Name);
+                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + gi.Commander.Name + " driver=" + gi.Driver.Name);
                }
                return;
             case GameAction.UpdateTankExplosion:

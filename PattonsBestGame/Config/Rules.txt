@@ -1332,8 +1332,8 @@ Panzer (armored) + kampf (fighting) + wagen (vehicle) = armored fighting vehicle
 <LineBreak/><LineBreak/>
      <InlineUIContainer><Image Name='c79PzIV'  Height='100' Width='100'></Image></InlineUIContainer>
      <InlineUIContainer><Image Name='c80PzV'  Height='100' Width='100'></Image></InlineUIContainer>
-     <InlineUIContainer><Image Name='c81PzVIe'  Height='100' Width='100'></Image></InlineUIContainer>
-     <InlineUIContainer><Image Name='c82PzVIb'  Height='100' Width='100'></Image></InlineUIContainer>"
+     <InlineUIContainer><Image Name='c82PzVIe'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c81PzVIb'  Height='100' Width='100'></Image></InlineUIContainer>"
 r12.12	"<Bold>r12.12 Self Propelled Gun (SPG)</Bold> 
 <LineBreak/><LineBreak/>
 SPGs have no turret and are designed as assault or anti-tnak guns. They appear in five types:

@@ -2684,19 +2684,19 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                int modifier56d = 0;
                StringBuilder sbe056d = new StringBuilder();
-               if( false == report.Loader.IsIncapacitated )
+               if( false == gi.Loader.IsIncapacitated )
                {
                   sbe056d.Append(" -");
-                  sbe056d.Append(report.Loader.Rating.ToString());
+                  sbe056d.Append(gi.Loader.Rating.ToString());
                   sbe056d.Append(" for loader rating\n");
-                  modifier56d -= report.Loader.Rating;
+                  modifier56d -= gi.Loader.Rating;
                }
-               if (false == report.Gunner.IsIncapacitated)
+               if (false == gi.Gunner.IsIncapacitated)
                {
                   sbe056d.Append(" -");
-                  sbe056d.Append(report.Gunner.Rating.ToString());
+                  sbe056d.Append(gi.Gunner.Rating.ToString());
                   sbe056d.Append(" for gunner rating\n");
-                  modifier56d -= report.Gunner.Rating;
+                  modifier56d -= gi.Gunner.Rating;
                }
                if( 0 == sbe056d.Length )
                   sbe056d.Append(" None");
@@ -2740,22 +2740,22 @@ namespace Pattons_Best
                StringBuilder sbe056e = new StringBuilder();
                if( (12 == report.TankCardNum) || (14 == report.TankCardNum) )
                {
-                  if (false == report.Loader.IsIncapacitated)
+                  if (false == gi.Loader.IsIncapacitated)
                   {
                      sbe056e.Append(" -");
-                     sbe056e.Append(report.Loader.Rating.ToString());
+                     sbe056e.Append(gi.Loader.Rating.ToString());
                      sbe056e.Append(" for loader rating\n");
-                     modifier56e -= report.Loader.Rating;
+                     modifier56e -= gi.Loader.Rating;
                   }
                }
                else
                {
-                  if (false == report.Commander.IsIncapacitated)
+                  if (false == gi.Commander.IsIncapacitated)
                   {
                      sbe056e.Append(" -");
-                     sbe056e.Append(report.Commander.Rating.ToString());
+                     sbe056e.Append(gi.Commander.Rating.ToString());
                      sbe056e.Append(" for commander rating\n");
-                     modifier56e -= report.Gunner.Rating;
+                     modifier56e -= gi.Commander.Rating;
                   }
                }
                if (0 == sbe056e.Length)
@@ -2798,12 +2798,12 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                int modifier56f = 0;
                StringBuilder sbe056f = new StringBuilder();
-               if (false == report.Loader.IsIncapacitated)
+               if (false == gi.Loader.IsIncapacitated)
                {
                   sbe056f.Append(" -");
-                  sbe056f.Append(report.Loader.Rating.ToString());
+                  sbe056f.Append(gi.Loader.Rating.ToString());
                   sbe056f.Append(" for loader rating\n");
-                  modifier56f -= report.Loader.Rating;
+                  modifier56f -= gi.Loader.Rating;
                }
                if (0 == sbe056f.Length)
                   sbe056f.Append(" None");
@@ -2845,12 +2845,12 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                int modifier56g = 0;
                StringBuilder sbe056g = new StringBuilder();
-               if (false == report.Assistant.IsIncapacitated)
+               if (false == gi.Assistant.IsIncapacitated)
                {
                   sbe056g.Append(" -");
-                  sbe056g.Append(report.Assistant.Rating.ToString());
+                  sbe056g.Append(gi.Assistant.Rating.ToString());
                   sbe056g.Append(" for assistant rating\n");
-                  modifier56g -= report.Assistant.Rating;
+                  modifier56g -= gi.Assistant.Rating;
                }
                if (0 == sbe056g.Length)
                   sbe056g.Append(" None");
@@ -4717,7 +4717,7 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("                                    "));
          }
-         else if (TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn) 
+         else if (TableMgr.MIA == gi.Commander.WoundDaysUntilReturn) 
          {
             sbe101.Append("\n\nYou as the commander are seriously wounded and sent home. Engagement Lost!");
             imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("HospitalShip") };
@@ -4726,7 +4726,7 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("                                    "));
          }
-         else if (0 < lastReport.Commander.WoundDaysUntilReturn) 
+         else if (0 < gi.Commander.WoundDaysUntilReturn) 
          {
             sbe101.Append("\n\nYou as the commander are wounded and out of action. Engagement Lost!");
             imge101 = new Image { Name = "EngagementOver", Width = 300, Height = 95, Source = MapItem.theMapImages.GetBitmapImage("Ambulance") };
@@ -4815,7 +4815,7 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new LineBreak());
          //------------------------------------------
          Image? imge102 = null;
-         switch (report.Commander.Rank)
+         switch (gi.Commander.Rank)
          {
             case "Sgt":
                imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 132, Source = MapItem.theMapImages.GetBitmapImage("RankSergeant") };
@@ -4833,7 +4833,7 @@ namespace Pattons_Best
                imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 92, Source = MapItem.theMapImages.GetBitmapImage("RankCaptian") };
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default newRank=" + report.Commander.Rank);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default newRank=" + gi.Commander.Rank);
                return false;
          }
          myTextBlock.Inlines.Add(new Run("                                                "));

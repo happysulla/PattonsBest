@@ -16,11 +16,11 @@ namespace Pattons_Best
       string Name { get; set; }
       int TankCardNum { get; set; }
       string Weather { get; set; }
-      ICrewMember Commander { get; set; }
-      ICrewMember Gunner { get; set; }
-      ICrewMember Loader { get; set; }
-      ICrewMember Driver { get; set; }
-      ICrewMember Assistant { get; set; }
+      string Commander { get; set; }
+      string Gunner { get; set; }
+      string Loader { get; set; }
+      string Driver { get; set; }
+      string Assistant { get; set; }
       //----------------------------------------
       int SunriseHour { get; set; }
       int SunriseMin { get; set; }
