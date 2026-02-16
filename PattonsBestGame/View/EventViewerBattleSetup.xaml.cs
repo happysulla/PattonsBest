@@ -378,7 +378,7 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateTerrain() returned ERROR");
                            return false;
                         }
-                        if ( (true == mi1.IsVehicle()) || (false == mi1.IsAntiTankGun()) )
+                        if ( (true == mi1.IsVehicle()) || (false == mi1.IsAntiTankGun())) // Setup_Battle()
                         {
                            dieRoll = Utilities.RandomGenerator.Next(1, 11);
                            myGridRows[startingRow].myDieRollFacing = dieRoll;

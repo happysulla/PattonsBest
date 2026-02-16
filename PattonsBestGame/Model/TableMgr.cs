@@ -1709,6 +1709,11 @@ namespace Pattons_Best
          }
          if (true == returnValue.Contains("Move"))
             mi.LastMoveAction = returnValue;
+         if (true == returnValue.Contains("(I)"))
+         {
+            mi.IsMovingInOpen = false;
+            mi.IsMoving = false;
+         }
          return returnValue;
       }
       public static ITerritory? SetNewTerritory(IMapItem mi, string move)
@@ -3066,20 +3071,20 @@ namespace Pattons_Best
             int turretMod = (int)(10.0 * turretNumRotations);
             toHitModifierNum += turretMod;
             Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): vca +" + turretMod.ToString() + " #r=" + turretNumRotations.ToString() + " mod=" + toHitModifierNum.ToString());
-            if ((true == optionSlowTransverseCoveredArc.IsEnabled) && ( (true == enemyUnit.Contains("PzVI")) || (true == enemyUnit.Contains("TANK")) ) )
+            if ((true == optionSlowTransverseCoveredArc.IsEnabled) && ((true == enemyUnit.Contains("PzVIb")) || (true == enemyUnit.Contains("PzVIe")) || (true == enemyUnit.Contains("TANK")) ) )
             {
                int turretMod2 = (int)(5.0 * turretNumRotations);
                toHitModifierNum += turretMod2;
                Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod2.ToString() + " mod=" + toHitModifierNum.ToString());
             }
          }
-         else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && ((true == enemyUnit.Contains("PzVI")) || (true == enemyUnit.Contains("TANK"))) ) 
+         else if ((true == optionSlowTransverseCoveredArc.IsEnabled) && (true == mi.IsTurret()) && ((true == enemyUnit.Contains("PzVIb")) || (true == enemyUnit.Contains("PzVIe")) || (true == enemyUnit.Contains("TANK"))) ) 
          {
             int turretMod = (int)(5.0 * turretNumRotations);
             toHitModifierNum += turretMod;
             Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): slow arc +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
          }
-         else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun()) )
+         else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun())) // GetEnemy_ToHitNumberYourTank()
          {
             string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
             int coveredArcMod = (int)(25.0 * hullNumRotations);

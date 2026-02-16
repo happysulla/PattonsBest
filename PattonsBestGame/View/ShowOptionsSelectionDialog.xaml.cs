@@ -51,9 +51,9 @@ namespace Pattons_Best
          //-----------------------------
          myCheckBoxAirInterdiction.ToolTip = "Air strikes were rarely used to lay smoke. If that result is rolled, replaced with no enemy movement due to interdiction. An interdicted move is indicated with (I).";
          myCheckBoxTerrainPointValue.ToolTip = "Increase incentive for attacking strategic areas: Area A = 1 point, Area B = 1 point, Area C = 3 points, Area D = 2 points.";
-         myCheckBoxTankCoverArc.ToolTip = "Ingore 'First Shot +10' die roll modifier (DRM) for enemy SPG/Tank attacks. Use +10 DRM when enemy is side facing. Use +20 DRM when using rear facing.";
-         myCheckBoxSlowTransverseCoverArc.ToolTip = "Tiger and King Tiger add additional +15 DRM since they are slow turrent-transverse AFVs.";
-         myCheckBoxSpgCoverArc.ToolTip = "Self Propelled Guns (SPGs) is ingored if the current facing is side or rear.";
+         myCheckBoxTankCoverArc.ToolTip = "Ignore 'First Shot +10' die roll modifier (DRM) for enemy SPG/Tank attacks. Use +10 DRM for each turret rotation. ";
+         myCheckBoxSlowTransverseCoverArc.ToolTip = "Tiger and King Tiger add additional +5 DRM for each turret rotation since they are slow turret-transverse AFVs.";
+         myCheckBoxSpgCoverArc.ToolTip = "Self Propelled Guns (SPGs) is ignored if the current facing is side or rear.";
          myCheckBoxAtgCoverArc.ToolTip = "Anti-Tank Guns (ATGs) using facings equivalent to AFVs. Pake38/Pak40 add +25 to change facing. Pak43 are on 360-degree mounts and only add +10 dice roll modifer per sector.";
          //-----------------------------
          myCheckBoxContinueMove.ToolTip = "Enemy units tend to move in straight line. Increase by 66& chances that same movement order occurs in consecutive moves. An continued move is indicated with (c).";

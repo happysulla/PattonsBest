@@ -31,6 +31,11 @@ namespace Pattons_Best
       //-------------
       LE_SHOW_CREW_NAME,
       LE_SHOW_CREW_BU,
+      LE_SHOW_CREW_ADD,
+      LE_SHOW_CREW_CLEAR,
+      LE_SHOW_CREW_SWITCH,
+      LE_SHOW_CREW_REPLACE,
+      LE_SHOW_CREW_RETURN,
       //-------------
       LE_SHOW_ROUND_COMBAT,
       LE_SHOW_START_AREA,
@@ -68,9 +73,6 @@ namespace Pattons_Best
       LE_SHOW_TO_KILL_ATTACK,
       LE_SHOW_TO_KILL_MG_ATTACK,
       LE_SHOW_CONDUCT_CREW_ACTION,
-      LE_SHOW_CREW_SWITCH,
-      LE_SHOW_CREW_REPLACE,
-      LE_SHOW_CREW_RETURN,
       LE_SHOW_BATTLE_ROUND_START,
       LE_SHOW_RESET_ROUND,
       LE_SHOW_TANK_BUTTONS,
@@ -174,8 +176,14 @@ namespace Pattons_Best
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_ROUND_COMBAT);
          SetOn(LogEnum.LE_SHOW_UPLOAD_GAME);
+         //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          //SetOn(LogEnum.LE_SHOW_CREW_BU);
+         SetOn(LogEnum.LE_SHOW_CREW_ADD);
+         SetOn(LogEnum.LE_SHOW_CREW_CLEAR);
+         SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
+         //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
+         //SetOn(LogEnum.LE_SHOW_CREW_RETURN);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          //SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);
@@ -199,9 +207,6 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
-         SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
-         //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
-         //SetOn(LogEnum.LE_SHOW_CREW_RETURN);
          //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD);
          SetOn(LogEnum.LE_SHOW_PROMOTION);

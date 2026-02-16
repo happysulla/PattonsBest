@@ -201,6 +201,7 @@ namespace Pattons_Best
             case GameAction.UpdateTankBrewUp:
             case GameAction.ShowTankForcePath:
             case GameAction.ShowRoads:
+            case GameAction.UpdateAfterActionReport:
                break;
             case GameAction.UpdateGameOptions:
                if (false == OpenEvent(gi, gi.EventActive))
@@ -231,11 +232,6 @@ namespace Pattons_Best
                if (false == OpenEvent(gi, gi.EventActive))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
-            case GameAction.MorningBriefingReturningCrewman:
-            case GameAction.UpdateAfterActionReport:
-               if (null != myAfterActionDialog)
-                  myAfterActionDialog.UpdateReport(gi);
-               return;
             case GameAction.UpdateUndo:
                myScrollViewerTextBlock.Cursor = System.Windows.Input.Cursors.Arrow;
                gi.IsGridActive = false;
@@ -4372,8 +4368,13 @@ namespace Pattons_Best
             mgType = "Sub";
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill(): unknown MG firing");
-            return false;
+            myTextBlock.Inlines.Add(new Run("All MGs have fired. Click image to continue."));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
+            Image imge53e = new Image { Name = "Continue54a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+            myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+            return true;
          }
          //------------------------------------
          myTextBlock.Inlines.Add(new LineBreak());

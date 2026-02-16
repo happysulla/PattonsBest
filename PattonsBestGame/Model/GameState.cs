@@ -202,7 +202,8 @@ namespace Pattons_Best
                   return false;
             }
          }
-         gi.NewMembers.Clear(); //AssignNewCrewMembers()
+         Logger.Log(LogEnum.LE_SHOW_CREW_CLEAR, "AssignNew_CrewMembers(): clearing NewMebers");
+         gi.NewMembers.Clear();        // AssignNewCrewMembers()
          return true;
       }
       protected bool ReplaceInjuredCrewmen(IGameInstance gi, out bool isCrewmanReplaced, string caller)
@@ -259,8 +260,11 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Driver) returned false");
                         return false;
                      }
-                     gi.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(gi.Driver);  // Replace_InjuredCrewmen()
+                     if (GamePhase.EveningDebriefing != gi.GamePhase)
+                        gi.NewMembers.Add(gi.Driver);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     else
+                        gi.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Driver=" + gi.Driver.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      if (false == gi.SetCrewActionTerritory(gi.Driver))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Driver) returned false");
@@ -275,8 +279,11 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Loader) returned false");
                         return false;
                      }
-                     gi.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(gi.Loader); // Replace_InjuredCrewmen()
+                     if (GamePhase.EveningDebriefing != gi.GamePhase)
+                        gi.NewMembers.Add(gi.Loader); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     else
+                        gi.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      if (false == gi.SetCrewActionTerritory(gi.Loader))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Loader) returned false");
@@ -291,8 +298,11 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Assistant) returned false");
                         return false;
                      }
-                     gi.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(gi.Assistant); // Replace_InjuredCrewmen()
+                     if (GamePhase.EveningDebriefing != gi.GamePhase)
+                        gi.NewMembers.Add(gi.Assistant); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     else
+                        gi.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Assistant=" + gi.Assistant.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      if (false == gi.SetCrewActionTerritory(gi.Assistant))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Assistant) returned false");
@@ -307,8 +317,11 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Gunner) returned false");
                         return false;
                      }
-                     gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(gi.Gunner); // Replace_InjuredCrewmen()
+                     if (GamePhase.EveningDebriefing != gi.GamePhase)
+                        gi.NewMembers.Add(gi.Gunner); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     else
+                        gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Gunner=" + gi.Gunner.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      if (false == gi.SetCrewActionTerritory(gi.Gunner))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Gunner) returned false");
@@ -323,8 +336,11 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Commander) returned false");
                         return false;
                      }
-                     gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(gi.Commander); // Replace_InjuredCrewmen()
+                     if(GamePhase.EveningDebriefing != gi.GamePhase)
+                        gi.NewMembers.Add(gi.Commander); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     else
+                        gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      if (false == gi.SetCrewActionTerritory(gi.Commander))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Commander) returned false");
@@ -1973,6 +1989,7 @@ namespace Pattons_Best
                   GameEngine.theInGameFeats.AddOne("EndGameExplode");
                   if (false == optionSingleDayGame.IsEnabled)
                      GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+                  gi.EndGameReason = "Sherman Explodes Killing Everyone";
                   gi.GamePhase = GamePhase.EndGame;
                   action = GameAction.EndGameLost;
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
@@ -1980,6 +1997,7 @@ namespace Pattons_Best
                else
                {
                   Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Single Day Game Ends!!!!! Lost Tank");
+                  gi.EndGameReason = "Sherman Lost";
                   gi.GamePhase = GamePhase.EndGame;
                   action = GameAction.EndGameLost;
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
@@ -1993,6 +2011,7 @@ namespace Pattons_Best
                   GameEngine.theInGameFeats.AddOne("EndGameExplode");
                   if (false == optionSingleDayGame.IsEnabled)
                      GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+                  gi.EndGameReason = "Sherman Explodes Killing Everyone";
                   gi.GamePhase = GamePhase.EndGame;
                   action = GameAction.EndGameLost;
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
@@ -2002,6 +2021,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + gi.Commander.WoundDaysUntilReturn.ToString());
                   if (true == gi.IsCommanderKilled)
                      GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+                  gi.EndGameReason = "Commander is Killed or Seriously Wounded";
                   gi.GamePhase = GamePhase.EndGame;
                   action = GameAction.EndGameLost;
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
@@ -2014,6 +2034,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Single Day Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + gi.Commander.WoundDaysUntilReturn.ToString());
             if (true == gi.IsCommanderKilled)
                GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+            gi.EndGameReason = "Commander is Killed or Seriously Wounded";
+            gi.GamePhase = GamePhase.EndGame;
+            action = GameAction.EndGameLost;
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+         }
+         //-------------------------------------------------------
+         if ((GamePhase.EndGame != gi.GamePhase) && ((true == gi.IsBrokenGunSight) || (true == gi.IsBrokenMainGun)) && (true == optionSingleDayGame.IsEnabled))
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Single Day Game Ends!!!!! gi.IsBrokenGunSight=" + gi.IsBrokenGunSight.ToString() + " or gi.IsBrokenMainGun=" + gi.IsBrokenMainGun.ToString());
+            gi.EndGameReason = "Main Gun Disabled";
             gi.GamePhase = GamePhase.EndGame;
             action = GameAction.EndGameLost;
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
@@ -2024,6 +2054,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + gi.Commander.WoundDaysUntilReturn.ToString());
             if (true == gi.IsCommanderKilled)
                GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+            gi.EndGameReason = "Commander is Killed or Seriously Wounded";
             gi.GamePhase = GamePhase.EndGame;
             action = GameAction.EndGameLost;
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
@@ -2431,18 +2462,18 @@ namespace Pattons_Best
             case GameAction.SetupShowCombatCalendarCheck:
                SetCommand(gi, action, GameAction.SetupCombatCalendarRoll, "e006"); // Setup_ShowCombatCalendarCheck
                gi.GamePhase = GamePhase.MorningBriefing;
-               if (false == AssignNewCrewMembers(gi))
+               if (false == AssignNewCrewMembers(gi)) // GameStateSetup.PerformAction(SetupShowCombatCalendarCheck)
                {
-                  returnStatus = "AssignNewCrewMembers() returned false";
+                  returnStatus = "Assign_NewCrewMembers() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupShowCombatCalendarCheck): " + returnStatus);
                }
                break;
             case GameAction.SetupShowSingleDayBattleStart:
                gi.GamePhase = GamePhase.MorningBriefing;
                SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // GameStateSetup.PerformAction(SetupShowCombatCalendarCheck) - First Weather Roll
-               if (false == AssignNewCrewMembers(gi))
+               if (false == AssignNewCrewMembers(gi)) // GameStateSetup.PerformAction(SetupShowCombatCalendarCheck)
                {
-                  returnStatus = "AssignNewCrewMembers() returned false";
+                  returnStatus = "Assign_NewCrewMembers() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupShowCombatCalendarCheck): " + returnStatus);
                }
                break;
@@ -2482,7 +2513,6 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipCrewAssignments(IGameInstance gi)
       {
-         gi.NewMembers.Clear();    //PerformAutoSetupSkipCrewAssignments()
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -2500,12 +2530,13 @@ namespace Pattons_Best
             lastReport.Scenario = EnumScenario.Counterattack; // PerformAutoSetupSkipCrewAssignments() - Test 
          //lastReport.Scenario = EnumScenario.Counterattack; // <CGS> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
          //-------------------------------
-         gi.NewMembers.Add(gi.Commander);   // PerformAutoSetupSkipCrewAssignments()
-         gi.NewMembers.Add(gi.Gunner);      // PerformAutoSetupSkipCrewAssignments()
-         gi.NewMembers.Add(gi.Loader);      // PerformAutoSetupSkipCrewAssignments()
-         gi.NewMembers.Add(gi.Driver);      // PerformAutoSetupSkipCrewAssignments()
-         gi.NewMembers.Add(gi.Assistant);   // PerformAutoSetupSkipCrewAssignments()
-         foreach (IMapItem mi in gi.NewMembers) // PerformAutoSetupSkipCrewAssignments() - assign crew ratings randomly
+         gi.NewMembers.Clear();             // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(gi.Commander);   // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(gi.Gunner);      // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(gi.Loader);      // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(gi.Driver);      // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(gi.Assistant);   // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
+         foreach (IMapItem mi in gi.NewMembers) // GameStateSetup.PerformAutoSetupSkipCrewAssignments() - assign crew ratings randomly
          {
             ICrewMember? cm = mi as ICrewMember;
             if (null == cm)
@@ -2521,7 +2552,7 @@ namespace Pattons_Best
             int dieRoll = Utilities.RandomGenerator.Next(1, 11);
             cm.Rating = (int)Math.Ceiling(dieRoll / 2.0);
          }
-         gi.NewMembers.Clear(); // PerformAutoSetupCrewRatings()
+         gi.NewMembers.Clear();          // PerformAutoSetupCrewRatings()
          return true;
       }
       private bool PerformAutoSetupSkipMorningBriefing(IGameInstance gi)
@@ -3081,7 +3112,7 @@ namespace Pattons_Best
             mi.Location = mp;
             gi.BattleStacks.Add(mi);
             //-----------------------------------------
-            if ( (true == mi.IsVehicle()) || (true == mi.IsAntiTankGun()) )
+            if ( (true == mi.IsVehicle()) || (true == mi.IsAntiTankGun()))  // PerformAutoSetupSkipBattleSetup()
             {
                if (false == mi.SetMapItemRotation(gi.Sherman))
                {
@@ -3744,12 +3775,12 @@ namespace Pattons_Best
          }
          //------------------------------
          gi.BattleStacks.Add(gi.Sherman);  // GameStateSetup.PerformAction(Setup_AssignCrewRating)
-         gi.NewMembers.Clear();                   // GameStateSetup.PerformAction(Setup_AssignCrewRating)
-         gi.NewMembers.Add(gi.Commander); // GameStateSetup.PerformAction(Setup_AssignCrewRating)
-         gi.NewMembers.Add(gi.Gunner);    // GameStateSetup.PerformAction(Setup_AssignCrewRating)
-         gi.NewMembers.Add(gi.Loader);    // GameStateSetup.PerformAction(Setup_AssignCrewRating)
-         gi.NewMembers.Add(gi.Driver);    // GameStateSetup.PerformAction(Setup_AssignCrewRating)
-         gi.NewMembers.Add(gi.Assistant); // GameStateSetup.PerformAction(Setup_AssignCrewRating)
+         gi.NewMembers.Clear();            // GameStateSetup.PerformAction(Setup_AssignCrewRating)
+         gi.NewMembers.Add(gi.Commander);  // GameStateSetup.PerformAction(Setup_AssignCrewRating)
+         gi.NewMembers.Add(gi.Gunner);     // GameStateSetup.PerformAction(Setup_AssignCrewRating)
+         gi.NewMembers.Add(gi.Loader);     // GameStateSetup.PerformAction(Setup_AssignCrewRating)
+         gi.NewMembers.Add(gi.Driver);     // GameStateSetup.PerformAction(Setup_AssignCrewRating)
+         gi.NewMembers.Add(gi.Assistant);  // GameStateSetup.PerformAction(Setup_AssignCrewRating)
          outAction = GameAction.SetupAssignCrewRating;
          return true;
       }
@@ -4188,7 +4219,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingDayOfRest:
                   ++gi.Day;
                   gi.MaxDayBetweenCombat++;
-                  gi.NewMembers.Clear(); // GameStateMorningBriefing.PerformAction(MorningBriefingDayOfRest)
+                  gi.NewMembers.Clear();          // GameStateMorningBriefing.PerformAction(MorningBriefingDayOfRest)
                   ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
                   if (null == newEntry)
                   {
@@ -8057,8 +8088,7 @@ namespace Pattons_Best
                   else if (true == gi.IsShermanFiringSubMg) gi.IsShermanFiredSubMg = true;
                   else
                   {
-                     returnStatus = "reached default no MG selected";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanFiringMachineGun): " + returnStatus);
+                     // this can happen when loading a game and MGs have already fired.
                   }
                   Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequenceShermanFiringMachineGun): " + Utilities.PrintMgState(gi));
                   break;
@@ -11752,6 +11782,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Perform_EndCheck() returned false");
             return false;
          }
+         //-------------------------------------------------------
          if (GamePhase.EndGame != gi.GamePhase)
          {
             IAfterActionReport? lastReport = gi.Reports.GetLast();

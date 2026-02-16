@@ -224,10 +224,11 @@ namespace Pattons_Best
             //----------------------------------
             if (null == myGameInstance)
             {
-               Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myGameInstance=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
             myGameInstance.NewMembers.Clear();
+            Logger.Log(LogEnum.LE_SHOW_CREW_CLEAR, "EventViewerCrewSetup.UpdateEndState(): clearing NewMebers");
             //----------------------------------
             if (null == myCallback)
             {

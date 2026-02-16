@@ -9335,7 +9335,7 @@ namespace Pattons_Best
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(IsMovingInOpen) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(Is_MovingInOpen) returned null");
                return false;
             }
             //--------------------------------

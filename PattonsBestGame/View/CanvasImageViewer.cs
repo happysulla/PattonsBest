@@ -178,7 +178,7 @@ namespace Pattons_Best
                this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
                break;
             case GameAction.UpdateAfterActionReport:
-
+            case GameAction.EveningDebriefingResetDay:
             case GameAction.EventDebriefDecorationHeart:
             case GameAction.EventDebriefDecorationContinue:
             case GameAction.EventDebriefDecorationBronzeStar:
@@ -187,7 +187,7 @@ namespace Pattons_Best
             case GameAction.EventDebriefDecorationHonor:
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingDayOfRest:
-            case GameAction.EveningDebriefingResetDay:
+            case GameAction.MorningBriefingReturningCrewman:
                if (null != myAarUserControl)
                {
                   myAarUserControl.IsEditable = false;

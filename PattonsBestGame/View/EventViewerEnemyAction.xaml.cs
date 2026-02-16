@@ -270,7 +270,9 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): count<3 for mi.TerritoryCurrent.Name=" + mi.TerritoryCurrent.Name);
                      return false;
                   }
-                  if (false == mi.IsVehicle())
+                  //-------------------------------
+                  Option optionAtgCoveredArc = myGameInstance.Options.Find("AtgCoveredArc");
+                  if ( (false == mi.IsVehicle()) && ((false == optionAtgCoveredArc.IsEnabled) || (false == mi.IsAntiTankGun())) )
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "PerformEnemyAction(): mi=" + mi.Name + " isVehicle=false for i=" + i.ToString());
                      myGridRows[i].myDieRollFacing = NO_FACING;
@@ -1639,7 +1641,7 @@ namespace Pattons_Best
                else
                {
                   myGridRows[i].myDieRollFacing = NO_MOVE;
-                  myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // if MOve is false or thrown track or interdicted
+                  myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // if Move is false or thrown track or interdicted
                }
                //----------------------------------------
                if (true == enemyAction.Contains("Collateral"))
@@ -1676,7 +1678,7 @@ namespace Pattons_Best
                   Option optionEnemyRearFacingOnMove = myGameInstance.Options.Find("EnemyRearFacingOnMove");
                   if (true == optionEnemyRearFacingOnMove.IsEnabled)
                   {
-                     if ( (true == myGridRows[i].myEnemyAction.Contains("Move-B")) && (true == myGridRows[i].myFacing.Contains("Rear")) )
+                     if ( (true == myGridRows[i].myEnemyAction.Contains("Move-B")) && (false == myGridRows[i].myFacing.Contains("Rear")) )
                      {
                         int randomNum = Utilities.RandomGenerator.Next(0, 5);
                         Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): rn=" + randomNum + " for mi=" + mi.Name + " eu=" + mi.GetEnemyUnit() + " isTurret=" + mi.IsTurret());
@@ -1685,7 +1687,7 @@ namespace Pattons_Best
                            if (randomNum < 2) // 33% chance shows rear facing when moving away
                            {
                               Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): Setting turreted vehicle to myGridRows[i].myFacing=Rear");
-                              myGridRows[i].myEnemyAction = "Move-B(r)";
+                              myGridRows[i].myEnemyAction += "(r)";
                               myGridRows[i].myFacing = "Rear";
                            }
                         }
@@ -1694,7 +1696,7 @@ namespace Pattons_Best
                            if (randomNum < 4) // 80% chance shows rear facing when moving away
                            {
                               Logger.Log(LogEnum.LE_SHOW_FACING, "ShowDieResults(ENEMY_ACTION_MOVE): Setting non turreted vehicle to myGridRows[i].myFacing=Rear");
-                              myGridRows[i].myEnemyAction = "Move-B(r)";
+                              myGridRows[i].myEnemyAction += "(r)";
                               myGridRows[i].myFacing = "Rear";
                            }
                         }
