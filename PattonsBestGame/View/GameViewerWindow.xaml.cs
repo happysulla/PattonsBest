@@ -293,18 +293,6 @@ namespace Pattons_Best
                }
             }
             //-------------------------------------------------------
-            //foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of Sherman
-            //{
-            //   if (ui is Button b)
-            //   {
-            //      if (true == b.Name.Contains("Sherman"))
-            //      {
-            //         myCanvasTank.Children.Remove(b);
-            //         break;
-            //      }
-            //   }
-            //}
-            //-------------------------------------------------------
             string appendText = "";
             if (9 < myTankCardNum)
                appendText = myTankCardNum.ToString();

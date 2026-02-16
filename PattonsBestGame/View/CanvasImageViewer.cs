@@ -120,6 +120,22 @@ namespace Pattons_Best
                myTargetCursor = null;
                this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
                //-----------------------------------------
+               if( null != gi.Death )
+               {
+                  if( true == gi.Sherman.IsKilled)
+                     gi.Sherman.SetBloodSpots();
+                  if (true == gi.Death.myIsExplosion)
+                     ShowTankExploding(gi, myCanvas);
+                  else if( true == gi.Death.myIsBrewUp)
+                     ShowTankBrewUp(gi, myCanvas);
+                  else
+                  {
+                     IMapItem? sherman = gi.BattleStacks.FindMapItem("Sherman");
+                     if( null == sherman )
+                        gi.BattleStacks.Add(gi.Sherman); //GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll)
+                  }
+               }
+               //-----------------------------------------
                IGameCommand? cmd = gi.GameCommands.GetLast();
                if (null == cmd)
                {
