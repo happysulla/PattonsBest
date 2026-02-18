@@ -647,26 +647,6 @@ namespace Pattons_Best
       }
       public static string GetEnemyNewFacing(IGameInstance gi, IMapItem mi, int dieRoll)
       {
-         //--------------------------------------------
-         Option optionEnemyRearFacingOnMove = gi.Options.Find("EnemyRearFacingOnMove");
-         if (true == optionEnemyRearFacingOnMove.IsEnabled)
-         {
-            if (true == mi.LastMoveAction.Contains("Move-B")) // 75% chance continue on same path
-            {
-               int randomNum = Utilities.RandomGenerator.Next(0, 5);
-               if (true == mi.IsTurret())
-               {
-                  if (randomNum < 2)
-                     return "Rear";
-               }
-               else
-               {
-                  if (randomNum < 4)
-                     return "Rear";
-               }
-            }
-         }
-         //------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          switch (enemyUnit)
          {
@@ -8381,20 +8361,23 @@ namespace Pattons_Best
          }
          //------------------------------------
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanMgToKillNumber(): 1-base#=" + toKillNumber.ToString());
-         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
-         if (numSmokeMarkers < 0)
+         if( NO_CHANCE != toKillNumber )
          {
-            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillNumber(): GetSmokeCount() returned error");
-            return FN_ERROR;
+            int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
+            if (numSmokeMarkers < 0)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillNumber(): GetSmokeCount() returned error");
+               return FN_ERROR;
+            }
+            if (0 < numSmokeMarkers)
+            {
+               double multiplier = Math.Pow(0.5, numSmokeMarkers);
+               toKillNumber *= multiplier;
+            }
+            //------------------------------------
+            if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+               toKillNumber *= 0.5;
          }
-         if (0 < numSmokeMarkers)
-         {
-            double multiplier = Math.Pow(0.5, numSmokeMarkers);
-            toKillNumber *= multiplier;
-         }
-         //------------------------------------
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
-            toKillNumber *= 0.5;
          return (int)toKillNumber;
       }
       //-------------------------------------------

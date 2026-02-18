@@ -1717,7 +1717,7 @@ namespace Pattons_Best
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge032a = new Image { Width = 100, Height = 100 };
+                  Image imge032a = new Image { Width = 150, Height = 150 };
                   if ( true == isCombat )
                   {
                      imge032a.Name = "MovementBattleStartCounterattack";

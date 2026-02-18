@@ -183,7 +183,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_CREW_CLEAR);
          SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
-         //SetOn(LogEnum.LE_SHOW_CREW_RETURN);
+         SetOn(LogEnum.LE_SHOW_CREW_RETURN);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          //SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);

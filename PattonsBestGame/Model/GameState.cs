@@ -239,9 +239,9 @@ namespace Pattons_Best
             cm.SetBloodSpots(0);
             if (true == cm.IsIncapacitated)
             {
-               if (false == cm.IsKilled)
+               if ((false == cm.IsKilled) && (TableMgr.MIA != cm.WoundDaysUntilReturn))
                {
-                  gi.InjuredCrewMembers.Add(cm);
+                  gi.InjuredCrewMembers.Add(cm); // ReplaceInjuredCrewmen()
                   if ((GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn)) // crewmen are not replaced if light wound and evening debrief
                   {
                      cm.IsIncapacitated = false;
@@ -1009,6 +1009,7 @@ namespace Pattons_Best
             return false;
          }
          Utilities.MapItemNum++;
+         //----------------------------------
          if (true == gi.IsAirStrikePending)
          {
             if (null == gi.AirStrikeCheckTerritory)
@@ -3869,6 +3870,7 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     Logger.Log(LogEnum.LE_SHOW_CREW_RETURN, "GameStateEveningDebriefing.PerformAction(MorningBriefingBegin): gi.InjuredCrewMembers.Count=" + gi.InjuredCrewMembers.Count.ToString() + " crewmen=" + gi.InjuredCrewMembers.ToString());
                      if (0 < gi.InjuredCrewMembers.Count)
                      {
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e007a");  // Healing Crewmen
@@ -5497,7 +5499,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == SetArtillerySupportCounter(gi, dieRoll))
                   {
-                     returnStatus = "SetArtillerySupportCounter() returned false";
+                     returnStatus = "Set_ArtillerySupportCounter() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -5564,6 +5566,21 @@ namespace Pattons_Best
                      gi.MinSinceLastCheck += 45;
                      AdvanceTime(lastReport, 45);  // GameStateMovement.PerformAction(MovementResupplyCheck) 
                      Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "GameStateMovement.PerformAction(): +45 MovementResupplyCheck -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString() + " lastCheck=" + gi.MinSinceLastCheck.ToString());
+                     if (null == gi.AirStrikeCheckTerritory)
+                     {
+                        returnStatus = "gi.AirStrikeCheckTerritory=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementResupplyCheck): " + returnStatus);
+                     }
+                     else
+                     {
+                        gi.IsAirStrikePending = false;
+                        string name = gi.AirStrikeCheckTerritory.Name + "Air" + Utilities.MapItemNum.ToString();
+                        Utilities.MapItemNum++;
+                        IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
+                        IMapPoint mp = Territory.GetRandomPoint(gi.AirStrikeCheckTerritory, airStrikeMarker.Zoom * Utilities.theMapItemOffset);
+                        airStrikeMarker.Location = mp;
+                        gi.MoveStacks.Add(airStrikeMarker);
+                     }
                   }
                   else
                   {
@@ -5613,6 +5630,7 @@ namespace Pattons_Best
                         lastReport.AmmoSmokeBomb = 14;
                         lastReport.AmmoSmokeGrenade = 6;
                         lastReport.AmmoPeriscope = 6;
+
                      }
                      else
                      {
@@ -8474,7 +8492,7 @@ namespace Pattons_Best
                   gi.BattleStacks.Add(smokeGrenade);
                   //--------------------------------------------------
                   gi.CrewActionPhase = CrewActionPhase.RestockReadyRack;
-                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanThrowGrenade)
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanThrowGrenade)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanThrowGrenade): " + returnStatus);
@@ -9325,6 +9343,7 @@ namespace Pattons_Best
             if (true == isMgFire)
             {
                Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "Conduct_CrewAction(): " + Utilities.PrintMgState(gi));
+               outAction = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
                SetCommand(gi, outAction, GameAction.DieRollActionNone, "e054");
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 6-phase=" + gi.CrewActionPhase.ToString());

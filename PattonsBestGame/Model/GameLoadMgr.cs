@@ -4649,6 +4649,7 @@ namespace Pattons_Best
             case "Light": report.Resistance = EnumResistance.Light; break;
             case "Medium": report.Resistance = EnumResistance.Medium; break;
             case "Heavy": report.Resistance = EnumResistance.Heavy; break;
+            case "None": report.Resistance = EnumResistance.None; break;  // happens during retrofit
             default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sResistance=" + sResistance); return false;
          }
          //----------------------------------------------
