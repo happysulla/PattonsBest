@@ -8435,27 +8435,27 @@ namespace Pattons_Best
                   gi.UndoCmd = null;
                   foreach (IMapItem crewAction in gi.CrewActions)
                   {
-                     if (true == crewAction.Name.Contains("Driver_RepairScope"))
+                     if ((true == crewAction.Name.Contains("Driver_RepairScope")) && (true == gi.IsBrokenPeriscopeDriver) ) // when loading game, periscope might have already been fixed... check if it is broken
                      {
                         lastReport.AmmoPeriscope--;
                         gi.IsBrokenPeriscopeDriver = false;
                      }
-                     if (true == crewAction.Name.Contains("Loader_RepairScope"))
+                     if ((true == crewAction.Name.Contains("Loader_RepairScope")) && (true == gi.IsBrokenPeriscopeLoader) )
                      {
                         lastReport.AmmoPeriscope--;
                         gi.IsBrokenPeriscopeLoader = false;
                      }
-                     if (true == crewAction.Name.Contains("Assistant_RepairScope"))
+                     if ((true == crewAction.Name.Contains("Assistant_RepairScope")) && (true == gi.IsBrokenPeriscopeAssistant) )
                      {
                         lastReport.AmmoPeriscope--;
                         gi.IsBrokenPeriscopeAssistant = false;
                      }
-                     if (true == crewAction.Name.Contains("Gunner_RepairScope"))
+                     if ((true == crewAction.Name.Contains("Gunner_RepairScope")) && (true == gi.IsBrokenPeriscopeGunner) )
                      {
                         lastReport.AmmoPeriscope--;
                         gi.IsBrokenPeriscopeGunner = false;
                      }
-                     if (true == crewAction.Name.Contains("Commander_RepairScope"))
+                     if ((true == crewAction.Name.Contains("Commander_RepairScope")) && (true == gi.IsBrokenPeriscopeCommander) )
                      {
                         lastReport.AmmoPeriscope--;
                         gi.IsBrokenPeriscopeCommander = false;
@@ -8482,19 +8482,9 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceShermanThrowGrenade:
                   gi.UndoCmd = null;
-                  string miNameGrenade = "SmokeWhite" + Utilities.MapItemNum;
-                  Utilities.MapItemNum++;
-                  double zoom = Utilities.ZOOM + 3.0;
-                  IMapItem smokeGrenade = new MapItem(miNameGrenade, zoom, "c108Smoke1", gi.Home);
-                  IMapPoint mp1 = Territory.GetRandomPoint(gi.Home, 10);
-                  smokeGrenade.Location.X = gi.Home.CenterPoint.X - zoom * Utilities.theMapItemOffset;
-                  smokeGrenade.Location.Y = mp1.Y - zoom * Utilities.theMapItemOffset;
-                  gi.BattleStacks.Add(smokeGrenade);
-                  //--------------------------------------------------
-                  gi.CrewActionPhase = CrewActionPhase.RestockReadyRack;
-                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanThrowGrenade)
+                  if (false == ThrowSmokeGrenade(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanThrowGrenade)
                   {
-                     returnStatus = "Conduct_CrewAction() returned false";
+                     returnStatus = "Throw_SmokeGrenade() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanThrowGrenade): " + returnStatus);
                   }
                   break;
@@ -11098,8 +11088,46 @@ namespace Pattons_Best
          gi.DieResults[key][0] = Utilities.NO_RESULT;
          return true;
       }
+      private bool ThrowSmokeGrenade(IGameInstance gi, ref GameAction outAction)
+      {
+         string miNameGrenade = "SmokeWhite-" + gi.Day.ToString() + "-" + Utilities.MapItemNum; 
+         foreach (IStack stack in gi.BattleStacks) // When loading game, if smoke already created, do not create again.
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains(miNameGrenade))
+                  return true;
+            }
+         }
+         //-----------------------------------------------
+         Utilities.MapItemNum++;
+         double zoom = Utilities.ZOOM + 3.0;
+         IMapItem smokeGrenade = new MapItem(miNameGrenade, zoom, "c108Smoke1", gi.Home);
+         IMapPoint mp1 = Territory.GetRandomPoint(gi.Home, 10);
+         smokeGrenade.Location.X = gi.Home.CenterPoint.X - zoom * Utilities.theMapItemOffset;
+         smokeGrenade.Location.Y = mp1.Y - zoom * Utilities.theMapItemOffset;
+         gi.BattleStacks.Add(smokeGrenade);
+         //--------------------------------------------------
+         gi.CrewActionPhase = CrewActionPhase.RestockReadyRack;
+         if (false == ConductCrewAction(gi, ref outAction))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanThrowGrenade)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanThrowGrenade): Conduct_CrewAction() returned false");
+            return false;
+         }
+         return true;
+      }
       private bool FireMortarIntoTurretFront(IGameInstance gi, ref GameAction outAction)
       {
+         string nameToMatch = "SmokeWhite_" + gi.Day.ToString() + "_"; // When loading a game, do not add smoke again
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach(IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains(nameToMatch))
+                  return true;
+            }
+         }
+         //---------------------------------------
          double rotation = gi.Sherman.RotationHull;
          rotation += gi.Sherman.RotationTurret;
          if (359 < rotation)
@@ -11141,7 +11169,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         string miName1 = "SmokeWhite" + Utilities.MapItemNum;
+         string miName1 = "SmokeWhite_" + gi.Day.ToString() + "_" + Utilities.MapItemNum;
          Utilities.MapItemNum++;
          IMapItem smoke1 = new MapItem(miName1, Utilities.ZOOM, "c108Smoke1", t);
          IMapPoint mp1 = Territory.GetRandomPoint(t, Utilities.theMapItemOffset);

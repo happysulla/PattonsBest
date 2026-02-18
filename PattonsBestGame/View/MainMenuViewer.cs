@@ -136,9 +136,14 @@ namespace Pattons_Best
                   subItem43.InputGestureText = "F3";
                   subItem43.Click += MenuItemHelpTables_Click;
                   myMenuItemTopLevel4.Items.Add(subItem43);
+                  MenuItem subItem44 = new MenuItem();
+                  subItem44.Header = "_Icons...";
+                  subItem44.InputGestureText = "F4";
+                  subItem44.Click += MenuItemHelpIcons_Click;
+                  myMenuItemTopLevel4.Items.Add(subItem44);
                   MenuItem subItem45 = new MenuItem();
                   subItem45.Header = "Report Error...";
-                  subItem45.InputGestureText = "F4";
+                  subItem45.InputGestureText = "F5";
                   subItem45.Click += MenuItemHelpReportError_Click;
                   myMenuItemTopLevel4.Items.Add(subItem45);
                   MenuItem subItem46 = new MenuItem();
@@ -419,6 +424,11 @@ namespace Pattons_Best
       {
          GameAction action = GameAction.ShowTableListing;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
+      }
+      public void MenuItemHelpIcons_Click(object sender, RoutedEventArgs e)
+      {
+         ShowIconDisplayDialog dialog = new ShowIconDisplayDialog();
+         dialog.Show();
       }
       public void MenuItemHelpReportError_Click(object sender, RoutedEventArgs e)
       {
