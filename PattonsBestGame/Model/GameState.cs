@@ -10322,8 +10322,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Resolve_ToKillEnemyUnit(): gi.TargetMainGun=null");
             return false;
          }
-         if (0 == gi.ShermanHits.Count)
+         if (0 == gi.ShermanHits.Count) 
          {
+            if (Utilities.NO_RESULT == dieRoll) // when loading game, the state might be that all rolls were accomplished. In that case, return true without doing anything.
+               return true;
             Logger.Log(LogEnum.LE_ERROR, "Resolve_ToKillEnemyUnit(): gi.ShermanHits.Count=0");
             return false;
          }
@@ -11840,6 +11842,7 @@ namespace Pattons_Best
             }
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
+            gi.RoundsOfCombat = 0;
             gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefing_ResetDay()
             gi.CrewActionPhase = CrewActionPhase.Movement;
             gi.MovementEffectOnSherman = "uninit";

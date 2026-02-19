@@ -230,7 +230,6 @@
 		   <TableRow FontSize='12'>
 			  <TableCell TextAlignment='Center'> <Paragraph>9/14</Paragraph></TableCell> 
 			  <TableCell TextAlignment='Center'> <Paragraph>A-3-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Crevic and Maixe</Paragraph></TableCell> 
 		   </TableRow>
 		   <TableRow FontSize='12'>
 			  <TableCell TextAlignment='Center'> <Paragraph>9/15</Paragraph></TableCell> 
