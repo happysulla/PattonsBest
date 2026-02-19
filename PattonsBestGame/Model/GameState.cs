@@ -11092,7 +11092,7 @@ namespace Pattons_Best
       }
       private bool ThrowSmokeGrenade(IGameInstance gi, ref GameAction outAction)
       {
-         string miNameGrenade = "SmokeWhite-" + gi.Day.ToString() + "-" + Utilities.MapItemNum; 
+         string miNameGrenade = "SmokeWhiteTT" + gi.Day.ToString() + "TT" + Utilities.MapItemNum; 
          foreach (IStack stack in gi.BattleStacks) // When loading game, if smoke already created, do not create again.
          {
             foreach (IMapItem mi in stack.MapItems)
@@ -11120,7 +11120,7 @@ namespace Pattons_Best
       }
       private bool FireMortarIntoTurretFront(IGameInstance gi, ref GameAction outAction)
       {
-         string nameToMatch = "SmokeWhite_" + gi.Day.ToString() + "_"; // When loading a game, do not add smoke again
+         string nameToMatch = "SmokeWhiteFF" + gi.Day.ToString() + "FF"; // When loading a game, do not add smoke again
          foreach (IStack stack in gi.BattleStacks)
          {
             foreach(IMapItem mi in stack.MapItems)
@@ -11171,7 +11171,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         string miName1 = "SmokeWhite_" + gi.Day.ToString() + "_" + Utilities.MapItemNum;
+         string miName1 = "SmokeWhiteFF" + gi.Day.ToString() + "FF" + Utilities.MapItemNum;
          Utilities.MapItemNum++;
          IMapItem smoke1 = new MapItem(miName1, Utilities.ZOOM, "c108Smoke1", t);
          IMapPoint mp1 = Territory.GetRandomPoint(t, Utilities.theMapItemOffset);
