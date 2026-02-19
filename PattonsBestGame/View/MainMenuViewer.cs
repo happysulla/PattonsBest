@@ -142,17 +142,22 @@ namespace Pattons_Best
                   subItem44.Click += MenuItemHelpIcons_Click;
                   myMenuItemTopLevel4.Items.Add(subItem44);
                   MenuItem subItem45 = new MenuItem();
-                  subItem45.Header = "Report Error...";
+                  subItem45.Header = "_Sherman Key...";
                   subItem45.InputGestureText = "F5";
-                  subItem45.Click += MenuItemHelpReportError_Click;
+                  subItem45.Click += MenuItemHelpShowSherman_Click;
                   myMenuItemTopLevel4.Items.Add(subItem45);
                   MenuItem subItem46 = new MenuItem();
-                  subItem46.Header = "_About...";
-                  subItem46.InputGestureText = "Ctrl+A";
-                  subItem46.Click += MenuItemHelpAbout_Click;
+                  subItem46.Header = "Report Error...";
+                  subItem46.InputGestureText = "F6";
+                  subItem46.Click += MenuItemHelpReportError_Click;
                   myMenuItemTopLevel4.Items.Add(subItem46);
+                  MenuItem subItem47 = new MenuItem();
+                  subItem47.Header = "_About...";
+                  subItem47.InputGestureText = "Ctrl+A";
+                  subItem47.Click += MenuItemHelpAbout_Click;
+                  myMenuItemTopLevel4.Items.Add(subItem47);
                }
-            } // end foreach (Control item in myMainMenu.Items)
+            } // end foreach (Control item in myMainMenu.Items) 
          } // end foreach (Control item in myMainMenu.Items)
 #if UT1
             myMenuItemTopLevel1.Width = 300;
@@ -428,6 +433,11 @@ namespace Pattons_Best
       public void MenuItemHelpIcons_Click(object sender, RoutedEventArgs e)
       {
          ShowIconDisplayDialog dialog = new ShowIconDisplayDialog();
+         dialog.Show();
+      }
+      public void MenuItemHelpShowSherman_Click(object sender, RoutedEventArgs e)
+      {
+         ShowShermanKeyDialog dialog = new ShowShermanKeyDialog();
          dialog.Show();
       }
       public void MenuItemHelpReportError_Click(object sender, RoutedEventArgs e)
