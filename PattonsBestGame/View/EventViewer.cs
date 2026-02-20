@@ -6765,7 +6765,7 @@ namespace Pattons_Best
                         case "Continue50c":
                         case "Continue50d":
                         case "Continue50e":
-                           action = GameAction.BattleRoundSequenceConductCrewAction;  // Continue50 - Ammo Reload Order
+                           action = GameAction.BattleRoundSequenceConductCrewAction;  // Continue50 - Skip Ammo Reload Order
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue50a":

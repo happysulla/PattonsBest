@@ -34,63 +34,64 @@
             <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="250"/>
          </Grid.ColumnDefinitions>
-            <TextBox Grid.Row="0" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False" Margin="0,8,0,0" Text="See note#4 on the enemy action tables. Enemy fires at your tank instead if you are firing at it" />
-            <TextBox Grid.Row="1" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="See note#5 on the enemy action tables. Fires at your tank instead if you are firing at its front. If you are firing at its side or rear, it moves back (MOVE-B)."/>
+         <TextBox Grid.Row="0" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False" Margin="0,8,0,0" Text="See note#4 on the enemy action tables. Enemy fires at your tank instead if you are firing at it" />
+         <TextBox Grid.Row="1" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="See note#5 on the enemy action tables. Fires at your tank instead if you are firing at its front. If you are firing at its side or rear, it moves back (MOVE-B)."/>
          <TextBox Grid.Row="2" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Due to optional rule 'Enemy Chances of Moving in Same Direction', this enemy is continuing moving in same direction" />
          <TextBox Grid.Row="3" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Due to optional rule 'Increase Chances of Rear Facing after Move-B', this enemy is facing rear when retreating"/>
-            <TextBox Grid.Row="4" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Due to optional rules related to air strikes or MG surpressing fire, the unit stops instead of moving"/>
+         <TextBox Grid.Row="4" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Due to optional rules related to air strikes or MG surpressing fire, the unit stops instead of moving"/>
          <TextBox Grid.Row="5" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates this enemy unit would have fired but is restricted due to weather conditions"/>
-         <TextBox Grid.Row="6" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates this enemy unit would have fired but is hidden from view and does not have a clear line of sight"/>
-         <TextBox Grid.Row="7" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates an Armor Piercing (AP) hit on enemy"/>
-         <TextBox Grid.Row="8" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates a High Explosive (HE) hit on enemy"/>
-         <TextBox Grid.Row="9" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates Sherman is bogged down. It can attempt to back out of stuck position."/>
-         <TextBox Grid.Row="10" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates Sherman is stuck and needs assistance. Engagement ends with a failure. Sherman crewmembers may elect to bail."/>
+         <TextBox Grid.Row="6" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates this enemy unit would have fired but is hidden from view and does not have a clear line of sight to Sherman"/>
+         <TextBox Grid.Row="7" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates this enemy unit would have moved, but it has a thrown track. Tanks can still pivot their turrets."/>
+         <TextBox Grid.Row="8" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates an Armor Piercing (AP) hit on enemy"/>
+         <TextBox Grid.Row="9" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates a High Explosive (HE) hit on enemy"/>
+         <TextBox Grid.Row="10" Grid.Column="1" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates Sherman is bogged down. It can attempt to back out of stuck position."/>
 
-            <TextBox Grid.Row="0" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Indicates the enemy is in woods surrounded by trees"/>
-         <TextBox Grid.Row="1" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Inicates the enemy is in a building"/>
-         <TextBox Grid.Row="2" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the enemy is in a fortification"/>
-         <TextBox Grid.Row="3" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates that the enemy tank, SPG, or ATG is spotted. Spotted units are not yet identified but can be fired upon. If they move prior to identification, the spotting marker is removed."/>
-         <TextBox Grid.Row="4" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the enemy is hidden and cannot be spotted. When hidden, it cannot be fired upon nor can it fire on the Sherman. Hidden status is removed if enemy or Sherman move."/>
-         <TextBox Grid.Row="5" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates a crewman is incapacitated. Incapacitated crewmen cannot be replaced until the Evening Debriefing Phase."/>
-         <TextBox Grid.Row="6" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates that the crewman is unconscious. Unconscious member can return to battle by rolling 6-10 during a Crew Action Phase. Until that happens, they are incapacitated."/>
-         <TextBox Grid.Row="7" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the crewman is severly wounded and must return to the United States. He is removed from the game in the next Evening Debriefing Phase."/>
-         <TextBox Grid.Row="8" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the crewman, Sherman, or enemy unit are killed in action"/>
-         <TextBox Grid.Row="9" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the Sherman or enemy unit has thrown a track. It cannot move for rest of engagement. Sherman crewmembers may elect to bail."/>
-         <TextBox Grid.Row="10" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Sherman is lead tank for the next combat deployment"/>
+         <TextBox Grid.Row="0" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Indicates Sherman is stuck and needs assistance. Engagement ends with a failure. Sherman crewmembers may elect to bail."/>
+         <TextBox Grid.Row="1" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the enemy is in woods surrounded by trees"/>
+         <TextBox Grid.Row="2" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Inicates the enemy is in a building"/>
+         <TextBox Grid.Row="3" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the enemy is in a fortification"/>
+         <TextBox Grid.Row="4" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates that the enemy tank, SPG, or ATG is spotted. Spotted units are not yet identified but can be fired upon. If they move prior to identification, the spotting marker is removed."/>
+         <TextBox Grid.Row="5" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the enemy is hidden and cannot be spotted. When hidden, it cannot be fired upon nor can it fire on the Sherman. Hidden status is removed if enemy or Sherman move."/>
+         <TextBox Grid.Row="6" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates a crewman is incapacitated. Incapacitated crewmen cannot be replaced until the Evening Debriefing Phase."/>
+         <TextBox Grid.Row="7" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates that the crewman is unconscious. Unconscious member can return to battle by rolling 6-10 during a Crew Action Phase. Until that happens, they are incapacitated."/>
+         <TextBox Grid.Row="8" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the crewman is severly wounded and must return to the United States. He is removed from the game in the next Evening Debriefing Phase."/>
+         <TextBox Grid.Row="9" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the crewman, Sherman, or enemy unit are killed in action"/>
+         <TextBox Grid.Row="10" Grid.Column="3" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Indicates the Sherman or enemy unit has thrown a track. It cannot move for rest of engagement. Sherman crewmembers may elect to bail. Shown on lower left of tank."/>
 
-            <TextBox Grid.Row="0" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Fuel remaining"/>
-         <TextBox Grid.Row="1" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Fuel is completely gone. Tank is immobalized and must resupply in Movement Area to be able to move. Cannot be done in battle."/>
-         <TextBox Grid.Row="2" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Captian"/>
-         <TextBox Grid.Row="3" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="First Lieutenant"/>
-         <TextBox Grid.Row="4" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Second Lieutenant"/>
-         <TextBox Grid.Row="5" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Staff Sergeant"/>
-         <TextBox Grid.Row="6" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Sergeant"/>
-         <TextBox Grid.Row="7" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Airstrike is scheduled to occur."/>
-         <TextBox Grid.Row="8" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Alert indicating High Explosive (HE) rounds on Sherman less than 10."/>
-         <TextBox Grid.Row="9" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Alert indicating Armor Piercing (AP) rounds on Sherman less than 6."/>
-         <TextBox Grid.Row="10" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Alert indicating 30 calibre machine gun rounds less than 10 boxes."/>
+         <TextBox Grid.Row="0" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Sherman is lead tank for the next combat deployment. Shown on status bar."/>
+         <TextBox Grid.Row="1" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Fuel remaining - Shown on status bar"/>
+         <TextBox Grid.Row="2" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Fuel is completely gone. Tank is immobalized and must resupply in Movement Area to be able to move. Cannot be done in battle. Symbol shown on Sherman tank."/>
+         <TextBox Grid.Row="3" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Captian"/>
+         <TextBox Grid.Row="4" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="First Lieutenant"/>
+         <TextBox Grid.Row="5" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Second Lieutenant"/>
+         <TextBox Grid.Row="6" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Staff Sergeant"/>
+         <TextBox Grid.Row="7" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Sergeant"/>
+         <TextBox Grid.Row="8" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Airstrike is scheduled to occur in 15 minutes. Shown on status bar."/>
+         <TextBox Grid.Row="9" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Alert indicating High Explosive (HE) rounds on Sherman less than 10. Shown on status bar."/>
+         <TextBox Grid.Row="10" Grid.Column="5" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Alert indicating Armor Piercing (AP) rounds on Sherman less than 6. Shown on status bar."/>
 
-            <TextBox Grid.Row="0" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Alert indicating 60 minutes or less until sunset occurs."/>
-          <TextBox Grid.Row="1" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Clear"/>
-          <TextBox Grid.Row="2" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Overcast"/>
-         <TextBox Grid.Row="3" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Mud"/>
-         <TextBox Grid.Row="4" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Mud/Overcast"/>
-         <TextBox Grid.Row="5" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Rain"/>
-         <TextBox Grid.Row="6" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Mud/Rain"/>
-         <TextBox Grid.Row="7" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Fog"/>
-         <TextBox Grid.Row="8" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Ground Snow"/>
-         <TextBox Grid.Row="9" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Deep Snow"/>
-         <TextBox Grid.Row="10" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Falling Snow"/>
+         <TextBox Grid.Row="0" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Alert indicating 30 calibre machine gun rounds less than 10 boxes. Shown on status bar."/>
+         <TextBox Grid.Row="1" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Alert indicating 60 minutes or less until sunset occurs. Shown on status bar."/>
+         <TextBox Grid.Row="2" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Clear"/>
+         <TextBox Grid.Row="3" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Overcast"/>
+         <TextBox Grid.Row="4" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Mud"/>
+         <TextBox Grid.Row="5" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Mud/Overcast"/>
+         <TextBox Grid.Row="6" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Rain"/>
+         <TextBox Grid.Row="7" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Mud/Rain"/>
+         <TextBox Grid.Row="8" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Fog"/>
+         <TextBox Grid.Row="9" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Ground Snow"/>
+         <TextBox Grid.Row="10" Grid.Column="7" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Deep Snow"/>
 
-            <TextBox Grid.Row="0" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Falling and Ground Snow"/>
-         <TextBox Grid.Row="1" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Falling and Deep Snow"/>
-         <TextBox Grid.Row="2" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Medal of Honor"/>
-         <TextBox Grid.Row="3" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Bronze Star"/>
-         <TextBox Grid.Row="4" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Silver Star"/>
-         <TextBox Grid.Row="5" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Distinguished Cross"/>
-         <TextBox Grid.Row="6" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Purple Heart"/>
-         <TextBox Grid.Row="7" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Eastern Campaign Medal"/>
-         <TextBox Grid.Row="8" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Eastern Campaign Medal and Victory Medal"/>
+         <TextBox Grid.Row="0" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Margin="0,8,0,0" Text="Falling Snow"/>
+         <TextBox Grid.Row="1" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Falling and Ground Snow"/>
+         <TextBox Grid.Row="2" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Falling and Deep Snow"/>
+         <TextBox Grid.Row="3" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Medal of Honor"/>
+         <TextBox Grid.Row="4" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Bronze Star"/>
+         <TextBox Grid.Row="5" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Silver Star"/>
+         <TextBox Grid.Row="6" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Distinguished Cross"/>
+         <TextBox Grid.Row="7" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Purple Heart"/>
+         <TextBox Grid.Row="8" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Eastern Campaign Medal"/>
+         <TextBox Grid.Row="9" Grid.Column="9" Height="70" Width="250" TextWrapping="Wrap" IsEnabled="False"  Text="Eastern Campaign Medal and Victory Medal"/>
          <StackPanel Name="myStackPanelButtons" Grid.Row="11" Grid.ColumnSpan="10"  Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="5,5,5,5" >
             <Button x:Name="myButtonOK" HorizontalAlignment="Center" Width="70" Height="30" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="14" Click="ButtonOk_Click" IsDefault="True">OK</Button>
          </StackPanel>

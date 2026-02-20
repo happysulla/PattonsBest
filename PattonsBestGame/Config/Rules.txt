@@ -1221,7 +1221,7 @@ Find the number rolled under the movement action you ordered and read along the 
 The number rolled is modifed by the ratings of the driver and possible the commander, as well as weather conditions. "
 r11.11	"<Bold>r11.11 Throwing a Track</Bold> 
 <LineBreak/><LineBreak/>
-A tank with a thrown track may not move or pivot for the remainder of the battle. Your tank sits where it is until it is knocked out or until all enemy units withdraw or are eliminated. Enemy units that are supposed to move are indicated with 'Do Nothing (TT)'.
+A tank with a thrown track may not move or pivot for the remainder of the battle. Your tank sits where it is until it is knocked out or until all enemy units withdraw or are eliminated. Enemy units that are supposed to move are indicated with 'Do Nothing (tt)'.
 <LineBreak/><LineBreak/>
 If the Battle Board is cleared of enemy units, the day of combat is finished for your tank. 
 <LineBreak/><LineBreak/>
@@ -1741,13 +1741,13 @@ r17.23	"<Bold>r17.23 Hatches Restrictions</Bold>
 Crewmen with closed hatches (other than the gunner) that have broken periscopes may not spot. The gunner may spot if either his sight or periscope is unbroken."
 r17.24	"<Bold>r17.24 Weather Restrictions</Bold> 
 <LineBreak/><LineBreak/>
-During falling snow and fog weather, spotting is only possible at close range. Also, enemy  attacks can only at close range. An enemy that is supposed to attack is indicated by 'Do Nothing (W)'."
+During falling snow and fog weather, spotting is only possible at close range. Also, enemy  attacks can only at close range. An enemy that is supposed to attack is indicated by 'Do Nothing (w)'."
 r17.25	"<Bold>r17.25 Smoke Restrictions</Bold> 
 <LineBreak/><LineBreak/>
 Spotting rolls are +1 for each Smoke marker on your tank, in the zone with the unit you are attempting to spot, or in any zones between."
 r17.3	"<Bold>r17.3 Hidden Units</Bold> 
 <LineBreak/><LineBreak/>
-Hidden enemy units cannot be spotted, cannot be fired on, and cannot fire at you. An enemy that is supposed to attack is indicated by 'Do Nothing (H)'. This changes when your tank moves or the hidden unit moves during the Enemy Action Phase 
+Hidden enemy units cannot be spotted, cannot be fired on, and cannot fire at you. An enemy that is supposed to attack is indicated by 'Do Nothing (h)'. This changes when your tank moves or the hidden unit moves during the Enemy Action Phase 
 <InlineUIContainer><Button Content='r17.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 If either event occurs, remove the Hidden marker. You may attempt to spot this unit during the next Spotting Phase.

@@ -49,7 +49,7 @@ namespace Pattons_Best
          myCheckBoxAutoRollEnemySetup.ToolTip = "Automatically roll die rolls for sector, terrain, and facing when activating an enemy.";
          myCheckBoxAutoAmmoLoad.ToolTip = "Automatically assign Ammo Reload to the same box as the Gun Load assignment. User still allowed to change.";
          //-----------------------------
-         myCheckBoxAirInterdiction.ToolTip = "Air strikes were rarely used to lay smoke. If that result is rolled, replaced with no enemy movement due to interdiction. An interdicted move is indicated with (I).";
+         myCheckBoxAirInterdiction.ToolTip = "Air strikes were rarely used to lay smoke. If that result is rolled, replaced with no enemy movement due to interdiction. An interdicted move is indicated with (i).";
          myCheckBoxTerrainPointValue.ToolTip = "Increase incentive for attacking strategic areas: Area A = 1 point, Area B = 1 point, Area C = 3 points, Area D = 2 points.";
          myCheckBoxTankCoverArc.ToolTip = "Ignore 'First Shot +10' die roll modifier (DRM) for enemy SPG/Tank attacks. Use +10 DRM for each turret rotation. ";
          myCheckBoxSlowTransverseCoverArc.ToolTip = "Tiger and King Tiger add additional +5 DRM for each turret rotation since they are slow turret-transverse AFVs.";
@@ -60,7 +60,7 @@ namespace Pattons_Best
          myCheckBoxRearFacingAfterMoveAway.ToolTip = "Enemy units when retreating have increase chances of rear facing. A rear facing move is indicated with (r).";
          myCheckBoxIncreasedMove.ToolTip = "Ever consecutive turn the Sherman attempts to move, increase chance it does move.";
          myCheckBoxEnhancedMgFire.ToolTip = "Increase the MG fire effectivity against close (6-12%) and medium range (4-7%) targets.";
-         myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs cause interdiction to prevent them from moving for one round. An interdicted move is indicated with (I).";
+         myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs cause interdiction to prevent them from moving for one round. An interdicted move is indicated with (i).";
          myCheckBoxMovingFwdIncreaseAdvanceChances.ToolTip = "Sherman advancing on Battle Board increase Friendly Advance by ~7% in Random Event.";
          myCheckBoxTerrainPointValueCenter.ToolTip = "Capturing/Losing Board Center adds/subtracts random points of 0 to 2 points.";
          //-----------------------------

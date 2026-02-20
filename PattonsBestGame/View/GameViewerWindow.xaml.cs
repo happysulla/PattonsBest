@@ -5977,6 +5977,16 @@ namespace Pattons_Best
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.F4, ModifierKeys.None);
             InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemHelpIcons_Click));
+            //------------------------------------------------
+            command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.F5, ModifierKeys.None);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemHelpShowSherman_Click));
+            //------------------------------------------------
+            command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.F6, ModifierKeys.None);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemHelpReportError_Click));
             //------------------------------------------------
             command = new RoutedCommand();

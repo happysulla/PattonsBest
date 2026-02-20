@@ -19,9 +19,10 @@ namespace Pattons_Best
       public ShowIconDisplayDialog()
       {
          InitializeComponent();
+         Thickness thickness = new Thickness(0, 8, 0, 0);
          int row = -1;
          int col = 0;
-         Image img = new Image() { Height = 50, Width = 40, IsEnabled = false, Margin = new Thickness(0, 5, 0, 0), Source = MapItem.theMapImages.GetBitmapImage("IconFireInsteadOfMove") };
+         Image img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("IconFireInsteadOfMove"), Margin = thickness};
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
@@ -49,6 +50,10 @@ namespace Pattons_Best
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
+         img = new Image() { Height = 40, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("IconThrownTrack") };
+         myGrid.Children.Add(img);
+         Grid.SetRow(img, ++row);
+         Grid.SetColumn(img, col);
          img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("OApHit") };
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
@@ -61,14 +66,14 @@ namespace Pattons_Best
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("OBoggedStuck") };
-         myGrid.Children.Add(img);
-         Grid.SetRow(img, ++row);
-         Grid.SetColumn(img, col);
          //--------------------------------------------
          row = -1;
          col = 2;
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Margin = new Thickness(0, 5, 0, 0), Source = MapItem.theMapImages.GetBitmapImage("OWoods") };
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("OBoggedStuck"), Margin = thickness};
+         myGrid.Children.Add(img);
+         Grid.SetRow(img, ++row);
+         Grid.SetColumn(img, col);
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("OWoods") };
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
@@ -104,22 +109,22 @@ namespace Pattons_Best
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("OTrack") };
-         myGrid.Children.Add(img);
-         Grid.SetRow(img, ++row);
-         Grid.SetColumn(img, col);
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("ShermanLead") };
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("ThrownTrack") };
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
          //--------------------------------------------
          row = -1;
          col = 4;
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Margin = new Thickness(0, 5, 0, 0), Source = MapItem.theMapImages.GetBitmapImage("Fuel") };
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("ShermanLead"), Margin = thickness};
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("OFuel") };
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("Fuel") };
+         myGrid.Children.Add(img);
+         Grid.SetRow(img, ++row);
+         Grid.SetColumn(img, col);
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("FuelEmpty") };
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
@@ -155,15 +160,14 @@ namespace Pattons_Best
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("Alert3") };
-         myGrid.Children.Add(img);
-         Grid.SetRow(img, ++row);
-         Grid.SetColumn(img, col);
-
          //--------------------------------------------
          row = -1;
          col = 6;
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Margin = new Thickness(0, 5, 0, 0), Source = MapItem.theMapImages.GetBitmapImage("Alert2") };
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("Alert3"), Margin = thickness};
+         myGrid.Children.Add(img);
+         Grid.SetRow(img, ++row);
+         Grid.SetColumn(img, col);
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("Alert2") };
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
@@ -203,14 +207,14 @@ namespace Pattons_Best
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling") };
-         myGrid.Children.Add(img);
-         Grid.SetRow(img, ++row);
-         Grid.SetColumn(img, col);
          //--------------------------------------------
          row = -1;
          col = 8;
-         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Margin = new Thickness(0, 5, 0, 0), Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround") };
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Margin = thickness};
+         myGrid.Children.Add(img);
+         Grid.SetRow(img, ++row);
+         Grid.SetColumn(img, col);
+         img = new Image() { Height = 50, Width = 40, IsEnabled = false, Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround") };
          myGrid.Children.Add(img);
          Grid.SetRow(img, ++row);
          Grid.SetColumn(img, col);
