@@ -411,10 +411,10 @@ namespace Pattons_Best
             enemyUnit = "PzVIe";
          else if (true == this.Name.Contains("STuGIIIg"))
             enemyUnit = "STuGIIIg";
-         else if (true == this.Name.Contains("MARDERII"))
-            enemyUnit = "MARDERII";
          else if (true == this.Name.Contains("MARDERIII"))
             enemyUnit = "MARDERIII";
+         else if (true == this.Name.Contains("MARDERII"))
+            enemyUnit = "MARDERII";
          else if (true == this.Name.Contains("JdgPzIV") )
             enemyUnit = "JdgPzIV";
          else if (true == this.Name.Contains("JdgPz38t") )

@@ -850,7 +850,7 @@ namespace Pattons_Best
                   be005a3.IsEnabled = false;
                   be005a4.IsEnabled = false;
                }
-
+               //------------------------------
                myTextBlock.Inlines.Add(new Run(" Date: "));
                myTextBlock.Inlines.Add(be005a1);
                myTextBlock.Inlines.Add(new Run("  "));
@@ -886,6 +886,12 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
             case "e006":
+               ICombatCalendarEntry? entrye006 = TableMgr.theCombatCalendarEntries[gi.Day];
+               if (null == entrye006)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): entry=null for day=" + gi.Day);
+                  return false;
+               }
                ReplaceText("DATE", report.Day);
                switch (report.Scenario)
                {
@@ -918,6 +924,11 @@ namespace Pattons_Best
                      return false;
                }
                ReplaceText("PROBABILITY", report.Probability.ToString());
+               if (false == String.IsNullOrEmpty(entrye006.Note))
+               {
+                  myTextBlock.Inlines.Add(new Run("Historical Battle: "));
+                  myTextBlock.Inlines.Add(new Run(entrye006.Note));
+               }
                if (Utilities.NO_RESULT == firstDieResult)
                {
                   Image imgSun = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150 };

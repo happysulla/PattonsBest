@@ -90,6 +90,7 @@ During the periods on the Combat <InlineUIContainer><Button Content='Calendar' F
 <LineBreak/><LineBreak/>
 During a refit period, you have the option of replacing your current tank per 
 <InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+If the refit period is over 7 days, the crew goes through additional training resulting in possilbe crew rating improvements.
 <LineBreak/><LineBreak/>"
 e006b	"<Bold>e006b Retrofit Period - Crew Training</Bold> 
 <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

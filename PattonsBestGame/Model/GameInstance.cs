@@ -1328,7 +1328,7 @@ namespace Pattons_Best
                report.VictoryPtsYourKiaSPGun++;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ScoreYourVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Score_YourVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
                break;
          }
          if (true == enemy.IsFortification)
@@ -1388,7 +1388,7 @@ namespace Pattons_Best
                break;
          }
          if (true == enemy.IsFortification)
-            report.VictoryPtsYourKiaFortifiedPosition++;
+            report.VictoryPtsFriendlyKiaFortifiedPosition++;
       }
    }
 }

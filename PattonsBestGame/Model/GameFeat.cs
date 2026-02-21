@@ -130,7 +130,7 @@ namespace Pattons_Best
             case "EndGameCmdrKilled": return "Game ends with commander killed";
             //------------
             case "NumKillLwFriendlyFire":
-               sb.Append("Killed LW units with friendly fire ");
+               sb.Append("Killed LW unit with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -140,7 +140,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMgFriendlyFire":
-               sb.Append("Killed MG Teams with friendly fire ");
+               sb.Append("Killed MG Team with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -150,7 +150,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillTruckFriendlyFire":
-               sb.Append("Killed trucks with friendly fire ");
+               sb.Append("Killed truck with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -160,7 +160,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPswFriendlyFire":
-               sb.Append("Killed PSW232 AFVs with friendly fire ");
+               sb.Append("Killed PSW232 AFV with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -170,7 +170,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSpwFriendlyFire":
-               sb.Append("Killed SPW251 AFVs with friendly fire ");
+               sb.Append("Killed SPW251 AFV with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -180,7 +180,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzIVFriendlyFire":
-               sb.Append("Killed PzIV Tanks with friendly fire ");
+               sb.Append("Killed PzIV Tank with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -190,7 +190,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVFriendlyFire":
-               sb.Append("Killed PzV Tanks with friendly fire ");
+               sb.Append("Killed PzV Tank with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -200,7 +200,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIeFriendlyFire":
-               sb.Append("Killed PzVIe Tanks with friendly fire ");
+               sb.Append("Killed PzVIe Tank with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -210,7 +210,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIbFriendlyFire":
-               sb.Append("Killed PzVIb Tanks with friendly fire ");
+               sb.Append("Killed PzVIb Tank with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -220,7 +220,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIFriendlyFire":
-               sb.Append("Killed MarderII SPGs with friendly fire ");
+               sb.Append("Killed MarderII SPG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -230,7 +230,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIIFriendlyFire":
-               sb.Append("Killed MarderIII SPGs with friendly fire " );
+               sb.Append("Killed MarderIII SPG with friendly fire " );
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -240,7 +240,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSTuGIIIgFriendlyFire":
-               sb.Append("Killed STuGIIIg SPGs with friendly fire ");
+               sb.Append("Killed STuGIIIg SPG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -250,7 +250,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPzIVFriendlyFire":
-               sb.Append("Killed JgdPzIV SPGs with friendly fire ");
+               sb.Append("Killed JgdPzIV SPG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -260,7 +260,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPz38tFriendlyFire":
-               sb.Append("Killed JgdPz38t SPGs with friendly fire ");
+               sb.Append("Killed JgdPz38t SPG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -270,7 +270,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak38FriendlyFire":
-               sb.Append("Killed Pak38 ATGs with friendly fire ");
+               sb.Append("Killed Pak38 ATG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -280,7 +280,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak40FriendlyFire":
-               sb.Append("Killed Pak40 ATGs with friendly fire ");
+               sb.Append("Killed Pak40 ATG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -290,7 +290,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak43FriendlyFire":
-               sb.Append("Killed Pak43 ATGs with friendly fire ");
+               sb.Append("Killed Pak43 ATG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -301,7 +301,7 @@ namespace Pattons_Best
                return sb.ToString();
             //------------
             case "NumKillLwYourFire":
-               sb.Append("Killed LW units with your fire ");
+               sb.Append("Killed LW unit with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -311,7 +311,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMgYourFire":
-               sb.Append("Killed MG Teams with your fire ");
+               sb.Append("Killed MG Team with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -321,7 +321,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillTruckYourFire":
-               sb.Append("Killed trucks with your fire ");
+               sb.Append("Killed truck with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -331,7 +331,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPswYourFire":
-               sb.Append("Killed PSW232 AFVs with your fire ");
+               sb.Append("Killed PSW232 AFV with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -341,7 +341,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSpwYourFire":
-               sb.Append("Killed SPW251 AFVs with your fire ");
+               sb.Append("Killed SPW251 AFV with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -351,7 +351,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzIVYourFire":
-               sb.Append("Killed PzIV Tanks with your fire ");
+               sb.Append("Killed PzIV Tank with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -361,7 +361,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVYourFire":
-               sb.Append("Killed PzV Tanks with your fire ");
+               sb.Append("Killed PzV Tank with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -371,7 +371,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIeYourFire":
-               sb.Append("Killed PzVIe Tanks with your fire ");
+               sb.Append("Killed PzVIe Tank with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -381,7 +381,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIbYourFire":
-               sb.Append("Killed PzVIb Tanks with your fire ");
+               sb.Append("Killed PzVIb Tank with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -391,7 +391,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIYourFire":
-               sb.Append("Killed MarderII SPGs with your fire ");
+               sb.Append("Killed MarderII SPG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -401,7 +401,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIIYourFire":
-               sb.Append("Killed MarderIII SPGs with your fire ");
+               sb.Append("Killed MarderIII SPG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -411,7 +411,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSTuGIIIgYourFire":
-               sb.Append("Killed STuGIIIg SPGs with your fire ");
+               sb.Append("Killed STuGIIIg SPG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -421,7 +421,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPzIVYourFire":
-               sb.Append("Killed JgdPzIV SPGs with your fire ");
+               sb.Append("Killed JgdPzIV SPG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -431,7 +431,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPz38tYourFire":
-               sb.Append("Killed JgdPz38t SPGs with your fire ");
+               sb.Append("Killed JgdPz38t SPG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -441,7 +441,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak38YourFire":
-               sb.Append("Killed Pak38 ATGs with your fire ");
+               sb.Append("Killed Pak38 ATG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -451,7 +451,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak40YourFire":
-               sb.Append("Killed Pak40 ATGs with your fire ");
+               sb.Append("Killed Pak40 ATG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -461,7 +461,7 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak43YourFire":
-               sb.Append("Killed Pak43 ATGs with your fire " );
+               sb.Append("Killed Pak43 ATG with your fire " );
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {

@@ -20,6 +20,7 @@ namespace Pattons_Best
       private const int MAX_GRID_ROWS = 14;
       private const int NO_FACING = -1;
       private const int EXISTING_UNIT = 1000;
+      private const int ADV_FIRE_NO_CHANCE = 1001;
       public enum E046Enum
       {
          ACTIVATION,
@@ -1010,16 +1011,17 @@ namespace Pattons_Best
             myGrid.Children.Add(bAdvance);
             Grid.SetRow(bAdvance, rowNum);
             Grid.SetColumn(bAdvance, 2);
-            Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireBaseNum.ToString() };
-            myGrid.Children.Add(label3);
-            Grid.SetRow(label3, rowNum);
-            Grid.SetColumn(label3, 3);
-            Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireModifier.ToString() };
-            myGrid.Children.Add(label4);
-            Grid.SetRow(label4, rowNum);
-            Grid.SetColumn(label4, 4);
-            if (TableMgr.NO_CHANCE == myAdvanceFireGridRows[i].myDieRollAdvanceFire)
+
+            if (ADV_FIRE_NO_CHANCE == myAdvanceFireGridRows[i].myDieRollAdvanceFire)
             {
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NC" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NC" };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
                Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NC" };
                myGrid.Children.Add(label5);
                Grid.SetRow(label5, rowNum);
@@ -1027,6 +1029,14 @@ namespace Pattons_Best
             }
             else if (Utilities.NO_RESULT < myAdvanceFireGridRows[i].myDieRollAdvanceFire)
             {
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireBaseNum.ToString() };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireModifier.ToString() };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
                Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireResult };
                myGrid.Children.Add(label5);
                Grid.SetRow(label5, rowNum);
@@ -1842,6 +1852,7 @@ namespace Pattons_Best
                         if ("MgAdvanceFire" == img.Name) // This is for MG Advance Fire in the Battle Sequence Phase when Enemy Reinforcements show up
                         {
                            int k = 0;
+                           bool isDieRollNeeded = false;
                            for (int j = 0; j < myMaxRowCount; ++j)
                            {
                               IMapItem? enemyUnit = myGridRows[j].myMapItem;
@@ -1894,25 +1905,36 @@ namespace Pattons_Best
                                        Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): Get_ShermanMgToKillNumber() returned false");
                                        return;
                                     }
-                                    myAdvanceFireGridRows[k].myAdvanceFireModifier = TableMgr.GetShermanMgToKillModifier(myGameInstance, enemyUnit, mgType, true);
-                                    if (TableMgr.FN_ERROR == myAdvanceFireGridRows[k].myAdvanceFireModifier)
+                                    else if (TableMgr.NO_CHANCE == myAdvanceFireGridRows[k].myAdvanceFireBaseNum)
                                     {
-                                       Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetShermanMgToKillModifier() returned false");
-                                       return;
+                                       myAdvanceFireGridRows[k].myDieRollAdvanceFire = ADV_FIRE_NO_CHANCE;
                                     }
-                                    myAdvanceFireGridRows[k].myDieRollAdvanceFire = Utilities.NO_RESULT;
+                                    else
+                                    {
+                                       isDieRollNeeded = true;
+                                       myAdvanceFireGridRows[k].myAdvanceFireModifier = TableMgr.GetShermanMgToKillModifier(myGameInstance, enemyUnit, mgType, true);
+                                       if (TableMgr.FN_ERROR == myAdvanceFireGridRows[k].myAdvanceFireModifier)
+                                       {
+                                          Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetShermanMgToKillModifier() returned false");
+                                          return;
+                                       }
+                                       myAdvanceFireGridRows[k].myDieRollAdvanceFire = Utilities.NO_RESULT;
+                                    }
                                     k++;
                                  }
                               }
                               myMaxRowCountAdvanceFire = k;
                            }
-                           myState = E046Enum.ADVANCE_FIRE;
                            myTextBlockHeader.Text = "r22.2 Advance Fire";
                            myTextBlock2.Text = "MG Attack";
                            myTextBlock3.Text = "To Kill #";
                            myTextBlock4.Text = "Modifier";
                            myTextBlock4.Visibility = Visibility.Visible;
-                           myTextBlock5.Text = "Result";
+                           myTextBlock5.Text = "Result"; 
+                           if( true == isDieRollNeeded )
+                              myState = E046Enum.ADVANCE_FIRE;
+                           else
+                              myState = E046Enum.ADVANCE_FIRE_SHOW; // occurs if all MG fire results in NO_CHANCE
                         }
                         else if ("DieRoll" == img.Name)
                         {

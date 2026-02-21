@@ -1563,6 +1563,7 @@ namespace Pattons_Best
          gi.Sherman.IsThrownTrack = false; // PrepareFor_Battle()
          gi.Sherman.IsBoggedDown = false;  // PrepareFor_Battle()
          gi.Sherman.EnemyAcquiredShots.Clear();
+         gi.Sherman.IsFuelNeeded = false;  // PrepareFor_Battle()
          //---------------------------------
          gi.BattlePhase = BattlePhase.None;
          gi.GamePhase = GamePhase.Preparations;
@@ -5181,6 +5182,8 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleEmpty: // only happens when loading a game in counterattack scenario when battle board is cleared
+                  break;
                case GameAction.PreparationsFinalSkip:
                   if (false == PerformAutoBattlePreparationsSetup(gi, ref action))
                   {
@@ -5815,16 +5818,8 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if (false == PrepareForBattle(gi)) // GameAction.MovementCounterattackEllapsedTimeRoll(Movement_CounterattackEllapsedTimeRoll)
-                        {
-                           returnStatus = "PrepareFor_Battle() returned false";
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(Movement_CounterattackEllapsedTimeRoll): " + returnStatus);
-                        }
-                        else if (false == PrepareForBattleSetState(gi, ref action)) // Resolve_EmptyBattleBoard() - If Injured Crewman but no daylight left
-                        {
-                           returnStatus = "PrepareFor_BattleSetState() returned false";
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(Movement_CounterattackEllapsedTimeRoll): " + returnStatus);
-                        }
+                        gi.GamePhase = GamePhase.Preparations;
+                        SetCommand(gi, action, GameAction.DieRollActionNone, "e059"); // PrepareForBattleState -> show ready rack 
                      }
                   }
                   break;
@@ -6762,12 +6757,12 @@ namespace Pattons_Best
                   if( (BattlePhase.Ambush == gi.BattlePhase) || (true == gi.IsCounterattackAmbush) )
                   {
                      Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleEmpty): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmbushRandomEvent");
-                     gi.BattlePhase = BattlePhase.AmbushRandomEvent;  // GameStateBattle.PerformAction(BattleEmpty)
+                     gi.BattlePhase = BattlePhase.AmbushRandomEvent;  // GameStateBattle.PerformAction(BattleEmpty) - go to randome event
                      if (EnumScenario.Advance == lastReport.Scenario)
                         SetCommand(gi, action, GameAction.BattleRandomEventRoll, "e039a");
                      else if (EnumScenario.Battle == lastReport.Scenario)           
-                        SetCommand(gi, action, GameAction.BattleRandomEventRoll, "e039b"); // GameStateBattle.PerformAction(BattleEmpty)
-                     else if (EnumScenario.Counterattack == lastReport.Scenario)           // GameStateBattle.PerformAction(BattleEmpty)
+                        SetCommand(gi, action, GameAction.BattleRandomEventRoll, "e039b"); // GameStateBattle.PerformAction(BattleEmpty) - go to randome event
+                     else if (EnumScenario.Counterattack == lastReport.Scenario)           // GameStateBattle.PerformAction(BattleEmpty) - go to randome event
                         SetCommand(gi, action, GameAction.BattleRandomEventRoll, "e039c");
                      else
                      {
@@ -7875,6 +7870,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGunArea:
                case GameAction.BattleRoundSequenceShermanFiringMainGunDirect:
+                  gi.DieResults[key][0] = Utilities.NO_RESULT;
                   gi.UndoCmd = null;
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGunEnd:  // due to missed target
@@ -9218,7 +9214,6 @@ namespace Pattons_Best
             }
             else
             {
-               gi.UndoCmd = null;
                gi.CrewActionPhase = CrewActionPhase.Movement;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 1-phase=" + gi.CrewActionPhase.ToString() + "  isMove=" + isTankMoving.ToString() + " isPivot=" + isTankPivoting.ToString());
                gi.Sherman.IsMoving = true;
@@ -11678,8 +11673,6 @@ namespace Pattons_Best
          totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzVI * 12;
          totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaAtGun * 4;
          totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaFortifiedPosition * 2;
-         totalFriendlyKia -= lastReport.VictoryPtsFriendlyTank * 5;
-         totalFriendlyKia -= lastReport.VictoryPtsFriendlySquad * 3;
          lastReport.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
          Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalFriendlyForces=" + lastReport.VictoryPtsTotalFriendlyForces.ToString());
          //----------------------------------
@@ -11687,7 +11680,12 @@ namespace Pattons_Best
          lastReport.VictoryPtsTotalTerritory -= (lastReport.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
          Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
          //----------------------------------
-         lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory;
+         int totalFriendlyLosses = lastReport.VictoryPtsFriendlyTank * 5;// lost friendly tanks
+         totalFriendlyLosses -= lastReport.VictoryPtsFriendlySquad * 3;  // lost friendly tanks
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): VictoryPtsFriendlyTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " report.VictoryPtsFriendlySquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
+         //----------------------------------
+         lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory + totalFriendlyLosses;
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
          gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
          gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
          //----------------------------------
