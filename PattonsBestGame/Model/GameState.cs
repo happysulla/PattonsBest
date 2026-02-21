@@ -3936,7 +3936,7 @@ namespace Pattons_Best
                   {
                      if (false == ReturnHealedCrewman(gi))
                      {
-                        returnStatus = "ReturnHealedCrewman() returned false";
+                        returnStatus = "Return_HealedCrewman() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingExistingCrewman): " + returnStatus);
                      }
                      else if (false == CheckCrewReturning(gi, lastReport, ref action))
@@ -4355,13 +4355,12 @@ namespace Pattons_Best
          if ( true == gi.Sherman.IsKilled )
          {
             SetCommand(gi, action, GameAction.MorningBriefingTankReplacementRoll, "e007d"); // Tank Replacement
-            action = GameAction.UpdateEventViewerActive;
+            //action = GameAction.UpdateEventViewerActive;
             return true;
          }
          else
          {
             SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // Check_CrewReturning() - Weather Roll
-            action = GameAction.UpdateEventViewerActive;
          }
          return true;
       }
@@ -11681,10 +11680,10 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
          //----------------------------------
          int totalFriendlyLosses = lastReport.VictoryPtsFriendlyTank * 5;// lost friendly tanks
-         totalFriendlyLosses -= lastReport.VictoryPtsFriendlySquad * 3;  // lost friendly tanks
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): VictoryPtsFriendlyTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " report.VictoryPtsFriendlySquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
+         totalFriendlyLosses += lastReport.VictoryPtsFriendlySquad * 3;  // lost friendly tanks
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): LostTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " LostSquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
          //----------------------------------
-         lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory + totalFriendlyLosses;
+         lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory - totalFriendlyLosses;
          Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
          gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
          gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;

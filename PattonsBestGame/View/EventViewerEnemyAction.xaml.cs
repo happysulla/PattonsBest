@@ -1817,7 +1817,7 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
-               //dieRoll = 1; // <CGS> TEST - KillYourTank - Tto hit your tank
+               //dieRoll = 1; // <CGS> TEST - KillYourTank - to hit your tank
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
                int modifiedDieRoll = dieRoll + myGridRows[i].myModifierToHitYourTank;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " dr=" + modifiedDieRoll.ToString());

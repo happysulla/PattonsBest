@@ -3826,7 +3826,7 @@ namespace Pattons_Best
          if (0 < numMineAttack.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Mine Attacks = " + numMineAttack.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            tb.Inlines.Add(new Run("Mine Attacks = " + numMineAttack.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             tb.Inlines.Add(new LineBreak());
             average = numMineImmobilization.Value / numMineAttack.Value;
             tb.Inlines.Add(new Run("Average Mine Immobilizations = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
