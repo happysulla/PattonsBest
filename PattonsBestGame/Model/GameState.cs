@@ -4422,6 +4422,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
             return false;
          }
+         string tType = lastReport.TankCardNum.ToString();
          //-----------------------------------------
          int totalRating = 0;
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Driver" };
@@ -4437,11 +4438,27 @@ namespace Pattons_Best
          }
          //totalRating = 30; // <CGS> TESTING - enforce HVSS training
          //-----------------------------------------
-         if ( (null != gi.ShermanHvss) && (29 < totalRating) && ( (37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day) ) ) // retrofits must be greater than 7 days for training 
+         if ((null == gi.ShermanHvss) && (29 < totalRating) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day))) // retrofits must be greater than 7 days for training 
          {
             GameEngine.theInGameFeats.AddOne("HvssTrained");
             gi.TrainedGunners.Add(gi.Gunner.Name);
             SetCommand(gi, action, GameAction.DieRollActionNone, "e006c");
+            //-------------------
+            ITerritory? t = Territories.theTerritories.Find("Hvss", tType); // make sure tank has an HVSS spot
+            if (null == t)
+            {
+               if (false == AdvancePastRetrofit(gi, action))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
+                  return false;
+               }
+            }
+            else
+            {
+               string mapItemName = "Hvss" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               gi.ShermanHvss = new MapItem(mapItemName, 1.0, "c75Hvss", t);
+            }
          }
          else
          {
@@ -11953,6 +11970,7 @@ namespace Pattons_Best
             gi.IsEnemyAdvanceComplete = false;
             //-------------------------------------------------------
             gi.IsCommanderRescuePerformed = false;
+            gi.IsCommnderFightiingFromOpenHatch = false; // EveningDebriefing_ResetDay()
             gi.IsPromoted = false;
             //-------------------------------------------------------
             gi.BattleResistance = EnumResistance.None;                      // EveningDebriefing_ResetDay()

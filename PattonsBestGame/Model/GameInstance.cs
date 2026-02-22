@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Xml;
@@ -170,6 +171,7 @@ namespace Pattons_Best
       public int PromotionDay { get; set; } = -1;
       public int NumPurpleHeart { get; set; } = 0;
       public bool IsCommanderRescuePerformed { set; get; } = false;
+      public bool IsCommnderFightiingFromOpenHatch { set; get; } = false;
       public bool IsCommanderKilled { set; get; } = false;
       public bool IsPromoted { set; get; } = false;
       //---------------------------------------------------------------

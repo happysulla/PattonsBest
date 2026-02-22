@@ -1221,7 +1221,7 @@ Find the number rolled under the movement action you ordered and read along the 
 The number rolled is modifed by the ratings of the driver and possible the commander, as well as weather conditions. "
 r11.11	"<Bold>r11.11 Throwing a Track</Bold> 
 <LineBreak/><LineBreak/>
-A tank with a thrown track may not move or pivot for the remainder of the battle. Your tank sits where it is until it is knocked out or until all enemy units withdraw or are eliminated. Enemy units that are supposed to move are indicated with 'Do Nothing (tt)'.
+A tank with a thrown track may not move or pivot for the remainder of the battle. Your tank sits where it is until it is knocked out or until all enemy units withdraw or are eliminated. Enemy units that are supposed to move are indicated with 'Do Nothing (TT)'.
 <LineBreak/><LineBreak/>
 If the Battle Board is cleared of enemy units, the day of combat is finished for your tank. 
 <LineBreak/><LineBreak/>
@@ -1741,13 +1741,13 @@ r17.23	"<Bold>r17.23 Hatches Restrictions</Bold>
 Crewmen with closed hatches (other than the gunner) that have broken periscopes may not spot. The gunner may spot if either his sight or periscope is unbroken."
 r17.24	"<Bold>r17.24 Weather Restrictions</Bold> 
 <LineBreak/><LineBreak/>
-During falling snow and fog weather, spotting is only possible at close range. Also, enemy  attacks can only at close range. An enemy that is supposed to attack is indicated by 'Do Nothing (w)'."
+During falling snow and fog weather, spotting is only possible at close range. Also, enemy  attacks can only at close range. An enemy that is supposed to attack is indicated by 'Do Nothing (W)'."
 r17.25	"<Bold>r17.25 Smoke Restrictions</Bold> 
 <LineBreak/><LineBreak/>
 Spotting rolls are +1 for each Smoke marker on your tank, in the zone with the unit you are attempting to spot, or in any zones between."
 r17.3	"<Bold>r17.3 Hidden Units</Bold> 
 <LineBreak/><LineBreak/>
-Hidden enemy units cannot be spotted, cannot be fired on, and cannot fire at you. An enemy that is supposed to attack is indicated by 'Do Nothing (h)'. This changes when your tank moves or the hidden unit moves during the Enemy Action Phase 
+Hidden enemy units cannot be spotted, cannot be fired on, and cannot fire at you. An enemy that is supposed to attack is indicated by 'Do Nothing (H)'. This changes when your tank moves or the hidden unit moves during the Enemy Action Phase 
 <InlineUIContainer><Button Content='r17.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 If either event occurs, remove the Hidden marker. You may attempt to spot this unit during the next Spotting Phase.
@@ -2331,7 +2331,7 @@ As a combat soldier in the European Theater of Operations during World War II, y
 -- WWII Victory Medal<LineBreak/>
 <LineBreak/>
 - Purple Hearts are awarded for each wound recieved in combat. The European Campaign Medal is automatically awarded for playing the game. The WWII Victory Medal is automatically awarded after May of 1945."
-r27.0	"<Bold>r27.0 Retrofitting</Bold>
+r27.0	"<Bold>r27.0 Retrofitting and Horizontal Volute Spring Suspension (HVSS)</Bold>
 <LineBreak/><LineBreak/>
 During the periods on the Combat Calendar marked Refitting, the Division is building itself back up to strength, replacing tanks, and retraining new crews. 
 <LineBreak/><LineBreak/>
@@ -2349,9 +2349,9 @@ Roll 1D separately for each crewman, even those joining the crew during the refi
 If the number rolled is higher than the crewman&apos;s current rating, his rating is increased by one. 
 <LineBreak/><LineBreak/>
 Only one attempt is made per man for the entire refit period."
-r27.2	"<Bold>r27.2 Gyrostabilizer</Bold>
+r27.2	"<Bold>r27.2 Gyrostabilizer, a.k.a., HVSS</Bold>
 <LineBreak/><LineBreak/>
-A gyrostabilizer was attached to the main gun of the Sherman tank is to keep the gun stabilized, or steady, in the vertical axis (up-down). 
+A gyrostabilizer, a.k.a., Horizontal Volute Spring Suspension, was attached to the main gun of the Sherman tank is to keep the gun stabilized, or steady, in the vertical axis (up-down). 
 <LineBreak/><LineBreak/>
 When turned on, it would keep the gun in a level position while the tank moved.  In theory, this allowed the gunner to keep the gun aimed at a target when moving by adjusting only the turret&apos;s rotation. 
 <LineBreak/><LineBreak/>
@@ -2369,7 +2369,7 @@ Mark the After Action Report
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> that the crew is gyroStabilizer trained."
 r27.22	"<Bold>r27.22 Stabilizer Use</Bold>
 <LineBreak/><LineBreak/>
-In order to use the stabilizer, your crew must be trained in its use. If not trained, you may not fire the main gun during rounds when the tank is moved or pivoted. 
+In order to use the stabilizer, a.k.a, Horizontal Volute Spring Suspension, your crew must be trained in its use. If not trained, you may not fire the main gun during rounds when the tank is moved or pivoted. 
 <LineBreak/><LineBreak/>
 Trained crews may fire the main gun when the tank is moving or pivoting, although with the pentalty shown on the To Hit Tables. 
 <LineBreak/><LineBreak/>

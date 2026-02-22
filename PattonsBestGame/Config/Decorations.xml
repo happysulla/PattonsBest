@@ -79,9 +79,9 @@
                <LineBreak/>
                <Run Text='  + Victory points scored by friendly forces and for captured territory.'></Run>
                <LineBreak/>
-               <Run Text='  +25 For pulling a crewman from a tank which burns.'></Run>
+               <Run Text='  +25 For pulling a crewman from a tank during a rescue when tank burns.'></Run>
                <LineBreak/>
-               <Run Text='  +5 If you are an officer (does not apply to the CMO).'></Run>
+               <Run Text='  +5 If you are an officer (Does not apply for Congression Medal of Honor).'></Run>
                <LineBreak/>
                <Run Text='  +5 If the commander was fighting from an open hatch during a roll on the '></Run>
                <InlineUIContainer>

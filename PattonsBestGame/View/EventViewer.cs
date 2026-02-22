@@ -4898,13 +4898,19 @@ namespace Pattons_Best
          //----------------------------------------
          if (true == gi.IsCommanderRescuePerformed)
          {
-            sbe103.Append("+25 for rescuing crewman\n");
+            sbe103.Append("+25 for rescuing crewman from burning tank\n");
+            modifierDecoration += 25;
+         }
+         //----------------------------------------
+         if (true == gi.IsCommnderFightiingFromOpenHatch)
+         {
+            sbe103.Append("+10 for fighting from open hatch when collateral occurs\n");
             modifierDecoration += 25;
          }
          //----------------------------------------
          if (("2Lt" == commander.Rank) || ("1Lt" == commander.Rank) || ("Cpt" == commander.Rank))
          {
-            sbe103.Append("+5 since you are officer\n");
+            sbe103.Append("+5 since you are officer (does not apply for CMO)\n");
             modifierDecoration += 5;
          }
          //----------------------------------------
@@ -4949,6 +4955,9 @@ namespace Pattons_Best
          else if (Utilities.NO_RESULT < gi.DieResults[key][0])
          {
             int combo = gi.DieResults[key][0] + modifierDecoration;
+            int comboWithoutOfficerRating = combo;
+            if (("2Lt" == commander.Rank) || ("1Lt" == commander.Rank) || ("Cpt" == commander.Rank))
+               comboWithoutOfficerRating -= 5;
             myTextBlock.Inlines.Add("Roll for Decoration: ");
             myTextBlock.Inlines.Add(gi.DieResults[key][0].ToString());
             myTextBlock.Inlines.Add(" + " );
@@ -4963,7 +4972,7 @@ namespace Pattons_Best
                Image imgSilver = new Image { Name = "DecorationSilverStar", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationSilverStar") };
                Image imgCross = new Image { Name = "DecorationDistinguishedCross", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationDistinguishedCross") };
                Image imgHonor = new Image { Name = "DecorationMedalOfHonor", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationMedalOfHonor") };
-               if (299 < combo)
+               if (299 < comboWithoutOfficerRating)
                {
                   myTextBlock.Inlines.Add("Qualify for Decoration. Click one of images to continue:");
                   myTextBlock.Inlines.Add(new LineBreak());

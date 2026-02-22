@@ -1333,6 +1333,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGridRowRescues[i].myCrewMemberRescuing=null for i=" + i.ToString());
                   return;
                }
+               if( "Commander" == rescuer.Role )
+                  myGameInstance.IsCommanderRescuePerformed = true;
                myGridRowRescues[i].myDieRollRescue = dieRoll;
                int combo = dieRoll + myGridRowRescues[i].myRescueWoundModifier;
                myGridRowRescues[i].myRescueWoundResult = TableMgr.SetWounds(myGameInstance, rescuer, dieRoll, myGridRowRescues[i].myRescueWoundModifier); // bailout rescue attempt
@@ -1394,6 +1396,7 @@ namespace Pattons_Best
                }
                else
                {
+                  myGameInstance.IsCommanderRescuePerformed = false; // only apply this if crewmember pulled from buring tank
                   myBrewupResult = "No Effect";
                }
                myState = E0481Enum.BREW_UP_ROLL_SHOW;

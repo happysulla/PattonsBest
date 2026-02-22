@@ -224,6 +224,9 @@ namespace Pattons_Best
             }
             Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerTankCollateral.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             //-----------------------------------------
+            if (false == myGameInstance.Commander.IsButtonedUp)
+               myGameInstance.IsCommnderFightiingFromOpenHatch = true;
+            //-----------------------------------------
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");

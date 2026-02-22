@@ -1354,6 +1354,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.IsCommanderRescuePerformed != right.IsCommanderRescuePerformed");
             return false;
          }
+         if (left.IsCommnderFightiingFromOpenHatch != right.IsCommnderFightiingFromOpenHatch)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.IsCommnderFightiingFromOpenHatch != right.IsCommnderFightiingFromOpenHatch");
+            return false;
+         }
          if (left.IsCommanderKilled != right.IsCommanderKilled)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.IsCommanderKilled != right.IsCommanderKilled");

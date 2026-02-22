@@ -3294,6 +3294,25 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsCommnderFightiingFromOpenHatch) = false");
+               return null;
+            }
+            if (reader.Name != "IsCommnderFightiingFromOpenHatch")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsCommnderFightiingFromOpenHatch != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsCommnderFightiingFromOpenHatch = reader.GetAttribute("value");
+            if (null == sIsCommanderRescuePerformed)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sIsCommnderFightiingFromOpenHatch=null");
+               return null;
+            }
+            gi.IsCommnderFightiingFromOpenHatch = Convert.ToBoolean(sIsCommnderFightiingFromOpenHatch);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsCommanderKilled) = false");
                return null;
             }
@@ -8783,6 +8802,20 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsCommanderRescuePerformed) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCommnderFightiingFromOpenHatch");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsCommnderFightiingFromOpenHatch) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCommnderFightiingFromOpenHatch.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsCommnderFightiingFromOpenHatch) returned null");
             return null;
          }
          //------------------------------------------

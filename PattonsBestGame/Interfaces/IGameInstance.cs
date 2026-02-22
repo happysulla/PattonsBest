@@ -157,6 +157,7 @@ namespace Pattons_Best
       int PromotionDay { get; set; }
       int NumPurpleHeart { get; set; }
       bool IsCommanderRescuePerformed { set; get; }
+      bool IsCommnderFightiingFromOpenHatch { set; get; }
       bool IsCommanderKilled { set; get; }
       bool IsPromoted { set; get; }
       //------------------------------------------------
