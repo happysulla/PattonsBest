@@ -1462,6 +1462,8 @@ namespace Pattons_Best
                enemyUnit.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
                Utilities.MapItemNum++;
                Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): Adding eu=" + enemyUnit.Name + " to " + t.Name);
+               enemyUnit.IsSpotted = false;
+               enemyUnit.Spotting = EnumSpottingResult.UNSPOTTED;
                enemyUnit.IsMoving = false;
                enemyUnit.IsHullDown = false;
                enemyUnit.IsSpotted = false;
@@ -8619,24 +8621,24 @@ namespace Pattons_Best
                   if (false == ResetRound(gi, action, "MoveSherman_AdvanceOrRetreat()", false, out isEmptyBattleBoard1))
                   {
                      returnStatus = "Reset_Round() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanAdvanceOrRetreatEnd): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanAdvanceOrRetreatEnd): " + returnStatus);
                   }
-                  else if (false == PrepareForBattle(gi)) // BattleRoundSequenceShermanAdvanceOrRetreatEnd !!! follows Reset_Round()
+                  else if (false == PrepareForBattle(gi)) // BattleRoundSequence_ShermanAdvanceOrRetreatEnd !!! follows Reset_Round()
                   {
                      returnStatus = "PrepareFor_Battle() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanAdvanceOrRetreatEnd): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanAdvanceOrRetreatEnd): " + returnStatus);
                   }
-                  else if (false == PrepareForBattleSetState(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanAdvanceOrRetreatEnd)
+                  else if (false == PrepareForBattleSetState(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanAdvanceOrRetreatEnd)
                   {
                      returnStatus = "PrepareFor_BattleSetState() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanAdvanceOrRetreatEnd): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanAdvanceOrRetreatEnd): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceShermanRetreatChoiceEnd:
                   if( null == gi.EnteredArea)
                   {
                      returnStatus = "gi.EnteredArea=null";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanRetreatChoiceEnd): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanRetreatChoiceEnd): " + returnStatus);
                   }
                   else
                   {
@@ -9892,7 +9894,7 @@ namespace Pattons_Best
                }
                if (false == MoveShermanCounterattackRetreatChoices(gi, startArea, taskForce))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): MoveShermanAdvanceOrRetreatCounterattack() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): MoveSherman_AdvanceOrRetreatCounterattack() returned false");
                   return false;
                }
                if (1 == gi.CounterattachRetreats.Count)
