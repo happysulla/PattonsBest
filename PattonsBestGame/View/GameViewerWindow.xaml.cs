@@ -3405,12 +3405,15 @@ namespace Pattons_Best
          Canvas.SetZIndex(imgFeat, 99998);
          myCanvasMain.MouseDown += MouseDownGameFeat;
          //-------------------------------------
-         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Name="FeatLabel1", Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelTitle);
-         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = GameFeats.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
+         labelTitle.MouseDown += MouseDownGameFeat;
+         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Name = "FeatLabel2", Content = GameFeats.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelForFeat);
-         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
+         labelForFeat.MouseDown += MouseDownGameFeat;
+         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Name = "FeatLabel3", Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelClick);
+         labelClick.MouseDown += MouseDownGameFeat;
          labelTitle.UpdateLayout();
          labelForFeat.UpdateLayout();
          labelClick.UpdateLayout();
@@ -4957,7 +4960,7 @@ namespace Pattons_Best
       private void MouseDownGameFeat(object send, MouseEventArgs e)
       {
          System.Windows.Point p = e.GetPosition((UIElement)send);
-         HitTestResult result = VisualTreeHelper.HitTest(myCanvasMain, p);  // Get the Point where the hit test occurrs
+         HitTestResult result = VisualTreeHelper.HitTest(myCanvasMain, p);  // Get the Point where the hit test occurs
          foreach (UIElement ui in myCanvasMain.Children)
          {
             if (ui is Image img1)
@@ -5028,6 +5031,82 @@ namespace Pattons_Best
                            myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                         }
                      }
+                     myCanvasMain.MouseDown -= MouseDownGameFeat;
+                     e.Handled = true;
+                     myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                     return;
+                  }
+               }
+            }
+            else if (ui is Label label)
+            {
+               if (result.VisualHit == label)
+               {
+                  if (true == label.Name.Contains("Feat") )
+                  {
+                     GameAction action = GameAction.Error;
+                     GameFeat featChange;
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+                     if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
+                        return;
+                     }
+                     //-------------------------------------
+                     if (GamePhase.EndGame == myGameInstance.GamePhase)
+                     {
+                        if (false == String.IsNullOrEmpty(featChange.Key))
+                        {
+                           action = GameAction.EndGameShowFeats;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 1-Change=" + featChange.Key);
+                        }
+                        else
+                        {
+                           action = GameAction.EndGameShowStats;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+                        }
+                     }
+                     else if (GamePhase.EveningDebriefing == myGameInstance.GamePhase)
+                     {
+                        if (false == String.IsNullOrEmpty(featChange.Key))
+                        {
+                           action = GameAction.EveningDebriefingShowFeat;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 2-Change=" + featChange.Key);
+                        }
+                        else
+                        {
+                           action = GameAction.EveningDebriefingShowFeatEnd;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+                        }
+                     }
+                     else if (GamePhase.BattleRoundSequence == myGameInstance.GamePhase)
+                     {
+                        if (false == String.IsNullOrEmpty(featChange.Key)) // no changed feat
+                        {
+                           action = GameAction.BattleRoundSequenceShowFeat;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 3-Change=" + featChange.Key);
+
+                        }
+                        else
+                        {
+                           action = GameAction.BattleRoundSequenceShowFeatEnd;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+                        }
+                     }
+                     else if (GamePhase.Preparations == myGameInstance.GamePhase)
+                     {
+                        if (false == String.IsNullOrEmpty(featChange.Key)) // no changed feat
+                        {
+                           action = GameAction.PreparationsShowFeat;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 4-Change=" + featChange.Key);
+                        }
+                        else
+                        {
+                           action = GameAction.PreparationsShowFeatEnd;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+                        }
+                     }
+                     label.MouseDown -= MouseDownGameFeat;
                      myCanvasMain.MouseDown -= MouseDownGameFeat;
                      e.Handled = true;
                      myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5904,16 +5983,15 @@ namespace Pattons_Best
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemSaveAs_Click));
             //------------------------------------------------
             command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.U, ModifierKeys.Control);
+            keyGesture = new KeyGesture(Key.O, ModifierKeys.Control | ModifierKeys.Shift);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemFileOptions_Click));
+            //------------------------------------------------
+            command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.Z, ModifierKeys.Control);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBinding undoCmdBinding = new CommandBinding(command, mmv.MenuItemEditUndo_Click, mmv.MenuItemEditUndo_ClickCanExecute);
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemEditUndo_Click));
-            //------------------------------------------------
-            command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.D, ModifierKeys.Control);
-            InputBindings.Add(new KeyBinding(command, keyGesture));
-            CommandBinding recoverCmdBinding = new CommandBinding(command, mmv.MenuItemEditRecoverCheckpoint_Click, mmv.MenuItemEditRecoverCheckpoint_ClickCanExecute);
-            CommandBindings.Add(recoverCmdBinding);
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.R, ModifierKeys.Control);
@@ -5922,25 +6000,28 @@ namespace Pattons_Best
             CommandBindings.Add(recoverRoundCmdBinding);
             //------------------------------------------------
             command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.D, ModifierKeys.Control);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBinding recoverCmdBinding = new CommandBinding(command, mmv.MenuItemEditRecoverCheckpoint_Click, mmv.MenuItemEditRecoverCheckpoint_ClickCanExecute);
+            CommandBindings.Add(recoverCmdBinding);
+            //------------------------------------------------
+            command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.O, ModifierKeys.Control | ModifierKeys.Shift);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemFileOptions_Click));
             //------------------------------------------------
             command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.P, ModifierKeys.Control);
+            keyGesture = new KeyGesture(Key.P, ModifierKeys.Control | ModifierKeys.Shift);
             InputBindings.Add(new KeyBinding(command, keyGesture));
-            //------------------------------------------------
-            command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.R, ModifierKeys.Control | ModifierKeys.Shift);
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewPath_Click));
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.C, ModifierKeys.Control | ModifierKeys.Shift);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewCombatCalendar));
-            InputBindings.Add(new KeyBinding(command, keyGesture));
             //------------------------------------------------
             command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.A, ModifierKeys.Control);
+            keyGesture = new KeyGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewAfterActionReport));
             //------------------------------------------------
@@ -5950,7 +6031,7 @@ namespace Pattons_Best
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewMoveDiagram));
             //------------------------------------------------
             command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.G, ModifierKeys.Control);
+            keyGesture = new KeyGesture(Key.G, ModifierKeys.Control | ModifierKeys.Shift);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewFeats_Click));
             //------------------------------------------------

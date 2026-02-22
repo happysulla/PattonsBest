@@ -241,7 +241,7 @@ namespace Pattons_Best
             {
                if ((false == cm.IsKilled) && (TableMgr.MIA != cm.WoundDaysUntilReturn))
                {
-                  gi.InjuredCrewMembers.Add(cm); // ReplaceInjuredCrewmen()
+                  gi.InjuredCrewMembers.Add(cm); // Replace_InjuredCrewmen()
                   if ((GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn)) // crewmen are not replaced if light wound and evening debrief
                   {
                      cm.IsIncapacitated = false;
@@ -340,6 +340,8 @@ namespace Pattons_Best
                         gi.NewMembers.Add(gi.Commander); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
                      else
                         gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                     gi.PromotionPointNum = 0; // start promotion cycle again
+                     gi.PromotionDay = -1;
                      Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      if (false == gi.SetCrewActionTerritory(gi.Commander))
                      {
@@ -4531,7 +4533,13 @@ namespace Pattons_Best
          {
             lastReport.MainGunWP = 0;
             lastReport.MainGunHBCI = 0;
-            lastReport.MainGunHVAP += Utilities.RandomGenerator.Next(1, 11);
+            int randNum = Utilities.RandomGenerator.Next(1, 11);
+            if( randNum < 4 )
+               lastReport.MainGunHVAP += 1;
+            else if (randNum < 7)
+               lastReport.MainGunHVAP += 2;
+            else
+               lastReport.MainGunHVAP += 3;
             unassignedCount -= lastReport.MainGunHVAP;
          }
          else
@@ -11684,7 +11692,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): LostTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " LostSquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
          //----------------------------------
          lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory - totalFriendlyLosses;
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalEngagement=" + lastReport.VictoryPtsTotalEngagement.ToString());
          gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
          gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
          //----------------------------------
@@ -11713,7 +11721,7 @@ namespace Pattons_Best
                      gi.Commander.Rank = "Ssg";
                   }
                   break;
-               case "2Lt":
+               case "Ssg":
                   if (199 < gi.PromotionPointNum)
                   {
                      gi.IsPromoted = true;
@@ -11721,7 +11729,7 @@ namespace Pattons_Best
                      gi.Commander.Rank = "2Lt";
                   }
                   break;
-               case "1Lt":
+               case "2Lt":
                   if (299 < gi.PromotionPointNum)
                   {
                      gi.IsPromoted = true;
@@ -11729,7 +11737,7 @@ namespace Pattons_Best
                      gi.Commander.Rank = "1Lt";
                   }
                   break;
-               case "Cpt":
+               case "1Lt":
                   if (399 < gi.PromotionPointNum)
                   {
                      gi.IsPromoted = true;
@@ -11951,7 +11959,7 @@ namespace Pattons_Best
             gi.Death = null; // EveningDebriefing_ResetDay()
             gi.Panzerfaust = null;
             gi.NumCollateralDamage = 0;
-            gi.Fuel = 35; 
+            gi.Fuel = 35;
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "EveningDebriefing_ResetDay(): gi.MapItemMoves.Clear()");
             gi.MapItemMoves.Clear();
@@ -12018,7 +12026,7 @@ namespace Pattons_Best
             }
             if (true == isCrewmanReplaced)
             {
-               gi.GamePhase = GamePhase.MorningBriefing; // need to put this here so that ReplaceInjuredCrewmen() does not add 30 minutes
+               gi.GamePhase = GamePhase.MorningBriefing; // need to put this here so that Replace_InjuredCrewmen() does not add 30 minutes
                outAction = GameAction.EveningDebriefingReplaceCrew;
                SetCommand(gi, outAction, GameAction.DieRollActionNone, "e007b"); // EveningDebriefing_ResetDay() - crew replacement
             }

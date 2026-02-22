@@ -4835,10 +4835,10 @@ namespace Pattons_Best
                imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 157, Source = MapItem.theMapImages.GetBitmapImage("RankStaffSergeant") };
                break;
             case "2Lt":
-               imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("RankFirstLieutenant") };
+               imge102 = new Image { Name = "EventDebriefPromotion", Width = 64, Height = 160, Source = MapItem.theMapImages.GetBitmapImage("RankSecondLieutenant") }; 
                break;
             case "1Lt":
-               imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("RankSecondLieutenant") };
+               imge102 = new Image { Name = "EventDebriefPromotion", Width = 64, Height = 160, Source = MapItem.theMapImages.GetBitmapImage("RankFirstLieutenant") };
                break;
             case "Cpt":
                imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 92, Source = MapItem.theMapImages.GetBitmapImage("RankCaptian") };

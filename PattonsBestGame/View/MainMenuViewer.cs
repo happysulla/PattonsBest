@@ -55,7 +55,7 @@ namespace Pattons_Best
                   myMenuItemTopLevel2.Header = "_Edit";
                   myMenuItemTopLevel2.Visibility = Visibility.Visible;
                   myMenuItemTopLevel21.Header = "_Undo";
-                  myMenuItemTopLevel21.InputGestureText = "Ctrl+U";
+                  myMenuItemTopLevel21.InputGestureText = "Ctrl+Z";
                   myMenuItemTopLevel21.IsEnabled = false;
                   myMenuItemTopLevel21.Click += MenuItemEditUndo_Click;
                   myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel21);
@@ -83,7 +83,7 @@ namespace Pattons_Best
                   myMenuItemTopLevel3.Header = "_View";
                   myMenuItemTopLevel3.Visibility = Visibility.Visible;
                   myMenuItemTopLevel31.Header = "_Path";
-                  myMenuItemTopLevel31.InputGestureText = "Ctrl+P";
+                  myMenuItemTopLevel31.InputGestureText = "Ctrl+Shift+P";
                   myMenuItemTopLevel31.Click += MenuItemViewPath_Click;
                   myMenuItemTopLevel31.IsCheckable = true;
                   myMenuItemTopLevel31.IsChecked = true;
@@ -95,17 +95,17 @@ namespace Pattons_Best
                   myMenuItemTopLevel3.Items.Add(subItem32);
                   MenuItem subItem33 = new MenuItem();
                   subItem33.Header = "_After Action Report...";
-                  subItem33.InputGestureText = "Ctrl+A";
+                  subItem33.InputGestureText = "Ctrl+Shift+A";
                   subItem33.Click += MenuItemViewAfterActionReport;
                   myMenuItemTopLevel3.Items.Add(subItem33);
                   MenuItem subItem34 = new MenuItem();
                   subItem34.Header = "_Movement Diagram...";
-                  subItem34.InputGestureText = "Ctrl+M";
+                  subItem34.InputGestureText = "Ctrl+Shift+M";
                   subItem34.Click += MenuItemViewMoveDiagram;
                   myMenuItemTopLevel3.Items.Add(subItem34);
                   MenuItem subItem35 = new MenuItem();
                   subItem35.Header = "_Game Feats...";
-                  subItem35.InputGestureText = "Ctrl+G";
+                  subItem35.InputGestureText = "Ctrl+Shift+G";
                   subItem35.Click += MenuItemViewFeats_Click;
                   myMenuItemTopLevel3.Items.Add(subItem35);
                   myMenuItemTopLevel36.Header = "_Roads";

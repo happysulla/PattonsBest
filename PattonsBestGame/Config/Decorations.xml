@@ -75,7 +75,7 @@
       <TableRow  FontSize='10' >
          <TableCell ColumnSpan='2' TextAlignment='Left' >
             <Paragraph>
-               <Run Text='  + Victory points scored by our tank, multiplied by two.'></Run>
+               <Run Text='  + Victory points scored by your tank, multiplied by two.'></Run>
                <LineBreak/>
                <Run Text='  + Victory points scored by friendly forces and for captured territory.'></Run>
                <LineBreak/>
