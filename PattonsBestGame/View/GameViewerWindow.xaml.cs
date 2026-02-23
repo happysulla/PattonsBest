@@ -6092,6 +6092,11 @@ namespace Pattons_Best
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewRoads_Click));
             //------------------------------------------------
             command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.O, ModifierKeys.Control | ModifierKeys.Shift);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewOtherGames_Click));
+            //------------------------------------------------
+            command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.F1, ModifierKeys.None);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemHelpRules_Click));

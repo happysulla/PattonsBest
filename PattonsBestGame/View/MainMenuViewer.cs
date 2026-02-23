@@ -114,6 +114,11 @@ namespace Pattons_Best
                   myMenuItemTopLevel36.IsCheckable = true;
                   myMenuItemTopLevel36.IsChecked = false;
                   myMenuItemTopLevel3.Items.Add(myMenuItemTopLevel36);
+                  MenuItem subItem37 = new MenuItem();
+                  subItem37.Header = "_Other Games...";
+                  subItem37.InputGestureText = "Ctrl+Shift+O";
+                  subItem37.Click += MenuItemViewOtherGames_Click;
+                  myMenuItemTopLevel3.Items.Add(subItem37);
                }
                //------------------------------------------------
                if (menuItem.Name == "myMenuItemTopLevel4")
@@ -414,6 +419,11 @@ namespace Pattons_Best
          myMenuItemTopLevel36.IsChecked = IsRoadsShown;
          GameAction action = GameAction.ShowRoads;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
+      }
+      public void MenuItemViewOtherGames_Click(object sender, RoutedEventArgs e)
+      {
+         ShowOtherGamesDialog dialog = new ShowOtherGamesDialog();
+         dialog.Show();
       }
       public void MenuItemHelpRules_Click(object sender, RoutedEventArgs e)
       {
