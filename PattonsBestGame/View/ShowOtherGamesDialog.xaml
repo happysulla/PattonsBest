@@ -20,7 +20,15 @@
             <ColumnDefinition Width="500"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock  x:Name="myTextBlockIntro" Grid.Row="0" Grid.ColumnSpan="2" Width="Auto" Margin="10,10,10,10">
-         <Bold>Listing of developed games as of March 2026. Check out these games if you are interested. </Bold>
+         <Bold>Listing of developed games as of March 2026. Check out these games if you are interested. </Bold><LineBreak/>
+         TO INSTALL: <LineBreak/>
+         1.) If you have already installed, you may need to first uninstall the application using the Windows Control Panel. <LineBreak/>
+         2.) To download, goto following website Git project link as shown below.<LineBreak/>
+         3.) Select the Latest Release from the right side middle of this web page. <LineBreak/>
+         4.) Download the XXXWindowsSetup.zip file by clicking on the file name. <LineBreak/>
+         5.) Unzip to any directory. Double click the setup.exe file. <LineBreak/>
+         6.) If you get Microsoft Defender blue dialog, select 'More Info' and 'Run Anyways' button. <LineBreak/>
+         7.) You can delete the XXXWindowsSetup directory when you are done.
         </TextBlock>
         <TextBlock Name="myTextBoxPrinceRelease" Grid.Row="1"  Grid.Column ="0" Width="Auto" Margin="10,10,10,10" TextWrapping="Wrap" >
             <Run>Latest Release Date: July 20, 2025</Run>
