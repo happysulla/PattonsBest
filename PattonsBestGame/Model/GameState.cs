@@ -5770,6 +5770,7 @@ namespace Pattons_Best
                      //dieRoll = 10; // <CGS> TEST - YES COMBAT ON MOVE BOARD - MovementBattleCheckCounterattackRoll
                      //dieRoll = 1; // <CGS> TEST - NO COMBAT ON MOVE BOARD
                      gi.DieResults[key][0] = dieRoll;
+                     
                   }
                   else
                   {
@@ -9744,7 +9745,7 @@ namespace Pattons_Best
          if ((((270.0 < gi.Sherman.RotationHull) || (gi.Sherman.RotationHull < 90.0)) && ("A" == gi.MovementEffectOnEnemy)) ||
              (((90.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull < 270.0)) && ("B" == gi.MovementEffectOnEnemy)))
          {
-            gi.IsShermanAdvancingOnBattleBoard = true; // MoveSherman_MoveEnemyUnits()
+            gi.IsShermanAdvancingOnBattleBoard = true; // MoveSherman_MoveEnemyUnits() - use of optional rule in TableMgr.GetRandomEvent() 
          }
          //--------------------------------------------
          IMapItems enemyUnits = new MapItems();
@@ -9795,7 +9796,7 @@ namespace Pattons_Best
       }
       private bool MoveShermanAdvanceOrRetreat(IGameInstance gi, ref GameAction action)
       {
-         Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "MoveSherman_AdvanceOrRetreat(): gi.ShermanAdvanceOrRetreatEnemies=" + gi.ShermanAdvanceOrRetreatEnemies.ToString());
+         Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "MoveSherman_AdvanceOrRetreat(): gi.Sherman_AdvanceOrRetreatEnemies=" + gi.ShermanAdvanceOrRetreatEnemies.ToString());
          //--------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -9803,7 +9804,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): lastReport=null");
             return false;
          }
-         if (false == EnemiesOverrunToPreviousArea(gi)) // MoveSherman_AdvanceOrRetreat() - enemy show up in previous area if they move to OffBottom
+         if (false == EnemiesOverrunToPreviousArea(gi)) // MoveSherman_AdvanceOrRetreat() - enemy show up in previous area if they move to OffBottom - This is in addition to other enemy shoing up due to Sherman Advance or Retreat
          {
             Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): EnemiesOverrun_ToPreviousArea() returned false");
             return false;
@@ -9855,7 +9856,7 @@ namespace Pattons_Best
                SetCommand(gi, action, GameAction.DieRollActionNone, "e099");
             }
          }
-         else
+         else // Sherman is RETREATING
          {
             if ( (EnumScenario.Counterattack != lastReport.Scenario ) && (gi.EnteredHexes.Count < 2)) // MoveSherman_AdvanceOrRetreat() - retreat into your start area means call for another start area
             {
@@ -9892,23 +9893,23 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): LoseArea() returned false");
                   return false;
                }
-               if (false == MoveShermanCounterattackRetreatChoices(gi, startArea, taskForce))
+               if (false == MoveShermanCounterattackRetreatChoices(gi, startArea, taskForce)) // need to give user choice of where to retreat if 2+ shortest paths exists
                {
                   Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): MoveSherman_AdvanceOrRetreatCounterattack() returned false");
                   return false;
                }
-               if (1 == gi.CounterattachRetreats.Count)
+               if (1 == gi.CounterattachRetreats.Count) // If only one retreat path exists, that is one chosen for user
                   newT = gi.CounterattachRetreats[0];
             }
             else
             {
-               EnteredHex enteredHex = gi.EnteredHexes[gi.EnteredHexes.Count - 2];
+               EnteredHex enteredHex = gi.EnteredHexes[gi.EnteredHexes.Count - 2]; // if advancing/battle scenario, move back to previous hex
                newT = Territories.theTerritories.Find(enteredHex.TerritoryName);
                Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveSherman_AdvanceOrRetreat(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
             }
          }
          //--------------------------------------------------------
-         foreach (IMapItem enemyUnit in gi.ShermanAdvanceOrRetreatEnemies)// add in enemy units that were on BattleBoard when battle ended
+         foreach (IMapItem enemyUnit in gi.ShermanAdvanceOrRetreatEnemies)// all enemies that left board show up on the  Movement Board in current territory
          {
             string enemyType = enemyUnit.GetEnemyUnit();
             enemyUnit.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
@@ -9940,7 +9941,7 @@ namespace Pattons_Best
                return false;
             }
             action = GameAction.BattleRoundSequenceShermanRetreatChoice;
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e099b");
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e099b"); // User has to pick from 2+ choices on where to retreat
          }
          else
          {

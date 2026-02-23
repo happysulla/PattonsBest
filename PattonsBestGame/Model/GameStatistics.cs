@@ -53,6 +53,10 @@ namespace Pattons_Best
          "NumDays",
          "NumGames",
          "NumWins",
+         "NumOfFight",
+         "NumOfDaysFighting",
+         "NumOfScenariosWon",
+         "NumOfScenariosLost",
          //------------
          "NumKillLwFriendlyFire",
          "NumKillMgFriendlyFire",
@@ -96,7 +100,6 @@ namespace Pattons_Best
          "NumDistinguishedCrosses",
          "NumMedalOfHonors",
          //------------
-         "NumOfBattles",
          "NumOfKilledCrewman",
          "NumShermanExplodes",
          "NumShermanBurns",
