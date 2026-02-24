@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -148,6 +149,31 @@ namespace Pattons_Best
          myIsAllFeatsShown = true;
          if (false == UpdateGridRows())
             Logger.Log(LogEnum.LE_ERROR, "ButtonShowAll_Click(): UpdateGridRows() returned false");
+      }
+      private void ButtonResetAll_Click(object sender, RoutedEventArgs e)
+      {
+         MessageBoxResult result = MessageBox.Show(
+             "Resetting all feats permanently resets them to initial settings. Do you want to continue?",       // Message text
+             "Confirmation",                   // Title
+             MessageBoxButton.YesNo,     // Buttons
+             MessageBoxImage.Question          // Icon
+         );
+         switch (result)          // Handle the user's choice
+         {
+            case MessageBoxResult.Yes:
+               GameEngine.theInGameFeats.SetOriginalGameFeats();
+               GameEngine.theInGameFeats.SetGameFeatThreshold();
+               GameEngine.theStartingFeats.SetOriginalGameFeats();
+               GameEngine.theStartingFeats.SetGameFeatThreshold();
+               if (false == UpdateGridRows())
+                  Logger.Log(LogEnum.LE_ERROR, "ButtonShowAll_Click(): UpdateGridRows() returned false");
+               break;
+            case MessageBoxResult.No: // do nothing
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ButtonResetAll_Click(): reached default result=" + result.ToString());
+               break;
+         }
       }
    }
 }
