@@ -2899,7 +2899,7 @@ namespace Pattons_Best
             case "e101":
                if (false == UpdateEventContentVictoryPointTotal(gi))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentVictoryPointTotal() returned error for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContent_VictoryPointTotal() returned error for key=" + key);
                   return false;
                }
                break;
@@ -2987,7 +2987,6 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue show game statistics and feats."));
-               gi.Statistics.AddOne("NumOfScenariosWon");
                break;
             case "e502":
                StringBuilder sbEndLost = new StringBuilder();
@@ -4715,12 +4714,93 @@ namespace Pattons_Best
          }
          //----------------------------------------
          StringBuilder sbe101 = new StringBuilder();
-         sbe101.Append("Engagement Victory Points: ");
+         string spaces = "";
+         Image? imge101 = null;
+         if (true == gi.IsCommanderKilled)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
+            sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!  Click image to continue.");
+            spaces="\n\n                                    ";
+         }
+         else if (TableMgr.MIA == gi.Commander.WoundDaysUntilReturn) 
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nYou as the commander are seriously wounded and sent home. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("HospitalShip") };
+         }
+         else if (0 < gi.Commander.WoundDaysUntilReturn) 
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nYou as the commander are wounded and out of action. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                           ";
+            imge101 = new Image { Name = "EngagementOver", Width = 300, Height = 95, Source = MapItem.theMapImages.GetBitmapImage("Ambulance") };
+         }
+         else if  (true == gi.IsBrokenMainGun)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nMain bun broken. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun") };
+         }
+         else if (true == gi.IsBrokenGunSight) 
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nMain gun site broken. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight") };
+         }
+         else if (null != gi.Death)
+         {
+            if(true == gi.Death.myIsCrewBail)
+            {
+               gi.Statistics.AddOne("NumOfScenariosLost");
+               sbe101.Append("\n\nYour crew bailed. Engagement Lost! Click image to continue.");
+               spaces = "\n\n                                    ";
+               imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c204Bail") };
+            }
+            else if (true == gi.Death.myIsBrewUp)
+            {
+               gi.Statistics.AddOne("NumOfScenariosLost");
+               sbe101.Append("\n\nYour Sherman was destroyed in brew up. Engagement Lost! Click image to continue.");
+               spaces = "\n\n                                    ";
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "ShermanBrewup.gif", UriKind.Absolute);
+               bmi.EndInit();
+               imge101 = new Image { Name = "EngagementOver", Source = bmi, Width = 150, Height = 150 };
+               ImageBehavior.SetAnimatedSource(imge101, bmi);
+            }
+            else
+            {
+               gi.Statistics.AddOne("NumOfScenariosLost");
+               sbe101.Append("\n\nYour Sherman was destroyed by enemy fire. Engagement Lost! Click image to continue.");
+               spaces = "\n\n                                    ";
+               imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 128, Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage") };
+            }
+         }
+         else if (lastReport.VictoryPtsTotalEngagement <= 0 )
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost! Click image to continue.");
+            spaces = "\n                                    ";
+            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
+         }
+         else
+         {
+            gi.Statistics.AddOne("NumOfScenariosWon");
+            sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won! Click image to continue.");
+            spaces = "\n\n                                                  ";
+            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 75, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
+
+         }
+         sbe101.Append("\n\nEngagement Victory Points: ");
          sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
          GameStatistic numFights = gi.Statistics.Find("NumOfFight");
          sbe101.Append("\nNumber of Battles: ");
          sbe101.Append(numFights.Value.ToString());
-         if ( false == optionSingleDayGame.IsEnabled )
+         if (false == optionSingleDayGame.IsEnabled)
          {
             GameStatistic numOfDaysFighting = gi.Statistics.Find("NumOfDaysFighting");
             GameStatistic numOfScenariosWon = gi.Statistics.Find("NumOfScenariosWon");
@@ -4734,96 +4814,7 @@ namespace Pattons_Best
             sbe101.Append("\nCampaign Victory Points: ");
             sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
          }
-         //----------------------------------------
-         Image? imge101 = null;
-         if (true == gi.IsCommanderKilled)
-         {
-            sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!  Click image to continue.");
-            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                    "));
-         }
-         else if (TableMgr.MIA == gi.Commander.WoundDaysUntilReturn) 
-         {
-            sbe101.Append("\n\nYou as the commander are seriously wounded and sent home. Engagement Lost! Click image to continue.");
-            imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("HospitalShip") };
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                    "));
-         }
-         else if (0 < gi.Commander.WoundDaysUntilReturn) 
-         {
-            sbe101.Append("\n\nYou as the commander are wounded and out of action. Engagement Lost! Click image to continue.");
-            imge101 = new Image { Name = "EngagementOver", Width = 300, Height = 95, Source = MapItem.theMapImages.GetBitmapImage("Ambulance") };
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                           "));
-         }
-         else if  (true == gi.IsBrokenMainGun)
-         {
-            sbe101.Append("\n\nMain bun broken. Engagement Lost! Click image to continue.");
-            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun") };
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                    "));
-         }
-         else if (true == gi.IsBrokenGunSight) 
-         {
-            sbe101.Append("\n\nMain gun site broken. Engagement Lost! Click image to continue.");
-            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight") };
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                    "));
-         }
-         else if (null != gi.Death)
-         {
-            if(true == gi.Death.myIsCrewBail)
-            {
-               sbe101.Append("\n\nYour crew bailed. Engagement Lost! Click image to continue.");
-               imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c204Bail") };
-            }
-            else if (true == gi.Death.myIsBrewUp)
-            {
-               sbe101.Append("\n\nYour Sherman was destroyed in brew up. Engagement Lost! Click image to continue.");
-               imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("ShermanBrewup") };
-               BitmapImage bmi = new BitmapImage();
-               bmi.BeginInit();
-               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
-               bmi.EndInit();
-               imge101 = new Image { Name = "EngagementOver", Source = bmi, Width = 150, Height = 150 };
-               ImageBehavior.SetAnimatedSource(imge101, bmi);
-            }
-            else
-            {
-               sbe101.Append("\n\nYour Sherman was destroyed by enemy fire. Engagement Lost! Click image to continue.");
-               imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 128, Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage") };
-            }
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                    "));
-         }
-         else if (lastReport.VictoryPtsTotalEngagement <= 0 )
-         {
-            sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost! Click image to continue.");
-            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                    "));
-         }
-         else
-         {
-            sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won! Click image to continue.");
-            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 75, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
-            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                                   "));
-         }
+         myTextBlock.Inlines.Add(new Run(spaces)) ;
          myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
          return true;
       }

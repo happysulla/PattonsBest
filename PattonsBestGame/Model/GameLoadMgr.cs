@@ -5823,13 +5823,13 @@ namespace Pattons_Best
          string? sValue = reader.GetAttribute("value");
          if (null == sValue)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sNasValueme=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sValue=null");
             return false;
          }
          string? sName = reader.GetAttribute("name");
          if (null == sName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null for sValue=" + sValue);
             return false;
          }
          if ("null" == sName)
@@ -5841,7 +5841,7 @@ namespace Pattons_Best
             mi = theMapItems.Find(sName);
             if (null == mi)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): unable to find mapitem=" + sName);
                return false;
             }
          }
@@ -6955,7 +6955,7 @@ namespace Pattons_Best
          string? sName = reader.GetAttribute("value");
          if (null == sName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): sName=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): sName=null for attribute=" + attribute);
             return false;
          }
          if( attribute != sName )
@@ -7019,7 +7019,7 @@ namespace Pattons_Best
             IMapItems mapItems = new MapItems();
             if (false == ReadXmlMapItems(reader, mapItems, tName))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): ReadXml_MapItems() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): ReadXml_MapItems() returned false for tName=" + tName);
                return false;
             }
             //--------------------------------------------

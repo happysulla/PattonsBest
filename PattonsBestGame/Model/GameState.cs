@@ -451,7 +451,7 @@ namespace Pattons_Best
                Utilities.MapItemNum++;
                break;
             case "Falling and Deep Snow": 
-               gi.BattleStacks.Add(new MapItem("WeatherDeep Snow" + Utilities.MapItemNum.ToString(), zoom, "c25SnowDeep", w1));
+               gi.BattleStacks.Add(new MapItem("WeatherDeepSnow" + Utilities.MapItemNum.ToString(), zoom, "c25SnowDeep", w1));
                Utilities.MapItemNum++;
                gi.BattleStacks.Add(new MapItem("WeatherFallingSnow" + Utilities.MapItemNum.ToString(), zoom, "c26SnowFalling", w2));
                Utilities.MapItemNum++;
