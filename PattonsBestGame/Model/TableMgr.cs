@@ -3045,6 +3045,16 @@ namespace Pattons_Best
             turretTotalAngle = 360 - turretTotalAngle;
          int turretNumRotations = (int)Math.Abs(turretTotalAngle / 60.0);
          //-----------------------------------------------
+         string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
+         if(  (true == mi.IsAntiTankGun()) || (true == mi.IsSelfPropelledGun())  )
+         {
+            if (false == mi.SetMapItemRotation(gi.Sherman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotation() returned false");
+               return FN_ERROR;
+            }
+         }
+         //-----------------------------------------------
          Option optionTankCoveredArc = gi.Options.Find("TankCoveredArc");
          Option optionSlowTransverseCoveredArc = gi.Options.Find("SlowTransverseCoveredArc");
          Option optionSpgCoveredArc = gi.Options.Find("SpgCoveredArc");
@@ -3070,28 +3080,16 @@ namespace Pattons_Best
          }
          else if ( (true == optionAtgCoveredArc.IsEnabled) && (true == mi.IsAntiTankGun())) // GetEnemy_ToHitNumberYourTank()
          {
-            string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
             int coveredArcMod = (int)(25.0 * hullNumRotations);
             if( (true == mi.Name.Contains("Pak43")) || (true == mi.Name.Contains("ATG")) )
                coveredArcMod = (int)(10.0 * hullNumRotations);
             toHitModifierNum += coveredArcMod;
             Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): ATG +" + coveredArcMod.ToString() + " turretTotalAngle=" + turretTotalAngle.ToString() + " #r=" + rotation.ToString() + " mod=" + toHitModifierNum.ToString() + " facing=" + facing);
-            if (false == mi.SetMapItemRotation(gi.Sherman))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotation() returned false");
-               return FN_ERROR;
-            }
          }
          else if ((true == optionSpgCoveredArc.IsEnabled) && (true == mi.IsSelfPropelledGun()))
          {
-            string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
             if ("Front" != facing)
             {
-               if (false == mi.SetMapItemRotation(gi.Sherman))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): Set_MapItemRotation() returned false");
-                  return FN_ERROR;
-               }
                Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): SPG Firing facing=" + facing + " return SPG_FIRE_OUTSIDE_ARC" );
                return SPG_FIRE_OUTSIDE_ARC;
             }
