@@ -3600,7 +3600,6 @@ namespace Pattons_Best
          Option optionSingleDayGame = myGameInstance.Options.Find("SingleDayScenario");
          GameStatistic numWins = statistics.Find("NumWins");
          GameStatistic numOfFight = statistics.Find("NumOfFight");
-         GameStatistic numOfDaysFighting = statistics.Find("NumOfDaysFighting");
          GameStatistic numScenariosWon = statistics.Find("NumScenariosWon");
          GameStatistic numScenariosLost = statistics.Find("NumScenariosLost");
          GameStatistic numOfKilledCrewman = statistics.Find("NumOfKilledCrewman");
@@ -3645,12 +3644,6 @@ namespace Pattons_Best
             {
                tb.Inlines.Add(new LineBreak());
                tb.Inlines.Add(new Run("# of Fights = " + numOfFight.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numOfDaysFighting.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# of Days of Combat = " + numOfDaysFighting.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             }
             //-------------------------------------
             if ((0 < numScenariosWon.Value) || (0 < numScenariosLost.Value))
@@ -3764,12 +3757,6 @@ namespace Pattons_Best
             {
                tb.Inlines.Add(new LineBreak());
                tb.Inlines.Add(new Run("# of Fights = " + numOfFight.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (1 < numOfDaysFighting.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# of Days of Combat = " + numOfDaysFighting.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
             }
             //-------------------------------------
             int totalEngagements = numScenariosWon.Value + numScenariosLost.Value;

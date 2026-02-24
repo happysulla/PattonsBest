@@ -952,7 +952,6 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Possible contact. Click image to continue."));
-                  gi.Statistics.AddOne("NumOfDaysFighting");
                }
                break;
             case "e006a":
@@ -1383,7 +1382,7 @@ namespace Pattons_Best
                if (true == gi.IsAirStrikePending)
                {
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Air Strike is pending. Perform strength check or artillery support while waiting --or-- "));
+                  myTextBlock.Inlines.Add(new Run("Air Strike is pending. Perform another action while waiting --or-- "));
                   Button b1 = new Button() { Content = "Cancel", FontFamily = myFontFam1, FontSize = 12 };
                   b1.Click += Button_Click;
                   myTextBlock.Inlines.Add(new InlineUIContainer(b1));
@@ -1584,43 +1583,61 @@ namespace Pattons_Best
             case "e024":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge024 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c39ArtillerySupport"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  StringBuilder sbe024 = new StringBuilder();
+                  Image? imge024 = null;
+                  if (gi.DieResults[key][0] < 8)
+                  {
+                     sbe024.Append("\n\nArtillery on its way. Click image to continue.");
+                     imge024 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c39ArtillerySupport"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  }
+                  else
+                  {
+                     sbe024.Append("\n\nNo Artillery Support available now. Click image to continue.");
+                     imge024 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c39ArtillerySupportDeny"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  }
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge024));
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  if (7 < gi.DieResults[key][0])
-                     myTextBlock.Inlines.Add(new Run("No Artillery Support available now. Click image to continue."));
-                  else
-                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  myTextBlock.Inlines.Add(new Run(sbe024.ToString()));
                }
                break;
             case "e026":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge026 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c40AirStrike"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  StringBuilder sbe026 = new StringBuilder();
+                  Image? imge026 = null;
+                  if(gi.DieResults[key][0] < 5 )
+                  {
+                     sbe026.Append("\n\nAirstrike arrives in 15 minutes. Click image to continue.");
+                     imge026 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c40AirStrike"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  }
+                  else
+                  {
+                     sbe026.Append("\n\nNo Air Strike available now. Click image to continue.");
+                     imge026 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c40AirStrikeDeny"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  }
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge026));
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  if (4 < gi.DieResults[key][0])
-                     myTextBlock.Inlines.Add(new Run("No Air Strike available now. Click image to continue."));
-                  else
-                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  myTextBlock.Inlines.Add(new Run(sbe026.ToString()));
                }
                break;
             case "e027":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReload"), Width = 100, Height = 100, Name = "MovementResupplyCheckRollEnd" };
+                  StringBuilder sbe027 = new StringBuilder();
+                  Image? imge027 = null;
+                  if (gi.DieResults[key][0] < 8)
+                  {
+                     sbe027.Append("\n\nResupplying occurring. Click image to continue.");
+                     imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReload"), Width = 100, Height = 100, Name = "MovementResupplyCheckRollEnd" };
+                  }
+                  else
+                  {
+                     sbe027.Append("\n\nNo Resupply available now. Click image to continue.");
+                     imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReloadDeny"), Width = 100, Height = 100, Name = "MovementResupplyCheckRollEnd" };
+                  }
                   myTextBlock.Inlines.Add(new Run("                                              "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge027));
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  if (7 < gi.DieResults[key][0])
-                     myTextBlock.Inlines.Add(new Run("No Resupply available now. Click image to continue."));
-                  else
-                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  myTextBlock.Inlines.Add(new Run(sbe027.ToString()));
                }
                break;
             case "e030": // This event is only shown if battle check resulted in combat
@@ -4753,16 +4770,15 @@ namespace Pattons_Best
          }
          else if (null != gi.Death)
          {
-            if(true == gi.Death.myIsCrewBail)
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (true == gi.Death.myIsCrewBail)
             {
-               gi.Statistics.AddOne("NumOfScenariosLost");
                sbe101.Append("\n\nYour crew bailed. Engagement Lost! Click image to continue.");
                spaces = "\n\n                                    ";
                imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c204Bail") };
             }
             else if (true == gi.Death.myIsBrewUp)
             {
-               gi.Statistics.AddOne("NumOfScenariosLost");
                sbe101.Append("\n\nYour Sherman was destroyed in brew up. Engagement Lost! Click image to continue.");
                spaces = "\n\n                                    ";
                BitmapImage bmi = new BitmapImage();
@@ -4774,7 +4790,6 @@ namespace Pattons_Best
             }
             else
             {
-               gi.Statistics.AddOne("NumOfScenariosLost");
                sbe101.Append("\n\nYour Sherman was destroyed by enemy fire. Engagement Lost! Click image to continue.");
                spaces = "\n\n                                    ";
                imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 128, Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage") };
@@ -4793,7 +4808,6 @@ namespace Pattons_Best
             sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won! Click image to continue.");
             spaces = "\n\n                                                  ";
             imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 75, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
-
          }
          sbe101.Append("\n\nEngagement Victory Points: ");
          sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
@@ -4802,18 +4816,16 @@ namespace Pattons_Best
          sbe101.Append(numFights.Value.ToString());
          if (false == optionSingleDayGame.IsEnabled)
          {
-            GameStatistic numOfDaysFighting = gi.Statistics.Find("NumOfDaysFighting");
             GameStatistic numOfScenariosWon = gi.Statistics.Find("NumOfScenariosWon");
             GameStatistic numOfScenariosLost = gi.Statistics.Find("NumOfScenariosLost");
             sbe101.Append("\nNumber of Engagements Won: ");
             sbe101.Append(numOfScenariosWon.Value.ToString());
             sbe101.Append("\nNumber of Engagements Lost: ");
             sbe101.Append(numOfScenariosLost.Value.ToString());
-            sbe101.Append("\nNumber of Days of Fighting: ");
-            sbe101.Append(numOfDaysFighting.Value.ToString());
             sbe101.Append("\nCampaign Victory Points: ");
             sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
          }
+         myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
          myTextBlock.Inlines.Add(new Run(spaces)) ;
          myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
          return true;
