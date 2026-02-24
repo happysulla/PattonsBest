@@ -36,6 +36,7 @@ namespace Pattons_Best
       LE_SHOW_CREW_SWITCH,
       LE_SHOW_CREW_REPLACE,
       LE_SHOW_CREW_RETURN,
+      LE_SHOW_CREW_RESCUE,
       //-------------
       LE_SHOW_ROUND_COMBAT,
       LE_SHOW_START_AREA,
@@ -184,6 +185,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
          SetOn(LogEnum.LE_SHOW_CREW_RETURN);
+         SetOn(LogEnum.LE_SHOW_CREW_RESCUE);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          //SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);

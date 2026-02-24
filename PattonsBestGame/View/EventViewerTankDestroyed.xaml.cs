@@ -960,18 +960,19 @@ namespace Pattons_Best
             Button b1 = CreateButton(cm, false);
             myGrid.Children.Add(b1);
             Grid.SetRow(b1, rowNum);
-            Grid.SetColumn(b1, 0);
+            Grid.SetColumn(b1, 0);      // UpdateGridRowBailoutRescue()
             ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing;
             if (null != rescuer)
             {
                Button b2 = CreateButton(rescuer, false);
                myGrid.Children.Add(b2);
                Grid.SetRow(b2, rowNum);
-               Grid.SetColumn(b2, 1);
+               Grid.SetColumn(b2, 1);   // UpdateGridRowBailoutRescue()
+               Logger.Log(LogEnum.LE_SHOW_CREW_RESCUE, "UpdateGridRowBailoutRescue(): rescuer=" + rescuer.Role + " for i=" + i.ToString());
                Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowRescues[i].myRescueWoundModifier };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
-               Grid.SetColumn(label2, 2);
+               Grid.SetColumn(label2, 2); 
                //--------------------------------
                if (Utilities.NO_RESULT == myGridRowRescues[i].myDieRollRescue)
                {
@@ -1029,14 +1030,15 @@ namespace Pattons_Best
             Button b1 = CreateButton(cm, false);
             myGrid.Children.Add(b1);
             Grid.SetRow(b1, rowNum);
-            Grid.SetColumn(b1, 0);
+            Grid.SetColumn(b1, 0);  // UpdateGridRowBrewUp()
             ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing;
             if (null != rescuer)
             {
                Button b2 = CreateButton(rescuer, false);
                myGrid.Children.Add(b2);
                Grid.SetRow(b2, rowNum);
-               Grid.SetColumn(b2, 1);
+               Grid.SetColumn(b2, 1); // UpdateGridRowBrewUp()
+               Logger.Log(LogEnum.LE_SHOW_CREW_RESCUE, "UpdateGridRowBrewUp(): rescuer=" + rescuer.Role + " for i=" + i.ToString());
                Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowRescues[i].myRescueWoundModifier };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
@@ -1327,13 +1329,14 @@ namespace Pattons_Best
                myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
             case E0481Enum.BAILOUT_RESCUE_ROLL:
-               ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing;
+               ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing; // ShowDieResults(BAILOUT_RESCUE_ROLL)
                if (null == rescuer)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGridRowRescues[i].myCrewMemberRescuing=null for i=" + i.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGridRowRescues[i].my_CrewMemberRescuing=null for i=" + i.ToString());
                   return;
                }
-               if( "Commander" == rescuer.Role )
+               Logger.Log(LogEnum.LE_SHOW_CREW_RESCUE, "ShowDieResults(BAILOUT_RESCUE_ROLL): rescuer=" + rescuer.Role + " for i=" + i.ToString());
+               if ( "Commander" == rescuer.Role )
                   myGameInstance.IsCommanderRescuePerformed = true;
                myGridRowRescues[i].myDieRollRescue = dieRoll;
                int combo = dieRoll + myGridRowRescues[i].myRescueWoundModifier;
@@ -1512,6 +1515,7 @@ namespace Pattons_Best
                      int rowNum = Grid.GetRow(rect);
                      int i = rowNum - STARTING_ASSIGNED_ROW;
                      myGridRowRescues[i].myCrewMemberRescuing = mySelectedCrewman;
+                     Logger.Log(LogEnum.LE_SHOW_CREW_RESCUE, "Grid_MouseDown(): rescuer=" + mySelectedCrewman.Role + " for i=" + i.ToString());
                      myGridRowRescues[i].myRescueWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, mySelectedCrewman, false, true, false);
                      if (TableMgr.FN_ERROR == myGridRowRescues[i].myRescueWoundModifier)
                      {
