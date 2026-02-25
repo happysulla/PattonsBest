@@ -2257,7 +2257,7 @@ r24.1	"<Bold>r24.1 Tank Replacement</Bold>
 <LineBreak/><LineBreak/>
 Players beginning a campaign game are issued an M4 tank with a type A turret with a 75 gun (Tank #1).
 <LineBreak/><LineBreak/>
-Tanks may be replaced udner two circumstances: after you have had a tank shot out from under you (knoched out) in combat or during a refit period on the Campaign 
+Tanks may be replaced under two circumstances: after you have had a tank shot out from under you (knocked out) in combat or during a refit period on the Campaign 
 <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
 There is no historical basis for replacing tanks during refits, and players may keep their old model as long as they can. Destroyed tanks must be replaced per the Tank 
@@ -2341,8 +2341,7 @@ During a refit period, you have the option of replacing your current tank per
 If the refit takes at least 7 days, you may attempt to improve your crew ratings per 
 <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 and train your crew to use the gyrostablilizer per 
-<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. HVSS are only added to a tank on the first day of operation per 
-<InlineUIContainer><Button Content='r5.25' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r27.1	"<Bold>r27.1 Crew Ratings </Bold>
 <LineBreak/><LineBreak/>
 Roll 1D separately for each crewman, even those joining the crew during the refit.
@@ -2366,7 +2365,7 @@ Tanks only get fitted with an HVSS on first day of operating tank when the tank 
 <InlineUIContainer><Button Content='r27.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Stabilizer Use"
 r27.21	"<Bold>r27.21 Training Crew</Bold>
 <LineBreak/><LineBreak/>
-During a refit of at least 7 days after November 1, 1944, you may have your crew trained in the use of the gyrostabalizier if the combined rating of the crew is 30 or higher. 
+During a refit of at least 7 days, you may have your crew trained in the use of the gyrostabalizier if the combined rating of the crew is 30 or higher. 
 <LineBreak/><LineBreak/>
 Once trained, your crew stays so unless your gunner is lost. Other crew casulaties have no effect. 
 <LineBreak/><LineBreak/>
