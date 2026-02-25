@@ -164,7 +164,8 @@ namespace Pattons_Best
             myAssignables.Add(cm);
             myGridRows[i] = new GridRow();
             Button b = CreateButton(cm, IS_ENABLE, false, NO_STATS, NO_ADORN, IS_CURSOR);
-            myCursors[cm.Name] = Utilities.ConvertToCursor(b, hotPoint);
+            string name = Utilities.RemoveSpaces(cm.Name);
+            myCursors[name] = Utilities.ConvertToCursor(b, hotPoint);
             ++i;
          }
          //--------------------------------------------------
@@ -628,9 +629,7 @@ namespace Pattons_Best
                if (STARTING_ASSIGNED_ROW <= rowNum) // only support dropping on grid row - all other drops just disable the move
                {
                   int i = rowNum - STARTING_ASSIGNED_ROW;
-                  #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-                    ICrewMember cm = myGridRows[i].myCrewMember;
-                  #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+                  ICrewMember? cm = myGridRows[i].myCrewMember;
                   if ( null == cm)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGridRows[i].myMapItem=null for b.Name=" + b.Name);
@@ -653,7 +652,8 @@ namespace Pattons_Best
             }
             if (null == myCrewMemberDragged) // When finish dragging all Crewmembers, cannot drag anymore
                return;
-            myGrid.Cursor = myCursors[myCrewMemberDragged.Name]; // change cursor of button being dragged
+            string name = Utilities.RemoveSpaces(myCrewMemberDragged.Name);
+            myGrid.Cursor = myCursors[name]; // change cursor of button being dragged
             if (STARTING_ASSIGNED_ROW <= rowNum)
             {
                int i = rowNum - STARTING_ASSIGNED_ROW;
