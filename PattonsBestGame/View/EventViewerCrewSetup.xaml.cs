@@ -164,8 +164,8 @@ namespace Pattons_Best
             myAssignables.Add(cm);
             myGridRows[i] = new GridRow();
             Button b = CreateButton(cm, IS_ENABLE, false, NO_STATS, NO_ADORN, IS_CURSOR);
-            string name = Utilities.RemoveSpaces(cm.Name);
-            myCursors[name] = Utilities.ConvertToCursor(b, hotPoint);
+            string role = Utilities.RemoveSpaces(cm.Role);
+            myCursors[role] = Utilities.ConvertToCursor(b, hotPoint);
             ++i;
          }
          //--------------------------------------------------
@@ -284,7 +284,7 @@ namespace Pattons_Best
                foreach (ICrewMember cm in myAssignables)
                {
                   bool isRectangleBorderAdded = false; // If dragging a map item, show rectangle around that MapItem
-                  if (null != myCrewMemberDragged && cm.Name == myCrewMemberDragged.Name)
+                  if (null != myCrewMemberDragged && cm.Role == myCrewMemberDragged.Role)
                      isRectangleBorderAdded = true;
                   Button b = CreateButton(cm, IS_ENABLE, isRectangleBorderAdded, IS_STATS, NO_ADORN, NO_CURSOR);
                   myStackPanelAssignable.Children.Add(b);
@@ -652,8 +652,8 @@ namespace Pattons_Best
             }
             if (null == myCrewMemberDragged) // When finish dragging all Crewmembers, cannot drag anymore
                return;
-            string name = Utilities.RemoveSpaces(myCrewMemberDragged.Name);
-            myGrid.Cursor = myCursors[name]; // change cursor of button being dragged
+            string role = Utilities.RemoveSpaces(myCrewMemberDragged.Role);
+            myGrid.Cursor = myCursors[role]; // change cursor of button being dragged
             if (STARTING_ASSIGNED_ROW <= rowNum)
             {
                int i = rowNum - STARTING_ASSIGNED_ROW;
