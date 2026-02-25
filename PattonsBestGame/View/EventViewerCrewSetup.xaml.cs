@@ -197,7 +197,7 @@ namespace Pattons_Best
          }
          if (false == UpdateCheckBoxPanel())
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGrid():  UpdateCheckBoxPanel() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGrid():  Update_CheckBoxPanel() returned false");
             return false;
          }
          if (false == UpdateGridRows())
@@ -303,7 +303,7 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCheckBoxPanel(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Update_CheckBoxPanel(): myGameInstance=null");
             return false;
          }
          myStackPanelCheckMarks.Children.Clear();

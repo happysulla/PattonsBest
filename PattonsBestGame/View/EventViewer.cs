@@ -203,9 +203,9 @@ namespace Pattons_Best
             case GameAction.ShowRoads:
             case GameAction.UpdateAfterActionReport:
                break;
-            case GameAction.UpdateGameOptions:
-               if (false == OpenEvent(gi, gi.EventActive))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
+            case GameAction.UpdateGameOptions: // when this taken out, the game option changes what is displayed cause it to hang
+               //if (false == OpenEvent(gi, gi.EventActive))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingDayOfRest:

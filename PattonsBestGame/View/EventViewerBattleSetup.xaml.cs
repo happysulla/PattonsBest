@@ -10,14 +10,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
+using static Pattons_Best.EventViewerCrewSetup;
 
 namespace Pattons_Best
 {
    public partial class EventViewerBattleSetup : UserControl
    {
       public delegate bool EndBattleSetupCallback();
-      private const int STARTING_ASSIGNED_ROW = 6;
-      private const int MAX_GRID_ROWS = 14;
+      private const int STARTING_ASSIGNED_ROW = 8;
+      private const int MAX_GRID_ROWS = 16;
       private const int NO_FACING = -1;
       private const int EXISTING_UNIT = 1000;
       private const int ADV_FIRE_NO_CHANCE = 1001;
@@ -492,6 +493,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateGrid(): UpdateAssignablePanel() returned false");
             return false;
          }
+         if (false == UpdateCheckBoxPanel())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGrid(): UpdateCheckBoxPanel() returned false");
+            return false;
+         }
          if (false == UpdateGridRows())
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateGrid(): UpdateGridRows() returned false");
@@ -680,6 +686,26 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
                return false;
          }
+         return true;
+      }
+      private bool UpdateCheckBoxPanel()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CheckBoxPanel(): myGameInstance=null");
+            return false;
+         }
+         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation");
+         //-----------------------------------
+         myStackPanelCheckMarks.Children.Clear();
+         CheckBox cb = new CheckBox() { FontSize = 12, Margin = new Thickness(5, 0, 0, 0), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center };
+         cb.Content = "Click to autosetup enemy location/facing";
+         cb.IsChecked = option.IsEnabled;
+         //------------------------------------
+         cb.Checked += CheckBox_Checked;
+         cb.Unchecked += CheckBox_Unchecked;
+         cb.IsEnabled = true;
+         myStackPanelCheckMarks.Children.Add(cb);
          return true;
       }
       private bool UpdateGridRows()
@@ -1975,6 +2001,38 @@ namespace Pattons_Best
                }
             }
          }
+      }
+      private void CheckBox_Checked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): myGameInstance=null");
+            return;
+         }
+         //---------------------------
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = true;
+         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation");
+         option.IsEnabled = true;
+         //---------------------------
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): UpdateGrid() return false");
+      }
+      private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): myGameInstance=null");
+            return;
+         }
+         //---------------------------
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = false;
+         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation");
+         option.IsEnabled = false;
+         //---------------------------
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): UpdateGrid() return false");
       }
    }
 }

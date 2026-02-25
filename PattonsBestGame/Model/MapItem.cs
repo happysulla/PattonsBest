@@ -897,7 +897,7 @@ namespace Pattons_Best
             IMapItem? mi = o as IMapItem;
             if (null == mi)
                return null;
-            if (miName == Utilities.RemoveSpaces(mi.Name))
+            if ( (miName == Utilities.RemoveSpaces(mi.Name))  || (miName == mi.Name) )
                return mi;
          }
          return null;

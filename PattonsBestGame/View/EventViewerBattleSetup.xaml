@@ -6,61 +6,64 @@
              xmlns:local="clr-namespace:Pattons_Best"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-   <Grid Name="myGrid" MinWidth="600" MaxWidth="600" Background="#FFB9EA9E" >
-      <Grid.ColumnDefinitions>
-         <ColumnDefinition Width="1*"/>
-         <ColumnDefinition Width="1*"/>
-         <ColumnDefinition Width="1*"/>
-         <ColumnDefinition Width="1*"/>
-         <ColumnDefinition Width="1*"/>
-         <ColumnDefinition Width="1*"/>
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
-        <RowDefinition Height="Auto"></RowDefinition>
-        <RowDefinition Height="Auto"></RowDefinition>
+    <Grid Name="myGrid" MinWidth="600" MaxWidth="600" Background="#FFB9EA9E" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-      <StackPanel Grid.Row="0" Grid.ColumnSpan="6" Orientation="Horizontal">
-         <TextBlock Name="myTextBlockHeader" Text="r4.62 Battle Setup" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-         <Button Name='myButtonR462' Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
-         <Button Name='myButtonR174' Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
-         <Button Name='myButtonR512' Content='r5.12' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
-         <Button Name='myButtonR1232' Content='r12.32' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
-         <Button Name='myButtonR1233' Content='r12.33' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
-         <Button Name='myButtonR1234' Content='r12.34' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
-      </StackPanel>
-      <Rectangle Grid.Row="1" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
-      <TextBlock Grid.Row="2" Grid.ColumnSpan="6" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
-        You find a high alter of godly power. Click to Select and Move Monk to grid row to perform invocation.
-        <LineBreak/>or click campfire to skip event.
-      </TextBlock>
-      <StackPanel Grid.Row="3" Grid.ColumnSpan="6" Name="myStackPanelAssignable" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
-         <Rectangle  Height="42" Width="42" Stroke="Black" />
-      </StackPanel>
-      <Rectangle Grid.Row="4" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
-      <!--Table Header Row-->
-      <TextBlock Grid.Row="5" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock0">Roll</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Enemy Unit</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Sector</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="3" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Range</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Vehicle Facing</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="5" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock5">Terrain</TextBlock>
-   </Grid>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="6" Orientation="Horizontal">
+            <TextBlock Name="myTextBlockHeader" Text="r4.62 Battle Setup" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+            <Button Name='myButtonR462' Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+            <Button Name='myButtonR174' Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+            <Button Name='myButtonR512' Content='r5.12' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+            <Button Name='myButtonR1232' Content='r12.32' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+            <Button Name='myButtonR1233' Content='r12.33' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+            <Button Name='myButtonR1234' Content='r12.34' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+        </StackPanel>
+        <Rectangle Grid.Row="1" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="6" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
+        You find a high alter of godly power. Click to Select and Move Monk to grid row to perform invocation.<LineBreak/>or click campfire to skip event.
+        </TextBlock>
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="6" Name="myStackPanelAssignable" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
+            <Rectangle  Height="42" Width="42" Stroke="Black" />
+        </StackPanel>
+        <Rectangle Grid.Row="4" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="6" DockPanel.Dock="Top" Name="myStackPanelCheckMarks" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
+            <CheckBox Content="Click to perform autosetup of location/facing" FontSize='12' Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </StackPanel>
+        <Rectangle Grid.Row="6" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
+        <!--Table Header Row-->
+        <TextBlock Grid.Row="7" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock0">Roll</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Enemy Unit</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Sector</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="3" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Range</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Vehicle Facing</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="5" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock5">Terrain</TextBlock>
+    </Grid>
 </UserControl>
