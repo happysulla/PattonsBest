@@ -978,6 +978,10 @@ namespace Pattons_Best
          //----------------------------------------------------
          bool isDoNothingDueToInterdicted = mi.IsInterdicted;
          //----------------------------------------------------
+         string targetNameIfFiringAtFront = "none";
+         if (null != gi.ShermanFiringAtFront)
+            targetNameIfFiringAtFront = gi.ShermanFiringAtFront.Name;
+         //----------------------------------------------------
          int modifier = GetEnemyActionModifier(gi, mi);
          if (TableMgr.FN_ERROR == modifier)
          {
@@ -1247,7 +1251,7 @@ namespace Pattons_Best
                   }
                   else if (dieRoll < 81)
                   {
-                     if (true == gi.IsShermanFiringAtFront)
+                     if (mi.Name == targetNameIfFiringAtFront)
                      {
                         if (true == isDoNothingDueToWeather)
                            returnValue = "Do Nothing (w)";
@@ -1461,7 +1465,7 @@ namespace Pattons_Best
                   }
                   else if (dieRoll < 86)
                   {
-                     if (true == gi.IsShermanFiringAtFront)
+                     if (mi.Name == targetNameIfFiringAtFront)
                      {
                         if (true == isDoNothingDueToWeather)
                            returnValue = "Do Nothing (w)";
@@ -1625,7 +1629,7 @@ namespace Pattons_Best
                   }
                   else if (dieRoll < 96)
                   {
-                     if (true == gi.IsShermanFiringAtFront)
+                     if (mi.Name == targetNameIfFiringAtFront)
                      {
                         if (true == isDoNothingDueToWeather)
                            returnValue = "Do Nothing (w)";

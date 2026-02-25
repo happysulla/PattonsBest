@@ -2341,7 +2341,8 @@ During a refit period, you have the option of replacing your current tank per
 If the refit takes at least 7 days, you may attempt to improve your crew ratings per 
 <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 and train your crew to use the gyrostablilizer per 
-<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. HVSS are only added to a tank on the first day of operation per 
+<InlineUIContainer><Button Content='r5.25' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r27.1	"<Bold>r27.1 Crew Ratings </Bold>
 <LineBreak/><LineBreak/>
 Roll 1D separately for each crewman, even those joining the crew during the refit.
@@ -2357,11 +2358,15 @@ When turned on, it would keep the gun in a level position while the tank moved. 
 <LineBreak/><LineBreak/>
 In practice, most crews found the Stabilizer dangerous (the gun would move up and down on its own) and difficult to use. However, others thought the Stabilizer was a great asset if properly used.
 <LineBreak/><LineBreak/>
+Tanks only get fitted with an HVSS on first day of operating tank when the tank replacement roll occurs per 
+<InlineUIContainer><Button Content='r5.25' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
+<InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r27.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Training Crew<LineBreak/>
 <InlineUIContainer><Button Content='r27.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Stabilizer Use"
 r27.21	"<Bold>r27.21 Training Crew</Bold>
 <LineBreak/><LineBreak/>
-During a refit of at least 7 days, you may have your crew trained in the use of the gyrostabalizier if the combined rating of the crew is 30 or higher. 
+During a refit of at least 7 days after November 1, 1944, you may have your crew trained in the use of the gyrostabalizier if the combined rating of the crew is 30 or higher. 
 <LineBreak/><LineBreak/>
 Once trained, your crew stays so unless your gunner is lost. Other crew casulaties have no effect. 
 <LineBreak/><LineBreak/>

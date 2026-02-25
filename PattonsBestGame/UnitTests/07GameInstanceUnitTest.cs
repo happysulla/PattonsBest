@@ -398,6 +398,10 @@ namespace Pattons_Best
          Utilities.MapItemNum++;
          enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
          myGameInstanceSave.TargetMg = enemy;
+         enemyName = "LW" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+         myGameInstanceSave.ShermanFiringAtFront = enemy;
          //----------------------------------------------
          myGameInstanceSave.ShermanHvss = new MapItem("ShermanHvss555", 1.0, "c75Hvss", t);
          //----------------------------------------------
@@ -448,7 +452,6 @@ namespace Pattons_Best
          //----------------------------------------------
          myGameInstanceSave.SwitchedCrewMemberRole = "Frankie";
          myGameInstanceSave.AssistantOriginalRating = 100;
-         myGameInstanceSave.IsShermanFiringAtFront = true;
          myGameInstanceSave.IsShermanDeliberateImmobilization = false;
          myGameInstanceSave.ShermanTypeOfFire = "nickle";
          myGameInstanceSave.NumSmokeAttacksThisRound = 101;
@@ -846,6 +849,24 @@ namespace Pattons_Best
                return false;
             }
          }
+         if (null == left.ShermanFiringAtFront && null != right.ShermanFiringAtFront) // test if one is null and one is not null
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanFiringAtFront=null");
+            return false;
+         }
+         if (null != left.ShermanFiringAtFront && null == right.ShermanFiringAtFront) // test if one is null and one is not null
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.ShermanFiringAtFront=null");
+            return false;
+         }
+         if (null != left.ShermanFiringAtFront && null != right.ShermanFiringAtFront)
+         {
+            if (false == IsEqual(left.ShermanFiringAtFront, right.ShermanFiringAtFront))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanFiringAtFront != right.ShermanFiringAtFront");
+               return false;
+            }
+         }
          if (null == left.ShermanHvss && null != right.ShermanHvss)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanHvss=null");
@@ -860,7 +881,7 @@ namespace Pattons_Best
          {
             if (false == IsEqual(left.ShermanHvss, right.ShermanHvss))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanHvss != right.TargetMg");
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanHvss != right.ShermanHvss");
                return false;
             }
          }
@@ -1051,11 +1072,6 @@ namespace Pattons_Best
          if (left.AssistantOriginalRating != right.AssistantOriginalRating)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.AssistantOriginalRating != right.SwitchedCrewMemberRole");
-            return false;
-         }
-         if (left.IsShermanFiringAtFront != right.IsShermanFiringAtFront)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.IsShermanFiringAtFront != right.IsShermanFiringAtFront");
             return false;
          }
          if (left.IsShermanDeliberateImmobilization != right.IsShermanDeliberateImmobilization)

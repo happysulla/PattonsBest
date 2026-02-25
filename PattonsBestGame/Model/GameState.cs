@@ -1516,7 +1516,7 @@ namespace Pattons_Best
          gi.IsRetreatToStartArea = false;
          gi.IsShermanAdvancingOnBattleBoard = false; // PrepareFor_Battle()
          //---------------------------------
-         gi.IsShermanFiringAtFront = false; // PrepareFor_Battle()
+         gi.ShermanFiringAtFront = null; ; // PrepareFor_Battle()
          gi.IsShermanDeliberateImmobilization = false;
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
@@ -4056,11 +4056,11 @@ namespace Pattons_Best
                      if ( (10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day) ) // must be Nov 44 before tanks have HVSS
                      {
                         gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
-                        SetCommand(gi, action, GameAction.MorningBriefingTankReplacementHvssRoll, "e007e"); // HVSS Roll
+                        SetCommand(gi, action, GameAction.MorningBriefingTankReplacementHvssRoll, "e007e"); // perform an HVSS Roll
                      }
                      else
                      {
-                        if (false == TankReplacementEnd(gi, action))
+                        if (false == TankReplacementEnd(gi, action)) // GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll)
                         {
                            returnStatus = "TankReplacement_End() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
@@ -4093,7 +4093,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if( false == TankReplacementEnd(gi, action))
+                     if( false == TankReplacementEnd(gi, action)) // GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll)
                      {
                         returnStatus = "TankReplacement_End() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
@@ -4131,13 +4131,21 @@ namespace Pattons_Best
                      shermanName1 = "Sherman76";
                   shermanName1 += Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
-                  gi.Sherman = new MapItem(shermanName1, 2.0, tankImageName1, gi.Home); // GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementEnd)
-                  gi.BattleStacks.Add(gi.Sherman); // GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementEnd)
-                  //---------------------------------
-                  if (false == TankReplacementEnd(gi, action))
+                  gi.Sherman = new MapItem(shermanName1, 2.0, tankImageName1, gi.Home); // GameStateMorningBriefing.PerformAction(MorningBriefing_TankReplacementEnd)
+                  gi.BattleStacks.Add(gi.Sherman); // GameStateMorningBriefing.PerformAction(MorningBriefingTank_ReplacementEnd)
+                 //---------------------------------
+                  if ((10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day)) // must be Nov 44 before tanks have HVSS
                   {
-                     returnStatus = "TankReplacement_End() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementEnd): " + returnStatus);
+                     gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
+                     SetCommand(gi, action, GameAction.MorningBriefingTankReplacementHvssRoll, "e007e"); // perform an HVSS Roll
+                  }
+                  else
+                  {
+                     if (false == TankReplacementEnd(gi, action)) // GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll)
+                     {
+                        returnStatus = "TankReplacement_End() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.SetupCombatCalendarRoll: // only applies when coming from Setup GamePhase
@@ -4442,33 +4450,15 @@ namespace Pattons_Best
          //-----------------------------------------
          if ((null == gi.ShermanHvss) && (29 < totalRating) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day))) // retrofits must be greater than 7 days for training 
          {
-            GameEngine.theInGameFeats.AddOne("HvssTrained");
+            GameEngine.theInGameFeats.AddOne("HvssTrained"); // even though trained, HVSS do not show up until after November 1944
+            gi.Statistics.AddOne("HvssTrained"); // even though trained, HVSS do not show up until after November 1944
             gi.TrainedGunners.Add(gi.Gunner.Name);
             SetCommand(gi, action, GameAction.DieRollActionNone, "e006c");
-            //-------------------
-            ITerritory? t = Territories.theTerritories.Find("Hvss", tType); // make sure tank has an HVSS spot
-            if (null == t)
-            {
-               if (false == AdvancePastRetrofit(gi, action))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
-                  return false;
-               }
-            }
-            else
-            {
-               string mapItemName = "Hvss" + Utilities.MapItemNum.ToString();
-               Utilities.MapItemNum++;
-               gi.ShermanHvss = new MapItem(mapItemName, 1.0, "c75Hvss", t);
-            }
          }
-         else
+         else if (false == AdvancePastRetrofit(gi, action))
          {
-            if( false == AdvancePastRetrofit(gi, action))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
-               return false;
-            }
+            Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
+            return false;
          }
          return true;
       }
@@ -4486,13 +4476,10 @@ namespace Pattons_Best
             {
                SetCommand(gi, action, GameAction.DieRollActionNone, "e006b"); // after tank replacement which means should be Retrofit - crew training
             }
-            else
+            else  if (false == AdvancePastRetrofit(gi, action))
             {
-               if (false == AdvancePastRetrofit(gi, action))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "TankReplacement_End(): AdvancePastRetrofit() returned error");
-                  return false;
-               }
+               Logger.Log(LogEnum.LE_ERROR, "TankReplacement_End(): AdvancePastRetrofit() returned error");
+               return false;
             }
          }
          else
@@ -10132,13 +10119,13 @@ namespace Pattons_Best
             }
             if ("Front" == facingOfTarget)
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=TRUE");
-               gi.IsShermanFiringAtFront = true; // Sherman is firing at front of target
+               gi.ShermanFiringAtFront = gi.TargetMainGun; // Sherman is firing at front of target
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront" + gi.ShermanFiringAtFront.Name);
             }
             else
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=FALSE");
-               gi.IsShermanFiringAtFront = false; // Sherman is firing at front of target
+               gi.ShermanFiringAtFront = null;  // Sherman is firing at front of target
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront = null");
             }
          }
          //---------------------------------------------------------------
@@ -10306,13 +10293,13 @@ namespace Pattons_Best
             }
             if ("Front" == facingOfTarget)
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=TRUE");
-               gi.IsShermanFiringAtFront = true; // Sherman is firing at front of target
+               gi.ShermanFiringAtFront = gi.TargetMainGun; // Sherman is firing at front of target
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.ShermanFiringAtFront=" + gi.ShermanFiringAtFront.Name);
             }
             else
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.IsShermanFiringAtFront=FALSE");
-               gi.IsShermanFiringAtFront = false; // Sherman is firing at front of target
+               gi.ShermanFiringAtFront = null;  // Sherman is firing at front of target
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.ShermanFiringAtFront=FALSE");
             }
          }
          //---------------------------------------------------------------
@@ -11417,7 +11404,7 @@ namespace Pattons_Best
             if (true == gi.TargetMainGun.IsKilled)
             {
                gi.TargetMainGun = null;           // if target is killed in this round
-               gi.IsShermanFiringAtFront = false; // if target is killed in this round
+               gi.ShermanFiringAtFront = null;  // if target is killed in this round
             }
          }
          //-------------------------------------------------------
@@ -11888,7 +11875,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "EveningDebriefing_ResetDay(): clear all crewactions");
             gi.GunLoads.Clear();
             gi.TargetMainGun = null;           // EveningDebriefing_ResetDay()
-            gi.IsShermanFiringAtFront = false; // EveningDebriefing_ResetDay()
+            gi.ShermanFiringAtFront = null;  // EveningDebriefing_ResetDay()
             //-------------------------------------------------------
             gi.EnemyStrengthCheckTerritory = null;
             gi.ArtillerySupportCheck = null;
@@ -11908,7 +11895,7 @@ namespace Pattons_Best
             gi.IsFlankingFire = false;
             gi.IsEnemyAdvanceComplete = false;
             //-------------------------------------------------------
-            gi.IsShermanFiringAtFront = false;              // EveningDebriefing_ResetDay()
+            gi.ShermanFiringAtFront = null;              // EveningDebriefing_ResetDay()
             gi.IsShermanDeliberateImmobilization = false;
             gi.ShermanTypeOfFire = "";
             gi.NumSmokeAttacksThisRound = 0;

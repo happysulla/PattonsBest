@@ -75,6 +75,7 @@ namespace Pattons_Best
       public IMapItem Sherman { set; get; } = new MapItem("Sherman75" + Utilities.MapItemNum.ToString(), 2.0, "t01", new Territory());
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
+      public IMapItem? ShermanFiringAtFront { set; get; } = null;
       public IMapItem? ShermanHvss { set; get; } = null;
       public ICrewMember? ReturningCrewman { set; get; } = null;
       //------------------------------------------------
@@ -107,7 +108,6 @@ namespace Pattons_Best
       public double ShermanTurretRotationOld { set; get; } = 0.0;
       public bool IsShermanTurretRotatedThisRound { set; get; } = false;
       public int ShermanConsectiveMoveAttempt { set; get; } = 0;
-      public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
       public bool IsMalfunctionedMainGun { set; get; } = false;

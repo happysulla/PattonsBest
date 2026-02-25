@@ -2435,7 +2435,7 @@ namespace Pattons_Best
             case "e053e":
                if( false == UpdateEventContentToKillVehicle(gi))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentToKillVehicle() returned error for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEvent_ContentToKillVehicle() returned error for key=" + key);
                   return false;
                }
                break;
@@ -4080,10 +4080,18 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         if (0 == gi.ShermanHits.Count)
+         if (0 == gi.ShermanHits.Count) // if already fired when loading game, 
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): gi.Sherman_Hits.Count=0 for key=" + key);
-            return false;
+            myTextBlock.Inlines.Add(new Run("Already checked results of this hit on enemy."));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
+            Image imge53e = new Image { Name = "Continue53f_1", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+            myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("Click image to continue."));
+            return true;
          }
          //------------------------------------
          ShermanAttack hit = gi.ShermanHits[0];
@@ -4811,20 +4819,20 @@ namespace Pattons_Best
          }
          sbe101.Append("\n\nEngagement Victory Points: ");
          sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
-         GameStatistic numFights = gi.Statistics.Find("NumOfFight");
-         sbe101.Append("\nNumber of Battles: ");
-         sbe101.Append(numFights.Value.ToString());
          if (false == optionSingleDayGame.IsEnabled)
          {
+            sbe101.Append("\nCampaign Victory Points: ");
+            sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
             GameStatistic numOfScenariosWon = gi.Statistics.Find("NumOfScenariosWon");
             GameStatistic numOfScenariosLost = gi.Statistics.Find("NumOfScenariosLost");
             sbe101.Append("\nNumber of Engagements Won: ");
             sbe101.Append(numOfScenariosWon.Value.ToString());
             sbe101.Append("\nNumber of Engagements Lost: ");
             sbe101.Append(numOfScenariosLost.Value.ToString());
-            sbe101.Append("\nCampaign Victory Points: ");
-            sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
          }
+         GameStatistic numFights = gi.Statistics.Find("NumOfFight");
+         sbe101.Append("\nNumber of Battles: ");
+         sbe101.Append(numFights.Value.ToString());
          myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
          myTextBlock.Inlines.Add(new Run(spaces)) ;
          myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
@@ -6877,6 +6885,10 @@ namespace Pattons_Best
                            break;
                         case "Continue53f":
                            action = GameAction.BattleRoundSequenceShermanToKillRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue53f_1":
+                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue54a":

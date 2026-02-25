@@ -56,6 +56,7 @@ namespace Pattons_Best
       IMapItem? TargetMainGun { set; get; }
       IMapItem? TargetMg { set; get; }
       IMapItem? ShermanHvss { set; get; }
+      IMapItem? ShermanFiringAtFront { set; get; }
       ICrewMember? ReturningCrewman { set; get; }
       ICrewMember Commander { get; set; }
       ICrewMember Gunner { get; set; }
@@ -92,7 +93,6 @@ namespace Pattons_Best
       double ShermanTurretRotationOld { set; get; } // to track how much the turret changes before firing - can only be 0, 60, 120, 180, 240, 300 degrees
       bool IsShermanTurretRotatedThisRound { set; get; } // Turret rotated without firing main gun causes target acquisition = 0
       int ShermanConsectiveMoveAttempt { set; get; } // track how many times Sherman attempted to move
-      bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
       string ShermanTypeOfFire { set; get; }
       int NumSmokeAttacksThisRound { set; get; }

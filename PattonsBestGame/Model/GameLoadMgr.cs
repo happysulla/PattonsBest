@@ -1615,6 +1615,13 @@ namespace Pattons_Best
             //----------------------------------------------
             if (false == ReadXmlMapItem(reader, ref mapItem))
             {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXml_MapItem(ShermanFiringAtFront) returned null");
+               return null;
+            }
+            gi.ShermanFiringAtFront = mapItem;
+            //----------------------------------------------
+            if (false == ReadXmlMapItem(reader, ref mapItem))
+            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXml_MapItem(ShermanHvss) returned null");
                return null;
             }
@@ -2255,25 +2262,6 @@ namespace Pattons_Best
                return null;
             }
             gi.ShermanConsectiveMoveAttempt = Convert.ToInt32(sShermanConsectiveMoveAttempt);
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement() = false");
-               return null;
-            }
-            if (reader.Name != "IsShermanFiringAtFront")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsShermanFiringAtFront != (node=" + reader.Name + ")");
-               return null;
-            }
-            string? sIsShermanFiringAtFront = reader.GetAttribute("value");
-            if (null == sIsShermanFiringAtFront)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsShermanFiringAtFront=null");
-               return null;
-            }
-            gi.IsShermanFiringAtFront = Convert.ToBoolean(sIsShermanFiringAtFront);
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -4532,9 +4520,6 @@ namespace Pattons_Best
                }
                if( true ==  report.IsActionThisDay )
                {
-                  lastReport.Name = report.Name;
-                  lastReport.TankCardNum = report.TankCardNum;
-                  lastReport.Weather = report.Weather;
                   lastReport.Commander = report.Commander;
                   lastReport.Gunner = report.Gunner;
                   lastReport.Loader = report.Loader;
@@ -4604,6 +4589,44 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Name) returned false");
+            return false;
+         }
+         if (reader.Name != "Name")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sName = reader.GetAttribute("value");
+         if (null == sName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sName=null");
+            return false;
+         }
+         report.Name = sName;
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(TankCardNum) returned false");
+            return false;
+         }
+         if (reader.Name != "TankCardNum")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sTankCardNum = reader.GetAttribute("value");
+         if (null == sTankCardNum)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): TankCardNum=null");
+            return false;
+         }
+         report.TankCardNum = Convert.ToInt32(sTankCardNum);
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
             return false;
          }
@@ -4626,6 +4649,25 @@ namespace Pattons_Best
             case "Retrofit": report.Scenario = EnumScenario.Retrofit; break;
             default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sScenario=" + sScenario); return false;
          }
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Weather) returned false");
+            return false;
+         }
+         if (reader.Name != "Weather")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sWeather = reader.GetAttribute("value");
+         if (null == sWeather)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sWeather=null");
+            return false;
+         }
+         report.Weather = sWeather;
          //----------------------------------------------
          reader.Read();
          if (false == reader.IsStartElement())
@@ -4671,66 +4713,9 @@ namespace Pattons_Best
             case "None": report.Resistance = EnumResistance.None; break;  // happens during retrofit
             default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sResistance=" + sResistance); return false;
          }
-         //----------------------------------------------
+         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
          if( true == report.IsActionThisDay )
          {
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Name) returned false");
-               return false;
-            }
-            if (reader.Name != "Name")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sName = reader.GetAttribute("value");
-            if (null == sName)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sName=null");
-               return false;
-            }
-            report.Name = sName;
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(TankCardNum) returned false");
-               return false;
-            }
-            if (reader.Name != "TankCardNum")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sTankCardNum = reader.GetAttribute("value");
-            if (null == sTankCardNum)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): TankCardNum=null");
-               return false;
-            }
-            report.TankCardNum = Convert.ToInt32(sTankCardNum);
-            //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Weather) returned false");
-               return false;
-            }
-            if (reader.Name != "Weather")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sWeather = reader.GetAttribute("value");
-            if (null == sWeather)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sWeather=null");
-               return false;
-            }
-            report.Weather = sWeather;
-            //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
             {
@@ -7619,6 +7604,12 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
+         if (false == CreateXmlMapItem(aXmlDocument, root, gi.ShermanFiringAtFront, "ShermanFiringAtFront"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlMapItem(ShermanFiringAtFront) returned false");
+            return null;
+         }
+         //------------------------------------------
          if (false == CreateXmlMapItem(aXmlDocument, root, gi.ShermanHvss, "ShermanHvss"))
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlMapItem(ShermanHvss) returned false");
@@ -8038,20 +8029,6 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(ShermanConsectiveMoveAttempt) returned null");
-            return null;
-         }
-         //------------------------------------------
-         elem = aXmlDocument.CreateElement("IsShermanFiringAtFront");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsShermanFiringAtFront) returned null");
-            return null;
-         }
-         elem.SetAttribute("value", gi.IsShermanFiringAtFront.ToString());
-         node = root.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsShermanFiringAtFront) returned null");
             return null;
          }
          //------------------------------------------
@@ -8936,6 +8913,8 @@ namespace Pattons_Best
             theMapItems.Add(gi.TargetMainGun);
          if (null != gi.TargetMg)
             theMapItems.Add(gi.TargetMg);
+         if (null != gi.ShermanFiringAtFront)
+            theMapItems.Add(gi.ShermanFiringAtFront);
          if (null != gi.ShermanHvss)
             theMapItems.Add(gi.ShermanHvss);
          if (null != gi.ReturningCrewman)
@@ -9830,6 +9809,33 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Day) returned false");
                return false;
             }
+            elem = aXmlDocument.CreateElement("Name");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Name) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Name);
+            node = reportNode.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Name) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("TankCardNum");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(TankCardNum) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.TankCardNum.ToString());
+            node = reportNode.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(TankCardNum) returned false");
+               return false;
+            }
             //------------------------------------------
             elem = aXmlDocument.CreateElement("Scenario");
             if (null == elem)
@@ -9842,6 +9848,20 @@ namespace Pattons_Best
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Scenario) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("Weather");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Weather) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Weather);
+            node = reportNode.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Weather) returned false");
                return false;
             }
             //------------------------------------------
@@ -9873,49 +9893,8 @@ namespace Pattons_Best
                return false;
             }
             //=======================================================
-            if( true == report.IsActionThisDay )
+            if ( true == report.IsActionThisDay )
             {
-               elem = aXmlDocument.CreateElement("Name");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Name) returned false");
-                  return false;
-               }
-               elem.SetAttribute("value", report.Name);
-               node = reportNode.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Name) returned false");
-                  return false;
-               }
-               //------------------------------------------
-               elem = aXmlDocument.CreateElement("TankCardNum");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(TankCardNum) returned false");
-                  return false;
-               }
-               elem.SetAttribute("value", report.TankCardNum.ToString());
-               node = reportNode.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(TankCardNum) returned false");
-                  return false;
-               }
-               //------------------------------------------
-               elem = aXmlDocument.CreateElement("Weather");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): CreateElement(Weather) returned false");
-                  return false;
-               }
-               elem.SetAttribute("value", report.Weather);
-               node = reportNode.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameReports(): AppendChild(Weather) returned false");
-                  return false;
-               }
                //------------------------------------------
                elem = aXmlDocument.CreateElement("CommanderName");
                if (null == elem)
