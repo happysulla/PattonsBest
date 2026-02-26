@@ -2534,7 +2534,7 @@ namespace Pattons_Best
             lastReport.Scenario = EnumScenario.Battle;
          else
             lastReport.Scenario = EnumScenario.Counterattack; // PerformAutoSetupSkipCrewAssignments() - Test 
-         //lastReport.Scenario = EnumScenario.Counterattack; // <CGS> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
+         // lastReport.Scenario = EnumScenario.Battle; // <CGS> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
          //-------------------------------
          gi.NewMembers.Clear();             // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(gi.Commander);   // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
@@ -3065,8 +3065,8 @@ namespace Pattons_Best
             else
                diceRoll = die1 + 10 * die2;
             //diceRoll = 11; // <CGS> TEST - AdvanceRetreat - MG appearing
-            //diceRoll = 45; // <CGS> TEST -  KillYourTank - TANKS APPEARING in battle scenario
-            //diceRoll = 51; // <CGS> TEST -  ATG appearing
+            //diceRoll = 45; // <CGS> TEST - KillYourTank - TANKS APPEARING in battle scenario
+            //diceRoll = 51; // <CGS> TEST - ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
@@ -4448,7 +4448,7 @@ namespace Pattons_Best
          }
          //totalRating = 30; // <CGS> TESTING - enforce HVSS training
          //-----------------------------------------
-         if ((null == gi.ShermanHvss) && (29 < totalRating) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day))) // retrofits must be greater than 7 days for training 
+         if ( (29 < totalRating) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day))) // retrofits must be greater than 7 days for training 
          {
             GameEngine.theInGameFeats.AddOne("HvssTrained"); // even though trained, HVSS do not show up until after November 1944
             gi.Statistics.AddOne("HvssTrained"); // even though trained, HVSS do not show up until after November 1944
@@ -6750,7 +6750,7 @@ namespace Pattons_Best
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
                   //dieRoll = 1; // <CGS> TEST - KillYourTank -  AMBUSH!!!!!
-                  //dieRoll = 10; // <CGS> TEST - KillYourTank -  NO AMBUSH!!!!!
+                  //dieRoll = 10; // <CGS> TEST - NO AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -7528,51 +7528,54 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequencePanzerfaustAttackRoll:
-                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  if( ("036" != key) && ( "036a" != key )) // if equal to 036, then loaded a game where attack roll already happened
                   {
-                     //dieRoll = 1; // <CGS> TEST - Panzerfaust To Attack
-                     gi.DieResults[key][0] = dieRoll;
-                  }
-                  else
-                  {
-                     gi.DieRollAction = GameAction.DieRollActionNone;
-                     if (null == gi.Panzerfaust)
+                     if (Utilities.NO_RESULT == gi.DieResults[key][0])
                      {
-                        returnStatus = "gi.Panzerfaust=null";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustAttackRoll): " + returnStatus);
+                        //dieRoll = 1; // <CGS> TEST - Panzerfaust To Attack
+                        gi.DieResults[key][0] = dieRoll;
                      }
                      else
                      {
-                        gi.Statistics.AddOne("NumPanzerfaustAttack");
-                        int modifier = 0;
-                        if (91 < gi.Panzerfaust.myDay)
-                           modifier -= 1;
-                        if (true == gi.Panzerfaust.myIsShermanMoving)
-                           modifier -= 1;
-                        if (true == gi.Panzerfaust.myIsLeadTank)
-                           modifier -= 1;
-                        if (true == gi.Panzerfaust.myIsAdvancingFireZone)
-                           modifier += 3;
-                        if (('1' == gi.Panzerfaust.mySector) || ('2' == gi.Panzerfaust.mySector) || ('3' == gi.Panzerfaust.mySector))
-                           modifier -= 1;
-                        int combo = gi.DieResults[key][0] + modifier;
-                        int rollNeededForAttack = 0;
-                        if (EnumScenario.Advance == lastReport.Scenario)
-                           rollNeededForAttack = 4;
-                        else if (EnumScenario.Battle == lastReport.Scenario)
-                           rollNeededForAttack = 6;
-                        else
-                           rollNeededForAttack = 3;
-                        if (combo < rollNeededForAttack)
+                        gi.DieRollAction = GameAction.DieRollActionNone;
+                        if (null == gi.Panzerfaust)
                         {
-                           SetCommand(gi, action, GameAction.BattleRoundSequencePanzerfaustToHitRoll, "e044b");
+                           returnStatus = "gi.Panzerfaust=null";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustAttackRoll): " + returnStatus);
                         }
                         else
                         {
-                           if (false == NextStepAfterRandomEvent(gi, ref action))
+                           gi.Statistics.AddOne("NumPanzerfaustAttack");
+                           int modifier = 0;
+                           if (91 < gi.Panzerfaust.myDay)
+                              modifier -= 1;
+                           if (true == gi.Panzerfaust.myIsShermanMoving)
+                              modifier -= 1;
+                           if (true == gi.Panzerfaust.myIsLeadTank)
+                              modifier -= 1;
+                           if (true == gi.Panzerfaust.myIsAdvancingFireZone)
+                              modifier += 3;
+                           if (('1' == gi.Panzerfaust.mySector) || ('2' == gi.Panzerfaust.mySector) || ('3' == gi.Panzerfaust.mySector))
+                              modifier -= 1;
+                           int combo = gi.DieResults[key][0] + modifier;
+                           int rollNeededForAttack = 0;
+                           if (EnumScenario.Advance == lastReport.Scenario)
+                              rollNeededForAttack = 4;
+                           else if (EnumScenario.Battle == lastReport.Scenario)
+                              rollNeededForAttack = 6;
+                           else
+                              rollNeededForAttack = 3;
+                           if (combo < rollNeededForAttack)
                            {
-                              returnStatus = "NextStep_AfterRandomEvent() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
+                              SetCommand(gi, action, GameAction.BattleRoundSequencePanzerfaustToHitRoll, "e044b");
+                           }
+                           else
+                           {
+                              if (false == NextStepAfterRandomEvent(gi, ref action))
+                              {
+                                 returnStatus = "NextStep_AfterRandomEvent() returned false";
+                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
+                              }
                            }
                         }
                      }
@@ -9830,7 +9833,7 @@ namespace Pattons_Best
          {
             if (EnumScenario.Counterattack == lastReport.Scenario) // MoveSherman_AdvanceOrRetreat()
             {
-               newT = taskForce.TerritoryCurrent; // Advancing is done by selecting a new hex in the movement phase
+               newT = taskForce.TerritoryCurrent; 
                gi.IsShermanAdvancingOnMoveBoard = true;
                action = GameAction.BattleRoundSequenceShermanAdvanceOrRetreat;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e099");

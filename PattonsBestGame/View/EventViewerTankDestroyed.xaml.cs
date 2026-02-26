@@ -90,7 +90,7 @@ namespace Pattons_Best
       {
          public ICrewMember myCrewMember;
          //------------------------------------
-         public ICrewMember? myCrewMemberRescuing = null;
+         public ICrewMember? myCrewMemberRescuer = null;
          public int myDieRollRescue = Utilities.NO_RESULT;
          public int myRescueWoundModifier = 0;
          public string myRescueWoundResult = "Uninit";
@@ -680,7 +680,7 @@ namespace Pattons_Best
          //-----------------------------
          int rowNum = STARTING_ASSIGNED_ROW;
          IMapItem mi = myGridRowExplodes[0].myMapItem;
-         Button b1 = CreateButton(mi);
+         Button b1 = CreateButtonFromMapItem(mi); // expolding Sherman
          myGrid.Children.Add(b1);
          Grid.SetRow(b1, rowNum);
          Grid.SetColumn(b1, 0);
@@ -961,7 +961,7 @@ namespace Pattons_Best
             myGrid.Children.Add(b1);
             Grid.SetRow(b1, rowNum);
             Grid.SetColumn(b1, 0);      // UpdateGridRowBailoutRescue()
-            ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing;
+            ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuer;
             if (null != rescuer)
             {
                Button b2 = CreateButton(rescuer, false);
@@ -1027,11 +1027,11 @@ namespace Pattons_Best
          {
             int rowNum = STARTING_ASSIGNED_ROW + i;
             ICrewMember cm = myGridRowRescues[i].myCrewMember;
-            Button b1 = CreateButton(cm, false);
+            Button b1 = CreateButton(cm, false); 
             myGrid.Children.Add(b1);
             Grid.SetRow(b1, rowNum);
             Grid.SetColumn(b1, 0);  // UpdateGridRowBrewUp()
-            ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing;
+            ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuer;
             if (null != rescuer)
             {
                Button b2 = CreateButton(rescuer, false);
@@ -1084,7 +1084,7 @@ namespace Pattons_Best
          return true;
       }
       //------------------------------------------------------------------------------------
-      private Button CreateButton(IMapItem mi)
+      private Button CreateButtonFromMapItem(IMapItem mi)
       {
          System.Windows.Controls.Button b = new Button { };
          b.Name = Utilities.RemoveSpaces(mi.Name);
@@ -1205,6 +1205,7 @@ namespace Pattons_Best
                myState = E0481Enum.TANK_EXPLOSION_ROLL_SHOW;
                break;
             case E0481Enum.WOUNDS_ROLL:
+               //if( 0 == i ) dieRoll = 93; // <CGS> TEST - KillYourTank - tank penetration
                ICrewMember cm = myGridRowWounds[i].myCrewMember;
                myGridRowWounds[i].myDieRollWound = dieRoll;
                myGridRowWounds[i].myWoundResult = TableMgr.SetWounds(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier); // wound roll on tank kill
@@ -1329,7 +1330,7 @@ namespace Pattons_Best
                myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
             case E0481Enum.BAILOUT_RESCUE_ROLL:
-               ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing; // ShowDieResults(BAILOUT_RESCUE_ROLL)
+               ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuer; // ShowDieResults(BAILOUT_RESCUE_ROLL)
                if (null == rescuer)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGridRowRescues[i].my_CrewMemberRescuing=null for i=" + i.ToString());
@@ -1368,6 +1369,7 @@ namespace Pattons_Best
                myDieRollBrewUp = dieRoll;
                if (dieRoll < myToBrewNumber)
                {
+                  myGameInstance.Death.myIsBrewUp = true;
                   myBrewupResult = "Tank Burns";
                   for (int k = 0; k < myMaxRowCountRescue; ++k)                   // Kill every one still left in tank
                   {
@@ -1456,12 +1458,13 @@ namespace Pattons_Best
          }
          if (null != mySelectedCrewman)
             return;
-         mySelectedCrewman = myGameInstance.GetCrewMemberByName(b.Name);
+         mySelectedCrewman = myGameInstance.GetCrewMemberByRole(b.Name);
          if (null == mySelectedCrewman)
          {
             Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMemberByRole() returned null for cm=" + b.Name);
             return;
          }
+         Logger.Log(LogEnum.LE_SHOW_CREW_RESCUE, "Grid_MouseDown(): rescuer.role=" + mySelectedCrewman.Role + " name=" + mySelectedCrewman.Name  + " b.Name=" + b.Name);
          myAssignables.Remove(mySelectedCrewman.Name);
          //---------------------------------------
          myGrid.Cursor = myCursors[b.Name];
@@ -1514,8 +1517,8 @@ namespace Pattons_Best
                      myGrid.Cursor = Cursors.Arrow;
                      int rowNum = Grid.GetRow(rect);
                      int i = rowNum - STARTING_ASSIGNED_ROW;
-                     myGridRowRescues[i].myCrewMemberRescuing = mySelectedCrewman;
-                     Logger.Log(LogEnum.LE_SHOW_CREW_RESCUE, "Grid_MouseDown(): rescuer=" + mySelectedCrewman.Role + " for i=" + i.ToString());
+                     myGridRowRescues[i].myCrewMemberRescuer = mySelectedCrewman;
+                     Logger.Log(LogEnum.LE_SHOW_CREW_RESCUE, "Grid_MouseDown(): rescuer.role=" + mySelectedCrewman.Role + " rescuer.name=" + mySelectedCrewman.Name + " for i=" + i.ToString());
                      myGridRowRescues[i].myRescueWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, mySelectedCrewman, false, true, false);
                      if (TableMgr.FN_ERROR == myGridRowRescues[i].myRescueWoundModifier)
                      {
@@ -1700,7 +1703,7 @@ namespace Pattons_Best
                                  if ("Crewman Out" != myGridRowRescues[i].myRescueResult)
                                  {
                                     isNeedRescuing = true;
-                                    myGridRowRescues[i].myCrewMemberRescuing = null;
+                                    myGridRowRescues[i].myCrewMemberRescuer = null;
                                     myGridRowRescues[i].myDieRollRescue = Utilities.NO_RESULT;
                                     myGridRowRescues[i].myRescueResult = "unit";
                                  }

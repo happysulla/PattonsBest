@@ -228,7 +228,7 @@ Note: You must choose HE gunload if you want to use Advancing Fire when entering
 e013a	"<Bold>e013a Out of Main Gun Rounds</Bold> 
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-Main Gun is empty, and there are no rounds to load. Tehrefore, the main gun cannot be loaded. Click image to continue.
+Main Gun is empty, and there are no rounds to load. Therefore, the main gun cannot be loaded. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue13a' Height='100' Width='100'></Image></InlineUIContainer>"
 e014	"<Bold>e014 Tank &amp; Turret Orientation</Bold> 

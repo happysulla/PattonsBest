@@ -5772,6 +5772,7 @@ namespace Pattons_Best
          }
          else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count)
          {
+            myGameInstance.GamePhase = GamePhase.BattleRoundSequence;
             outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
          }
          else if (EnumScenario.Counterattack == lastReport.Scenario)
@@ -6735,12 +6736,12 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue38":
-                           bool isLoaderLoading = false;
+                           bool isLoaderLoading = true;
                            foreach (IMapItem crewAction in myGameInstance.CrewActions)
                            {
-                              if (true == crewAction.Name.Contains("Loader_Load"))
+                              if ((true == crewAction.Name.Contains("Loader")) && (false == crewAction.Name.Contains("Loader_Load")) )
                               {
-                                 isLoaderLoading = true;
+                                 isLoaderLoading = false;
                                  break;
                               }
                            }
@@ -6753,10 +6754,14 @@ namespace Pattons_Best
                                  isGunnerFiring = true;
                            }
                            myGameInstance.UndoCmd = new UndoCmdCrewActionOrder(myGameInstance);
-                           if ( (true == isLoaderLoading) || (true == isGunnerFiring) ) // do not show ammo orders screen if gunner is not firing or loader is not loading
+                           if ( (true == isLoaderLoading) && (true == isGunnerFiring) ) // do not show ammo orders screen if gunner is not firing and loader is not loading
+                           {
                               action = GameAction.BattleRoundSequenceAmmoOrders;
+                           }
                            else
+                           {
                               action = GameAction.BattleRoundSequenceConductCrewAction; // skip ammo orders
+                           }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue39":

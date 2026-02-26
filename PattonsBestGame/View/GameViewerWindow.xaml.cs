@@ -5686,51 +5686,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickBail(): adding new button=" + mi.Name + " for crewmember=" + crewmember); // LE_SHOW_ORDERS_MENU
          }
       }
-      private void MenuItemCrewActionClickLoad()
-      {
-         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickLoad(): lastReport=null");
-            return;
-         }
-         string tType = lastReport.TankCardNum.ToString();
-         //----------------------------------------------
-         bool isGunnerFiring = false;
-         bool isLoaderLoading = false;
-         foreach (IMapItem crewaction in myGameInstance.CrewActions) // This menu is created on each crew action - Remove Gunner_RepairGun if load does anything other than Repair
-         {
-            if (("Gunner_FireMainGun" == crewaction.Name) || ("Gunner_RotateFireMainGun" == crewaction.Name))
-               isGunnerFiring = true;
-            if ("Loader_Load" == crewaction.Name)
-               isLoaderLoading = true;
-         }
-         //----------------------------------------------
-         if (true == isLoaderLoading)
-         {
-            string tName = "LoaderAction";
-            ITerritory? t = Territories.theTerritories.Find(tName, tType);
-            if (null == t)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickLoad(): t=null for " + tName + " tType=" + tType);
-               return;
-            }
-            IMapItem mi;
-            if (true == isGunnerFiring)
-               mi = new MapItem("Loader_Load", 1.0, "c54LLoadNoSpot", t);
-            else
-               mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
-            myGameInstance.CrewActions.Add(mi);
-            System.Windows.Controls.Button newButton = new Button { Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-            MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
-            myTankButtons.Add(newButton);
-            myCanvasTank.Children.Add(newButton);
-            Canvas.SetLeft(newButton, mi.Location.X);
-            Canvas.SetTop(newButton, mi.Location.Y);
-            Canvas.SetZIndex(newButton, 900);
-            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickLoad(): adding new button=" + mi.Name ); // LE_SHOW_ORDERS_MENU
-         }
-      }
       private void MenuItemAmmoReloadClick(object sender, RoutedEventArgs e)
       {
          MenuItem? menuitem = sender as MenuItem;
