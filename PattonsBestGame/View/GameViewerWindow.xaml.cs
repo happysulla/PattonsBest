@@ -2803,14 +2803,8 @@ namespace Pattons_Best
          }
          else if (EnumMainImage.MI_Battle == CanvasImageViewer.theMainImage )
          {
-            foreach (IMapItem mi in gi.Targets) // Remove all boarders around targets
-            {
-               foreach (Button b in myBattleButtons)
-               {
-                  if (mi.Name == b.Name)
-                     b.BorderThickness = new Thickness(0);  // UpdateCanvasMain()
-               }
-            }
+            foreach (Button b in myBattleButtons)
+               b.BorderThickness = new Thickness(0);  // UpdateCanvasMain()
             stacks = gi.BattleStacks;
             buttons = myBattleButtons;
             myMoveButtons.Clear();
