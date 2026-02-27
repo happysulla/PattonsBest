@@ -3756,7 +3756,7 @@ namespace Pattons_Best
          else if (EnumMainImage.MI_Battle == CanvasImageViewer.theMainImage )
          {
             foreach (Button b in myBattleButtons)
-               b.BorderThickness = new Thickness(0);  // UpdateCanvasMain()
+               b.BorderThickness = new Thickness(0);  // UpdateCanvas_Main()
             stacks = gi.BattleStacks;
             buttons = myBattleButtons;
             myMoveButtons.Clear();
@@ -4584,10 +4584,10 @@ namespace Pattons_Best
          {
             foreach(Button b in myBattleButtons)
             {
-               if( mi.Name == b.Name )
+               if( true == b.Name.Contains(Utilities.RemoveSpaces(mi.Name) ) )
                {
                   b.BorderBrush = mySolidColorBrushRed;
-                  b.BorderThickness = new Thickness(3);
+                  b.BorderThickness = new Thickness(3);    // UpdateCanvas_ShermanSelectTarget()
                }
             }
          }
@@ -4600,10 +4600,10 @@ namespace Pattons_Best
          {
             foreach (Button b in myBattleButtons)
             {
-               if (mi.Name == b.Name)
+               if (true == b.Name.Contains(Utilities.RemoveSpaces(mi.Name)) )
                {
                   b.BorderBrush = mySolidColorBrushRed;
-                  b.BorderThickness = new Thickness(3);
+                  b.BorderThickness = new Thickness(3); // UpdateCanvas_ShermanSelectTarget()
                }
             }
          }
@@ -5300,12 +5300,12 @@ namespace Pattons_Best
             {
                if (true == myGameInstance.Targets.Contains(selectedMapItem))
                {
-                  foreach (IMapItem mi in myGameInstance.Targets) // All buttons in the target view are selected
+                  foreach (IMapItem mi in myGameInstance.Targets)  // remove border from all buttons if a target is selected
                   {
                      foreach (Button b in myBattleButtons)
                      {
-                        if (mi.Name == b.Name)
-                           b.BorderThickness = new Thickness(0);
+                        if ( true == b.Name.Contains(Utilities.RemoveSpaces(mi.Name)) )
+                           b.BorderThickness = new Thickness(0);  // Click_ButtonMapItem()
                      }
                   }
                   GameAction outAction = GameAction.Error;

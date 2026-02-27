@@ -171,7 +171,7 @@ namespace Pattons_Best
       bool IsCrewActionPossibleButtonUp(string crewRole, string crewAction);
       ICrewMember? GetCrewMemberByRole(string role);
       ICrewMember? GetCrewMemberByName(string name);
-      void SetIncapacitated(ICrewMember crewmember);
+      bool SetIncapacitated(ICrewMember crewmember);
       bool SetCrewActionTerritory(ICrewMember cm);
       bool SwitchMembers(string switchingMemberRole);
       void ClearCrewActions(string caller);

@@ -434,7 +434,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Set_CrewActionTerritory(): cm=" + cm.Name + " role=" + cm.Role + " move to t=" + t.Name);
          return true;
       }
-      public void SetIncapacitated(ICrewMember cm)
+      public bool SetIncapacitated(ICrewMember cm)
       { 
          cm.IsIncapacitated = true;
          //-------------------------------
@@ -447,11 +447,13 @@ namespace Pattons_Best
          foreach (IMapItem ca in removals)
          {
             this.CrewActions.Remove(ca);
-            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_Incapacitated(): ---------------------removing ca=" + ca.Name);
+            Logger.Log(LogEnum.LE_SHOW_CREW_INCAPACITATED, "Set_Incapacitated(): ---------------------removing ca=" + ca.Name);
          }
          //-------------------------------
          this.CrewActions.Add(cm);
-         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_Incapacitated(): +++++++++++++++++++++++adding cm=" + cm.Name + " cm.Role=" + cm.Role);
+         if (false == SetCrewActionTerritory(cm))
+            Logger.Log(LogEnum.LE_ERROR, "Set_Incapacitated(): Set_CrewMemberTerritory() returned false for cm=" + cm.Role + "  cm.Name=" + cm.Name);
+         Logger.Log(LogEnum.LE_SHOW_CREW_INCAPACITATED, "Set_Incapacitated(): +++++++++++++++++++++++adding cm=" + cm.Name + " cm.Role=" + cm.Role + " ca=" + this.CrewActions.ToString());
          //-------------------------------
          removals.Clear();
          foreach (IMapItem mi in this.Hatches) // incapacitated crewmember becomes button up
@@ -463,6 +465,7 @@ namespace Pattons_Best
             this.Hatches.Remove(mi);
          cm.IsButtonedUp = true;
          Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Set_Incapacitated():name=" + cm.Name + " role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
+         return true;
       }
       public bool SwitchMembers(string switchingMemberRole)
       {

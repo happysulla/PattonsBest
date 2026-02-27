@@ -33,6 +33,7 @@ namespace Pattons_Best
       LE_SHOW_CREW_BU,
       LE_SHOW_CREW_ADD,
       LE_SHOW_CREW_CLEAR,
+      LE_SHOW_CREW_INCAPACITATED,
       LE_SHOW_CREW_SWITCH,
       LE_SHOW_CREW_REPLACE,
       LE_SHOW_CREW_RETURN,
@@ -182,6 +183,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_CREW_BU);
          SetOn(LogEnum.LE_SHOW_CREW_ADD);
          SetOn(LogEnum.LE_SHOW_CREW_CLEAR);
+         SetOn(LogEnum.LE_SHOW_CREW_INCAPACITATED);
          SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
          SetOn(LogEnum.LE_SHOW_CREW_RETURN);
