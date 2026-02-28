@@ -751,7 +751,8 @@ The main gun may only fire at a target in the turret&apos;s front sector unless 
 <LineBreak/><LineBreak/>"
 e053a	"<Bold>e053a Main Gun Firing - No Target Available</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
-<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
 There is no target that is selectable. Only enemy units that have been spotted may be selected.
 <LineBreak/><LineBreak/>

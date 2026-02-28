@@ -8591,7 +8591,8 @@ namespace Pattons_Best
          theCombatCalendarEntries.Add(new CombatCalendarEntry("04/16/45", EnumScenario.Counterattack, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("04/17/45", EnumScenario.Counterattack, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("04/18/45", EnumScenario.Counterattack, 2, EnumResistance.Light));
-         theCombatCalendarEntries.Add(new CombatCalendarEntry("Drive into Czechoslavakia", EnumScenario.Retrofit, 10, EnumResistance.None)); // Day=190  -- TOTAL 191 days
+         theCombatCalendarEntries.Add(new CombatCalendarEntry("Drive into Czechoslavakia", EnumScenario.Retrofit, 10, EnumResistance.None)); // Day=190 
+         theCombatCalendarEntries.Add(new CombatCalendarEntry("04/19/45", EnumScenario.Advance, 0, EnumResistance.Light)); // Day=191  -- TOTAL 192 days
          //--------------------------------------------------------------------
       }
       private void CreateExitTable()

@@ -2551,7 +2551,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
                   myTextBlock.Inlines.Add(new Run( " - " + Math.Abs(modifier56).ToString()));
                   myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
-                  if (gi.DieResults[key][0] < 21) // Assume that sub MG do not use ammo
+                  if (combo < 21) // Assume that sub MG do not use ammo
                      myTextBlock.Inlines.Add(new Run(" = Gun Repaired."));
                   else if ((90 < combo) || (97 < gi.DieResults[key][0]))
                      myTextBlock.Inlines.Add(new Run(" = GUN BROKEN!"));

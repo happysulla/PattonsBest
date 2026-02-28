@@ -2204,6 +2204,606 @@ namespace Pattons_Best
          return true;
       }
       //---------------------------------------
+      private bool UpdateCanvasShowFeats()
+      {
+         myMoveButtons.Clear();
+         myBattleButtons.Clear();
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Image img)
+            {
+               if (true == img.Name.Contains("Canvas"))
+                  continue;
+               elements.Add(ui);
+            }
+            if (ui is Polygon polygon)
+               elements.Add(ui);
+            if (ui is TextBlock tb)
+               elements.Add(ui);
+            if (ui is Label label)
+               elements.Add(ui);
+            if (ui is Button b)
+            {
+               if (false == b.Name.Contains("Die"))
+                  elements.Add(ui);
+            }
+         }
+         foreach (UIElement ui1 in elements)
+            myCanvasMain.Children.Remove(ui1);
+         //------------------------------------
+         myCanvasMain.LayoutTransform = new ScaleTransform(1.0, 1.0);
+         double centerX = myCanvasMain.ActualWidth * 0.5;
+         double centerY = myCanvasMain.ActualHeight * 0.5;
+         //------------------------------------
+         GameFeat featChange;
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+         if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // Update_CanvasShowFeats()
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): Get_FeatChange() returned false");
+            return false;
+         }
+         if (true == String.IsNullOrEmpty(featChange.Key))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): featChange=empty");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): Change=" + featChange.ToString());
+         //------------------------------------
+         double sizeOfImage = Math.Min(myCanvasMain.ActualHeight, myCanvasMain.ActualWidth);
+         BitmapImage bmi1 = new BitmapImage();
+         bmi1.BeginInit();
+         bmi1.UriSource = new Uri(MapImage.theImageDirectory + "StarReward.gif", UriKind.Absolute);
+         bmi1.EndInit();
+         Image imgFeat = new Image { Source = bmi1, Height = sizeOfImage, Width = sizeOfImage, Name = "Feat" };
+         ImageBehavior.SetAnimatedSource(imgFeat, bmi1);
+         myCanvasMain.Children.Add(imgFeat);
+         double X = centerX - (sizeOfImage * 0.5);
+         double Y = centerY - (sizeOfImage * 0.5);
+         Canvas.SetLeft(imgFeat, X);
+         Canvas.SetTop(imgFeat, Y);
+         Canvas.SetZIndex(imgFeat, 99998);
+         myCanvasMain.MouseDown += MouseDownGameFeat;
+         //-------------------------------------
+         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Name = "FeatLabel1", Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
+         myCanvasMain.Children.Add(labelTitle);
+         labelTitle.MouseDown += MouseDownGameFeat;
+         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Name = "FeatLabel2", Content = GameFeats.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
+         myCanvasMain.Children.Add(labelForFeat);
+         labelForFeat.MouseDown += MouseDownGameFeat;
+         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Name = "FeatLabel3", Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
+         myCanvasMain.Children.Add(labelClick);
+         labelClick.MouseDown += MouseDownGameFeat;
+         labelTitle.UpdateLayout();
+         labelForFeat.UpdateLayout();
+         labelClick.UpdateLayout();
+         //-------------------------------------
+         double X1 = centerX - labelTitle.ActualWidth * 0.5;
+         double Y1 = centerY - labelTitle.ActualHeight * 0.5;
+         double X2 = centerX - labelForFeat.ActualWidth * 0.5;
+         double Y2 = centerY + labelTitle.ActualHeight * 0.5;
+         double X3 = centerX - labelClick.ActualWidth * 0.5;
+         double Y3 = centerY + labelTitle.ActualHeight * 0.5 + labelForFeat.ActualHeight;
+         //-------------------------------------
+         Canvas.SetLeft(labelTitle, X1);
+         Canvas.SetTop(labelTitle, Y1);
+         Canvas.SetZIndex(labelTitle, 99999);
+         Canvas.SetLeft(labelForFeat, X2);
+         Canvas.SetTop(labelForFeat, Y2);
+         Canvas.SetZIndex(labelForFeat, 99999);
+         Canvas.SetLeft(labelClick, X3);
+         Canvas.SetTop(labelClick, Y3);
+         Canvas.SetZIndex(labelClick, 99999);
+         //-------------------------------------
+         GameFeat? startingFeat = GameEngine.theStartingFeats.Find(featChange.Key);
+         if (null == startingFeat)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): startingFeat=null");
+            return false;
+         }
+         startingFeat.Value = featChange.Value;
+         return true;
+      }
+      private bool UpdateCanvasShowStatistics(IGameInstance gi)
+      {
+         if (null == myDieRoller)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatistics(): myDieRoller=null");
+            return false;
+         }
+         myMoveButtons.Clear();
+         myBattleButtons.Clear();
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Image img)
+            {
+               if ("Map" == img.Name)
+                  continue;
+               elements.Add(ui);
+            }
+            if (ui is TextBlock tb)
+               elements.Add(ui);
+            if (ui is Label label)
+               elements.Add(ui);
+            if (ui is Button b)
+            {
+               if (false == b.Name.Contains("Die"))
+                  elements.Add(ui);
+            }
+         }
+         foreach (UIElement ui1 in elements)
+            myCanvasMain.Children.Remove(ui1);
+         myDieRoller.HideDie();
+         //-------------------------------
+         GameStatistic statNumGames = gi.Statistics.Find("NumGames"); // current game always set to one
+         statNumGames.Value = 1;
+         //-------------------------------
+         myTextBoxMarquee.Inlines.Clear();
+         myTextBoxMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground = Brushes.Red });
+         if (false == UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistics, Brushes.Red))
+         {
+            Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.Update_CanvasShowStatistics(): UpdateCanvasShowStatsText() returned false");
+            return false;
+         }
+         //-------------------------------
+         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         if (true == optionSingleDayGame.IsEnabled)
+         {
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
+            UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theSingleDayStatistics);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
+            GameStatistic stat0NumGames = GameEngine.theSingleDayStatistics.Find("NumGames");
+            if (1 < stat0NumGames.Value)
+            {
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               string title2 = "Single Games Statistics:";
+               myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground = Brushes.Blue });
+               UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theSingleDayStatistics, Brushes.Blue);
+            }
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
+            UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theCampaignStatistics);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
+            GameStatistic stat1NumGames = GameEngine.theCampaignStatistics.Find("NumGames");
+            if (1 < stat1NumGames.Value)
+            {
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               string title2 = "Campaign Games Statistics:";
+               myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground = Brushes.Blue });
+               UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theCampaignStatistics, Brushes.Blue);
+            }
+         }
+         //-------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
+         UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theTotalStatistics);
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
+         GameStatistic stat0NumGamesAfter = GameEngine.theSingleDayStatistics.Find("NumGames");
+         GameStatistic stat1NumGamesAfter = GameEngine.theCampaignStatistics.Find("NumGames");
+         GameStatistic stat2NumGames = GameEngine.theTotalStatistics.Find("NumGames");
+         if ((stat0NumGamesAfter.Value != stat2NumGames.Value) && (stat1NumGamesAfter.Value != stat2NumGames.Value))
+         {
+            myTextBoxMarquee.Inlines.Add(new LineBreak());
+            myTextBoxMarquee.Inlines.Add(new LineBreak());
+            string title2 = "All Games Statistics:";
+            myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground = Brushes.Goldenrod });
+            UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theTotalStatistics, Brushes.Goldenrod);
+         }
+         //-------------------------------
+         myCanvasMain.ClipToBounds = true;
+         myCanvasMain.Children.Add(myTextBoxMarquee);
+         myTextBoxMarquee.UpdateLayout();
+         //-------------------------------
+         DoubleAnimation doubleAnimation = new DoubleAnimation();
+         doubleAnimation.From = -myTextBoxMarquee.ActualHeight;
+         doubleAnimation.To = myCanvasMain.ActualHeight;
+         doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+         doubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(MARQUEE_SCROLL_ANMINATION_TIME));
+         Storyboard.SetTargetName(doubleAnimation, "tbMarquee");
+         Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(Canvas.BottomProperty));
+         myStoryboard.Children.Add(doubleAnimation);
+         myStoryboard.Begin(this, true);
+         //-------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.Update_CanvasShowStatistics(): Called Save_DefaultsToSettings()");
+         SaveDefaultsToSettings();
+         return true;
+      }
+      private void UpdateCanvasShowStatsAdds(GameStatistics statistics, GameStatistics totalStatistics)
+      {
+         //-------------------------------------
+         foreach (GameStatistic stat in statistics)
+         {
+            if (true == stat.Key.Contains("Num"))
+            {
+               GameStatistic statAllNum = totalStatistics.Find(stat.Key);
+               statAllNum.Value += stat.Value;
+            }
+            else if (true == stat.Key.Contains("Max"))
+            {
+               GameStatistic statMax = totalStatistics.Find(stat.Key);
+               if (statMax.Value < stat.Value)
+                  statMax.Value = stat.Value;
+            }
+            else if (true == stat.Key.Contains("Min"))
+            {
+               GameStatistic statMin = totalStatistics.Find(stat.Key);
+               Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): key=" + stat.Key + " statMin.Value=" + statMin.Value.ToString() + " stat.Value=" + stat.Value.ToString());
+               if ((stat.Value < statMin.Value) || (0 == statMin.Value))
+               {
+                  if (0 < stat.Value)
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): (stat.Value=" + stat.Value.ToString() + ") < (statMin.Value=" + statMin.Value.ToString() + ")");
+                     statMin.Value = stat.Value;
+                  }
+               }
+            }
+         }
+      }
+      private bool UpdateCanvasShowStatsText(TextBlock tb, GameStatistics statistics, Brush brushFont)
+      {
+         GameStatistic numGames = statistics.Find("NumGames"); // check that at least one
+         if (0 == numGames.Value)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatsText(): numGames=0");
+            return false;
+         }
+         GameStatistic numDays = statistics.Find("NumDays");
+         if (0 == numDays.Value) // this should only happen when testing. It is incremented in Evening Debriefing which should occur before at least once in a campaign game
+            statistics.AddOne("NumDays");
+         Option optionSingleDayGame = myGameInstance.Options.Find("SingleDayScenario");
+         GameStatistic numWins = statistics.Find("NumWins");
+         GameStatistic numOfFight = statistics.Find("NumOfFight");
+         GameStatistic numScenariosWon = statistics.Find("NumScenariosWon");
+         GameStatistic numScenariosLost = statistics.Find("NumScenariosLost");
+         GameStatistic numOfKilledCrewman = statistics.Find("NumOfKilledCrewman");
+         GameStatistic numShermanExplodes = statistics.Find("NumShermanExplodes");
+         GameStatistic numShermanBurns = statistics.Find("NumShermanBurns");
+         GameStatistic numShermanPenetrations = statistics.Find("NumShermanPenetration");
+         GameStatistic numPanzerfaultAttacks = statistics.Find("NumPanzerfaustAttack");
+         GameStatistic numPanzerfaultDeaths = statistics.Find("NumPanzerfaustDeath");
+         GameStatistic numMineAttack = statistics.Find("NumMineAttack");
+         GameStatistic numMineImmobilization = statistics.Find("NumMineImmobilization");
+         int numLostTanks = numShermanExplodes.Value + numShermanPenetrations.Value;
+         int numKilledEnemyFriendlyFire = 0;
+         int numKilledEnemyYourFire = 0;
+         foreach (GameStatistic stat in statistics)
+         {
+            if (true == stat.Key.Contains("FriendlyFire")) numKilledEnemyFriendlyFire += stat.Value;
+            if (true == stat.Key.Contains("YourFire")) numKilledEnemyYourFire += stat.Value;
+         }
+         int numKilledEnemyTotal = numKilledEnemyFriendlyFire + numKilledEnemyYourFire;
+         int average = 0;
+         if (1 < numGames.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Games = " + numGames.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            int winRatio = (int)Math.Round(100.0 * ((double)numWins.Value) / (double)numGames.Value);
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("% Wins = " + winRatio.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            if (true == optionSingleDayGame.IsEnabled)
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsSingleDayGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Max Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            else
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsCampaignGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Max Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numOfFight.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("# of Fights = " + numOfFight.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if ((0 < numScenariosWon.Value) || (0 < numScenariosLost.Value))
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("# Engagements Won = " + numScenariosWon.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("# Engagements Lost = " + numScenariosLost.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               int totalEngagements = numScenariosWon.Value + numScenariosLost.Value;
+               average = numScenariosWon.Value / totalEngagements;
+               tb.Inlines.Add(new Run("Average Engagements Won = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            GameStatistic maxCrewRatingWin = statistics.Find("MaxCrewRatingWin");
+            if (0 < maxCrewRatingWin.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Max Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
+            if (0 < minCrewRatingWin.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            average = numDays.Value / numGames.Value;
+            tb.Inlines.Add(new Run("Average Days per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            if (0 < numLostTanks)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               average = numDays.Value / numLostTanks;
+               tb.Inlines.Add(new Run("Average Days per Lost Tanks = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numOfKilledCrewman.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Crewmen = " + numOfKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               average = numDays.Value / numOfKilledCrewman.Value;
+               tb.Inlines.Add(new Run("Average Days/Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold });
+               average = numOfKilledCrewman.Value / numGames.Value;
+               tb.Inlines.Add(new Run("Average Crewmen Killed per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyTotal)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemyTotal.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               average = numKilledEnemyTotal / numGames.Value;
+               tb.Inlines.Add(new Run("Average Killed Enemy per Day = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyFriendlyFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed by Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               average = numKilledEnemyFriendlyFire / numGames.Value;
+               tb.Inlines.Add(new Run("Average FF Killed per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyYourFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed by Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               average = numKilledEnemyYourFire / numGames.Value;
+               tb.Inlines.Add(new Run("Average Your Kills per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+         }
+         else // only one game
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("End Date = " + TableMgr.GetDate(myGameInstance.Day - 1)) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            //-------------------------------------
+            if (0 < numWins.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Game Won!") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            else
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Game Lost!") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            if (true == optionSingleDayGame.IsEnabled)
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsSingleDayGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+
+            }
+            else
+            {
+               GameStatistic victoryPointsGame = statistics.Find("MaxPointsCampaignGame");
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numOfFight.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("# of Fights = " + numOfFight.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            int totalEngagements = numScenariosWon.Value + numScenariosLost.Value;
+            if (1 < totalEngagements)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("# Engagements Won = " + numScenariosWon.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("# Engagements Lost = " + numScenariosLost.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+
+               average = numScenariosWon.Value / totalEngagements;
+               tb.Inlines.Add(new Run("Average Engagements Won = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_ShowStatsText(): lastReport=null");
+               return false;
+            }
+            int crewRating = myGameInstance.Commander.Rating + myGameInstance.Gunner.Rating + myGameInstance.Loader.Rating + myGameInstance.Driver.Rating + myGameInstance.Assistant.Rating;
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Crew Rating = " + crewRating.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            //-------------------------------------
+            if (1 < numDays.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            if (0 < numLostTanks)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numOfKilledCrewman.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Crewmen = " + numOfKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               tb.Inlines.Add(new LineBreak());
+               average = numDays.Value / numOfKilledCrewman.Value;
+               tb.Inlines.Add(new Run("Average Days/Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyTotal)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemyTotal.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyFriendlyFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed by Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyYourFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed by Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            }
+         }
+         //====================================================
+         tb.Inlines.Add(new LineBreak());
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         GameStatistic numPurpleHearts = statistics.Find("NumPurpleHearts");
+         if (0 < numPurpleHearts.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Purple Hearts = " + numPurpleHearts.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic numBronzeStars = statistics.Find("NumBronzeStars");
+         if (0 < numBronzeStars.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Bronze Stars = " + numBronzeStars.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic numSilverStars = statistics.Find("NumSilverStars");
+         if (0 < numSilverStars.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Silver Stars = " + numSilverStars.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic numDistinguishedCrosses = statistics.Find("NumDistinguishedCrosses");
+         if (0 < numDistinguishedCrosses.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Distinguished Crosses = " + numDistinguishedCrosses.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic numMedalOfHonors = statistics.Find("NumMedalOfHonors");
+         if (0 < numMedalOfHonors.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Medal of Honor = " + numMedalOfHonors.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         //-------------------------------------
+         if (0 < numPanzerfaultAttacks.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Panzerfaust Attacks = " + numPanzerfaultAttacks.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            tb.Inlines.Add(new LineBreak());
+            average = numPanzerfaultDeaths.Value / numPanzerfaultAttacks.Value;
+            tb.Inlines.Add(new Run("Average Deaths per PzFaust Attack = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         if (0 < numMineAttack.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Mine Attacks = " + numMineAttack.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+            tb.Inlines.Add(new LineBreak());
+            average = numMineImmobilization.Value / numMineAttack.Value;
+            tb.Inlines.Add(new Run("Average Mine Immobilizations = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         //-------------------------------------
+         tb.Inlines.Add(new LineBreak());
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         GameStatistic maxDayBetweenCombat = statistics.Find("MaxDayBetweenCombat");
+         if (1 < maxDayBetweenCombat.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Max Days Between Combat = " + maxDayBetweenCombat.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic maxRollsForAirSupport = statistics.Find("MaxRollsForAirSupport");
+         if (1 < maxRollsForAirSupport.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Max Rolls For Air Strikes = " + maxRollsForAirSupport.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic maxRollsForArtillerySupport = statistics.Find("MaxRollsForArtillerySupport");
+         if (1 < maxRollsForArtillerySupport.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Max Rolls For Artillery Support = " + maxRollsForArtillerySupport.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic maxEnemiesInOneBattle = statistics.Find("MaxEnemiesInOneBattle");
+         if (0 < maxEnemiesInOneBattle.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Max Enemies In One Battle = " + maxEnemiesInOneBattle.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         GameStatistic maxRoundsOfCombat = statistics.Find("MaxRoundsOfCombat");
+         if (0 < maxRoundsOfCombat.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Max Rounds of Combat = " + maxRoundsOfCombat.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         }
+         //-------------------------------------
+         tb.Inlines.Add(new LineBreak());
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         foreach (GameStatistic kill in statistics)
+         {
+            StringBuilder sb = new StringBuilder();
+            if (true == kill.Key.Contains("FriendlyFire"))
+            {
+               if (0 < kill.Value)
+               {
+                  int index = kill.Key.IndexOf("Friendly"); //NumKillLwFriendlyFire
+                  sb.Append("Killed ");
+                  sb.Append(kill.Key.Substring(7, index - 7));
+                  sb.Append(" by Friendly Fire = ");
+                  sb.Append(kill.Value.ToString());
+                  tb.Inlines.Add(new LineBreak());
+                  tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               }
+            }
+         }
+         tb.Inlines.Add(new LineBreak());
+         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
+         foreach (GameStatistic kill in statistics)
+         {
+            StringBuilder sb = new StringBuilder();
+            if (true == kill.Key.Contains("YourFire"))
+            {
+               if (0 < kill.Value)
+               {
+                  int index = kill.Key.IndexOf("Your");
+                  sb.Append("Killed ");
+                  sb.Append(kill.Key.Substring(7, index - 7));
+                  sb.Append(" by Your Fire = ");
+                  sb.Append(kill.Value.ToString());
+                  tb.Inlines.Add(new LineBreak());
+                  tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
+               }
+            }
+         }
+         return true;
+      }
+      //---------------------------------------
       private bool UpdateCanvasTank(IGameInstance gi, GameAction action)
       {
          // Clean the Canvas of all marks
@@ -3338,609 +3938,6 @@ namespace Pattons_Best
          return true;
       }
       //---------------------------------------
-      private bool UpdateCanvasShowFeats()
-      {
-         myMoveButtons.Clear();
-         myBattleButtons.Clear();
-         List<UIElement> elements = new List<UIElement>();
-         foreach (UIElement ui in myCanvasMain.Children)
-         {
-            if (ui is Image img)
-            {
-               if (true == img.Name.Contains("Canvas"))
-                  continue;
-               elements.Add(ui);
-            }
-            if (ui is Polygon polygon)
-               elements.Add(ui);
-            if (ui is TextBlock tb)
-               elements.Add(ui);
-            if (ui is Label label)
-               elements.Add(ui);
-            if (ui is Button b)
-            {
-               if (false == b.Name.Contains("Die"))
-                  elements.Add(ui);
-            }
-         }
-         foreach (UIElement ui1 in elements)
-            myCanvasMain.Children.Remove(ui1);
-         //------------------------------------
-         myCanvasMain.LayoutTransform = new ScaleTransform(1.0, 1.0);
-         double centerX = myCanvasMain.ActualWidth * 0.5;
-         double centerY = myCanvasMain.ActualHeight * 0.5;
-         //------------------------------------
-         GameFeat featChange;
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-         if ( false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // Update_CanvasShowFeats()
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): Get_FeatChange() returned false");
-            return false;
-         }
-         if (true == String.IsNullOrEmpty(featChange.Key))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): featChange=empty");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): Change=" + featChange.ToString());
-         //------------------------------------
-         double sizeOfImage = Math.Min(myCanvasMain.ActualHeight, myCanvasMain.ActualWidth);
-         BitmapImage bmi1 = new BitmapImage();
-         bmi1.BeginInit();
-         bmi1.UriSource = new Uri(MapImage.theImageDirectory + "StarReward.gif", UriKind.Absolute);
-         bmi1.EndInit();
-         Image imgFeat = new Image { Source = bmi1, Height = sizeOfImage, Width = sizeOfImage, Name = "Feat" };
-         ImageBehavior.SetAnimatedSource(imgFeat, bmi1);
-         myCanvasMain.Children.Add(imgFeat);
-         double X = centerX - (sizeOfImage * 0.5);
-         double Y = centerY - (sizeOfImage * 0.5);
-         Canvas.SetLeft(imgFeat, X);
-         Canvas.SetTop(imgFeat, Y);
-         Canvas.SetZIndex(imgFeat, 99998);
-         myCanvasMain.MouseDown += MouseDownGameFeat;
-         //-------------------------------------
-         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Name="FeatLabel1", Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
-         myCanvasMain.Children.Add(labelTitle);
-         labelTitle.MouseDown += MouseDownGameFeat;
-         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Name = "FeatLabel2", Content = GameFeats.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
-         myCanvasMain.Children.Add(labelForFeat);
-         labelForFeat.MouseDown += MouseDownGameFeat;
-         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Name = "FeatLabel3", Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center };
-         myCanvasMain.Children.Add(labelClick);
-         labelClick.MouseDown += MouseDownGameFeat;
-         labelTitle.UpdateLayout();
-         labelForFeat.UpdateLayout();
-         labelClick.UpdateLayout();
-         //-------------------------------------
-         double X1 = centerX - labelTitle.ActualWidth * 0.5;
-         double Y1 = centerY - labelTitle.ActualHeight * 0.5;
-         double X2 = centerX - labelForFeat.ActualWidth * 0.5;
-         double Y2 = centerY + labelTitle.ActualHeight * 0.5;
-         double X3 = centerX - labelClick.ActualWidth * 0.5;
-         double Y3 = centerY + labelTitle.ActualHeight * 0.5 + labelForFeat.ActualHeight;
-         //-------------------------------------
-         Canvas.SetLeft(labelTitle, X1);
-         Canvas.SetTop(labelTitle, Y1);
-         Canvas.SetZIndex(labelTitle, 99999);
-         Canvas.SetLeft(labelForFeat, X2);
-         Canvas.SetTop(labelForFeat, Y2);
-         Canvas.SetZIndex(labelForFeat, 99999);
-         Canvas.SetLeft(labelClick, X3);
-         Canvas.SetTop(labelClick, Y3);
-         Canvas.SetZIndex(labelClick, 99999);
-         //-------------------------------------
-         GameFeat? startingFeat = GameEngine.theStartingFeats.Find(featChange.Key);
-         if ( null == startingFeat )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): startingFeat=null");
-            return false;
-         }
-         startingFeat.Value = featChange.Value;
-         return true;
-      }
-      private bool UpdateCanvasShowStatistics(IGameInstance gi)
-      {
-         if( null == myDieRoller )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatistics(): myDieRoller=null");
-            return false;
-         }
-         myMoveButtons.Clear();
-         myBattleButtons.Clear();
-         List<UIElement> elements = new List<UIElement>();
-         foreach (UIElement ui in myCanvasMain.Children)
-         {
-            if (ui is Image img)
-            {
-               if ("Map" == img.Name)
-                  continue;
-               elements.Add(ui);
-            }
-            if (ui is TextBlock tb)
-               elements.Add(ui);
-            if (ui is Label label)
-               elements.Add(ui);
-            if (ui is Button b)
-            {
-               if (false == b.Name.Contains("Die"))
-                  elements.Add(ui);
-            }
-         }
-         foreach (UIElement ui1 in elements)
-            myCanvasMain.Children.Remove(ui1);
-         myDieRoller.HideDie();
-         //-------------------------------
-         GameStatistic statNumGames = gi.Statistics.Find("NumGames"); // current game always set to one
-         statNumGames.Value = 1;
-         //-------------------------------
-         myTextBoxMarquee.Inlines.Clear();
-         myTextBoxMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground = Brushes.Red });
-         if (false == UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistics, Brushes.Red))
-         {
-            Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.Update_CanvasShowStatistics(): UpdateCanvasShowStatsText() returned false");
-            return false;
-         }
-         //-------------------------------
-         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
-         if( true == optionSingleDayGame.IsEnabled)
-         {
-            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
-            UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theSingleDayStatistics);
-            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
-            GameStatistic stat0NumGames = GameEngine.theSingleDayStatistics.Find("NumGames");
-            if (1 < stat0NumGames.Value)
-            {
-               myTextBoxMarquee.Inlines.Add(new LineBreak());
-               myTextBoxMarquee.Inlines.Add(new LineBreak());
-               string title2 = "Single Games Statistics:";
-               myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground = Brushes.Blue });
-               UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theSingleDayStatistics, Brushes.Blue);
-            }
-         }
-         else
-         {
-            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
-            UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theCampaignStatistics);
-            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
-            GameStatistic stat1NumGames = GameEngine.theCampaignStatistics.Find("NumGames");
-            if (1 < stat1NumGames.Value)
-            {
-               myTextBoxMarquee.Inlines.Add(new LineBreak());
-               myTextBoxMarquee.Inlines.Add(new LineBreak());
-               string title2 = "Campaign Games Statistics:";
-               myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground = Brushes.Blue });
-               UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theCampaignStatistics, Brushes.Blue);
-            }
-         }
-         //-------------------------------
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
-         UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theTotalStatistics);
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
-         GameStatistic stat0NumGamesAfter = GameEngine.theSingleDayStatistics.Find("NumGames");
-         GameStatistic stat1NumGamesAfter = GameEngine.theCampaignStatistics.Find("NumGames"); 
-         GameStatistic stat2NumGames = GameEngine.theTotalStatistics.Find("NumGames");
-         if ((stat0NumGamesAfter.Value != stat2NumGames.Value) && (stat1NumGamesAfter.Value != stat2NumGames.Value)) 
-         {
-            myTextBoxMarquee.Inlines.Add(new LineBreak());
-            myTextBoxMarquee.Inlines.Add(new LineBreak());
-            string title2 = "All Games Statistics:";
-            myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline, Foreground=Brushes.Goldenrod });
-            UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theTotalStatistics, Brushes.Goldenrod);
-         }
-         //-------------------------------
-         myCanvasMain.ClipToBounds = true;
-         myCanvasMain.Children.Add(myTextBoxMarquee);
-         myTextBoxMarquee.UpdateLayout();
-         //-------------------------------
-         DoubleAnimation doubleAnimation = new DoubleAnimation();
-         doubleAnimation.From = -myTextBoxMarquee.ActualHeight;
-         doubleAnimation.To = myCanvasMain.ActualHeight;
-         doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
-         doubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(MARQUEE_SCROLL_ANMINATION_TIME));
-         Storyboard.SetTargetName(doubleAnimation, "tbMarquee");
-         Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(Canvas.BottomProperty));
-         myStoryboard.Children.Add(doubleAnimation);
-         myStoryboard.Begin(this, true);
-         //-------------------------------
-         Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.Update_CanvasShowStatistics(): Called Save_DefaultsToSettings()");
-         SaveDefaultsToSettings();
-         return true;
-      }
-      private void UpdateCanvasShowStatsAdds(GameStatistics statistics, GameStatistics totalStatistics)
-      {
-         //-------------------------------------
-         foreach (GameStatistic stat in statistics)
-         {
-            if (true == stat.Key.Contains("Num"))
-            {
-               GameStatistic statAllNum = totalStatistics.Find(stat.Key);
-               statAllNum.Value += stat.Value;
-            }
-            else if (true == stat.Key.Contains("Max"))
-            {
-               GameStatistic statMax = totalStatistics.Find(stat.Key);
-               if (statMax.Value < stat.Value)
-                  statMax.Value = stat.Value;
-            }
-            else if (true == stat.Key.Contains("Min"))
-            {
-               GameStatistic statMin = totalStatistics.Find(stat.Key);
-               Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): key=" + stat.Key + " statMin.Value=" + statMin.Value.ToString() + " stat.Value=" + stat.Value.ToString());
-               if ( (stat.Value < statMin.Value) || (0 == statMin.Value)  )
-               {
-                  if( 0 < stat.Value )
-                  {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_STATS_MIN, "Perform_EndCheck(): (stat.Value=" + stat.Value.ToString() + ") < (statMin.Value=" + statMin.Value.ToString() + ")");
-                     statMin.Value = stat.Value;
-                  }
-               }
-            }
-         }
-      }
-      private bool UpdateCanvasShowStatsText(TextBlock tb, GameStatistics statistics, Brush brushFont)
-      {
-         GameStatistic numGames = statistics.Find("NumGames"); // check that at least one
-         if( 0 == numGames.Value )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatsText(): numGames=0");
-            return false;
-         }
-         GameStatistic numDays = statistics.Find("NumDays");
-         if (0 == numDays.Value)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatsText(): numDays=0");
-            return false;
-         }
-         Option optionSingleDayGame = myGameInstance.Options.Find("SingleDayScenario");
-         GameStatistic numWins = statistics.Find("NumWins");
-         GameStatistic numOfFight = statistics.Find("NumOfFight");
-         GameStatistic numScenariosWon = statistics.Find("NumScenariosWon");
-         GameStatistic numScenariosLost = statistics.Find("NumScenariosLost");
-         GameStatistic numOfKilledCrewman = statistics.Find("NumOfKilledCrewman");
-         GameStatistic numShermanExplodes = statistics.Find("NumShermanExplodes");
-         GameStatistic numShermanBurns = statistics.Find("NumShermanBurns");
-         GameStatistic numShermanPenetrations = statistics.Find("NumShermanPenetration");
-         GameStatistic numPanzerfaultAttacks = statistics.Find("NumPanzerfaustAttack");
-         GameStatistic numPanzerfaultDeaths = statistics.Find("NumPanzerfaustDeath");
-         GameStatistic numMineAttack = statistics.Find("NumMineAttack");
-         GameStatistic numMineImmobilization = statistics.Find("NumMineImmobilization");
-         int numLostTanks = numShermanExplodes.Value + numShermanPenetrations.Value;
-         int numKilledEnemyFriendlyFire = 0;
-         int numKilledEnemyYourFire = 0;
-         foreach(GameStatistic stat in statistics)
-         {
-            if (true == stat.Key.Contains("FriendlyFire")) numKilledEnemyFriendlyFire += stat.Value;
-            if (true == stat.Key.Contains("YourFire")) numKilledEnemyYourFire += stat.Value;
-         }
-         int numKilledEnemyTotal = numKilledEnemyFriendlyFire + numKilledEnemyYourFire;
-         int average = 0;
-         if (1 < numGames.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Games = " + numGames.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground=brushFont });
-            int winRatio = (int)Math.Round(100.0 * ((double)numWins.Value) / (double)numGames.Value);
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("% Wins = " + winRatio.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            if (true == optionSingleDayGame.IsEnabled)
-            {
-               GameStatistic victoryPointsGame = statistics.Find("MaxPointsSingleDayGame");
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Max Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            else
-            {
-               GameStatistic victoryPointsGame = statistics.Find("MaxPointsCampaignGame");
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Max Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numOfFight.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# of Fights = " + numOfFight.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if ((0 < numScenariosWon.Value) || (0 < numScenariosLost.Value))
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# Engagements Won = " + numScenariosWon.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# Engagements Lost = " + numScenariosLost.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               int totalEngagements = numScenariosWon.Value + numScenariosLost.Value;
-               average = numScenariosWon.Value / totalEngagements;
-               tb.Inlines.Add(new Run("Average Engagements Won = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            GameStatistic maxCrewRatingWin = statistics.Find("MaxCrewRatingWin");
-            if (0 < maxCrewRatingWin.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Max Crew Rating with Win = " + maxCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            GameStatistic minCrewRatingWin = statistics.Find("MinCrewRatingWin");
-            if (0 < minCrewRatingWin.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            average = numDays.Value / numGames.Value;
-            tb.Inlines.Add(new Run("Average Days per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            if (0 < numLostTanks)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               average = numDays.Value / numLostTanks;
-               tb.Inlines.Add(new Run("Average Days per Lost Tanks = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if( 0 < numOfKilledCrewman.Value )
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Crewmen = " + numOfKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               average = numDays.Value / numOfKilledCrewman.Value;
-               tb.Inlines.Add(new Run("Average Days/Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold });
-               average = numOfKilledCrewman.Value / numGames.Value;
-               tb.Inlines.Add(new Run("Average Crewmen Killed per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if( 0 < numKilledEnemyTotal )
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemyTotal.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               average = numKilledEnemyTotal / numGames.Value;
-               tb.Inlines.Add(new Run("Average Killed Enemy per Day = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numKilledEnemyFriendlyFire)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed by Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               average = numKilledEnemyFriendlyFire / numGames.Value;
-               tb.Inlines.Add(new Run("Average FF Killed per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numKilledEnemyYourFire)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed by Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               average = numKilledEnemyYourFire / numGames.Value;
-               tb.Inlines.Add(new Run("Average Your Kills per Game = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-         }
-         else // only one game
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("End Date = " + TableMgr.GetDate(myGameInstance.Day-1)) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            //-------------------------------------
-            if (0 < numWins.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Game Won!") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            else
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Game Lost!") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            if( true == optionSingleDayGame.IsEnabled)
-            {
-               GameStatistic victoryPointsGame = statistics.Find("MaxPointsSingleDayGame");
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-
-            }
-            else
-            {
-               GameStatistic victoryPointsGame = statistics.Find("MaxPointsCampaignGame");
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Victory Points = " + victoryPointsGame.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numOfFight.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# of Fights = " + numOfFight.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            int totalEngagements = numScenariosWon.Value + numScenariosLost.Value;
-            if ( 1 < totalEngagements )
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# Engagements Won = " + numScenariosWon.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("# Engagements Lost = " + numScenariosLost.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               
-               average = numScenariosWon.Value / totalEngagements;
-               tb.Inlines.Add(new Run("Average Engagements Won = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
-            if (null == lastReport)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_ShowStatsText(): lastReport=null");
-               return false;
-            }
-            int crewRating = myGameInstance.Commander.Rating + myGameInstance.Gunner.Rating + myGameInstance.Loader.Rating + myGameInstance.Driver.Rating + myGameInstance.Assistant.Rating;
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Crew Rating = " + crewRating.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            //-------------------------------------
-            if (1 < numDays.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            if ( 0 < numLostTanks )
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numOfKilledCrewman.Value)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Crewmen = " + numOfKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               tb.Inlines.Add(new LineBreak());
-               average = numDays.Value / numOfKilledCrewman.Value;
-               tb.Inlines.Add(new Run("Average Days/Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numKilledEnemyTotal)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemyTotal.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numKilledEnemyFriendlyFire)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed by Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-            //-------------------------------------
-            if (0 < numKilledEnemyYourFire)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed by Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            }
-         }
-         //====================================================
-         tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         GameStatistic numPurpleHearts = statistics.Find("NumPurpleHearts");
-         if (0 < numPurpleHearts.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Purple Hearts = " + numPurpleHearts.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic numBronzeStars = statistics.Find("NumBronzeStars");
-         if (0 < numBronzeStars.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Bronze Stars = " + numBronzeStars.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic numSilverStars = statistics.Find("NumSilverStars");
-         if (0 < numSilverStars.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Silver Stars = " + numSilverStars.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic numDistinguishedCrosses = statistics.Find("NumDistinguishedCrosses");
-         if (0 < numDistinguishedCrosses.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Distinguished Crosses = " + numDistinguishedCrosses.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic numMedalOfHonors = statistics.Find("NumMedalOfHonors");
-         if (0 < numMedalOfHonors.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Medal of Honor = " + numMedalOfHonors.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         //-------------------------------------
-         if (0 < numPanzerfaultAttacks.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Panzerfaust Attacks = " + numPanzerfaultAttacks.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            tb.Inlines.Add(new LineBreak());
-            average = numPanzerfaultDeaths.Value / numPanzerfaultAttacks.Value;
-            tb.Inlines.Add(new Run("Average Deaths per PzFaust Attack = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         if (0 < numMineAttack.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Mine Attacks = " + numMineAttack.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-            tb.Inlines.Add(new LineBreak());
-            average = numMineImmobilization.Value / numMineAttack.Value;
-            tb.Inlines.Add(new Run("Average Mine Immobilizations = " + average.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         //-------------------------------------
-         tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         GameStatistic maxDayBetweenCombat = statistics.Find("MaxDayBetweenCombat");
-         if (1 < maxDayBetweenCombat.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Max Days Between Combat = " + maxDayBetweenCombat.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic maxRollsForAirSupport = statistics.Find("MaxRollsForAirSupport");
-         if (1 < maxRollsForAirSupport.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Max Rolls For Air Strikes = " + maxRollsForAirSupport.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic maxRollsForArtillerySupport = statistics.Find("MaxRollsForArtillerySupport");
-         if (1 < maxRollsForArtillerySupport.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Max Rolls For Artillery Support = " + maxRollsForArtillerySupport.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic maxEnemiesInOneBattle = statistics.Find("MaxEnemiesInOneBattle");
-         if (0 < maxEnemiesInOneBattle.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Max Enemies In One Battle = " + maxEnemiesInOneBattle.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         GameStatistic maxRoundsOfCombat = statistics.Find("MaxRoundsOfCombat");
-         if (0 < maxRoundsOfCombat.Value)
-         {
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Max Rounds of Combat = " + maxRoundsOfCombat.Value.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         }
-         //-------------------------------------
-         tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         foreach (GameStatistic kill in statistics)
-         {
-            StringBuilder sb = new StringBuilder();
-            if (true == kill.Key.Contains("FriendlyFire"))
-            {
-               if (0 < kill.Value)
-               {
-                  int index = kill.Key.IndexOf("Friendly"); //NumKillLwFriendlyFire
-                  sb.Append("Killed ");
-                  sb.Append(kill.Key.Substring(7, index - 7));
-                  sb.Append(" by Friendly Fire = ");
-                  sb.Append(kill.Value.ToString());
-                  tb.Inlines.Add(new LineBreak());
-                  tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               }
-            }
-         }
-         tb.Inlines.Add(new LineBreak());
-         tb.Inlines.Add(new Run("------------------------------") { FontWeight = FontWeights.Bold, Foreground = brushFont });
-         foreach (GameStatistic kill in statistics)
-         {
-            StringBuilder sb = new StringBuilder();
-            if (true == kill.Key.Contains("YourFire"))
-            {
-               if (0 < kill.Value)
-               {
-                  int index = kill.Key.IndexOf("Your");
-                  sb.Append("Killed ");
-                  sb.Append(kill.Key.Substring(7, index-7));
-                  sb.Append(" by Your Fire = ");
-                  sb.Append(kill.Value.ToString());
-                  tb.Inlines.Add(new LineBreak());
-                  tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold, Foreground = brushFont });
-               }
-            }
-         }
-         return true;
-      }
-      //---------------------------------------
       private bool UpdateCanvasMainSpottingLoader(IGameInstance gi, GameAction action)
       {
          Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateCanvasMainSpottingLoader(): SSSSSSS setting ellipse action=" + action.ToString());
@@ -4501,6 +4498,7 @@ namespace Pattons_Best
          }
          return true;
       }
+      //-------------CONTROLLER FUNCTIONS---------------------------------
       //-------------CONTROLLER FUNCTIONS---------------------------------
       private void MouseDownPolygonHatches(object sender, MouseButtonEventArgs e)
       {

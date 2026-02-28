@@ -465,9 +465,9 @@ namespace Pattons_Best
       {
          c.LayoutTransform = new ScaleTransform(1.0, 1.0);
          BitmapImage bmi1 = new BitmapImage();
-         int randomNum = Utilities.RandomGenerator.Next(5);
+         int randomNum = Utilities.RandomGenerator.Next(10);
          bmi1.BeginInit();
-         if (0 == randomNum)
+         if (6 < randomNum)
             bmi1.UriSource = new Uri(MapImage.theImageDirectory + "EndGameSuccess.gif", UriKind.Absolute);
          else
             bmi1.UriSource = new Uri(MapImage.theImageDirectory + "EndGameSuccess2.gif", UriKind.Absolute);

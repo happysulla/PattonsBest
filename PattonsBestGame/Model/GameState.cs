@@ -2066,20 +2066,15 @@ namespace Pattons_Best
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
          }
          //----------------------------------------------------------
-         else if ( (189 < gi.Day) || ((true == optionSingleDayGame.IsEnabled) && (GamePhase.MorningBriefing == gi.GamePhase)) ) // ends on day 190 -- or if this is a single day game
+         else if ( (true == optionSingleDayGame.IsEnabled) && (GamePhase.MorningBriefing == gi.GamePhase) ) // ends if this is a single day game
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! optionSingleDay=" + optionSingleDayGame.IsEnabled.ToString() + " or 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            if ((false == optionSingleDayGame.IsEnabled) && (189 < gi.Day))
-               GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
             //-------------------------------------------------------------
             gi.GamePhase = GamePhase.EndGame;
             if (0 < gi.VictoryPtsTotalCampaign)
             {
                gi.Statistics.AddOne("NumWins");
-               if (true == optionSingleDayGame.IsEnabled)
-                  GameEngine.theInGameFeats.AddOne("EndSingleDayWin");
-               else
-                  GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
+               GameEngine.theInGameFeats.AddOne("EndSingleDayWin");
                gi.EndGameReason = "Won on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " > 0";
                action = GameAction.EndGameWin;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
@@ -2090,6 +2085,18 @@ namespace Pattons_Best
                action = GameAction.EndGameLost;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
             }
+         }
+         //----------------------------------------------------------
+         else if ( (188 < gi.Day) && (false == optionSingleDayGame.IsEnabled) && ((GamePhase.EveningDebriefing == gi.GamePhase)|| (GamePhase.MorningBriefing == gi.GamePhase)) ) // ends on day 190 
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! optionSingleDay=" + optionSingleDayGame.IsEnabled.ToString() + " or 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
+            GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
+            //-------------------------------------------------------------
+            gi.GamePhase = GamePhase.EndGame;
+            gi.Statistics.AddOne("NumWins");
+            gi.EndGameReason = "Germany surrenders! Victory in Europe!";
+            action = GameAction.EndGameWin;
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
          }
          //----------------------------------------------------------
          if (GamePhase.EndGame == gi.GamePhase)
@@ -2441,6 +2448,7 @@ namespace Pattons_Best
                }
                break;
             case GameAction.UpdateNewGameEnd:
+               //gi.Day = 188; // <CGS> TEST - End campaign game early
                if (false == ShowTutorialScreen(gi, ref action))
                {
                   returnStatus = "Show_TutorialScreen() returned false";
@@ -4150,14 +4158,23 @@ namespace Pattons_Best
                   break;
                case GameAction.SetupCombatCalendarRoll: // only applies when coming from Setup GamePhase
                case GameAction.MorningBriefingCalendarRoll:
-                  if (false == HealedCrewmanDayDecrease(gi)) // GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll)
-                  {
-                     returnStatus = "Healed_CrewmanDayDecrease() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll): " + returnStatus);
-                  }
                   //dieRoll = 0; // <CGS> TEST - NO COMBAT - move to battle board
                   //dieRoll = 6; // <CGS> TEST - NO COMBAT - stay on move board
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
+                  if (false == PerformEndCheck(gi, ref action))
+                  {
+                       returnStatus = "Perform_EndCheck() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(" + action.ToString() +"): " + returnStatus);
+                  }
+                  //-------------------------------------------------------
+                  if (GamePhase.EndGame != gi.GamePhase)
+                  {
+                     if (false == HealedCrewmanDayDecrease(gi)) // GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll)
+                     {
+                        returnStatus = "Healed_CrewmanDayDecrease() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll): " + returnStatus);
+                     }
+                  }
                   break;
                case GameAction.MorningBriefingWeatherRoll:
                   gi.DieResults[key][0] = dieRoll;
@@ -4232,6 +4249,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MorningBriefingDayOfRest:
+                  gi.Statistics.AddOne("NumDays");
                   ++gi.Day;
                   gi.MaxDayBetweenCombat++;
                   gi.NewMembers.Clear();          // GameStateMorningBriefing.PerformAction(MorningBriefingDayOfRest)
@@ -4325,6 +4343,7 @@ namespace Pattons_Best
                      case 147: cm.WoundDaysUntilReturn -= 1; break;
                      case 155: cm.WoundDaysUntilReturn -= 1; break;
                      case 163: cm.WoundDaysUntilReturn -= 2; break;
+                     case 190: cm.WoundDaysUntilReturn -= 0; break; 
                      default:
                         Logger.Log(LogEnum.LE_ERROR, "Healed_CrewmanDayDecrease(): reach default gi.Day=" + gi.Day.ToString());
                         return false;
@@ -4490,6 +4509,7 @@ namespace Pattons_Best
       }
       protected bool AdvancePastRetrofit(IGameInstance gi, GameAction action)
       {
+         //-------------------------------------------------------
          if (false == HealedCrewmanDayDecrease(gi)) // Advance_PastRetrofit()
          {
             Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): Healed_CrewmanDayDecrease() returned false");
@@ -4504,21 +4524,23 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          ++gi.Day;
-         ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
-         if (null == newEntry)
+         if( 190 < gi.Day )
          {
-            Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): newEntry=null");
-            return false;
+            ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
+            if (null == newEntry)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): newEntry=null");
+               return false;
+            }
+            IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);  // AdvancePastRetrofit()
+            gi.Reports.Add(newReport); // AdvancePastRetrofit()
+            if (false == TableMgr.InitializeTimeTrackForNewDay(gi))  // AdvancePastRetrofit()
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): Initialize_TimeTrackForNewDay() returned false");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Advance_PastRetrofit(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          }
-         IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);  // AdvancePastRetrofit()
-         gi.Reports.Add(newReport); // AdvancePastRetrofit()
-         if (false == TableMgr.InitializeTimeTrackForNewDay(gi))  // AdvancePastRetrofit()
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): Initialize_TimeTrackForNewDay() returned false");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Advance_PastRetrofit(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
-         //-------------------------------------------------------
          SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006"); // MorningBriefing_DayOfRest
          return true;
       }
@@ -11941,6 +11963,7 @@ namespace Pattons_Best
             gi.IsBrokenMgAntiAircraft = false;
             gi.IsBrokenMgCoaxial = false;
             gi.IsBrokenMgAntiAircraft = false;
+            gi.IsBrokenMgBow = false;
             //-------------------------------------------------------
             gi.IsBrokenPeriscopeDriver = false;
             gi.IsBrokenPeriscopeLoader = false;
