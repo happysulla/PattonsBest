@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace Pattons_Best
 {
-   //-------------------------------------------------
    public interface IGameInstance
    {
-      //----------------------------------------------
       bool CtorError { get; }
       Dictionary<string, int[]> DieResults { get; }
       //----------------------------------------------
@@ -25,6 +23,7 @@ namespace Pattons_Best
       bool IsGridActive { set; get; } // True if there is some EventViewer manager active
       IUndo? UndoCmd { set; get; }
       //----------------------------------------------
+      Guid GameGuid { get; set; }
       string EventActive { set; get; }
       string EventDisplayed { set; get; }
       //----------------------------------------------

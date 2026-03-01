@@ -16,9 +16,6 @@ namespace Pattons_Best
 { 
    public class GameInstance : IGameInstance
    {
-      static public bool theIsMedalsCalculatedThisDay = false;
-      static public bool theIsPurpleHeartCalculatedThisDay = false;
-      //------------------------------------------------
       static public Logger Logger = new Logger();
       public bool CtorError { get; } = false;
       private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
@@ -42,6 +39,7 @@ namespace Pattons_Best
       public string EventActive { get; set; } = "e000";
       public string EventDisplayed { set; get; } = "e000";
       //------------------------------------------------
+      public Guid GameGuid { get; set; } = Guid.NewGuid();
       public int Day { get; set; } = 0;
       public int GameTurn { get; set; } = 0;
       public GamePhase GamePhase { get; set; } = GamePhase.GameSetup;

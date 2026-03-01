@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
+using System.Collections.Specialized;
+using System.Windows.Forms;
 using System.Windows.Shapes;
 using Windows.Networking.Sockets;
 
@@ -8,10 +11,10 @@ namespace Pattons_Best
 {
    public class GameEngine : IGameEngine
    {
+      public const int MAX_GAME_TYPE = 3;
       static public GameFeats theInGameFeats = new GameFeats();          // feats that change from starting as this session runs
       static public GameFeats theStartingFeats = new GameFeats();  // starting feats read in at app initialization
       //---------------------------------------------------------------------
-      public const int MAX_GAME_TYPE = 3;
       static public GameStatistics theTotalStatistics = new GameStatistics();
       static public GameStatistics theCampaignStatistics = new GameStatistics();
       static public GameStatistics theSingleDayStatistics = new GameStatistics();

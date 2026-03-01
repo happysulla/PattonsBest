@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -20,10 +22,10 @@ using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
-using MenuItem = System.Windows.Controls.MenuItem;
-using Point = System.Windows.Point;
 using Label = System.Windows.Controls.Label;
+using MenuItem = System.Windows.Controls.MenuItem;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using Point = System.Windows.Point;
 
 namespace Pattons_Best
 {
@@ -170,6 +172,13 @@ namespace Pattons_Best
             return;
          }
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  total stats=" + GameEngine.theTotalStatistics.ToString());
+         //---------------------------------------------------------------
+         if (false == DeserializeGameSave(GameSaveMgr.theGameSaves, "gamesave"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theTotalStatistics) returned false");
+            CtorError = true;
+            return;
+         }
          //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
@@ -1546,43 +1555,46 @@ namespace Pattons_Best
       private void SaveDefaultsToSettings(bool isWindowPlacementSaved = true)
       {
          theSaveSettingsMutex.WaitOne();
-            CultureInfo currentCulture = CultureInfo.CurrentCulture;
-            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
-            //-------------------------------------------
-            if (true == isWindowPlacementSaved)
-            {
-               WindowPlacement wp; // Persist window placement details to application settings
-               var hwnd = new WindowInteropHelper(this).Handle;
-               if (false == GetWindowPlacement(hwnd, out wp))
-                  Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): GetWindowPlacement() returned false");
-               string sWinPlace = Utilities.Serialize<WindowPlacement>(wp);
-               Properties.Settings.Default.WindowPlacement = sWinPlace;
-            }
-            //-------------------------------------------
-            Properties.Settings.Default.ZoomCanvas = Utilities.ZoomCanvas;
-            //-------------------------------------------
-            Properties.Settings.Default.ScrollViewerHeight = myScrollViewerMap.Height;
-            Properties.Settings.Default.ScrollViewerWidth = myScrollViewerMap.Width;
-            //-------------------------------------------
-            Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "Save_DefaultsToSettings(): Options=" + myGameInstance.Options.ToString());
-            string? sOptions = SerializeOptions(myGameInstance.Options);
-            if (null == sOptions)
-               Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeOptions() returned false");
-            else
-               Properties.Settings.Default.GameOptions = sOptions;
-            //-------------------------------------------
-            Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Save_DefaultsToSettings():\n  SAVING feats=" + GameEngine.theInGameFeats.ToString() );
-            if (false == SerializeGameFeats(GameEngine.theInGameFeats))
-               Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameFeats() returned false");
-            //-------------------------------------------
-            if (false == SerializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
-               Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics() returned false");
-            if (false == SerializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
-               Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics(theCampaignStatistics) returned false");
-            if (false == SerializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
-               Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics(theTotalStatistics) returned false");
-            //-------------------------------------------
-            Properties.Settings.Default.Save();
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         //-------------------------------------------
+         if (true == isWindowPlacementSaved)
+         {
+            WindowPlacement wp; // Persist window placement details to application settings
+            var hwnd = new WindowInteropHelper(this).Handle;
+            if (false == GetWindowPlacement(hwnd, out wp))
+               Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): GetWindowPlacement() returned false");
+            string sWinPlace = Utilities.Serialize<WindowPlacement>(wp);
+            Properties.Settings.Default.WindowPlacement = sWinPlace;
+         }
+         //-------------------------------------------
+         Properties.Settings.Default.ZoomCanvas = Utilities.ZoomCanvas;
+         //-------------------------------------------
+         Properties.Settings.Default.ScrollViewerHeight = myScrollViewerMap.Height;
+         Properties.Settings.Default.ScrollViewerWidth = myScrollViewerMap.Width;
+         //-------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "Save_DefaultsToSettings(): Options=" + myGameInstance.Options.ToString());
+         string? sOptions = SerializeOptions(myGameInstance.Options);
+         if (null == sOptions)
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeOptions() returned false");
+         else
+            Properties.Settings.Default.GameOptions = sOptions;
+         //-------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Save_DefaultsToSettings():\n  SAVING feats=" + GameEngine.theInGameFeats.ToString() );
+         if (false == SerializeGameFeats(GameEngine.theInGameFeats))
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameFeats() returned false");
+         //-------------------------------------------
+         if (false == SerializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics() returned false");
+         if (false == SerializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics(theCampaignStatistics) returned false");
+         if (false == SerializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics(theTotalStatistics) returned false");
+         //-------------------------------------------
+         if (false == SerializeGameSave(GameSaveMgr.theGameSaves, "gamesave"))
+            Logger.Log(LogEnum.LE_ERROR, "SerializeGameSave(): SerializeGameStatistics(theGameSaves) returned false");
+         //-------------------------------------------
+         Properties.Settings.Default.Save();
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          theSaveSettingsMutex.ReleaseMutex();
       }
@@ -1765,6 +1777,153 @@ namespace Pattons_Best
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
          //--------------------------------
+         return true;
+      }
+      private bool SerializeGameSave(OrderedDictionary gameSaves, string filename)
+      {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         XmlDocument aXmlDocument = new XmlDocument();
+         aXmlDocument.LoadXml("<GameSaves></GameSaves>");
+         if (null == aXmlDocument.DocumentElement)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): aXmlDocument.DocumentElement=null");
+            return false;
+         }
+         //--------------------------------                                                                                                                                                                         //--------------------------------
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): root is null");
+            return false;
+         }
+         aXmlDocument.DocumentElement.SetAttribute("count", gameSaves.Count.ToString());
+         //--------------------------------
+         foreach (DictionaryEntry entry in gameSaves)
+         {
+            Guid guid = (Guid)entry.Key;
+            if( null == entry.Value )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): entry.Value is null");
+               return false;
+            }
+            DaySaves daySaves = (DaySaves)entry.Value;
+            XmlElement? daySavesElem = aXmlDocument.CreateElement("DaySaves");
+            if (null == daySavesElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): CreateElement(daySavesElem) returned null");
+               return false;
+            }
+            daySavesElem.SetAttribute("value", guid.ToString()); // this saves GUID to value for <DaySaves>
+            daySavesElem.SetAttribute("count", daySaves.Count.ToString()); // how many days recorded for this game instance
+            XmlNode? daySavesNode = root.AppendChild(daySavesElem);
+            if (null == daySavesNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): AppendChild(daySavesNode) returned null");
+               return false;
+            }
+            //---------------------------
+            foreach (KeyValuePair<int, DayData> kvp1 in daySaves)
+            {
+               XmlElement? dayDataElem = aXmlDocument.CreateElement("DayData");
+               if (null == dayDataElem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): CreateElement(guidElem) returned null");
+                  return false;
+               }
+               dayDataElem.SetAttribute("day", kvp1.Key.ToString()); // this saves day to value for <GameSaveData>
+               XmlNode? dayDataNode = daySavesNode.AppendChild(dayDataElem);
+               if (null == dayDataNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): AppendChild(dayDataNode) returned null");
+                  return false;
+               }
+               DayData data = kvp1.Value;
+               //--------------------------------
+               XmlElement? isDecorationGivenElem = aXmlDocument.CreateElement("IsDecorationGiven");
+               if (null == isDecorationGivenElem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): CreateElement(isDecorationGivenElem) returned null");
+                  return false;
+               }
+               isDecorationGivenElem.SetAttribute("value", data.myIsDecorationGiven.ToString());
+               XmlNode? isDecorationGivenNode = dayDataNode.AppendChild(isDecorationGivenElem);
+               if (null == isDecorationGivenNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): AppendChild(isDecorationGivenNode) returned null");
+                  return false;
+               }
+               //--------------------------------
+               XmlElement? isHeartGivenElem = aXmlDocument.CreateElement("IsPurpleHeartGiven");
+               if (null == isHeartGivenElem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): CreateElement(isHeartGivenElem) returned null");
+                  return false;
+               }
+               isHeartGivenElem.SetAttribute("value", data.myIsPurpleHeartGiven.ToString());
+               XmlNode? isHeartGivenNode = dayDataNode.AppendChild(isHeartGivenElem);
+               if (null == isHeartGivenNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): AppendChild(isHeartGivenNode) returned null");
+                  return false;
+               }
+               //--------------------------------
+               XmlElement? isPromoVictoryPointsCalculated = aXmlDocument.CreateElement("IsPromoVictoryPointsCalculated");
+               if (null == isPromoVictoryPointsCalculated)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): CreateElement(IsPromoVictoryPointsCalculated) returned null");
+                  return false;
+               }
+               isPromoVictoryPointsCalculated.SetAttribute("value", data.myIsPromoVictoryPointsCalculated.ToString());
+               XmlNode? isPromoVictoryPointsGivenNode = dayDataNode.AppendChild(isPromoVictoryPointsCalculated);
+               if (null == isPromoVictoryPointsGivenNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): AppendChild(isPromoVictoryPointsGivenNode) returned null");
+                  return false;
+               }
+            }
+         }
+         //-----------------------------------------
+         if (null == aXmlDocument)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): aXmlDocument=null");
+            return false;
+         }
+         //-----------------------------------------
+         try
+         {
+            if (false == Directory.Exists(GameFeats.theGameFeatDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(GameFeats.theGameFeatDirectory);
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): path=" + GameFeats.theGameFeatDirectory + "\n e=" + e.ToString());
+            return false;
+         }
+         string filenameFull = GameStatistics.theGameStatisticsDirectory + filename + ".xml";
+         if (File.Exists(filenameFull))
+            File.Delete(filenameFull);
+         FileStream? writer = null;
+         //-----------------------------------------
+         try
+         {
+            writer = new FileStream(filenameFull, FileMode.OpenOrCreate, FileAccess.Write);
+            XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
+            XmlWriter xmlWriter = XmlWriter.Create(writer, settings);// For XmlWriter, it uses the stream that was created: writer.
+            aXmlDocument.Save(xmlWriter);
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): path=" + GameFeats.theGameFeatDirectory + "\n e =" + ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            return false;
+         }
+         finally
+         {
+            if (writer != null)
+               writer.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         }
          return true;
       }
       private void SetDisplayIconForUninstall()
@@ -2108,6 +2267,188 @@ namespace Pattons_Best
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             if (0 == statistics.Count)
                statistics.SetOriginalGameStatistics();
+         }
+         return true;
+      }
+      private bool DeserializeGameSave(OrderedDictionary gameSaves, string filename)
+      {
+         gameSaves.Clear();
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         XmlTextReader? reader = null;
+         try
+         {
+            string qualifiedFilename = GameStatistics.theGameStatisticsDirectory + filename + ".xml";
+            reader = new XmlTextReader(qualifiedFilename) { WhitespaceHandling = WhitespaceHandling.None };
+            if (null == reader)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader=null");
+               return false;
+            }
+            if (null == reader)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader=null");
+               return false;
+            }
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(GameSaves) = false");
+               return false;
+            }
+            if (reader.Name != "GameSaves")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): GameSaves != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sCount = reader.GetAttribute("count");
+            if (null == sCount)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): Count=null");
+               return false;
+            }
+            int count = int.Parse(sCount);
+            for (int i = 0; i < count; ++i)
+            {
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(DaySaves) = false");
+                  return false;
+               }
+               if (reader.Name != "DaySaves")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): DaySaves != (node=" + reader.Name + ")");
+                  return false;
+               }
+               string? sGuid = reader.GetAttribute("value");
+               if (null == sGuid)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sGuid=null");
+                  return false;
+               }
+               Guid guid = Guid.Parse(sGuid);
+               //-----------------------------
+               string? sCount1 = reader.GetAttribute("count");
+               if (null == sCount1)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sCount1=null");
+                  return false;
+               }
+               //-----------------------------
+               DaySaves daySaves = new DaySaves();
+               for (int i1 = 0; i1 < count; ++i1)
+               {
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(DayData) = false");
+                     return false;
+                  }
+                  if (reader.Name != "DayData")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): DayData != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sDay = reader.GetAttribute("value");
+                  if (null == sDay)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sDay=null");
+                     return false;
+                  }
+                  int day = Int32.Parse(sDay);
+                  //-----------------------------
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(IsDecorationGiven) = false");
+                     return false;
+                  }
+                  if (reader.Name != "IsDecorationGiven")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): IsDecorationGiven != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sIsDecorationGiven = reader.GetAttribute("value");
+                  if (null == sIsDecorationGiven)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sIsDecorationGiven=null");
+                     return false;
+                  }
+                  bool isDecorationGiven = Boolean.Parse(sIsDecorationGiven);
+                  //-----------------------------
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(IsPurpleHeartGiven ) = false");
+                     return false;
+                  }
+                  if (reader.Name != "IsPurpleHeartGiven ")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): IsPurpleHeartGiven  != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sIsPurpleHeartGiven = reader.GetAttribute("value");
+                  if (null == sIsPurpleHeartGiven)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sIsPromoPointsGiven=null");
+                     return false;
+                  }
+                  bool isPurpleHeartGiven = Boolean.Parse(sIsPurpleHeartGiven);
+                  //-----------------------------
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(IsPromoVictoryPointsCalculated) = false");
+                     return false;
+                  }
+                  if (reader.Name != "IsPromoVictoryPointsCalculated")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): IsPromoVictoryPointsCalculated != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sIsPromoVictoryPointsCalculated = reader.GetAttribute("value");
+                  if (null == sIsPromoVictoryPointsCalculated)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sIsPromoVictoryPointsCalculated=null");
+                     return false;
+                  }
+                  bool isPromoVictoryPointsCalculated = Boolean.Parse(sIsPromoVictoryPointsCalculated);
+                  //-----------------------------
+                  daySaves[day] = new DayData(isDecorationGiven, isPurpleHeartGiven, isPromoVictoryPointsCalculated);
+               }
+               gameSaves[guid] = daySaves;
+               if (0 < count)
+                  reader.Read(); // get past </GameSaveData> tag
+            }
+            if (0 < count)
+               reader.Read(); // get past </DaySaves> tag
+         }
+         //==========================================
+         catch (DirectoryNotFoundException dirException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): dirException=" + dirException.ToString());
+            return false;
+         }
+         catch (FileNotFoundException)
+         {
+            // expected on first run
+         }
+         catch (IOException ioException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): ioException=" + ioException.ToString());
+            return false;
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): ex=" + ex.ToString());
+            return false;
+         }
+         finally
+         {
+            if (reader != null)
+               reader.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
          return true;
       }

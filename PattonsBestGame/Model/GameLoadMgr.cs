@@ -1081,6 +1081,25 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsStartElement(Guid) returned false");
+               return null;
+            }
+            if (reader.Name != "Guid")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): Guid != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sGuid = reader.GetAttribute("value");
+            if (null == sGuid)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sGuid=null");
+               return null;
+            }
+            gi.GameGuid = Guid.Parse(sGuid);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsStartElement(Version) returned false");
                return null;
             }
@@ -7213,6 +7232,20 @@ namespace Pattons_Best
          if (null == root)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): root is null");
+            return null;
+         }
+         //------------------------------------------
+         XmlElement? guidElem = aXmlDocument.CreateElement("Guid");
+         if (null == guidElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): aXmlDocument.DocumentElement.LastChild=null");
+            return null;
+         }
+         guidElem.SetAttribute("value", gi.GameGuid.ToString());
+         XmlNode? guidNode = root.AppendChild(guidElem);
+         if (null == guidNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(guidNode) returned null");
             return null;
          }
          //------------------------------------------

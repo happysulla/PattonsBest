@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -111,6 +112,8 @@ namespace Pattons_Best
          gi.GameCommands.Add(new GameCommand(gi.GamePhase, drAction, evt, action, CanvasImageViewer.theMainImage));
          gi.EventActive = gi.EventDisplayed = evt;
          gi.DieRollAction = drAction;
+         if (10 < gi.GameCommands.Count) // remove oldest if over 10 commands
+            gi.GameCommands.RemoveAt(0);
       }
       protected bool ResetDieResults(IGameInstance gi)
       {
@@ -3873,8 +3876,6 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.MorningBriefingBegin:
-                  GameInstance.theIsMedalsCalculatedThisDay = false; // it is a new day
-                  GameInstance.theIsPurpleHeartCalculatedThisDay = false; // it is a new day
                   GameLoadMgr loadMgr = new GameLoadMgr();
                   if (false == loadMgr.SaveGame(gi, "CheckpointLastDay.pbg"))
                   {
@@ -11616,9 +11617,13 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.EventDebriefDecorationHeart:
-                  GameInstance.theIsPurpleHeartCalculatedThisDay = true;
-                  GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
-                  gi.Statistics.AddOne("NumPurpleHearts");
+                  if( false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day) )// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
+                  {
+                     GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
+                     GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
+                     gi.Statistics.AddOne("NumPurpleHearts");
+                  }
+                  //-------------------------------------------------
                   if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
                   {
                      returnStatus = "EveningDebriefing_ResetDay() returned false";
@@ -11663,75 +11668,80 @@ namespace Pattons_Best
       }
       public bool VictoryPointsCalculated(IGameInstance gi, IAfterActionReport lastReport)
       {
-         int scenarioMultiplierKOGermanUnit = 1;
-         int scenarioMultiplierCapturedMapArea = 1;
-         int scenarioMultiplierLoseMapArea = 1;
-         if (EnumScenario.Advance == lastReport.Scenario)
+         if (false == GameSaveMgr.GetVpCalculated(gi.GameGuid, gi.Day)) // only caculate VP if not already done for this Game Instance for this day
          {
-            scenarioMultiplierKOGermanUnit = 1;
-            scenarioMultiplierCapturedMapArea = 2;
-            scenarioMultiplierLoseMapArea = 1;
+            GameSaveMgr.SetVpCalculated(gi.GameGuid, gi.Day);
+            //------------------------------------------
+            int scenarioMultiplierKOGermanUnit = 1;
+            int scenarioMultiplierCapturedMapArea = 1;
+            int scenarioMultiplierLoseMapArea = 1;
+            if (EnumScenario.Advance == lastReport.Scenario)
+            {
+               scenarioMultiplierKOGermanUnit = 1;
+               scenarioMultiplierCapturedMapArea = 2;
+               scenarioMultiplierLoseMapArea = 1;
+            }
+            else if (EnumScenario.Battle == lastReport.Scenario)
+            {
+               scenarioMultiplierKOGermanUnit = 1;
+               scenarioMultiplierCapturedMapArea = 2;
+               scenarioMultiplierLoseMapArea = 3;
+            }
+            else if (EnumScenario.Counterattack == lastReport.Scenario) // VictoryPoints_Calculated() - set victory points based on scenario
+            {
+               scenarioMultiplierKOGermanUnit = 2;
+               scenarioMultiplierCapturedMapArea = 0;
+               scenarioMultiplierLoseMapArea = 2;
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "VictoryPoints_Calculated(): report.Scenario=" + lastReport.Scenario.ToString());
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): koX=" + scenarioMultiplierKOGermanUnit.ToString() + " captureX=" + scenarioMultiplierCapturedMapArea.ToString() + " lostX=" + scenarioMultiplierLoseMapArea.ToString());
+            //----------------------------------
+            int totalYourKia = lastReport.VictoryPtsYourKiaLightWeapon;
+            totalYourKia += lastReport.VictoryPtsYourKiaTruck;
+            totalYourKia += lastReport.VictoryPtsYourKiaSpwOrPsw * 2;
+            totalYourKia += lastReport.VictoryPtsYourKiaSPGun * 6;
+            totalYourKia += lastReport.VictoryPtsYourKiaPzIV * 7;
+            totalYourKia += lastReport.VictoryPtsYourKiaPzV * 9;
+            totalYourKia += lastReport.VictoryPtsYourKiaPzVI * 12;
+            totalYourKia += lastReport.VictoryPtsYourKiaAtGun * 4;
+            totalYourKia += lastReport.VictoryPtsYourKiaFortifiedPosition * 2;
+            lastReport.VictoryPtsTotalYourTank = totalYourKia * scenarioMultiplierKOGermanUnit;
+            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalYourTank=" + lastReport.VictoryPtsTotalYourTank.ToString());
+            //----------------------------------
+            int totalFriendlyKia = lastReport.VictoryPtsFriendlyKiaLightWeapon;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaTruck;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSpwOrPsw * 2;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSPGun * 6;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzIV * 7;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzV * 9;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzVI * 12;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaAtGun * 4;
+            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaFortifiedPosition * 2;
+            lastReport.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
+            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalFriendlyForces=" + lastReport.VictoryPtsTotalFriendlyForces.ToString());
+            //----------------------------------
+            lastReport.VictoryPtsTotalTerritory = (lastReport.VictoryPtsCaptureArea + 10 * lastReport.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
+            lastReport.VictoryPtsTotalTerritory -= (lastReport.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
+            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
+            //----------------------------------
+            int totalFriendlyLosses = lastReport.VictoryPtsFriendlyTank * 5;// lost friendly tanks
+            totalFriendlyLosses += lastReport.VictoryPtsFriendlySquad * 3;  // lost friendly tanks
+            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): LostTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " LostSquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
+            //----------------------------------
+            lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory - totalFriendlyLosses;
+            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalEngagement=" + lastReport.VictoryPtsTotalEngagement.ToString());
+            gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
+            gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
          }
-         else if (EnumScenario.Battle == lastReport.Scenario)
-         {
-            scenarioMultiplierKOGermanUnit = 1;
-            scenarioMultiplierCapturedMapArea = 2;
-            scenarioMultiplierLoseMapArea = 3;
-         }
-         else if (EnumScenario.Counterattack == lastReport.Scenario) // VictoryPoints_Calculated() - set victory points based on scenario
-         {
-            scenarioMultiplierKOGermanUnit = 2;
-            scenarioMultiplierCapturedMapArea = 0;
-            scenarioMultiplierLoseMapArea = 2;
-         }
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "VictoryPoints_Calculated(): report.Scenario=" + lastReport.Scenario.ToString());
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): koX=" + scenarioMultiplierKOGermanUnit.ToString() + " captureX=" + scenarioMultiplierCapturedMapArea.ToString() + " lostX=" + scenarioMultiplierLoseMapArea.ToString());
-         //----------------------------------
-         int totalYourKia = lastReport.VictoryPtsYourKiaLightWeapon;
-         totalYourKia += lastReport.VictoryPtsYourKiaTruck;
-         totalYourKia += lastReport.VictoryPtsYourKiaSpwOrPsw * 2;
-         totalYourKia += lastReport.VictoryPtsYourKiaSPGun * 6;
-         totalYourKia += lastReport.VictoryPtsYourKiaPzIV * 7;
-         totalYourKia += lastReport.VictoryPtsYourKiaPzV * 9;
-         totalYourKia += lastReport.VictoryPtsYourKiaPzVI * 12;
-         totalYourKia += lastReport.VictoryPtsYourKiaAtGun * 4;
-         totalYourKia += lastReport.VictoryPtsYourKiaFortifiedPosition * 2;
-         lastReport.VictoryPtsTotalYourTank = totalYourKia * scenarioMultiplierKOGermanUnit;
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalYourTank=" + lastReport.VictoryPtsTotalYourTank.ToString());
-         //----------------------------------
-         int totalFriendlyKia = lastReport.VictoryPtsFriendlyKiaLightWeapon;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaTruck;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSpwOrPsw * 2;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSPGun * 6;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzIV * 7;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzV * 9;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzVI * 12;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaAtGun * 4;
-         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaFortifiedPosition * 2;
-         lastReport.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalFriendlyForces=" + lastReport.VictoryPtsTotalFriendlyForces.ToString());
-         //----------------------------------
-         lastReport.VictoryPtsTotalTerritory = (lastReport.VictoryPtsCaptureArea + 10 * lastReport.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
-         lastReport.VictoryPtsTotalTerritory -= (lastReport.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
-         //----------------------------------
-         int totalFriendlyLosses = lastReport.VictoryPtsFriendlyTank * 5;// lost friendly tanks
-         totalFriendlyLosses += lastReport.VictoryPtsFriendlySquad * 3;  // lost friendly tanks
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): LostTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " LostSquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
-         //----------------------------------
-         lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory - totalFriendlyLosses;
-         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalEngagement=" + lastReport.VictoryPtsTotalEngagement.ToString());
-         gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
-         gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
-         //----------------------------------
          return true;
       }
       public bool UpdatePromotion(IGameInstance gi)
       {
+         //-----------------------------------------------
          string oldRank = gi.Commander.Rank;
          string lastPromoDate = TableMgr.GetDate(gi.PromotionDay);
          string currentDate = TableMgr.GetDate(gi.Day);
@@ -11810,49 +11820,51 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): commander=null");
             return false;
          }
-         StringBuilder sb1 = new StringBuilder("At ");
-         sb1.Append(TableMgr.GetTime(report));
-         sb1.Append(", ");
-         sb1.Append(commander.Name);
-         switch (outAction)
+         //---------------------------------------------
+         if (false == GameSaveMgr.GetDecorationGiven(gi.GameGuid, gi.Day))// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
          {
-            case GameAction.EventDebriefDecorationContinue:  // UpdateDecoration()
-               break;
-            case GameAction.EventDebriefDecorationBronzeStar:
-               GameInstance.theIsMedalsCalculatedThisDay = true;
-               GameEngine.theInGameFeats.AddOne("NumBronzeStars");
-               gi.Statistics.AddOne("NumBronzeStars");
-               sb1.Append(" received the Bronze Star.");
-               report.Notes.Add(sb1.ToString());
-               break;
-            case GameAction.EventDebriefDecorationSilverStar:
-               GameInstance.theIsMedalsCalculatedThisDay = true;
-               GameEngine.theInGameFeats.AddOne("NumSilverStars");
-               gi.Statistics.AddOne("NumSilverStars");
-               sb1.Append(" received the Silver Star.");
-               report.Notes.Add(sb1.ToString());
-               break;
-            case GameAction.EventDebriefDecorationCross:
-               GameInstance.theIsMedalsCalculatedThisDay = true;
-               GameEngine.theInGameFeats.AddOne("NumDistinguishedCrosses");
-               gi.Statistics.AddOne("NumDistinguishedCrosses");
-               sb1.Append(" received the Distinguished Cross.");
-               report.Notes.Add(sb1.ToString());
-               break;
-            case GameAction.EventDebriefDecorationHonor:
-               GameInstance.theIsMedalsCalculatedThisDay = true;
-               GameEngine.theInGameFeats.AddOne("NumMedalOfHonors");
-               gi.Statistics.AddOne("NumMedalOfHonors");
-               sb1.Append(" received the Medal of Honor.");
-               report.Notes.Add(sb1.ToString());
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): reached default action=" + outAction.ToString());
-               return false;
+            GameSaveMgr.SetDecorationGiven(gi.GameGuid, gi.Day);
+            StringBuilder sb1 = new StringBuilder("At ");
+            sb1.Append(TableMgr.GetTime(report));
+            sb1.Append(", ");
+            sb1.Append(commander.Name);
+            switch (outAction)
+            {
+               case GameAction.EventDebriefDecorationContinue:  // UpdateDecoration()
+                  break;
+               case GameAction.EventDebriefDecorationBronzeStar:
+                  GameEngine.theInGameFeats.AddOne("NumBronzeStars");
+                  gi.Statistics.AddOne("NumBronzeStars");
+                  sb1.Append(" received the Bronze Star.");
+                  report.Notes.Add(sb1.ToString());
+                  break;
+               case GameAction.EventDebriefDecorationSilverStar:
+                  GameEngine.theInGameFeats.AddOne("NumSilverStars");
+                  gi.Statistics.AddOne("NumSilverStars");
+                  sb1.Append(" received the Silver Star.");
+                  report.Notes.Add(sb1.ToString());
+                  break;
+               case GameAction.EventDebriefDecorationCross:
+                  GameEngine.theInGameFeats.AddOne("NumDistinguishedCrosses");
+                  gi.Statistics.AddOne("NumDistinguishedCrosses");
+                  sb1.Append(" received the Distinguished Cross.");
+                  report.Notes.Add(sb1.ToString());
+                  break;
+               case GameAction.EventDebriefDecorationHonor:
+                  GameEngine.theInGameFeats.AddOne("NumMedalOfHonors");
+                  gi.Statistics.AddOne("NumMedalOfHonors");
+                  sb1.Append(" received the Medal of Honor.");
+                  report.Notes.Add(sb1.ToString());
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): reached default action=" + outAction.ToString());
+                  return false;
+            }
          }
          //---------------------------------------------
-         if ("None" != commander.Wound) 
+         if (("None" != commander.Wound) && (false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day)) )
          {
+            GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
             SetCommand(gi, outAction, GameAction.DieRollActionNone, "e104");
             gi.NumPurpleHeart++;
             StringBuilder sb2 = new StringBuilder(commander.Name);
