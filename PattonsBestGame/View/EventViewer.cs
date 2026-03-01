@@ -4712,7 +4712,7 @@ namespace Pattons_Best
          //----------------------------------------
          if (null == myTextBlock)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentVictoryPointTotal(): myTextBlock=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_VictoryPointTotal(): myTextBlock=null");
             return false;
          }
          string key = gi.EventActive;
@@ -4720,7 +4720,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentVictoryPointTotal():  gi.Reports.GetLast()");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_VictoryPointTotal():  gi.Reports.GetLast()");
             return false;
          }
          Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
@@ -4741,42 +4741,7 @@ namespace Pattons_Best
          StringBuilder sbe101 = new StringBuilder();
          string spaces = "";
          Image? imge101 = null;
-         if (true == gi.IsCommanderKilled)
-         {
-            gi.Statistics.AddOne("NumOfScenariosLost");
-            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
-            sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!  Click image to continue.");
-            spaces="\n\n                                    ";
-         }
-         else if (TableMgr.MIA == gi.Commander.WoundDaysUntilReturn) 
-         {
-            gi.Statistics.AddOne("NumOfScenariosLost");
-            sbe101.Append("\n\nYou as the commander are seriously wounded and sent home. Engagement Lost! Click image to continue.");
-            spaces = "\n\n                                    ";
-            imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("HospitalShip") };
-         }
-         else if (0 < gi.Commander.WoundDaysUntilReturn) 
-         {
-            gi.Statistics.AddOne("NumOfScenariosLost");
-            sbe101.Append("\n\nYou as the commander are wounded and out of action. Engagement Lost! Click image to continue.");
-            spaces = "\n\n                           ";
-            imge101 = new Image { Name = "EngagementOver", Width = 300, Height = 95, Source = MapItem.theMapImages.GetBitmapImage("Ambulance") };
-         }
-         else if  (true == gi.IsBrokenMainGun)
-         {
-            gi.Statistics.AddOne("NumOfScenariosLost");
-            sbe101.Append("\n\nMain bun broken. Engagement Lost! Click image to continue.");
-            spaces = "\n\n                                    ";
-            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun") };
-         }
-         else if (true == gi.IsBrokenGunSight) 
-         {
-            gi.Statistics.AddOne("NumOfScenariosLost");
-            sbe101.Append("\n\nMain gun site broken. Engagement Lost! Click image to continue.");
-            spaces = "\n\n                                    ";
-            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight") };
-         }
-         else if (null != gi.Death)
+         if (null != gi.Death)
          {
             gi.Statistics.AddOne("NumOfScenariosLost");
             if (true == gi.Death.myIsCrewBail)
@@ -4803,7 +4768,56 @@ namespace Pattons_Best
                imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 128, Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage") };
             }
          }
-         else if (lastReport.VictoryPtsTotalEngagement <= 0 )
+         else if (true == gi.IsCommanderKilled)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
+            sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!  Click image to continue.");
+            spaces = "\n\n                                    ";
+         }
+         else if (TableMgr.MIA == gi.Commander.WoundDaysUntilReturn)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nYou as the commander are seriously wounded and sent home. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("HospitalShip") };
+         }
+         else if (0 < gi.Commander.WoundDaysUntilReturn)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nYou as the commander are wounded and out of action. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                           ";
+            imge101 = new Image { Name = "EngagementOver", Width = 300, Height = 95, Source = MapItem.theMapImages.GetBitmapImage("Ambulance") };
+         }
+         else if (true == gi.IsBrokenMainGun)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nMain bun broken. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun") };
+         }
+         else if (true == gi.IsBrokenGunSight)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nMain gun site broken. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight") };
+         }
+         else if (true == gi.Sherman.IsThrownTrack)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nThrown Track. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("ShermanThrownTrack") };
+         }
+         else if (true == gi.Sherman.IsAssistanceNeeded)
+         {
+            gi.Statistics.AddOne("NumOfScenariosLost");
+            sbe101.Append("\n\nAssistant needed to pull tank out of mud. Engagement Lost! Click image to continue.");
+            spaces = "\n\n                                    ";
+            imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("ShermanStuck") };
+         }
+         else if (lastReport.VictoryPtsTotalEngagement <= 0)
          {
             gi.Statistics.AddOne("NumOfScenariosLost");
             sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost! Click image to continue.");

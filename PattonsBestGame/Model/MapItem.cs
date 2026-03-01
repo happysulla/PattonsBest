@@ -403,8 +403,6 @@ namespace Pattons_Best
             enemyUnit = "Pak40";
          else if (true == this.Name.Contains("Pak43"))
             enemyUnit = "Pak43";
-         else if (true == this.Name.Contains("PzV"))
-            enemyUnit = "PzV";
          else if (true == this.Name.Contains("PzVIb"))
             enemyUnit = "PzVIb";
          else if (true == this.Name.Contains("PzVIe"))
@@ -421,6 +419,8 @@ namespace Pattons_Best
             enemyUnit = "JdgPz38t";
          else if (true == this.Name.Contains("PzIV"))
             enemyUnit = "PzIV";
+         else if (true == this.Name.Contains("PzV"))
+            enemyUnit = "PzV";
          else if (true == this.Name.Contains("Panzerfaust"))
             enemyUnit = "Panzerfaust";
          else

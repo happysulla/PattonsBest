@@ -2072,9 +2072,14 @@ namespace Pattons_Best
          else if ( (true == optionSingleDayGame.IsEnabled) && (GamePhase.MorningBriefing == gi.GamePhase) ) // ends if this is a single day game
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! optionSingleDay=" + optionSingleDayGame.IsEnabled.ToString() + " or 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            //-------------------------------------------------------------
             gi.GamePhase = GamePhase.EndGame;
-            if (0 < gi.VictoryPtsTotalCampaign)
+            if( (true == gi.Sherman.IsAssistanceNeeded) || (true == gi.Sherman.IsThrownTrack) || (true == gi.IsBrokenMainGun) || (true == gi.IsBrokenGunSight) || (true == gi.IsBrokenGunSight) )
+            {
+               gi.EndGameReason = "Sherman Broken Down";
+               action = GameAction.EndGameLost;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+            }
+            else if (0 < gi.VictoryPtsTotalCampaign)
             {
                gi.Statistics.AddOne("NumWins");
                GameEngine.theInGameFeats.AddOne("EndSingleDayWin");
@@ -7351,7 +7356,6 @@ namespace Pattons_Best
                      {
                         SetCommand(gi, action, GameAction.BattleRoundSequenceMinefieldDisableRoll, "e043b");
                         gi.Sherman.IsThrownTrack = true; // BattleRoundSequenceMinefieldRoll
-                        lastReport.Breakdown = "Thrown Track";
                         gi.Sherman.IsMoving = false;
                         GameEngine.theInGameFeats.AddOne("NumMineImmobilization");
                         gi.Statistics.AddOne("NumMineImmobilization");
@@ -11536,6 +11540,8 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.EveningDebriefingStart: // GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start)
+                  UpdateAfterActionReportSummary(gi, lastReport);
+                  //------------------
                   GameFeat featChange;
                   if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange))  // GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start)
                   {
@@ -11568,7 +11574,6 @@ namespace Pattons_Best
                      returnStatus = "Switch_Members() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingRatingImprovement): " + returnStatus);
                   }
-                  lastReport.DayEndedTime = TableMgr.GetTime(lastReport);
                   break;
                case GameAction.EveningDebriefingRatingImprovementEnd:
                   gi.BattleStacks.Clear();
@@ -11579,7 +11584,6 @@ namespace Pattons_Best
                      returnStatus = "VictoryPoints_Calculated() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
-                  lastReport.DayEndedTime = TableMgr.GetTime(lastReport);
                   break;
                case GameAction.EveningDebriefingCrewReplacedEnd:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e101");
@@ -11666,7 +11670,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
       }
-      public bool VictoryPointsCalculated(IGameInstance gi, IAfterActionReport lastReport)
+      private bool VictoryPointsCalculated(IGameInstance gi, IAfterActionReport lastReport)
       {
          if (false == GameSaveMgr.GetVpCalculated(gi.GameGuid, gi.Day)) // only caculate VP if not already done for this Game Instance for this day
          {
@@ -11739,7 +11743,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      public bool UpdatePromotion(IGameInstance gi)
+      private bool UpdatePromotion(IGameInstance gi)
       {
          //-----------------------------------------------
          string oldRank = gi.Commander.Rank;
@@ -11812,7 +11816,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_PROMOTION, "UpdatePromotion(): oldRank=" + oldRank + " promoDate=" + lastPromoDate.ToString() + " diffInDates=" + diffInDates.ToString() + " isPromoted=" + gi.IsPromoted);
          return true;
       }
-      public bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, ref GameAction outAction)
+      private bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, ref GameAction outAction)
       {
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
@@ -11881,7 +11885,25 @@ namespace Pattons_Best
          }
          return true;
       }
-      public bool EveningDebriefingResetDay(IGameInstance gi, IAfterActionReport report, ref GameAction outAction)
+      private void UpdateAfterActionReportSummary(IGameInstance gi, IAfterActionReport lastReport)
+      {
+         lastReport.DayEndedTime = TableMgr.GetTime(lastReport);
+         //-----------------------------------
+         if (true == gi.Sherman.IsThrownTrack)
+            lastReport.Breakdown = "Thrown Track";
+         else if (true == gi.Sherman.IsAssistanceNeeded)
+            lastReport.Breakdown = "Bogged Down";
+         else if ( true == gi.IsBrokenGunSight )
+            lastReport.Breakdown = "Broken Gun Site";
+         else if (true == gi.IsBrokenMainGun)
+            lastReport.Breakdown = "Broken Main Gun";
+         else
+            lastReport.Breakdown = "No";
+         //-----------------------------------
+         if (null != gi.Death)
+            lastReport.KnockedOut = gi.Death.myCause;
+      }
+      private bool EveningDebriefingResetDay(IGameInstance gi, IAfterActionReport report, ref GameAction outAction)
       {
          //-------------------------------------------------------
          if (false == PerformEndCheck(gi, ref outAction))

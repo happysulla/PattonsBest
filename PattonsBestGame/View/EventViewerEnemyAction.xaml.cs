@@ -1865,7 +1865,6 @@ namespace Pattons_Best
                   {
                      myGridRows[i].myDieRollToKillYourTank = NO_FIRE_THROWN_TRACK;
                      myGameInstance.Sherman.IsThrownTrack = true;
-                     lastReport.Breakdown = "Thrown Track";
                      myGameInstance.Sherman.IsMoving = false;
                   }
                }
