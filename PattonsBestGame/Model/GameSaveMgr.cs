@@ -47,6 +47,8 @@ namespace Pattons_Best
          }
          if (null == gameSave)
             return false;
+         if (false == gameSave.ContainsKey(aDay))
+            return false;
          return gameSave[aDay].myIsDecorationGiven;
       }
       static public void SetDecorationGiven(Guid guid, int aDay)
@@ -91,6 +93,8 @@ namespace Pattons_Best
          }
          if (null == gameSave)
             return false;
+         if (false == gameSave.ContainsKey(aDay))
+            return false;
          return gameSave[aDay].myIsPurpleHeartGiven;
       }
       static public void SetHeartGiven(Guid guid, int aDay)
@@ -134,6 +138,8 @@ namespace Pattons_Best
             }
          }
          if (null == gameSave)
+            return false;
+         if (false == gameSave.ContainsKey(aDay))
             return false;
          return gameSave[aDay].myIsPromoVictoryPointsCalculated;
       }

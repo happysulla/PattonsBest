@@ -1766,7 +1766,7 @@ namespace Pattons_Best
          }
          catch (Exception ex)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): path=" + GameFeats.theGameFeatDirectory + "\n e =" + ex.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): path=" + GameStatistics.theGameStatisticsDirectory + "\n e =" + ex.ToString());
             System.Diagnostics.Debug.WriteLine(ex.ToString());
             return false;
          }
@@ -1886,7 +1886,7 @@ namespace Pattons_Best
          //-----------------------------------------
          if (null == aXmlDocument)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): aXmlDocument=null");
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): aXmlDocument=null");
             return false;
          }
          //-----------------------------------------
@@ -1897,10 +1897,10 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): path=" + GameFeats.theGameFeatDirectory + "\n e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): path=" + GameFeats.theGameFeatDirectory + "\n e=" + e.ToString());
             return false;
          }
-         string filenameFull = GameStatistics.theGameStatisticsDirectory + filename + ".xml";
+         string filenameFull = GameFeats.theGameFeatDirectory + filename + ".xml";
          if (File.Exists(filenameFull))
             File.Delete(filenameFull);
          FileStream? writer = null;
@@ -1914,7 +1914,7 @@ namespace Pattons_Best
          }
          catch (Exception ex)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): path=" + GameFeats.theGameFeatDirectory + "\n e =" + ex.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): path=" + GameFeats.theGameFeatDirectory + "\n e =" + ex.ToString());
             System.Diagnostics.Debug.WriteLine(ex.ToString());
             return false;
          }
@@ -2350,7 +2350,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): DayData != (node=" + reader.Name + ")");
                      return false;
                   }
-                  string? sDay = reader.GetAttribute("value");
+                  string? sDay = reader.GetAttribute("day");
                   if (null == sDay)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sDay=null");
@@ -2423,6 +2423,17 @@ namespace Pattons_Best
             }
             if (0 < count)
                reader.Read(); // get past </DaySaves> tag
+            //---------------------------------------------
+            bool isRemoved = true; 
+            while(isRemoved)
+            {
+               isRemoved = false;
+               if (20 < gameSaves.Count) // only keep 20 instances in dictionary
+               {
+                  gameSaves.RemoveAt(0);
+                  isRemoved = true;
+               }
+            }
          }
          //==========================================
          catch (DirectoryNotFoundException dirException)

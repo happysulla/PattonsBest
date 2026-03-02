@@ -841,6 +841,8 @@ namespace Pattons_Best
                {
                   if (true == isFriendlyAdvance)
                      return true;
+                  else if ((false == mi.IsVehicle()) && (false == mi.IsAntiTankGun()))
+                     return true;
                   else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
                      return true;
                }
@@ -857,6 +859,8 @@ namespace Pattons_Best
                {
                   if (true == isFriendlyAdvance)
                      return true;
+                  else if ((false == mi.IsVehicle()) && (false == mi.IsAntiTankGun()))
+                     return true;
                   else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
                      return true;
                }
@@ -872,6 +876,8 @@ namespace Pattons_Best
                if (true == mi.IsEnemyUnit())
                {
                   if (true == isFriendlyAdvance)
+                     return true;
+                  else if ((false == mi.IsVehicle()) && (false == mi.IsAntiTankGun()))
                      return true;
                   else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
                      return true;

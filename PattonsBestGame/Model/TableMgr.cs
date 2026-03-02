@@ -1678,7 +1678,7 @@ namespace Pattons_Best
          if (true == optionEnemyContinueMove.IsEnabled)
          {
             int randomNum = Utilities.RandomGenerator.Next(0, 3);
-            if ((true == returnValue.Contains("Move")) && (true == mi.LastMoveAction.Contains("Move")) && (randomNum < 2) ) // 66% chance continue on same path
+            if ((true == returnValue.Contains("Move")) && (true == mi.LastMoveAction.Contains("Move")) && (randomNum < 2) && (false == isDoNothingDueToInterdicted)) // 66% chance continue on same path
             {
                returnValue = "Move-" + mi.LastMoveAction[5] + " (c)";
                //-----------------------------------------
@@ -4580,7 +4580,7 @@ namespace Pattons_Best
          int dieRoll = DieRoller.WhiteDie;
          if (dieRoll < 1 || 10 < dieRoll)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): invalid dieRoll=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultEnemy(): invalid dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
          //---------------------------------------------
@@ -4592,7 +4592,7 @@ namespace Pattons_Best
          {
             if (true == crewAction.Name.Contains("Driver"))
             {
-               Logger.Log(LogEnum.LE_SHOW_SHERMAN_MOVE, "GetMovingResultEnemy():  white die=" + dieRoll.ToString() + " ca=" + crewAction.Name);
+               Logger.Log(LogEnum.LE_SHOW_SHERMAN_MOVE, "Get_MovingResultEnemy():  white die=" + dieRoll.ToString() + " ca=" + crewAction.Name);
                switch (crewAction.Name)
                {
                   case "Driver_Forward":
@@ -4620,12 +4620,12 @@ namespace Pattons_Best
                         return "C";
                      return "None";
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default crewaction=" + crewAction.Name);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultEnemy(): reached default crewaction=" + crewAction.Name);
                      return "ERROR";
                }
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default");
+         Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultEnemy(): reached default");
          return "ERROR";
       }
       public static int GetBoggedDownModifier(IGameInstance gi)

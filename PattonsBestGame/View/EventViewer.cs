@@ -4985,8 +4985,18 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new Run(sbe103.ToString()));
          myTextBlock.Inlines.Add(new LineBreak());
          myTextBlock.Inlines.Add(new LineBreak());
+
          //----------------------------------------
-         if (modifierDecoration < 100)
+         if (true == GameSaveMgr.GetDecorationGiven(gi.GameGuid, gi.Day))
+         {
+            myTextBlock.Inlines.Add("Decoration Roll already made for today. Click image to continue.");
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
+            Image imge103 = new Image { Name = "Continue103", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+            myTextBlock.Inlines.Add(new InlineUIContainer(imge103));
+         }
+         else if (modifierDecoration < 100) 
          {
             myTextBlock.Inlines.Add("Do not qualify for decoration. Click image to continue.");
             myTextBlock.Inlines.Add(new LineBreak());

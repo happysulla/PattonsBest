@@ -330,15 +330,19 @@ namespace Pattons_Best
                         myIsVehicleActivated = true; // need to roll for vehicle facings
                      }
                      //--------------------------------------------
+                     mi1.IsSpotted = true;
+                     mi1.Spotting = EnumSpottingResult.IDENTIFIED;
                      string activation = mi1.GetEnemyUnit();
                      switch (activation)
                      {
-                        case "ATG": case "Pak43": mi1.Zoom = Utilities.ZOOM + 0.1; break;
+                        case "ATG": mi1.Zoom = Utilities.ZOOM + 0.1; mi1.IsSpotted = false; mi1.Spotting = EnumSpottingResult.UNSPOTTED; break;
+                        case "Pak43": mi1.Zoom = Utilities.ZOOM + 0.1;  break;
                         case "Pak38": case "Pak40": mi1.Zoom = Utilities.ZOOM; break;
                         case "LW": case "MG": mi1.Zoom = Utilities.ZOOM; break;
                         case "PSW": case "SPW": mi1.Zoom = Utilities.ZOOM + 0.2; break;
                         case "SPG": case "STuGIIIg": case "MARDERII": case "MARDERIII": case "JdgPzIV": case "JdgPz38t": mi1.Zoom = Utilities.ZOOM + 0.5; break;
-                        case "TANK": case "PzIV": case "PzV": case "PzVIb": case "PzVIe": mi1.Zoom = Utilities.ZOOM + 0.5; break;
+                        case "TANK":mi1.Zoom = Utilities.ZOOM + 0.5; mi1.IsSpotted = false; mi1.Spotting = EnumSpottingResult.UNSPOTTED; break;
+                        case "PzIV": case "PzV": case "PzVIb": case "PzVIe": mi1.Zoom = Utilities.ZOOM + 0.5; break;
                         case "TRUCK": mi1.Zoom = Utilities.ZOOM + 0.3; break;
                         default:
                            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with enemyUnit=" + mi1.GetEnemyUnit());
@@ -380,7 +384,7 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateTerrain() returned ERROR");
                            return false;
                         }
-                        if ( (true == mi1.IsVehicle()) || (false == mi1.IsAntiTankGun())) // Setup_Battle()
+                        if ( (true == mi1.IsVehicle()) || (true == mi1.IsAntiTankGun())) // Setup_Battle()
                         {
                            dieRoll = Utilities.RandomGenerator.Next(1, 11);
                            myGridRows[startingRow].myDieRollFacing = dieRoll;
