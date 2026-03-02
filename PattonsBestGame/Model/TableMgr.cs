@@ -1678,7 +1678,7 @@ namespace Pattons_Best
          if (true == optionEnemyContinueMove.IsEnabled)
          {
             int randomNum = Utilities.RandomGenerator.Next(0, 3);
-            if ((true == currentAction.Contains("Move")) && (true == mi.LastMoveAction.Contains("Move")) && (randomNum < 2) ) // 66% chance continue on same path
+            if ((true == returnValue.Contains("Move")) && (true == mi.LastMoveAction.Contains("Move")) && (randomNum < 2) ) // 66% chance continue on same path
             {
                currentAction = "Move-" + mi.LastMoveAction[5] + " (c)";
                //-----------------------------------------
@@ -4586,7 +4586,7 @@ namespace Pattons_Best
          int dieRoll = DieRoller.WhiteDie;
          if (dieRoll < 1 || 10 < dieRoll)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): invalid dieRoll=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultEnemy(): invalid dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
          //---------------------------------------------
@@ -4598,7 +4598,7 @@ namespace Pattons_Best
          {
             if (true == crewAction.Name.Contains("Driver"))
             {
-               Logger.Log(LogEnum.LE_SHOW_SHERMAN_MOVE, "GetMovingResultEnemy():  white die=" + dieRoll.ToString() + " ca=" + crewAction.Name);
+               Logger.Log(LogEnum.LE_SHOW_SHERMAN_MOVE, "Get_MovingResultEnemy():  white die=" + dieRoll.ToString() + " ca=" + crewAction.Name);
                switch (crewAction.Name)
                {
                   case "Driver_Forward":
@@ -4626,12 +4626,12 @@ namespace Pattons_Best
                         return "C";
                      return "None";
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default crewaction=" + crewAction.Name);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultEnemy(): reached default crewaction=" + crewAction.Name);
                      return "ERROR";
                }
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default");
+         Logger.Log(LogEnum.LE_ERROR, "Get_MovingResultEnemy(): reached default");
          return "ERROR";
       }
       public static int GetBoggedDownModifier(IGameInstance gi)
@@ -8597,7 +8597,8 @@ namespace Pattons_Best
          theCombatCalendarEntries.Add(new CombatCalendarEntry("04/16/45", EnumScenario.Counterattack, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("04/17/45", EnumScenario.Counterattack, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("04/18/45", EnumScenario.Counterattack, 2, EnumResistance.Light));
-         theCombatCalendarEntries.Add(new CombatCalendarEntry("Drive into Czechoslavakia", EnumScenario.Retrofit, 10, EnumResistance.None)); // Day=190  -- TOTAL 191 days
+         theCombatCalendarEntries.Add(new CombatCalendarEntry("Drive into Czechoslavakia", EnumScenario.Retrofit, 10, EnumResistance.None)); // Day=190 
+         theCombatCalendarEntries.Add(new CombatCalendarEntry("04/19/45", EnumScenario.Advance, 0, EnumResistance.Light)); // Day=191  -- TOTAL 192 days
          //--------------------------------------------------------------------
       }
       private void CreateExitTable()
