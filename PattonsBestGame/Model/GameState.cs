@@ -9795,7 +9795,7 @@ namespace Pattons_Best
                   IMapItems removals = new MapItems();
                   foreach (MapItem removal in stack.MapItems)
                   {
-                     if (true == removal.Name.Contains("UsControl"))
+                     if ( (true == removal.Name.Contains("UsControl")) && (true == mi.IsEnemyUnit()) )
                         removals.Add(removal);
                   }
                   foreach (IMapItem removal in removals)
