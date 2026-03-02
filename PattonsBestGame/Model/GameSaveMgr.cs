@@ -72,9 +72,17 @@ namespace Pattons_Best
          }
          else
          {
-            bool isPurpleHeart = gameSave[aDay].myIsPurpleHeartGiven;
-            bool isVpCalculated = gameSave[aDay].myIsPromoVictoryPointsCalculated;
-            gameSave[aDay] = new DayData(true, isPurpleHeart, isVpCalculated);
+            if (false == gameSave.ContainsKey(aDay))
+            {
+               gameSave[aDay] = new DayData(true, false, false);
+            }
+            else
+            {
+               bool isPurpleHeart = gameSave[aDay].myIsPurpleHeartGiven;
+               bool isVpCalculated = gameSave[aDay].myIsPromoVictoryPointsCalculated;
+               gameSave[aDay] = new DayData(true, isPurpleHeart, isVpCalculated);
+            }
+
          }
       }
       //------------------------------------------------------
@@ -118,9 +126,16 @@ namespace Pattons_Best
          }
          else
          {
-            bool isDecoration = gameSave[aDay].myIsDecorationGiven;
-            bool isVpCalculated = gameSave[aDay].myIsPromoVictoryPointsCalculated;
-            gameSave[aDay] = new DayData(isDecoration, true, isVpCalculated);
+            if (false == gameSave.ContainsKey(aDay))
+            {
+               gameSave[aDay] = new DayData(false, true, false);
+            }
+            else
+            {
+               bool isDecoration = gameSave[aDay].myIsDecorationGiven;
+               bool isVpCalculated = gameSave[aDay].myIsPromoVictoryPointsCalculated;
+               gameSave[aDay] = new DayData(isDecoration, true, isVpCalculated);
+            }
          }
       }
       //------------------------------------------------------
@@ -164,9 +179,16 @@ namespace Pattons_Best
          }
          else
          {
-            bool isDecoration = gameSave[aDay].myIsDecorationGiven;
-            bool isHeart = gameSave[aDay].myIsPurpleHeartGiven;
-            gameSave[aDay] = new DayData(isDecoration, isHeart, true);
+            if (false == gameSave.ContainsKey(aDay))
+            {
+               gameSave[aDay] = new DayData(false, false, true);
+            }
+            else
+            {
+               bool isDecoration = gameSave[aDay].myIsDecorationGiven;
+               bool isHeart = gameSave[aDay].myIsPurpleHeartGiven;
+               gameSave[aDay] = new DayData(isDecoration, isHeart, true);
+            }
          }
       }
    }
