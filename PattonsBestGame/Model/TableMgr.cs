@@ -1678,7 +1678,7 @@ namespace Pattons_Best
          if (true == optionEnemyContinueMove.IsEnabled)
          {
             int randomNum = Utilities.RandomGenerator.Next(0, 3);
-            if ((true == returnValue.Contains("Move")) && (true == mi.LastMoveAction.Contains("Move")) && (randomNum < 2) ) // 66% chance continue on same path
+            if ((true == currentAction.Contains("Move")) && (true == mi.LastMoveAction.Contains("Move")) && (randomNum < 2) && (false == isDoNothingDueToInterdicted) ) // 66% chance continue on same path
             {
                currentAction = "Move-" + mi.LastMoveAction[5] + " (c)";
                //-----------------------------------------
