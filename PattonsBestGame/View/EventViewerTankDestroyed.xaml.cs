@@ -1176,7 +1176,8 @@ namespace Pattons_Best
                      }
                      cm0.IsKilled = true;
                      cm0.SetBloodSpots();
-                     myGameInstance.SetIncapacitated(cm0);
+                     if (false == myGameInstance.SetIncapacitated(cm0))
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_Incapacitated) returned false for " + cm0.Name);
                      if ("Commander" == cm0.Role)
                      {
                         myGameInstance.IsCommanderKilled = true; // Tank Explodes
@@ -1377,6 +1378,8 @@ namespace Pattons_Best
                      if ("Crewman Out" != myGridRowRescues[k].myRescueResult)
                      {
                         myGameInstance.SetIncapacitated(cm10);
+                        if (false == myGameInstance.SetIncapacitated(cm10))
+                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_Incapacitated) returned false for " + cm10.Name);
                         cm10.IsKilled = true;
                         cm10.SetBloodSpots();
                         if ("Commander" == cm10.Role)
