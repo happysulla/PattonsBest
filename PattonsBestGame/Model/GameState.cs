@@ -4530,7 +4530,7 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          ++gi.Day;
-         if( 190 < gi.Day )
+         if( gi.Day < 191 )
          {
             ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
             if (null == newEntry)

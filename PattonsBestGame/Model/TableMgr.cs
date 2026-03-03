@@ -6360,13 +6360,13 @@ namespace Pattons_Best
                   else toKillNum = 58;
                }
             }
-            else if ("PzVIe" == enemyUnitType)
+            else if ( ("PzVIe" == enemyUnitType)  || ("TANK" == enemyUnitType)) 
             {
                if ('C' == range) toKillNum = 100;
                else if ('M' == range) toKillNum = 100;
                else toKillNum = 97;
             }
-            else if (("PzVIb" == enemyUnitType) || ("TANK" == enemyUnitType))
+            else if ("PzVIb" == enemyUnitType)
             {
                if ("Turret" == hit.myHitLocation)
                {
@@ -6455,6 +6455,7 @@ namespace Pattons_Best
                   else toKillNum = 42;
                }
                break;
+            case "TANK":
             case "PzVIe":
                if ("Front" == facing)
                {
@@ -6474,7 +6475,6 @@ namespace Pattons_Best
                   else toKillNum = 17;
                }
                break;
-            case "TANK":
             case "PzVIb":
                if ("Front" == facing)
                {
@@ -6730,7 +6730,7 @@ namespace Pattons_Best
          int toKillNum = 0;
          if (true == hit.myIsCriticalHit) // CRITICAL HIT
          {
-            if ((("TANK" == enemyUnitType) || ("PzVIb" == enemyUnitType)) && ("Front" == facing) && ("Hull" == hit.myHitLocation))
+            if ((("PzVIb" == enemyUnitType)) && ("Front" == facing) && ("Hull" == hit.myHitLocation))
             {
                if ('C' == range) toKillNum = 58;
                else if ('M' == range) toKillNum = 42;
@@ -6826,6 +6826,7 @@ namespace Pattons_Best
                   else toKillNum = 83;
                }
                break;
+            case "TANK":
             case "PzVIe":
                if ("Front" == facing)
                {
@@ -6862,7 +6863,6 @@ namespace Pattons_Best
                   else toKillNum = 58;
                }
                break;
-            case "TANK":
             case "PzVIb":
                if ("Front" == facing)
                {
@@ -7103,6 +7103,7 @@ namespace Pattons_Best
                   toKillNum = 95;
                }
                break;
+            case "TANK":
             case "PzVIe":
                if ("Front" == facing)
                {
@@ -7132,7 +7133,6 @@ namespace Pattons_Best
                   else toKillNum = 72;
                }
                break;
-            case "TANK":
             case "PzVIb":
                if ("Front" == facing)
                {
@@ -7493,6 +7493,7 @@ namespace Pattons_Best
                      toKillNum = 72;
                   }
                   break;
+               case "TANK":
                case "PzVIe":
                   if ("Front" == facing)
                   {
@@ -7515,7 +7516,6 @@ namespace Pattons_Best
                      toKillNum = 42;
                   }
                   break;
-               case "TANK":
                case "PzVIb":
                   if ("Front" == facing)
                   {
