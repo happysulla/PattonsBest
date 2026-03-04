@@ -29,6 +29,8 @@ namespace Pattons_Best
       public int MaxRollsForArtillerySupport { get; set; } = 0;
       public int MaxEnemiesInOneBattle { get; set; } = 0;
       public int RoundsOfCombat { get; set; } = 0;
+      public int NumOfBattles { get; set; } = 0;
+      public int NumOfKias { get; set; } = 0;
       public bool IsFirstSpottingOccurred { get; set; } = false;
       public bool Is1stEnemyStrengthCheckTerritory { get; set; } = true;
       //------------------------------------------------

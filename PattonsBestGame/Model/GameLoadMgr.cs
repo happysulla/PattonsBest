@@ -1243,6 +1243,44 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(NumOfBattles) = false");
+               return null;
+            }
+            if (reader.Name != "NumOfBattles")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): NumOfBattles != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sNumOfBattles = reader.GetAttribute("value");
+            if (null == sNumOfBattles)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sNumOfBattles=null");
+               return null;
+            }
+            gi.NumOfBattles = Int32.Parse(sNumOfBattles);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(NumOfKias) = false");
+               return null;
+            }
+            if (reader.Name != "NumOfKias")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): NumOfKias != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sNumOfKias = reader.GetAttribute("value");
+            if (null == sNumOfKias)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sNumOfKias=null");
+               return null;
+            }
+            gi.NumOfKias = Int32.Parse(sRoundsOfCombat);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsFirstSpottingOccurred) = false");
                return null;
             }
@@ -7360,6 +7398,34 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(RoundsOfCombat) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("NumOfBattles");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(NumOfBattles) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.NumOfBattles.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(NumOfBattles) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("NumOfKias");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(NumOfKias) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.NumOfKias.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(NumOfKias) returned null");
             return null;
          }
          //------------------------------------------

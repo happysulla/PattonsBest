@@ -1175,6 +1175,9 @@ namespace Pattons_Best
                         return;
                      }
                      cm0.IsKilled = true;
+                     cm0.Wound = "Killed";
+                     myGameInstance.Statistics.AddOne("NumOfKilledCrewman");
+                     myGameInstance.NumOfKias++;
                      cm0.SetBloodSpots();
                      if (false == myGameInstance.SetIncapacitated(cm0))
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_Incapacitated) returned false for " + cm0.Name);
@@ -1381,6 +1384,9 @@ namespace Pattons_Best
                         if (false == myGameInstance.SetIncapacitated(cm10))
                            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_Incapacitated) returned false for " + cm10.Name);
                         cm10.IsKilled = true;
+                        cm10.Wound = "Killed";
+                        myGameInstance.Statistics.AddOne("NumOfKilledCrewman");
+                        myGameInstance.NumOfKias++;
                         cm10.SetBloodSpots();
                         if ("Commander" == cm10.Role)
                         {

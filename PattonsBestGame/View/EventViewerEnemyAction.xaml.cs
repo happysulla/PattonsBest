@@ -1307,6 +1307,8 @@ namespace Pattons_Best
          //---------------------------------------
          int rowNum = i + STARTING_ASSIGNED_ROW;
          IMapItem mi = myGridRows[i].myMapItem;
+         mi.RotationOffsetTurret = 0.0; // when enemies are moved, all turret rotation goes back to forward facing
+         mi.RotationTurret = 0.0;
          //---------------------------------------
          ITerritory? newT = null;
          if (true == myGridRows[i].myEnemyAction.Contains("Move"))

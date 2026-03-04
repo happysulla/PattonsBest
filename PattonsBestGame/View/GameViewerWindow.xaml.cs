@@ -175,7 +175,7 @@ namespace Pattons_Best
          //---------------------------------------------------------------
          if (false == DeserializeGameSave(GameSaveMgr.theGameSaves, "gamesave"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theTotalStatistics) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): GameSaveMgr.theGameSaves() returned false");
             CtorError = true;
             return;
          }
@@ -2383,7 +2383,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(IsPurpleHeartGiven ) = false");
                      return false;
                   }
-                  if (reader.Name != "IsPurpleHeartGiven ")
+                  if (reader.Name != "IsPurpleHeartGiven")
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): IsPurpleHeartGiven  != (node=" + reader.Name + ")");
                      return false;

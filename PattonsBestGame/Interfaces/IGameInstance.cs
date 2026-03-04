@@ -16,6 +16,8 @@ namespace Pattons_Best
       int MaxRollsForArtillerySupport { get; set; }
       int MaxEnemiesInOneBattle { get; set; }
       int RoundsOfCombat { get; set; }
+      int NumOfBattles { get; set; }
+      int NumOfKias { get; set; }
       bool IsFirstSpottingOccurred { get; set; } // first spotting set per Battle Prep
       bool Is1stEnemyStrengthCheckTerritory { get; set; }
       //----------------------------------------------

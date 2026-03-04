@@ -3635,6 +3635,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): Set_Incapacitated() returned null for cm=" + cm.Role);
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
+            cm.Wound = "Killed";
+            gi.Statistics.AddOne("NumOfKilledCrewman");
+            gi.NumOfKias++;
             if ("Commander" == cm.Role)
             {
                gi.IsCommanderKilled = true; // Set_Wounds()
@@ -3642,21 +3645,12 @@ namespace Pattons_Best
                if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
                {
                   StringBuilder sb = new StringBuilder();
-                  ICrewMember? commander = gi.GetCrewMemberByRole(cm.Role);
-                  if(null == commander)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): GetCrewMemberByRole() returned null for cm=" + cm.Role);
-                  }
-                  else
-                  {
-                     sb.Append(commander.Name);
-                     sb.Append(" dying of wounds received in battle on ");
-                     sb.Append(TableMgr.GetDate(gi.Day));
-                     gi.EndGameReason = sb.ToString();
-                  }
+                  sb.Append(gi.Commander.Name);
+                  sb.Append(" dying of wounds received in battle on ");
+                  sb.Append(TableMgr.GetDate(gi.Day));
+                  gi.EndGameReason = sb.ToString();
                }
             }
-            cm.Wound = "Killed";
             return "Killed";
          }
          dieRoll += modifier;
@@ -3720,6 +3714,8 @@ namespace Pattons_Best
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             cm.Wound = "Killed";
+            gi.Statistics.AddOne("NumOfKilledCrewman");
+            gi.NumOfKias++;
             if ("Commander" == cm.Role)
             {
                gi.IsCommanderKilled = true; // Set_Wounds()

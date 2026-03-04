@@ -1704,6 +1704,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                   gi.Statistics.AddOne("NumOfFight");
+                  gi.NumOfBattles++;
                }
                break;
             case "e032a":
@@ -1753,6 +1754,7 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
                      imge032a.Source = MapItem.theMapImages.GetBitmapImage("Combat");
                      gi.Statistics.AddOne("NumOfFight");
+                     gi.NumOfBattles++;
                   }
                   else
                   {
@@ -4821,7 +4823,7 @@ namespace Pattons_Best
          {
             gi.Statistics.AddOne("NumOfScenariosLost");
             sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost! Click image to continue.");
-            spaces = "\n                                    ";
+            spaces = "\n\n                                         ";
             imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
          }
          else
@@ -4831,22 +4833,43 @@ namespace Pattons_Best
             spaces = "\n\n                                                  ";
             imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 75, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
          }
-         sbe101.Append("\n\nEngagement Victory Points: ");
-         sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
-         if (false == optionSingleDayGame.IsEnabled)
+
+         if (true == optionSingleDayGame.IsEnabled)
          {
-            sbe101.Append("\nCampaign Victory Points: ");
+            sbe101.Append("\n\nEngagement Victory Points: ");
+            sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
+            sbe101.Append("\nBattles Today: ");
+            sbe101.Append(gi.NumOfBattles.ToString());
+            sbe101.Append("\nKIAs Today: ");
+            sbe101.Append(gi.NumOfKias.ToString());
+         }
+         else
+         {
+            sbe101.Append("\n\nEngagement (Campaign) Victory Points: ");
+            sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
+            sbe101.Append(" (");
             sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
+            sbe101.Append(")");
             GameStatistic numOfScenariosWon = gi.Statistics.Find("NumOfScenariosWon");
             GameStatistic numOfScenariosLost = gi.Statistics.Find("NumOfScenariosLost");
-            sbe101.Append("\nNumber of Engagements Won: ");
+            sbe101.Append("\nEngagements Won (Lost): ");
             sbe101.Append(numOfScenariosWon.Value.ToString());
-            sbe101.Append("\nNumber of Engagements Lost: ");
+            sbe101.Append(" (");
             sbe101.Append(numOfScenariosLost.Value.ToString());
+            sbe101.Append(")");
+            sbe101.Append("\nBattles Today (Total): ");
+            sbe101.Append(gi.NumOfBattles.ToString());
+            sbe101.Append(" (");
+            GameStatistic numFights = gi.Statistics.Find("NumOfFight");
+            sbe101.Append(numFights.Value.ToString());
+            sbe101.Append(")");
+            sbe101.Append("\nKIAs Today (Total): ");
+            sbe101.Append(gi.NumOfKias.ToString());
+            sbe101.Append(" (");
+            GameStatistic numKias = gi.Statistics.Find("NumOfKilledCrewman");
+            sbe101.Append(numKias.Value.ToString());
+            sbe101.Append(")");
          }
-         GameStatistic numFights = gi.Statistics.Find("NumOfFight");
-         sbe101.Append("\nNumber of Battles: ");
-         sbe101.Append(numFights.Value.ToString());
          myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
          myTextBlock.Inlines.Add(new Run(spaces)) ;
          myTextBlock.Inlines.Add(new InlineUIContainer(imge101));

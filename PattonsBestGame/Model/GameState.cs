@@ -1583,6 +1583,8 @@ namespace Pattons_Best
          if (statMaxRoundsOfCombat.Value < gi.RoundsOfCombat)
             statMaxRoundsOfCombat.Value = gi.RoundsOfCombat;
          gi.RoundsOfCombat = 0; // PrepareFor_Battle()
+         gi.NumOfBattles = 0;
+         gi.NumOfKias = 0;
          return true;
       }
       protected bool PrepareForBattleSetState(IGameInstance gi, ref GameAction action)
@@ -4473,14 +4475,23 @@ namespace Pattons_Best
          }
          //totalRating = 30; // <CGS> TESTING - enforce HVSS training
          //-----------------------------------------
-         if ( (29 < totalRating) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day))) // retrofits must be greater than 7 days for training 
+         bool isTrainingPossible = false;
+         if ((29 < totalRating) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day))) // retrofits must be greater than 7 days for training 
+            isTrainingPossible = true;
+         if ( true == isTrainingPossible )
          {
+            StringBuilder sb1 = new StringBuilder("At ");
+            sb1.Append(TableMgr.GetTime(lastReport));
+            sb1.Append(", ");
+            sb1.Append(gi.Gunner.Name);
+            sb1.Append(" trained on HVSS.");
+            lastReport.Notes.Add(sb1.ToString());  // ShowDieResults(): BAILOUT_RESCUE_ROLL
             GameEngine.theInGameFeats.AddOne("HvssTrained"); // even though trained, HVSS do not show up until after November 1944
             gi.Statistics.AddOne("HvssTrained"); // even though trained, HVSS do not show up until after November 1944
             gi.TrainedGunners.Add(gi.Gunner.Name);
             SetCommand(gi, action, GameAction.DieRollActionNone, "e006c");
          }
-         else if (false == AdvancePastRetrofit(gi, action))
+         else  if (false == AdvancePastRetrofit(gi, action))
          {
             Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
             return false;
@@ -9778,6 +9789,8 @@ namespace Pattons_Best
          }
          foreach (IMapItem mi in enemyUnits)
          {
+            mi.RotationOffsetTurret = 0.0; // when enemies are moved, all rotation goes back to forward facing
+            mi.RotationTurret = 0.0;
             ITerritory? newT = TableMgr.SetNewTerritoryShermanMove(gi.Sherman, mi, gi.MovementEffectOnEnemy);
             if (null == newT)
             {
@@ -11672,72 +11685,72 @@ namespace Pattons_Best
       }
       private bool VictoryPointsCalculated(IGameInstance gi, IAfterActionReport lastReport)
       {
+         //------------------------------------------
+         int scenarioMultiplierKOGermanUnit = 1;
+         int scenarioMultiplierCapturedMapArea = 1;
+         int scenarioMultiplierLoseMapArea = 1;
+         if (EnumScenario.Advance == lastReport.Scenario)
+         {
+            scenarioMultiplierKOGermanUnit = 1;
+            scenarioMultiplierCapturedMapArea = 2;
+            scenarioMultiplierLoseMapArea = 1;
+         }
+         else if (EnumScenario.Battle == lastReport.Scenario)
+         {
+            scenarioMultiplierKOGermanUnit = 1;
+            scenarioMultiplierCapturedMapArea = 2;
+            scenarioMultiplierLoseMapArea = 3;
+         }
+         else if (EnumScenario.Counterattack == lastReport.Scenario) // VictoryPoints_Calculated() - set victory points based on scenario
+         {
+            scenarioMultiplierKOGermanUnit = 2;
+            scenarioMultiplierCapturedMapArea = 0;
+            scenarioMultiplierLoseMapArea = 2;
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "VictoryPoints_Calculated(): report.Scenario=" + lastReport.Scenario.ToString());
+            return false;
+         }
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): koX=" + scenarioMultiplierKOGermanUnit.ToString() + " captureX=" + scenarioMultiplierCapturedMapArea.ToString() + " lostX=" + scenarioMultiplierLoseMapArea.ToString());
+         //----------------------------------
+         int totalYourKia = lastReport.VictoryPtsYourKiaLightWeapon;
+         totalYourKia += lastReport.VictoryPtsYourKiaTruck;
+         totalYourKia += lastReport.VictoryPtsYourKiaSpwOrPsw * 2;
+         totalYourKia += lastReport.VictoryPtsYourKiaSPGun * 6;
+         totalYourKia += lastReport.VictoryPtsYourKiaPzIV * 7;
+         totalYourKia += lastReport.VictoryPtsYourKiaPzV * 9;
+         totalYourKia += lastReport.VictoryPtsYourKiaPzVI * 12;
+         totalYourKia += lastReport.VictoryPtsYourKiaAtGun * 4;
+         totalYourKia += lastReport.VictoryPtsYourKiaFortifiedPosition * 2;
+         lastReport.VictoryPtsTotalYourTank = totalYourKia * scenarioMultiplierKOGermanUnit;
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalYourTank=" + lastReport.VictoryPtsTotalYourTank.ToString());
+         //----------------------------------
+         int totalFriendlyKia = lastReport.VictoryPtsFriendlyKiaLightWeapon;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaTruck;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSpwOrPsw * 2;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSPGun * 6;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzIV * 7;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzV * 9;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzVI * 12;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaAtGun * 4;
+         totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaFortifiedPosition * 2;
+         lastReport.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalFriendlyForces=" + lastReport.VictoryPtsTotalFriendlyForces.ToString());
+         //----------------------------------
+         lastReport.VictoryPtsTotalTerritory = (lastReport.VictoryPtsCaptureArea + 10 * lastReport.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
+         lastReport.VictoryPtsTotalTerritory -= (lastReport.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
+         //----------------------------------
+         int totalFriendlyLosses = lastReport.VictoryPtsFriendlyTank * 5;// lost friendly tanks
+         totalFriendlyLosses += lastReport.VictoryPtsFriendlySquad * 3;  // lost friendly tanks
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): LostTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " LostSquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
+         //----------------------------------
+         lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory - totalFriendlyLosses;
+         Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalEngagement=" + lastReport.VictoryPtsTotalEngagement.ToString());
          if (false == GameSaveMgr.GetVpCalculated(gi.GameGuid, gi.Day)) // only caculate VP if not already done for this Game Instance for this day
          {
             GameSaveMgr.SetVpCalculated(gi.GameGuid, gi.Day);
-            //------------------------------------------
-            int scenarioMultiplierKOGermanUnit = 1;
-            int scenarioMultiplierCapturedMapArea = 1;
-            int scenarioMultiplierLoseMapArea = 1;
-            if (EnumScenario.Advance == lastReport.Scenario)
-            {
-               scenarioMultiplierKOGermanUnit = 1;
-               scenarioMultiplierCapturedMapArea = 2;
-               scenarioMultiplierLoseMapArea = 1;
-            }
-            else if (EnumScenario.Battle == lastReport.Scenario)
-            {
-               scenarioMultiplierKOGermanUnit = 1;
-               scenarioMultiplierCapturedMapArea = 2;
-               scenarioMultiplierLoseMapArea = 3;
-            }
-            else if (EnumScenario.Counterattack == lastReport.Scenario) // VictoryPoints_Calculated() - set victory points based on scenario
-            {
-               scenarioMultiplierKOGermanUnit = 2;
-               scenarioMultiplierCapturedMapArea = 0;
-               scenarioMultiplierLoseMapArea = 2;
-            }
-            else
-            {
-               Logger.Log(LogEnum.LE_ERROR, "VictoryPoints_Calculated(): report.Scenario=" + lastReport.Scenario.ToString());
-               return false;
-            }
-            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): koX=" + scenarioMultiplierKOGermanUnit.ToString() + " captureX=" + scenarioMultiplierCapturedMapArea.ToString() + " lostX=" + scenarioMultiplierLoseMapArea.ToString());
-            //----------------------------------
-            int totalYourKia = lastReport.VictoryPtsYourKiaLightWeapon;
-            totalYourKia += lastReport.VictoryPtsYourKiaTruck;
-            totalYourKia += lastReport.VictoryPtsYourKiaSpwOrPsw * 2;
-            totalYourKia += lastReport.VictoryPtsYourKiaSPGun * 6;
-            totalYourKia += lastReport.VictoryPtsYourKiaPzIV * 7;
-            totalYourKia += lastReport.VictoryPtsYourKiaPzV * 9;
-            totalYourKia += lastReport.VictoryPtsYourKiaPzVI * 12;
-            totalYourKia += lastReport.VictoryPtsYourKiaAtGun * 4;
-            totalYourKia += lastReport.VictoryPtsYourKiaFortifiedPosition * 2;
-            lastReport.VictoryPtsTotalYourTank = totalYourKia * scenarioMultiplierKOGermanUnit;
-            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalYourTank=" + lastReport.VictoryPtsTotalYourTank.ToString());
-            //----------------------------------
-            int totalFriendlyKia = lastReport.VictoryPtsFriendlyKiaLightWeapon;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaTruck;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSpwOrPsw * 2;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaSPGun * 6;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzIV * 7;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzV * 9;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaPzVI * 12;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaAtGun * 4;
-            totalFriendlyKia += lastReport.VictoryPtsFriendlyKiaFortifiedPosition * 2;
-            lastReport.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
-            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalFriendlyForces=" + lastReport.VictoryPtsTotalFriendlyForces.ToString());
-            //----------------------------------
-            lastReport.VictoryPtsTotalTerritory = (lastReport.VictoryPtsCaptureArea + 10 * lastReport.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
-            lastReport.VictoryPtsTotalTerritory -= (lastReport.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
-            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalTerritory=" + lastReport.VictoryPtsTotalTerritory.ToString());
-            //----------------------------------
-            int totalFriendlyLosses = lastReport.VictoryPtsFriendlyTank * 5;// lost friendly tanks
-            totalFriendlyLosses += lastReport.VictoryPtsFriendlySquad * 3;  // lost friendly tanks
-            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): LostTank=" + lastReport.VictoryPtsFriendlyTank.ToString() + " LostSquad=" + lastReport.VictoryPtsFriendlySquad.ToString() + " totalFriendlyLosses=" + totalFriendlyLosses.ToString());
-            //----------------------------------
-            lastReport.VictoryPtsTotalEngagement = lastReport.VictoryPtsTotalYourTank + lastReport.VictoryPtsTotalFriendlyForces + lastReport.VictoryPtsTotalTerritory - totalFriendlyLosses;
-            Logger.Log(LogEnum.LE_SHOW_VP_TOTAL, "VictoryPoints_Calculated(): report.VictoryPtsTotalEngagement=" + lastReport.VictoryPtsTotalEngagement.ToString());
             gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
             gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
          }
@@ -11923,6 +11936,8 @@ namespace Pattons_Best
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
             gi.RoundsOfCombat = 0;
+            gi.NumOfBattles = 0;
+            gi.NumOfKias = 0;
             gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefing_ResetDay()
             gi.CrewActionPhase = CrewActionPhase.Movement;
             gi.MovementEffectOnSherman = "uninit";
