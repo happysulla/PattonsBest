@@ -2925,7 +2925,7 @@ namespace Pattons_Best
             case "e102":
                if (false == UpdateEventContentPromotion(gi))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentPromotion() returned error for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContent_Promotion() returned error for key=" + key);
                   return false;
                }
                break;
@@ -4885,8 +4885,8 @@ namespace Pattons_Best
          }
          string key = gi.EventActive;
          //----------------------------------------
-         IAfterActionReport? report = gi.Reports.GetLast();
-         if (null == report)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentPromotion():  gi.Reports.GetLast()");
             return false;
@@ -4894,8 +4894,11 @@ namespace Pattons_Best
          //----------------------------------------
          string promoDate = TableMgr.GetDate(gi.PromotionDay);
          StringBuilder sbPromo = new StringBuilder();
-         sbPromo.Append("Promotion Points: ");
+         sbPromo.Append("Promotion Points Today (Total): ");
+         sbPromo.Append(lastReport.VictoryPtsTotalYourTank.ToString());
+         sbPromo.Append(" (");
          sbPromo.Append(gi.PromotionPointNum.ToString());
+         sbPromo.Append(")");
          sbPromo.Append("\nLast Promotion Date: ");
          sbPromo.Append(promoDate);
          myTextBlock.Inlines.Add(sbPromo.ToString());

@@ -1583,8 +1583,6 @@ namespace Pattons_Best
          if (statMaxRoundsOfCombat.Value < gi.RoundsOfCombat)
             statMaxRoundsOfCombat.Value = gi.RoundsOfCombat;
          gi.RoundsOfCombat = 0; // PrepareFor_Battle()
-         gi.NumOfBattles = 0;
-         gi.NumOfKias = 0;
          return true;
       }
       protected bool PrepareForBattleSetState(IGameInstance gi, ref GameAction action)

@@ -204,6 +204,7 @@ namespace Pattons_Best
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingDayOfRest:
             case GameAction.MorningBriefingReturningCrewman:
+            case GameAction.EveningDebriefingRatingTrainingEnd:
                if (null != myAarUserControl)
                {
                   myAarUserControl.IsEditable = false;
