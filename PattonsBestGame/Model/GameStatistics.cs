@@ -407,7 +407,6 @@ namespace Pattons_Best
       public int IndexOf(GameStatistic o) { return myList.IndexOf(o); }
       public GameStatistic Find(string key)
       {
-         int i = 0;
          foreach (object o in myList)
          {
             GameStatistic? stat1 = (GameStatistic)o;
@@ -415,7 +414,6 @@ namespace Pattons_Best
                continue;
             if (key == stat1.Key)
                return stat1;
-            ++i;
          }
          Logger.Log(LogEnum.LE_ERROR, "GameStatistics.Find(): null for key=" + key + " in " + this.ToString());
          GameStatistic stat = new GameStatistic(key);

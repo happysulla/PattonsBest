@@ -3637,7 +3637,7 @@ namespace Pattons_Best
             cm.IsKilled = true;
             cm.Wound = "Killed";
             gi.Statistics.AddOne("NumOfKilledCrewman");
-            gi.NumOfKias++;
+            gi.NumKia++; // SetWounds(): dr=100
             if ("Commander" == cm.Role)
             {
                gi.IsCommanderKilled = true; // Set_Wounds()
@@ -3715,7 +3715,7 @@ namespace Pattons_Best
             cm.IsKilled = true;
             cm.Wound = "Killed";
             gi.Statistics.AddOne("NumOfKilledCrewman");
-            gi.NumOfKias++;
+            gi.NumKia++; // Set_Wounds()
             if ("Commander" == cm.Role)
             {
                gi.IsCommanderKilled = true; // Set_Wounds()

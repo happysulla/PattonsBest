@@ -4745,7 +4745,11 @@ namespace Pattons_Best
          Image? imge101 = null;
          if (null != gi.Death)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if( false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             if (true == gi.Death.myIsCrewBail)
             {
                sbe101.Append("\n\nYour crew bailed. Engagement Lost! Click image to continue.");
@@ -4772,68 +4776,103 @@ namespace Pattons_Best
          }
          else if (true == gi.IsCommanderKilled)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
             sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!  Click image to continue.");
             spaces = "\n\n                                    ";
          }
          else if (TableMgr.MIA == gi.Commander.WoundDaysUntilReturn)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             sbe101.Append("\n\nYou as the commander are seriously wounded and sent home. Engagement Lost! Click image to continue.");
             spaces = "\n\n                                    ";
             imge101 = new Image { Name = "EngagementOver", Width = 200, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("HospitalShip") };
          }
          else if (0 < gi.Commander.WoundDaysUntilReturn)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             sbe101.Append("\n\nYou as the commander are wounded and out of action. Engagement Lost! Click image to continue.");
             spaces = "\n\n                           ";
             imge101 = new Image { Name = "EngagementOver", Width = 300, Height = 95, Source = MapItem.theMapImages.GetBitmapImage("Ambulance") };
          }
          else if (true == gi.IsBrokenMainGun)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             sbe101.Append("\n\nMain bun broken. Engagement Lost! Click image to continue.");
             spaces = "\n\n                                    ";
             imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun") };
          }
          else if (true == gi.IsBrokenGunSight)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             sbe101.Append("\n\nMain gun site broken. Engagement Lost! Click image to continue.");
-            spaces = "\n\n                                    ";
+            spaces = "\n\n                                         ";
             imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight") };
          }
          else if (true == gi.Sherman.IsThrownTrack)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             sbe101.Append("\n\nThrown Track. Engagement Lost! Click image to continue.");
             spaces = "\n\n                                    ";
             imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("ShermanThrownTrack") };
          }
          else if (true == gi.Sherman.IsAssistanceNeeded)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             sbe101.Append("\n\nAssistant needed to pull tank out of mud. Engagement Lost! Click image to continue.");
             spaces = "\n\n                                    ";
             imge101 = new Image { Name = "EngagementOver", Width = 150, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("ShermanStuck") };
          }
          else if (lastReport.VictoryPtsTotalEngagement <= 0)
          {
-            gi.Statistics.AddOne("NumOfScenariosLost");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosLost");
+            }
             sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost! Click image to continue.");
             spaces = "\n\n                                         ";
             imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 150, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
          }
          else
          {
-            gi.Statistics.AddOne("NumOfScenariosWon");
+            if (false == GameSaveMgr.GetEngagementCounted(gi.GameGuid, gi.Day))
+            {
+               GameSaveMgr.SetEngagementCounted(gi.GameGuid, gi.Day);
+               gi.Statistics.AddOne("NumOfScenariosWon");
+            }
             sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won! Click image to continue.");
             spaces = "\n\n                                                  ";
             imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 75, Height = 150, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
          }
-
          if (true == optionSingleDayGame.IsEnabled)
          {
             sbe101.Append("\n\nEngagement Victory Points: ");
@@ -4841,7 +4880,7 @@ namespace Pattons_Best
             sbe101.Append("\nBattles Today: ");
             sbe101.Append(gi.NumOfBattles.ToString());
             sbe101.Append("\nKIAs Today: ");
-            sbe101.Append(gi.NumOfKias.ToString());
+            sbe101.Append(gi.NumKia.ToString());
          }
          else
          {
@@ -4864,10 +4903,10 @@ namespace Pattons_Best
             sbe101.Append(numFights.Value.ToString());
             sbe101.Append(")");
             sbe101.Append("\nKIAs Today (Total): ");
-            sbe101.Append(gi.NumOfKias.ToString());
+            sbe101.Append(gi.NumKia.ToString());
             sbe101.Append(" (");
-            GameStatistic numKias = gi.Statistics.Find("NumOfKilledCrewman");
-            sbe101.Append(numKias.Value.ToString());
+            GameStatistic numKiaStat= gi.Statistics.Find("NumOfKilledCrewman");
+            sbe101.Append(numKiaStat.Value.ToString());
             sbe101.Append(")");
          }
          myTextBlock.Inlines.Add(new Run(sbe101.ToString()));

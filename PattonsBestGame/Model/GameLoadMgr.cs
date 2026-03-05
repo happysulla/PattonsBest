@@ -1276,7 +1276,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sNumOfKias=null");
                return null;
             }
-            gi.NumOfKias = Int32.Parse(sRoundsOfCombat);
+            gi.NumKia = Int32.Parse(sNumOfKias);
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -7421,7 +7421,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(NumOfKias) returned null");
             return null;
          }
-         elem.SetAttribute("value", gi.NumOfKias.ToString());
+         elem.SetAttribute("value", gi.NumKia.ToString());
          node = root.AppendChild(elem);
          if (null == node)
          {

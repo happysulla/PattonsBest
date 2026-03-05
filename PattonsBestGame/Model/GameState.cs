@@ -11635,6 +11635,7 @@ namespace Pattons_Best
                   if( false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day) )// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
                   {
                      GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart):\n  gameSaves=" + GameSaveMgr.ToString());
                      GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
                      gi.Statistics.AddOne("NumPurpleHearts");
                   }
@@ -11749,6 +11750,7 @@ namespace Pattons_Best
          if (false == GameSaveMgr.GetVpCalculated(gi.GameGuid, gi.Day)) // only caculate VP if not already done for this Game Instance for this day
          {
             GameSaveMgr.SetVpCalculated(gi.GameGuid, gi.Day);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "VictoryPoints_Calculated():\n  gameSaves=" + GameSaveMgr.ToString());
             gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
             gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
          }
@@ -11839,6 +11841,7 @@ namespace Pattons_Best
          if (false == GameSaveMgr.GetDecorationGiven(gi.GameGuid, gi.Day))// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
          {
             GameSaveMgr.SetDecorationGiven(gi.GameGuid, gi.Day);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "Update_Decoration():\n  gameSaves=" + GameSaveMgr.ToString());
             StringBuilder sb1 = new StringBuilder("At ");
             sb1.Append(TableMgr.GetTime(report));
             sb1.Append(", ");
@@ -11880,6 +11883,7 @@ namespace Pattons_Best
          if (("None" != commander.Wound) && (false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day)) )
          {
             GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "Update_Decoration.PerformAction():\n  SetHeartGiven() gameSaves=" + GameSaveMgr.ToString());
             SetCommand(gi, outAction, GameAction.DieRollActionNone, "e104");
             gi.NumPurpleHeart++;
             StringBuilder sb2 = new StringBuilder(commander.Name);
@@ -11935,7 +11939,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
             gi.RoundsOfCombat = 0;
             gi.NumOfBattles = 0;
-            gi.NumOfKias = 0;
+            gi.NumKia = 0;
             gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefing_ResetDay()
             gi.CrewActionPhase = CrewActionPhase.Movement;
             gi.MovementEffectOnSherman = "uninit";

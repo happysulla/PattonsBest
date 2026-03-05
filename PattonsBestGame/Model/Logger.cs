@@ -25,6 +25,7 @@ namespace Pattons_Best
       LE_VIEW_SHOW_OPTIONS,
       LE_VIEW_SHOW_FEATS,
       LE_VIEW_SHOW_STATS,
+      LE_VIEW_SHOW_GAMESAVES,
       LE_VIEW_SHOW_STATS_MIN,
       LE_VIEW_SHOW_SETTINGS,
       LE_SHOW_UPLOAD_GAME,
@@ -173,6 +174,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
          //SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS);
+         SetOn(LogEnum.LE_VIEW_SHOW_GAMESAVES);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS_MIN);
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------

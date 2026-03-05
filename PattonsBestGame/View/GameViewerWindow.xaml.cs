@@ -177,8 +177,9 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): GameSaveMgr.theGameSaves() returned false");
             CtorError = true;
-            return;
+            return; 
          }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "GameViewerWindow():\n  gameSaves=" + GameSaveMgr.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
@@ -971,7 +972,7 @@ namespace Pattons_Best
          }
          bool isGunnerTrainedInHvss = ( (true == gi.TrainedGunners.Contains(gi.Gunner.Name)) && (false == gi.Gunner.IsIncapacitated) );
          bool isTargetInCurrentMainGunSector = Territory.IsEnemyUnitInSector(gi, sector);
-         bool iMainGunAbleAbleToFireDueToMoving = ( (false == isTankMoving) || (true == isGunnerTrainedInHvss) );
+         bool iMainGunAbleAbleToFireDueToMoving = ( (false == isTankMoving) || ((true == isGunnerTrainedInHvss) && (null != gi.ShermanHvss)) );
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
          bool isShermanMoveAvailable = ( (false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.Sherman.IsFuelNeeded) && ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch)) );
          //---------------------------------
@@ -1591,8 +1592,9 @@ namespace Pattons_Best
          if (false == SerializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
             Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics(theTotalStatistics) returned false");
          //-------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "GameViewerWindow():\n  gameSaves=" + GameSaveMgr.ToString());
          if (false == SerializeGameSave(GameSaveMgr.theGameSaves, "gamesave"))
-            Logger.Log(LogEnum.LE_ERROR, "SerializeGameSave(): SerializeGameStatistics(theGameSaves) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "SerializeGameSave(): SerializeGameSave(theGameSaves) returned false");
          //-------------------------------------------
          Properties.Settings.Default.Save();
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
@@ -1868,17 +1870,31 @@ namespace Pattons_Best
                   return false;
                }
                //--------------------------------
-               XmlElement? isPromoVictoryPointsCalculated = aXmlDocument.CreateElement("IsPromoVictoryPointsCalculated");
-               if (null == isPromoVictoryPointsCalculated)
+               XmlElement? isPromoVictoryPointsCalculatedElem = aXmlDocument.CreateElement("IsPromoVictoryPointsCalculated");
+               if (null == isPromoVictoryPointsCalculatedElem)
                {
                   Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): CreateElement(IsPromoVictoryPointsCalculated) returned null");
                   return false;
                }
-               isPromoVictoryPointsCalculated.SetAttribute("value", data.myIsPromoVictoryPointsCalculated.ToString());
-               XmlNode? isPromoVictoryPointsGivenNode = dayDataNode.AppendChild(isPromoVictoryPointsCalculated);
+               isPromoVictoryPointsCalculatedElem.SetAttribute("value", data.myIsPromoVictoryPointsCalculated.ToString());
+               XmlNode? isPromoVictoryPointsGivenNode = dayDataNode.AppendChild(isPromoVictoryPointsCalculatedElem);
                if (null == isPromoVictoryPointsGivenNode)
                {
                   Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): AppendChild(isPromoVictoryPointsGivenNode) returned null");
+                  return false;
+               }
+               //--------------------------------
+               XmlElement? isEngagementCountedElem = aXmlDocument.CreateElement("IsEngagementCounted");
+               if (null == isEngagementCountedElem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): CreateElement(IsEngagementCounted) returned null");
+                  return false;
+               }
+               isEngagementCountedElem.SetAttribute("value", data.myIsEngagementCounted.ToString());
+               XmlNode? isEngagementCountedNode = dayDataNode.AppendChild(isEngagementCountedElem);
+               if (null == isEngagementCountedNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Serialize_GameSave(): AppendChild(isEngagementCountedNode) returned null");
                   return false;
                }
             }
@@ -2335,9 +2351,10 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sCount1=null");
                   return false;
                }
+               int count1 = int.Parse(sCount1);
                //-----------------------------
                DaySaves daySaves = new DaySaves();
-               for (int i1 = 0; i1 < count; ++i1)
+               for (int i1 = 0; i1 < count1; ++i1)
                {
                   reader.Read();
                   if (false == reader.IsStartElement())
@@ -2415,10 +2432,30 @@ namespace Pattons_Best
                   }
                   bool isPromoVictoryPointsCalculated = Boolean.Parse(sIsPromoVictoryPointsCalculated);
                   //-----------------------------
-                  daySaves[day] = new DayData(isDecorationGiven, isPurpleHeartGiven, isPromoVictoryPointsCalculated);
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): reader.IsStartElement(IsEngagementCounted) = false");
+                     return false;
+                  }
+                  if (reader.Name != "IsEngagementCounted")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): IsEngagementCounted != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sIsEngagementCounted = reader.GetAttribute("value");
+                  if (null == sIsEngagementCounted)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameSave(): sIsEngagementCounted=null");
+                     return false;
+                  }
+                  bool isEngagementCounted = Boolean.Parse(sIsEngagementCounted);
+                  //-----------------------------
+                  reader.Read(); // get past </DayData> tag
+                  daySaves[day] = new DayData(isDecorationGiven, isPurpleHeartGiven, isPromoVictoryPointsCalculated, isEngagementCounted);
                }
                gameSaves[guid] = daySaves;
-               if (0 < count)
+               if (0 < count1)
                   reader.Read(); // get past </GameSaveData> tag
             }
             if (0 < count)
