@@ -51,7 +51,7 @@ namespace Pattons_Best
             myDieRoll = Utilities.NO_RESULT;
          }
       };
-      private GridRow[] myGridRows = new GridRow[4];
+      private GridRow[] myGridRows = new GridRow[5];
       //---------------------------------------------------
       private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;

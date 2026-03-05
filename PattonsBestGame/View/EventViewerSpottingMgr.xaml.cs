@@ -21,7 +21,7 @@ namespace Pattons_Best
    public partial class EventViewerSpottingMgr : UserControl
    {
       public delegate bool EndSpottingMgrCallback();
-      private const int MAX_GRID_LEN = 5;
+      private const int MAX_GRID_LEN = 20;
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int NOT_IDENTIFIED = -1;
       private const int ALREADY_IDENTIFIED = 100;
@@ -39,7 +39,7 @@ namespace Pattons_Best
       public bool CtorError { get; } = false;
       private EndSpottingMgrCallback? myCallback = null;
       private E0472Enum myState = E0472Enum.ROLL_SPOTTING;
-      private int myMaxRowCount = 5;
+      private int myMaxRowCount = 14;
       private int myRollResultRowNum = 0;
       private int myRollResultColNum = 0;
       private bool myIsRollInProgress = false;
@@ -198,7 +198,7 @@ namespace Pattons_Best
                   sb.Append(t);
                   if (i != (spottedTerritories.Count - 1))
                      sb.Append(", ");
-                  i++; ;
+                  i++; 
                }
                sb.Append("]");
                Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  cm=" + cm.Role + " spottedTerritories=" + sb.ToString());
@@ -764,6 +764,11 @@ namespace Pattons_Best
                            return;
                         }
                         i++;
+                        if( MAX_GRID_LEN == i )
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "Button_Click(): reached maximum grid size");
+                           return;
+                        }
                      }
                   }
                   sb.Append(",");
