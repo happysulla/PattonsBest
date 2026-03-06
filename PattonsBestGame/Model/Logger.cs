@@ -161,7 +161,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_GAME_INIT);
          //SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_NEXT_ACTION);
-         SetOn(LogEnum.LE_UNDO_COMMAND);
+         //SetOn(LogEnum.LE_UNDO_COMMAND);
          SetOn(LogEnum.LE_GAME_END);
          SetOn(LogEnum.LE_GAME_END_CHECK);
          //SetOn(LogEnum.LE_SHOW_STACK_ADD);
@@ -215,7 +215,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
          //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD);
-         SetOn(LogEnum.LE_SHOW_PROMOTION);
+         //SetOn(LogEnum.LE_SHOW_PROMOTION);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
@@ -240,7 +240,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_IMMOBILIZATION);
          SetOn(LogEnum.LE_SHOW_KILLED_ENEMY);
          //-------------------------------
-         SetOn(LogEnum.LE_SHOW_TIME_ADVANCE);
+         //SetOn(LogEnum.LE_SHOW_TIME_ADVANCE);
          //SetOn(LogEnum.LE_SHOW_TIME_GAME);
          //SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
          SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
