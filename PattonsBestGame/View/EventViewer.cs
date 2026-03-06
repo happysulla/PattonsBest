@@ -399,7 +399,7 @@ namespace Pattons_Best
                break;
             case GameAction.MorningBriefingAmmoReadyRackLoad:
                break;
-            case GameAction.MovementBattlePhaseStartCounterattack: // when counterattack roll indicates battle - BattleActivation happens prior to Ambush roll
+            case GameAction.MovementBattlePhaseStartCounterattack: // when counterattack roll indicates battle - BattleActivation happens prior to A_mbush roll
             case GameAction.MovementBattlePhaseStartDueToRetreat:
             case GameAction.MovementBattlePhaseStartDueToAdvance:
             case GameAction.BattleActivation:
@@ -6048,7 +6048,7 @@ namespace Pattons_Best
          GameAction outAction = GameAction.Error;
          if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) // Show_SupportingFireResults() - (AmbushRandomEvent == gamephase) ==> Friendly Artillery as Random Event during ambush
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_SupportingFireResults(): Friendly Artillery during Ambush Random Event e=" + myGameInstance.EventActive);
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_SupportingFireResults(): Friendly Artillery during A_mbush Random Event e=" + myGameInstance.EventActive);
             outAction = GameAction.BattleRoundSequenceRoundStart;   // Show_SupportingFireResults() - AmbushRandomEvent 
          }
          else if (BattlePhase.FriendlyAction == myGameInstance.BattlePhase)  // Show_SupportingFireResults() - (FriendlyAction == gamephase) ==> Friendly Action 
@@ -6198,9 +6198,9 @@ namespace Pattons_Best
          {
             outAction = GameAction.BattleShermanKilled; // Show_CollateralDamageResults()
          }
-         else if (BattlePhase.Ambush == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (Ambush==BattlePhase)  ==> BattleRandomEvent
+         else if (BattlePhase.Ambush == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (A_mbush==BattlePhase)  ==> BattleRandomEvent
          {
-            outAction = GameAction.BattleRandomEvent; // Show_CollateralDamageResults() - (Ambush==BattlePhase)  ==> BattleRandomEvent
+            outAction = GameAction.BattleRandomEvent; // Show_CollateralDamageResults() - (A_mbush==BattlePhase)  ==> BattleRandomEvent
          }
          else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (AmbushRandomEvent==BattlePhase)  ==> start round
          {
@@ -6783,9 +6783,9 @@ namespace Pattons_Best
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Continue35":  // Ambush Check results in no ambush
-                           Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Ambush Check e=" + myGameInstance.EventActive);
-                           action = GameAction.BattleRoundSequenceRoundStart;          // Ambush Check results in no ambush ==> start round
+                        case "Continue35":  // A_mbush Check results in no ambush
+                           Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): A_mbush Check e=" + myGameInstance.EventActive);
+                           action = GameAction.BattleRoundSequenceRoundStart;          // A_mbush Check results in no ambush ==> start round
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "MovementCounterattackEllapsedTimeRoll":
@@ -6796,11 +6796,11 @@ namespace Pattons_Best
                            if( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Minefield Attack e=" + myGameInstance.EventActive);
-                              action = GameAction.BattleRoundSequenceRoundStart;           // Ambush occurred - Minefield Attack Ignored ==> start round
+                              action = GameAction.BattleRoundSequenceRoundStart;           // A_mbush occurred - Minefield Attack Ignored ==> start round
                            }
                            else
                            {
-                              action = GameAction.BattleRoundSequenceBackToSpotting;  // No Ambush - Minefield Attack Ignored
+                              action = GameAction.BattleRoundSequenceBackToSpotting;  // No A_mbush - Minefield Attack Ignored
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
@@ -6861,7 +6861,7 @@ namespace Pattons_Best
                            if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Military Watch e=" + myGameInstance.EventActive);
-                              action = GameAction.BattleRoundSequenceRoundStart;           // Ambush occurred - Military Watch
+                              action = GameAction.BattleRoundSequenceRoundStart;           // A_mbush occurred - Military Watch
                            }
                            else
                            {
@@ -6906,11 +6906,11 @@ namespace Pattons_Best
                            if( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Frendly Advance Ignored | Enemy Reinforcements e=" + myGameInstance.EventActive);
-                              action = GameAction.BattleRoundSequenceRoundStart;           // AmbushRandom Event - Friendly Advance Ignored | Enemy Reinforcements 
+                              action = GameAction.BattleRoundSequenceRoundStart;           // A_mbushRandom Event - Friendly Advance Ignored | Enemy Reinforcements 
                            }
                            else
                            {
-                              action = GameAction.BattleRoundSequenceBackToSpotting; // No Ambush - Friendly Advance Ignored | Enemy Reinforcements 
+                              action = GameAction.BattleRoundSequenceBackToSpotting; // No A_mbush - Friendly Advance Ignored | Enemy Reinforcements 
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;

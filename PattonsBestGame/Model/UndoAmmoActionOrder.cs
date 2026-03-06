@@ -37,7 +37,8 @@ namespace Pattons_Best
          gi.Sherman.IsMoving = myIsShermanMoving;
          gi.Sherman.IsMoved = myIsShermanMoved;
          gi.ShermanConsectiveMoveAttempt = myConsecutiveMoveAttempts;
-         if( null != myTargetMainGun )
+         gi.IsShermanTurretRotatedThisRound = false;
+         if ( null != myTargetMainGun )
          {
             gi.TargetMainGun = myTargetMainGun;
             myTargetMainGun.EnemyAcquiredShots.Clear();
