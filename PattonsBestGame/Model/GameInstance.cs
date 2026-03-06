@@ -30,6 +30,7 @@ namespace Pattons_Best
       public int MaxEnemiesInOneBattle { get; set; } = 0;
       public int RoundsOfCombat { get; set; } = 0;
       public int NumOfBattles { get; set; } = 0;
+      public int NumKiaSherman { get; set; } = 0;
       public int NumKia { get; set; } = 0;
       public bool IsFirstSpottingOccurred { get; set; } = false;
       public bool Is1stEnemyStrengthCheckTerritory { get; set; } = true;

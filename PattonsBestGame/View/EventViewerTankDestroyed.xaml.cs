@@ -1197,6 +1197,7 @@ namespace Pattons_Best
                   }
                   GameEngine.theInGameFeats.AddOne("NumShermanExplodes");
                   myGameInstance.Statistics.AddOne("NumShermanExplodes");
+                  myGameInstance.NumKiaSherman++;
                   outAction = GameAction.UpdateTankExplosion;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                }
@@ -1205,6 +1206,7 @@ namespace Pattons_Best
                   myGridRowExplodes[0].myExplosionResult = "Penetration";
                   GameEngine.theInGameFeats.AddOne("NumShermanPenetration");
                   myGameInstance.Statistics.AddOne("NumShermanPenetration");
+                  myGameInstance.NumKiaSherman++;
                }
                myState = E0481Enum.TANK_EXPLOSION_ROLL_SHOW;
                break;

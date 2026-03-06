@@ -4879,6 +4879,8 @@ namespace Pattons_Best
             sbe101.Append(lastReport.VictoryPtsTotalEngagement.ToString());
             sbe101.Append("\nBattles Today: ");
             sbe101.Append(gi.NumOfBattles.ToString());
+            sbe101.Append("\nSherman KIAs Today: ");
+            sbe101.Append(gi.NumKiaSherman.ToString());
             sbe101.Append("\nKIAs Today: ");
             sbe101.Append(gi.NumKia.ToString());
          }
@@ -4901,6 +4903,14 @@ namespace Pattons_Best
             sbe101.Append(" (");
             GameStatistic numFights = gi.Statistics.Find("NumOfFight");
             sbe101.Append(numFights.Value.ToString());
+            sbe101.Append(")");
+            sbe101.Append("\nKIA Shermans Today (Total): ");
+            sbe101.Append(gi.NumKiaSherman.ToString());
+            sbe101.Append(" (");
+            GameStatistic numShermanExplodes = gi.Statistics.Find("NumShermanExplodes");
+            GameStatistic numShermanPenetrations = gi.Statistics.Find("NumShermanPenetration");
+            int numLostTanks = numShermanExplodes.Value + numShermanPenetrations.Value;
+            sbe101.Append(numLostTanks.ToString());
             sbe101.Append(")");
             sbe101.Append("\nKIAs Today (Total): ");
             sbe101.Append(gi.NumKia.ToString());

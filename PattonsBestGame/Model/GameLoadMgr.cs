@@ -1262,6 +1262,25 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(NumOfKiaShermans) = false");
+               return null;
+            }
+            if (reader.Name != "NumOfKiaShermans")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): NumOfKiaShermans != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sNumOfKiasSherman = reader.GetAttribute("value");
+            if (null == sNumOfKiasSherman)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sNumOfKiasSherman=null");
+               return null;
+            }
+            gi.NumKiaSherman = Int32.Parse(sNumOfKiasSherman);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(NumOfKias) = false");
                return null;
             }
@@ -7412,6 +7431,20 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(NumOfBattles) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("NumOfKiaShermans");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(NumOfKiaShermans) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.NumKiaSherman.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(NumOfKiaShermans) returned null");
             return null;
          }
          //------------------------------------------

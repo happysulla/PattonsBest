@@ -11939,6 +11939,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
             gi.RoundsOfCombat = 0;
             gi.NumOfBattles = 0;
+            gi.NumKiaSherman = 0;
             gi.NumKia = 0;
             gi.BattlePhase = BattlePhase.Ambush; // EveningDebriefing_ResetDay()
             gi.CrewActionPhase = CrewActionPhase.Movement;

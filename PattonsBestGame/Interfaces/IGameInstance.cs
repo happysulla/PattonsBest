@@ -17,6 +17,7 @@ namespace Pattons_Best
       int MaxEnemiesInOneBattle { get; set; }
       int RoundsOfCombat { get; set; }
       int NumOfBattles { get; set; }
+      int NumKiaSherman { get; set; }
       int NumKia { get; set; }
       bool IsFirstSpottingOccurred { get; set; } // first spotting set per Battle Prep
       bool Is1stEnemyStrengthCheckTerritory { get; set; }
