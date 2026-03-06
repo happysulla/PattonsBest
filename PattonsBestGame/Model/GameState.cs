@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
 
@@ -11552,30 +11553,17 @@ namespace Pattons_Best
                   break;
                case GameAction.EveningDebriefingStart: // GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start)
                   UpdateAfterActionReportSummary(gi, lastReport);
-                  //------------------
-                  GameFeat featChange;
-                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange))  // GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start)
-                  {
-                     returnStatus = "theInGameFeats.Get_FeatChange() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start): " + returnStatus);
-                  }
-                  if (false == String.IsNullOrEmpty(featChange.Key))
-                  {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start):  Change=" + featChange.ToString());
-                     action = GameAction.EveningDebriefingShowFeat; // GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start)
-                     SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
-                  }
-                  else
-                  {
-                     SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
-                  }
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
                   break;
                case GameAction.EveningDebriefingShowFeat:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                   break;
                case GameAction.EveningDebriefingShowFeatEnd:
-                  action = GameAction.EveningDebriefingStart;
-                  SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
+                  if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
+                  {
+                     returnStatus = "EveningDebriefing_ResetDay() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingShowFeatEnd): " + returnStatus);
+                  }
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
                   gi.BattleStacks.Clear();
@@ -11639,6 +11627,8 @@ namespace Pattons_Best
                      GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
                      gi.Statistics.AddOne("NumPurpleHearts");
                   }
+                  if( true == gi.IsCommanderKilled)
+                     gi.NumPurpleHeart = 0;
                   //-------------------------------------------------
                   if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
                   {
@@ -11831,12 +11821,7 @@ namespace Pattons_Best
       }
       private bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, ref GameAction outAction)
       {
-         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
-         if (null == commander)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): commander=null");
-            return false;
-         }
+         ICrewMember commander = gi.Commander;
          //---------------------------------------------
          if (false == GameSaveMgr.GetDecorationGiven(gi.GameGuid, gi.Day))// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
          {
@@ -11892,6 +11877,8 @@ namespace Pattons_Best
          }
          else
          {
+            if (true == gi.IsCommanderKilled)
+               gi.NumPurpleHeart = 0;
             if (false == EveningDebriefingResetDay(gi, report, ref outAction))
             {
                Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): EveningDebriefing_ResetDay(=null) returned false");
@@ -11929,6 +11916,19 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (GamePhase.EndGame != gi.GamePhase)
          {
+            GameFeat featChange;
+            if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange))  // EveningDebriefing_ResetDay()
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefingResetDay(): theInGameFeats.Get_FeatChange() returned false");
+               return false;
+            }
+            if (false == String.IsNullOrEmpty(featChange.Key))
+            {
+               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "EveningDebriefingResetDay():  Change=" + featChange.ToString());
+               outAction = GameAction.EveningDebriefingShowFeat; // EveningDebriefing_ResetDay()
+               SetCommand(gi, outAction, GameAction.DieRollActionNone, "e503a");
+               return true;
+            }
             IAfterActionReport? lastReport = gi.Reports.GetLast();
             if (null == lastReport)
             {
