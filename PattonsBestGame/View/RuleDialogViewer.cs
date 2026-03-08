@@ -1,6 +1,8 @@
 ﻿
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Linq;
@@ -11,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
 
@@ -229,6 +232,9 @@ namespace Pattons_Best
                bitImage.EndInit();
                iamge.Source = bitImage;
             }
+            List<Hyperlink> hyperlinks = FindHyperlinksInTables(dialog.myFlowDocumentScrollViewer.Document);
+            foreach(Hyperlink hyperlink in hyperlinks)
+               hyperlink.RequestNavigate += Hyperlink_RequestNavigate;
             myTableDialogs[key] = dialog;
             dialog.Show();
             dialog.MaxWidth = dialog.MinWidth + theExtraWidth;
@@ -540,6 +546,75 @@ namespace Pattons_Best
          }
          throw new InvalidOperationException("Unknown block type: " + block.GetType());
       }
+      private List<Hyperlink> FindHyperlinksInTables(FlowDocument doc)
+      {
+         var hyperlinks = new List<Hyperlink>();
+
+         foreach (Block block in doc.Blocks)
+         {
+            if (block is Table table)
+            {
+               foreach (TableRowGroup trg in table.RowGroups)
+               {
+                  foreach (TableRow row in trg.Rows)
+                  {
+                     foreach (TableCell cell in row.Cells)
+                     {
+                        foreach (Block cellBlock in cell.Blocks)
+                        {
+                           hyperlinks.AddRange(FindHyperlinksInBlock(cellBlock));
+                        }
+                     }
+                  }
+               }
+            }
+         }
+         return hyperlinks;
+      }
+      private IEnumerable<Hyperlink> FindHyperlinksInBlock(Block block)
+      {
+         var found = new List<Hyperlink>();
+         if (block is Paragraph paragraph)
+         {
+            foreach (Inline inline in paragraph.Inlines)
+            {
+               if (inline is Hyperlink hyperlink)
+               {
+                  found.Add(hyperlink);
+               }
+               else if (inline is Span span)
+               {
+                  found.AddRange(FindHyperlinksInSpan(span));
+               }
+            }
+         }
+         else if (block is Section section)
+         {
+            foreach (Block innerBlock in section.Blocks)
+            {
+               found.AddRange(FindHyperlinksInBlock(innerBlock));
+            }
+         }
+
+         return found;
+      }
+      private IEnumerable<Hyperlink> FindHyperlinksInSpan(Span span)
+      {
+         var found = new List<Hyperlink>();
+
+         foreach (Inline inline in span.Inlines)
+         {
+            if (inline is Hyperlink hyperlink)
+            {
+               found.Add(hyperlink);
+            }
+            else if (inline is Span innerSpan)
+            {
+               found.AddRange(FindHyperlinksInSpan(innerSpan));
+            }
+         }
+         return found;
+      }
       //--------------------------------------------------------------------
       private void BannerDialog_Closed(object? sender, EventArgs e)
       {
@@ -650,6 +725,18 @@ namespace Pattons_Best
             }
          }
 
+      }
+      private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+      {
+         try
+         {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Hyperlink_RequestNavigate(): failed e.URI=" + e.Uri.ToString() + "\n" + ex.ToString());
+         }
+         e.Handled = true;
       }
    }
 }

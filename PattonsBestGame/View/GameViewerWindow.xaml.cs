@@ -3803,16 +3803,22 @@ namespace Pattons_Best
          {
             myBattleButtons.Clear();
             myMoveButtons.Clear();
-            List<UIElement> buttonRemovals = new List<UIElement>();
+            List<UIElement> elementRemovals = new List<UIElement>();
             foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
             {
                if (ui is Button button)
                {
                   if (false == button.Name.Contains("Die"))  // die buttons never disappear - only one copy of them
-                     buttonRemovals.Add(button);
+                     elementRemovals.Add(button);
+               }
+               if (ui is Image img)
+               {
+                  if (true == img.Name.Contains("Canvas"))
+                     continue;
+                  elementRemovals.Add(ui);
                }
             }
-            foreach (UIElement ui1 in buttonRemovals)
+            foreach (UIElement ui1 in elementRemovals)
                myCanvasMain.Children.Remove(ui1);
             return true;
          }
@@ -3963,7 +3969,7 @@ namespace Pattons_Best
       }
       private void UpdateCanvasMainClear(List<Button> buttons, IStacks stacks, GameAction action)
       {
-         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMainClear(): " + stacks.ToString());
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMain_Clear(): " + stacks.ToString());
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
          {
@@ -3992,11 +3998,11 @@ namespace Pattons_Best
                   IStack? stack = stacks.Find(button.Name);
                   if (null == stack)
                   {
-                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): mi=" + button.Name + " does not belong to " + stacks.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMain_Clear(): mi=" + button.Name + " does not belong to " + stacks.ToString());
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): Remove mi=" + button.Name + " from stack=" + stack.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMain_Clear(): Remove mi=" + button.Name + " from stack=" + stack.ToString());
                      stack.MapItems.Remove(button.Name);
                   }
                }

@@ -229,8 +229,8 @@
 		   </TableRow>
 		   <TableRow FontSize='12'>
 			  <TableCell TextAlignment='Center'> <Paragraph>9/14</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-M</Paragraph></TableCell> 
-		   </TableRow>
+			  <TableCell TextAlignment='Center'> <Paragraph>A-3-M</Paragraph></TableCell>
+         </TableRow>
 		   <TableRow FontSize='12'>
 			  <TableCell TextAlignment='Center'> <Paragraph>9/15</Paragraph></TableCell> 
 			  <TableCell TextAlignment='Center'> <Paragraph>B-9-M</Paragraph></TableCell> 
@@ -254,7 +254,13 @@
 			<TableRow FontSize='12'>
 			  <TableCell TextAlignment='Center'> <Paragraph>9/19</Paragraph></TableCell> 
 			  <TableCell TextAlignment='Center'> <Paragraph>B-9-M</Paragraph></TableCell> 
-			  <TableCell RowSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph><LineBreak/><LineBreak/>Arracourt</Paragraph></TableCell> 
+			  <TableCell RowSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> 
+              <Paragraph>
+                 <LineBreak/>
+                 <LineBreak/>
+                 <Hyperlink Name='myHyperlink' NavigateUri='https://en.wikipedia.org/wiki/Battle_of_Arracourt'> Arracourt </Hyperlink>
+              </Paragraph>
+           </TableCell> 
 		   </TableRow> 
 			<TableRow FontSize='12'>
 			  <TableCell TextAlignment='Center'> <Paragraph>9/20</Paragraph></TableCell> 

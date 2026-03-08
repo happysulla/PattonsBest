@@ -194,7 +194,6 @@ namespace Pattons_Best
                this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
                break;
             case GameAction.UpdateAfterActionReport:
-            case GameAction.EveningDebriefingResetDay:
             case GameAction.EventDebriefDecorationHeart:
             case GameAction.EventDebriefDecorationContinue:
             case GameAction.EventDebriefDecorationBronzeStar:
@@ -212,7 +211,48 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + gi.Commander.Name + " driver=" + gi.Driver.Name);
                }
                return;
+            case GameAction.EveningDebriefingResetDay:
+               List<UIElement> elements = new List<UIElement>();
+               foreach (UIElement ui in myCanvas.Children)
+               {
+                  if (ui is Image img)
+                  {
+                     if (true == img.Name.Contains("Feat"))
+                        elements.Add(ui);
+                  }
+                  if (ui is Label lbl)
+                  {
+                     if (true == lbl.Name.Contains("Feat"))
+                        elements.Add(ui);
+                  }
+               }
+               foreach (UIElement ui1 in elements)
+                  myCanvas.Children.Remove(ui1);
+               //----------------------------
+               if (null != myAarUserControl)
+               {
+                  myAarUserControl.IsEditable = false;
+                  myAarUserControl.UpdateReport(gi);
+                  Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "CanvasImageViewer.UpdateView(): action=" + action.ToString() + " cmdr=" + gi.Commander.Name + " driver=" + gi.Driver.Name);
+               }
+               return;
             case GameAction.EveningDebriefingReplaceCrew:
+               List<UIElement> removals = new List<UIElement>();
+               foreach (UIElement ui in myCanvas.Children)
+               {
+                  if (ui is Image img)
+                  {
+                     if (true == img.Name.Contains("Feat"))
+                        removals.Add(ui);
+                  }
+                  if (ui is Label lbl)
+                  {
+                     if (true == lbl.Name.Contains("Feat"))
+                        removals.Add(ui);
+                  }
+               }
+               foreach (UIElement ui1 in removals)
+                  myCanvas.Children.Remove(ui1);
                if (null != myAarUserControl)
                {
                   myAarUserControl.IsEditable = true;
@@ -324,7 +364,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------------
-      public void CleanCanvas(Canvas c, bool IsBattleMap = false)
+      public void CleanCanvas(Canvas c)
       {
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in c.Children)
@@ -367,7 +407,7 @@ namespace Pattons_Best
       }
       public void ShowBattleMap(bool isFallingOrFog, Canvas c)
       {
-         CleanCanvas(c, true);
+         CleanCanvas(c);
          Image img;
          if ( true == isFallingOrFog )
             img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattleFogFalling") };

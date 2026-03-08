@@ -264,17 +264,21 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Driver) returned false");
                         return false;
                      }
-                     if (GamePhase.EveningDebriefing != gi.GamePhase)
+                     if (GamePhase.EveningDebriefing == gi.GamePhase)
+                     {
                         gi.NewMembers.Add(gi.Driver);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                     }
                      else
+                     {
                         gi.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Driver=" + gi.Driver.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " with rating=" + gi.Driver.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                     }
                      if (false == gi.SetCrewActionTerritory(gi.Driver))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Driver) returned false");
                         return false;
                      }
-                     Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): Replacing cm=" + cm.Name + " with new=" + gi.Driver.Name);
                      break;
                   case "Loader":
                      gi.Loader = new CrewMember("Loader", "Cpl", "c09Loader");
@@ -283,17 +287,21 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Loader) returned false");
                         return false;
                      }
-                     if (GamePhase.EveningDebriefing != gi.GamePhase)
-                        gi.NewMembers.Add(gi.Loader); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     if (GamePhase.EveningDebriefing == gi.GamePhase)
+                     {
+                        gi.NewMembers.Add(gi.Loader);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                     }
                      else
+                     {
                         gi.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " with rating=" + gi.Loader.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                     }
                      if (false == gi.SetCrewActionTerritory(gi.Loader))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Loader) returned false");
                         return false;
                      }
-                     Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): Replacing cm=" + cm.Name + " with new=" + gi.Loader.Name);
                      break;
                   case "Assistant":
                      gi.Assistant = new CrewMember("Assistant", "Pvt", "c10Assistant");
@@ -302,17 +310,21 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Assistant) returned false");
                         return false;
                      }
-                     if (GamePhase.EveningDebriefing != gi.GamePhase)
-                        gi.NewMembers.Add(gi.Assistant); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     if (GamePhase.EveningDebriefing == gi.GamePhase)
+                     {
+                        gi.NewMembers.Add(gi.Assistant);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                     }
                      else
+                     {
                         gi.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Assistant=" + gi.Assistant.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " with rating=" + gi.Assistant.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                     }
                      if (false == gi.SetCrewActionTerritory(gi.Assistant))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Assistant) returned false");
                         return false;
                      }
-                     Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): Replacing cm=" + cm.Name + " with new=" + gi.Assistant.Name);
                      break;
                   case "Gunner":
                      gi.Gunner = new CrewMember("Gunner", "Cpl", "c11Gunner");
@@ -321,17 +333,16 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Gunner) returned false");
                         return false;
                      }
-                     if (GamePhase.EveningDebriefing != gi.GamePhase)
-                        gi.NewMembers.Add(gi.Gunner); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
-                     else
-                        gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Gunner=" + gi.Gunner.Name + " to NewMembers=" + gi.NewMembers.ToString());
-                     if (false == gi.SetCrewActionTerritory(gi.Gunner))
+                     if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Gunner) returned false");
-                        return false;
+                        gi.NewMembers.Add(gi.Gunner);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      }
-                     Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): Replacing cm=" + cm.Name + " with new=" + gi.Gunner.Name);
+                     else
+                     {
+                        gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " with rating=" + gi.Gunner.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                     }
                      break;
                   case "Commander":
                      gi.Commander = new CrewMember("Commander", "Sgt", "c07Commander");
@@ -340,10 +351,16 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Commander) returned false");
                         return false;
                      }
-                     if(GamePhase.EveningDebriefing != gi.GamePhase)
-                        gi.NewMembers.Add(gi.Commander); // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                     if (GamePhase.EveningDebriefing == gi.GamePhase)
+                     {
+                        gi.NewMembers.Add(gi.Commander);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                     }
                      else
+                     {
                         gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): commander Driver=" + gi.Commander.Name + " with rating=" + gi.Commander.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                     }
                      gi.PromotionPointNum = 0; // start promotion cycle again
                      gi.PromotionDay = -1;
                      Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
@@ -352,7 +369,6 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Set_CrewActionTerritory(Commander) returned false");
                         return false;
                      }
-                     Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): Replacing cm=" + cm.Name + " with new=" + gi.Commander.Name);
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): cm=null for name=" + cm.Role);
@@ -11627,8 +11643,6 @@ namespace Pattons_Best
                      GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
                      gi.Statistics.AddOne("NumPurpleHearts");
                   }
-                  if( true == gi.IsCommanderKilled)
-                     gi.NumPurpleHeart = 0;
                   //-------------------------------------------------
                   if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
                   {
@@ -11877,8 +11891,6 @@ namespace Pattons_Best
          }
          else
          {
-            if (true == gi.IsCommanderKilled)
-               gi.NumPurpleHeart = 0;
             if (false == EveningDebriefingResetDay(gi, report, ref outAction))
             {
                Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): EveningDebriefing_ResetDay(=null) returned false");
@@ -11924,7 +11936,7 @@ namespace Pattons_Best
             }
             if (false == String.IsNullOrEmpty(featChange.Key))
             {
-               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "EveningDebriefingResetDay():  Change=" + featChange.ToString());
+               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "EveningDebriefing_ResetDay():  Change=" + featChange.ToString());
                outAction = GameAction.EveningDebriefingShowFeat; // EveningDebriefing_ResetDay()
                SetCommand(gi, outAction, GameAction.DieRollActionNone, "e503a");
                return true;
@@ -11935,6 +11947,10 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): lastReport=null");
                return false;
             }
+            //-------------------------------------------------------
+            if (true == gi.IsCommanderKilled)
+               gi.NumPurpleHeart = 0;
+            gi.IsCommanderKilled = false;
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
             gi.RoundsOfCombat = 0;
