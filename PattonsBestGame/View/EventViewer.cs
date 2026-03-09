@@ -4904,7 +4904,7 @@ namespace Pattons_Best
             GameStatistic numFights = gi.Statistics.Find("NumOfFight");
             sbe101.Append(numFights.Value.ToString());
             sbe101.Append(")");
-            sbe101.Append("\nShermans KIAs Today (Total): ");
+            sbe101.Append("\nSherman KIAs Today (Total): ");
             sbe101.Append(gi.NumKiaSherman.ToString());
             sbe101.Append(" (");
             GameStatistic numShermanExplodes = gi.Statistics.Find("NumShermanExplodes");

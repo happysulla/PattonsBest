@@ -1,1002 +1,2084 @@
 <Table>
-<Table.Columns>
-   <TableColumn Width='320'/>
-   <TableColumn Width='320'/>
-   <TableColumn Width='320'/>  
-   <TableColumn Width='320'/>  
-</Table.Columns> 
-<TableRowGroup  FontStyle='Italic' >
-   <TableRow FontSize='12'> 
-      <TableCell TextAlignment='Center'>
-	     <Table>
-		<Table.Columns>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='190'/>  
-		</Table.Columns>   
-		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
-		   <TableRow  FontSize='12'> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='AliceBlue' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>7/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Cobra Breakout</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>7/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Coutances</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>7/29</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>7/30</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Avranches</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>7/31</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='LightGray' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/02</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/03</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/04</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/05</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-H</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Vannes</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/06</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/07</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-H</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Lorient</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/08</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/09</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/10</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/11</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Nantes</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/12</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/13</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/14</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/15</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/16</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Orleans</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/17</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/18</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/19</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/20</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/21</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/22</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/23</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/24</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/25</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/26</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/29</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/30</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>8/31</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Commercy</Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='AliceBlue' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/11</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-5-H</Paragraph></TableCell> 
-			  <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph><LineBreak/>Moselle Crossing</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/12</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-5-M</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/13</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-5-M</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/14</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-M</Paragraph></TableCell>
-         </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/15</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-9-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Crevic and Maixe</Paragraph></TableCell> 
-		   </TableRow>   
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/16</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-9-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Luneville</Paragraph></TableCell> 
-		   </TableRow> 
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/17</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow> 
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/18</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow> 
-			<TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/19</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-9-M</Paragraph></TableCell> 
-			  <TableCell RowSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> 
-              <Paragraph>
-                 <LineBreak/>
-                 <LineBreak/>
-                 <Hyperlink Name='myHyperlink' NavigateUri='https://en.wikipedia.org/wiki/Battle_of_Arracourt'> Arracourt </Hyperlink>
-              </Paragraph>
-           </TableCell> 
-		   </TableRow> 
-			<TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/20</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-L</Paragraph></TableCell> 
-		   </TableRow> 
-			<TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/21</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-9-M</Paragraph></TableCell> 
-		   </TableRow> 
-			<TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/22</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-9-M</Paragraph></TableCell> 
-		   </TableRow> 
-			<TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>    
-		</TableRowGroup>
-		</Table>
-	  </TableCell> 
-      <TableCell TextAlignment='Center'>
-	    <Table>
-		<Table.Columns>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='190'/>  
-		</Table.Columns>   
-		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
-		   <TableRow  FontSize='12'> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-	    <TableRowGroup Background='AliceBlue' >
-		    <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/25</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-9-H</Paragraph></TableCell> 
-			  <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph>Counterattack</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/26</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-9-H</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-6-M</Paragraph></TableCell> 
-			  <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph>Hill 318</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-5-M</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/29</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-9-H</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Arracourt</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>9/30</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='LightGray' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/02</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/03</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/04</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/05</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/06</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/07</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/08</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/09</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/10</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>10/11</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='AliceBlue' >
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/09</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-5-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/10</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/11</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-5-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Fonteny</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/12</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-8-H</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Counterattack at Rodalbe</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/13</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/14</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/15</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-H</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/16</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/17</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/18</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-H</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Dieuze and Rodalbe</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/19</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/20</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/21</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/22</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/23</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/24</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Crossed Saare River at Romeifing</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/25</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-7-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Counterattacks</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/26</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Wolfskirchen</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph><LineBreak/>Cleared zone of responsibility</Paragraph></TableCell> 
-		   </TableRow>	
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/29</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>11/30</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-		   </TableRow>		   
-		</TableRowGroup>
-		<TableRowGroup Background='LightGray' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph>Attacked Saare Union</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/02</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/03</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/04</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell>
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 			  
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/05</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-9-H</Paragraph></TableCell> 
-			  <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph>Battle of Bining</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/06</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-9-H</Paragraph></TableCell> 
-		   </TableRow>		   
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/21</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>		   
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/22</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Marteiange</Paragraph></TableCell> 
-		   </TableRow>     
-		</TableRowGroup>
-		</Table>
-	  </TableCell> 
-      <TableCell TextAlignment='Center'>
-	     <Table>
-		<Table.Columns>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='190'/>  
-		</Table.Columns>   
-		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
-		   <TableRow  FontSize='12'> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='AliceBlue' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/23</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-7-H</Paragraph></TableCell> 
-			  <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph><LineBreak/>Battle for Chaumount</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/24</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-7-H</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/25</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-7-H</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/26</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-9-H</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Into Bastogne</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/29</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Open Arion-Bastogne Highway</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/30</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-3-M</Paragraph></TableCell> 
-			  <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph>Defense of Bastogne corridor</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>12/31</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-3-M</Paragraph></TableCell> 
-		   </TableRow>		   
-		</TableRowGroup>
-		<TableRowGroup Background='LightGray' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-3-M</Paragraph></TableCell> 
-			  <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph>Defense of Bastogne corridor</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/02</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-3-M</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'><Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/09</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Noville</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/10</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Bourcy</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/11</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell RowSpan='21' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/>Defensive positions</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/12</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/13</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/14</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/15</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/16</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/17</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/18</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/19</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/20</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/21</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/22</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/23</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/24</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/25</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/26</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/29</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/30</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>1/31</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='AliceBlue' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/02</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Hosdorf</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/22</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-8-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Gerchlingen</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/23</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-8-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Sinspenit</Paragraph></TableCell> 			  
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/24</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 			  
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/25</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-5-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Rittersdorf</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/26</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-5-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Bitburg</Paragraph></TableCell> 
-		   </TableRow>   
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>B-5-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Matzen and Fleissen</Paragraph></TableCell> 
-		   </TableRow> 
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>2/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow> 
-		</TableRowGroup>
-		<TableRowGroup Background='LightGray' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow> 
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/02</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow> 
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>    
-		</TableRowGroup>
-		</Table>
-	  </TableCell>
-	  <TableCell TextAlignment='Center'>
-	     <Table>
-		<Table.Columns>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='50'/>
-		   <TableColumn Width='190'/>  
-		</Table.Columns>   
-		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
-		   <TableRow  FontSize='12'> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='AliceBlue' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/05</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell RowSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph><LineBreak/>To the Rhine</Paragraph></TableCell>  
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/06</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/07</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/08</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/09</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'> <Paragraph><LineBreak/>Regroup and mop up</Paragraph></TableCell>  
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/10</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/11</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-		   </TableRow>		   
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>  		   
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/14</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-9-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Attack out of Moselle Bridgehead</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/15</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-7-M</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Bad Kreuznauch</Paragraph></TableCell> 
-		   </TableRow>
-			   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/16</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-5-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-			   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/17</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-3-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-			   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/18</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-			   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/19</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-			   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/20</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Worms on the Rhine</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>==========Refitting==========</Paragraph></TableCell> 
-		   </TableRow>  		   
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/24</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Crossed the Rhine</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/25</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Hanau and Darmstadt</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/26</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/27</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/28</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Across the Main at Grossauhein</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/29</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/30</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>3/31</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		</TableRowGroup>
-		<TableRowGroup Background='LightGray' >
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/01</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Creuzburg</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/02</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/03</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/04</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-4-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Gotha</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/05</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/06</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/07</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/08</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/09</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/10</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/11</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph></Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/12</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Crossed Saale River</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/13</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>A-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph>Wolkenburg</Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/14</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/15</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-           </TableRow>				  
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/16</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-           </TableRow>	
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/17</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>	
-		   <TableRow FontSize='12'>
-			  <TableCell TextAlignment='Center'> <Paragraph>4/18</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>C-2-L</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Left'> <Paragraph> </Paragraph></TableCell> 
-		   </TableRow>		
-		   <TableRow FontSize='12'>
-			  <TableCell ColumnSpan='3' TextAlignment='Center'> <Paragraph>Refittiing for drive into Czechoslavakia</Paragraph></TableCell> 
-		   </TableRow>		   
-		</TableRowGroup>
-		</Table>
-	  </TableCell>
-   </TableRow>
-</TableRowGroup>
+   <Table.Columns>
+      <TableColumn Width='320'/>
+      <TableColumn Width='320'/>
+      <TableColumn Width='320'/>
+      <TableColumn Width='320'/>
+   </Table.Columns>
+   <TableRowGroup  Name='myTableRowGroup0' FontStyle='Italic' >
+      <TableRow Name='myTableRow0' FontSize='12'>
+         <TableCell Name='myTableCell0' TextAlignment='Center'>
+            <Table>
+               <Table.Columns>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='190'/>
+               </Table.Columns>
+               <TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
+                  <TableRow  FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           Month<LineBreak/>Day
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Scenario</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Historical Notes</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='AliceBlue' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>7/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>
+                           <Hyperlink Name='myHyperlinkCobra' NavigateUri='https://en.wikipedia.org/wiki/Operation_Cobra'>Cobra Breakout </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>7/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Coutances</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>7/29</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>7/30</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>
+                           <Hyperlink Name='myHyperlinkAvranches' NavigateUri='https://en.wikipedia.org/wiki/Operation_L%C3%BCttich'>Avranches </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>7/31</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='LightGray' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/02</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/03</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/04</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/05</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-H</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Vannes</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/06</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/07</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-H</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Lorient</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/08</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/09</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/10</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/11</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Nantes</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/12</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/13</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/14</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/15</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/16</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Orleans</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/17</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/18</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/19</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/20</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/21</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/22</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/23</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/24</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/25</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/26</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/29</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/30</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>8/31</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>
+                           <Hyperlink Name='myHyperlinkCommercy' NavigateUri='https://en.wikipedia.org/wiki/Battle_of_Nancy_(1944)'>Commercy </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='AliceBlue' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/11</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-5-H</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <LineBreak/>
+                           <Hyperlink Name='myHyperlinkMoselleCrossing' NavigateUri='https://en.wikipedia.org/wiki/Battle_of_Metz'>Moselle Crossing </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/12</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-5-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/13</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-5-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/14</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/15</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-9-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Crevic and Maixe</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/16</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-9-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Luneville</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/17</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/18</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/19</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-9-M</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <LineBreak/>
+                           <LineBreak/>
+                           <Hyperlink Name='myHyperlinkArracourt' NavigateUri='https://en.wikipedia.org/wiki/Battle_of_Arracourt'>Arracourt </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/20</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/21</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-9-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/22</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-9-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell Name='myTableCell1' TextAlignment='Center'>
+            <Table>
+               <Table.Columns>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='190'/>
+               </Table.Columns>
+               <TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
+                  <TableRow  FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           Month<LineBreak/>Day
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Scenario</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Historical Notes</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='AliceBlue' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/25</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-9-H</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>Counterattack</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/26</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-9-H</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-6-M</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>Hill 318</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-5-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/29</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-9-H</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Arracourt</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>9/30</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='LightGray' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/02</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/03</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/04</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/05</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/06</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/07</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/08</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/09</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/10</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>10/11</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='AliceBlue' >
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/09</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-5-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/10</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/11</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-5-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Fonteny</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/12</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-8-H</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>
+                           Counterattack at Rodalbe
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/13</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/14</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/15</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-H</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/16</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/17</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/18</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-H</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Dieuze and Rodalbe</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/19</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/20</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/21</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/22</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/23</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/24</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>
+                           <Hyperlink Name='myHyperlinkSaareRiver' NavigateUri='https://warfarehistorynetwork.com/article/the-saar-offensive-patton-breaks-through-the-western-wall/'>Crossed Saare River at Romeifing </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/25</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-7-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Counterattacks</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/26</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Wolfskirchen</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <LineBreak/>Cleared zone of responsibility
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/29</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>11/30</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='LightGray' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>Attacked Saare Union</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/02</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/03</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/04</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/05</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-9-H</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>Battle of Bining</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/06</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-9-H</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/21</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/22</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Marteiange</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell Name='myTableCell2' TextAlignment='Center'>
+            <Table>
+               <Table.Columns>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='190'/>
+               </Table.Columns>
+               <TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
+                  <TableRow  FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           Month<LineBreak/>Day
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Scenario</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Historical Notes</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='AliceBlue' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/23</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-7-H</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <LineBreak/>
+                           <Hyperlink Name='myHyperlinkChaumount' NavigateUri='https://warfarehistorynetwork.com/article/the-u-s-4th-armored-division-siege-of-bastogne/'>Battle for Chaumount </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/24</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-7-H</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/25</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-7-H</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/26</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-9-H</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>
+                           <Hyperlink Name='myHyperlinkBastogne' NavigateUri='https://en.wikipedia.org/wiki/Siege_of_Bastogne'>Into Bastogne </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/29</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Open Arion-Bastogne Highway</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/30</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-3-M</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>Defense of Bastogne corridor</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>12/31</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-3-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='LightGray' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-3-M</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>Defense of Bastogne corridor</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/02</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-3-M</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/09</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Noville</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/10</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Bourcy</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/11</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='21' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/><LineBreak/>Defensive positions
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/12</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/13</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/14</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/15</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/16</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/17</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/18</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/19</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/20</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/21</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/22</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/23</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/24</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/25</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/26</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/29</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/30</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>1/31</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='AliceBlue' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/02</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Hosdorf</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/22</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-8-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Gerchlingen</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/23</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-8-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Sinspenit</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/24</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/25</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-5-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Rittersdorf</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/26</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-5-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Bitburg</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>B-5-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Matzen and Fleissen</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>2/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='LightGray' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/02</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell Name='myTableCell3' TextAlignment='Center'>
+            <Table>
+               <Table.Columns>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='50'/>
+                  <TableColumn Width='190'/>
+               </Table.Columns>
+               <TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
+                  <TableRow  FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           Month<LineBreak/>Day
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Scenario</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>Historical Notes</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='AliceBlue' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/05</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <LineBreak/>To the Rhine
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/06</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/07</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/08</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/09</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell RowSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <LineBreak/>Regroup and mop up
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/10</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/11</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/14</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-9-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Attack out of Moselle Bridgehead</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/15</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-7-M</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Bad Kreuznauch</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/16</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-5-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/17</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-3-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/18</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/19</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/20</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Worms on the Rhine</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>==========Refitting==========</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/24</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>
+                           <Hyperlink Name='myHyperlinkCrossedRhine' NavigateUri='https://en.wikipedia.org/wiki/Operation_Plunder'>Crossed the Rhine </Hyperlink>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/25</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Hanau and Darmstadt</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/26</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/27</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/28</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Across the Main at Grossauhein</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/29</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/30</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>3/31</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+               <TableRowGroup Background='LightGray' >
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/01</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Creuzburg</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/02</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/03</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/04</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-4-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Gotha</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/05</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/06</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/07</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/08</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/09</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/10</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/11</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph></Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/12</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Crossed Saale River</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/13</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>A-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph>Wolkenburg</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/14</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/15</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/16</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/17</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>4/18</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>C-2-L</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Left'>
+                        <Paragraph> </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow FontSize='12'>
+                     <TableCell ColumnSpan='3' TextAlignment='Center'>
+                        <Paragraph>Refittiing for drive into Czechoslavakia</Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
 </Table>

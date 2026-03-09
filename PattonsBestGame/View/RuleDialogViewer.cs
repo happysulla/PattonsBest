@@ -549,7 +549,6 @@ namespace Pattons_Best
       private List<Hyperlink> FindHyperlinksInTables(FlowDocument doc)
       {
          var hyperlinks = new List<Hyperlink>();
-
          foreach (Block block in doc.Blocks)
          {
             if (block is Table table)
@@ -574,7 +573,23 @@ namespace Pattons_Best
       private IEnumerable<Hyperlink> FindHyperlinksInBlock(Block block)
       {
          var found = new List<Hyperlink>();
-         if (block is Paragraph paragraph)
+         if( block is Table table)
+         {
+            foreach (TableRowGroup trg in table.RowGroups)
+            {
+               foreach (TableRow row in trg.Rows)
+               {
+                  foreach (TableCell cell in row.Cells)
+                  {
+                     foreach (Block cellBlock in cell.Blocks)
+                     {
+                        found.AddRange(FindHyperlinksInBlock(cellBlock));
+                     }
+                  }
+               }
+            }
+         }
+         else if (block is Paragraph paragraph)
          {
             foreach (Inline inline in paragraph.Inlines)
             {
@@ -595,7 +610,6 @@ namespace Pattons_Best
                found.AddRange(FindHyperlinksInBlock(innerBlock));
             }
          }
-
          return found;
       }
       private IEnumerable<Hyperlink> FindHyperlinksInSpan(Span span)
