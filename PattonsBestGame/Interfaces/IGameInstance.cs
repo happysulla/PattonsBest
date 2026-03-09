@@ -157,6 +157,7 @@ namespace Pattons_Best
       int VictoryPtsTotalCampaign { get; set; }
       int PromotionPointNum { get; set; }
       int PromotionDay { get; set; }
+      Dictionary<string, int> CommanderPromoPoints { set; get; }
       int NumPurpleHeart { get; set; }
       bool IsCommanderRescuePerformed { set; get; }
       bool IsCommnderFightiingFromOpenHatch { set; get; }

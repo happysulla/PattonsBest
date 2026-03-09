@@ -168,6 +168,7 @@ namespace Pattons_Best
       public int TankReplacementNumber { set; get; } = 0;
       public int Fuel { set; get; } = 35;
       public int VictoryPtsTotalCampaign { get; set; } = 0;
+      public Dictionary<string, int> CommanderPromoPoints { set; get; } = new Dictionary<string, int>();
       public int PromotionPointNum { get; set; } = 0;
       public int PromotionDay { get; set; } = -1;
       public int NumPurpleHeart { get; set; } = 0;

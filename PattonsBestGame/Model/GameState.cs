@@ -361,6 +361,7 @@ namespace Pattons_Best
                         gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
                         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): commander Driver=" + gi.Commander.Name + " with rating=" + gi.Commander.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
+                     gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);  // Replace_InjuredCrewmen()
                      gi.PromotionPointNum = 0; // start promotion cycle again
                      gi.PromotionDay = -1;
                      Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
@@ -5875,7 +5876,7 @@ namespace Pattons_Best
                      lastReport.SunriseHour += hoursElapsed;
                      Logger.Log(LogEnum.LE_SHOW_TIME_ADVANCE, "Move_TaskForceToNewArea(): +" + (hoursElapsed * 60).ToString() + " for counterattack time -- min remaining=" + TableMgr.GetTimeRemaining(lastReport).ToString());
                      bool isCrewmanReplaced;
-                     if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "PrepareFor_BattleSetState()"))  // GameAction.MovementCounterattackEllapsedTimeRoll(Movement_CounterattackEllapsedTimeRoll) - TODO: Check feats process
+                     if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "PrepareFor_BattleSetState()"))  // GameAction.MovementCounterattackEllapsedTimeRoll(Movement_CounterattackEllapsedTimeRoll) 
                      {
                         returnStatus = "Replace_InjuredCrewmen() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(Movement_CounterattackEllapsedTimeRoll): " + returnStatus);
@@ -11757,6 +11758,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "VictoryPoints_Calculated():\n  gameSaves=" + GameSaveMgr.ToString());
             gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
             gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
+            if (false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name))
+               gi.CommanderPromoPoints.Add(gi.Commander.Name, lastReport.VictoryPtsTotalYourTank);
+            else 
+               gi.CommanderPromoPoints[gi.Commander.Name] += lastReport.VictoryPtsTotalYourTank;
          }
          return true;
       }
@@ -11772,12 +11777,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): Utilities.DiffInDates() returned error");
             return false;
          }
+         if( false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name) )
+            gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);
+         int numPromoPoint = gi.CommanderPromoPoints[gi.Commander.Name];
+         numPromoPoint = gi.PromotionPointNum;
          if (29 < diffInDates)  // cannot get promoted until 30 days past since last promotion
          {
             switch (oldRank)
             {
                case "Sgt":
-                  if (99 < gi.PromotionPointNum)
+                  if (99 < numPromoPoint)
                   {
                      gi.IsPromoted = true;
                      gi.PromotionDay = gi.Day;
@@ -11785,7 +11794,7 @@ namespace Pattons_Best
                   }
                   break;
                case "Ssg":
-                  if (199 < gi.PromotionPointNum)
+                  if (199 < numPromoPoint)
                   {
                      gi.IsPromoted = true;
                      gi.PromotionDay = gi.Day;
@@ -11793,7 +11802,7 @@ namespace Pattons_Best
                   }
                   break;
                case "2Lt":
-                  if (299 < gi.PromotionPointNum)
+                  if (299 < numPromoPoint)
                   {
                      gi.IsPromoted = true;
                      gi.PromotionDay = gi.Day;
@@ -11801,7 +11810,7 @@ namespace Pattons_Best
                   }
                   break;
                case "1Lt":
-                  if (399 < gi.PromotionPointNum)
+                  if (399 < numPromoPoint)
                   {
                      gi.IsPromoted = true;
                      gi.PromotionDay = gi.Day;
@@ -12079,15 +12088,6 @@ namespace Pattons_Best
             gi.Sherman.IsAssistanceNeeded = false;
             gi.Sherman.IsFuelNeeded = false;
             gi.Sherman.IsThrownTrack = false;
-            //-------------------------------------------------------
-            ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
-            if (null == commander)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): commander=null");
-               return false;
-            }
-            if (true == commander.IsKilled)
-               gi.PromotionPointNum = 0;
             //-------------------------------------------------------
             if (false == ResetDieResults(gi)) // EveningDebriefing_ResetDay()
             {

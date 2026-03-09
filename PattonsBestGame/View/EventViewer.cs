@@ -4946,7 +4946,9 @@ namespace Pattons_Best
          sbPromo.Append("Promotion Points Today (Total): ");
          sbPromo.Append(lastReport.VictoryPtsTotalYourTank.ToString());
          sbPromo.Append(" (");
-         sbPromo.Append(gi.PromotionPointNum.ToString());
+         if (false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name))
+            gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);
+         sbPromo.Append(gi.CommanderPromoPoints[gi.Commander.Name].ToString());
          sbPromo.Append(")");
          sbPromo.Append("\nLast Promotion Date: ");
          sbPromo.Append(promoDate);
