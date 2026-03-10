@@ -602,6 +602,7 @@ namespace Pattons_Best
          if (true == myIsEditableCommanderName)
          {
             myIsEditableCommanderName = false;
+
             if (0 < mySpanCommanderName.Inlines.Count)
             {
                Inline inline = mySpanCommanderName.Inlines.FirstInline;
@@ -612,9 +613,18 @@ namespace Pattons_Best
                      string trimStart = textbox.Text.TrimStart(trimChars);
                      string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
+                     {
+                        string currentCommanderName = myGameInstance.Commander.Name;
                         lastReport.Commander = trimString;
+                        int promoPoint = 0;
+                        if( true == myGameInstance.CommanderPromoPoints.ContainsKey(currentCommanderName))
+                           promoPoint = myGameInstance.CommanderPromoPoints[currentCommanderName];
+                        myGameInstance.CommanderPromoPoints.Add(lastReport.Commander, promoPoint); // add new entry for commander due to name change
+                     }
                      else
+                     {
                         textbox.Text = myGameInstance.Commander.Name;
+                     }
                   }
                }
             }

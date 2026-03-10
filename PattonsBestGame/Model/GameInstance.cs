@@ -912,13 +912,28 @@ namespace Pattons_Best
             return false;
          }
          //-----------------------------------------------
-         if (null != TargetMainGun)
+         this.ShermanFiringAtFront = null;  // assume not firing at any target at its front
+         if (null != this.TargetMainGun)
          {
             if (true == this.TargetMainGun.EnemyAcquiredShots.ContainsKey("Sherman")) // Fire_AndReloadGun() - Increase when firing at a target
                this.TargetMainGun.EnemyAcquiredShots["Sherman"]++;
             else
                this.TargetMainGun.EnemyAcquiredShots["Sherman"] = 1;
             Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++++> numOfShots=" + this.TargetMainGun.EnemyAcquiredShots["Sherman"].ToString());
+            if (true == this.TargetMainGun.IsVehicle())
+            {
+               string facingOfTarget = TableMgr.GetShermanFireDirection(this, this.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
+               if ("ERROR" == facingOfTarget)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): GetEnemyFireDirection() returned error");
+                  return false;
+               }
+               if ("Front" == facingOfTarget)
+               {
+                  this.ShermanFiringAtFront = this.TargetMainGun; // Sherman is firing at front of target
+                  Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_AndReloadGun(): SETTTING gi.ShermanFiringAtFront=" + this.ShermanFiringAtFront.Name);
+               }
+            }
          }
          //-----------------------------------------------
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired

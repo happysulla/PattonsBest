@@ -8023,7 +8023,7 @@ namespace Pattons_Best
                      }
                   }
                   break;
-               case GameAction.BattleRoundSequenceShermanToHitRoll:
+               case GameAction.BattleRoundSequenceShermanToHitRoll: 
                   gi.UndoCmd = null;
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
@@ -8034,7 +8034,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     gi.DieRollAction = GameAction.DieRollActionNone; // This only occurs if a hit is secured. Otherwise, BattleRoundSequenceShermanFiringMainGunEnd occurs
                      if (false == FireMainGunAtEnemyUnits(gi, ref action, gi.DieResults[key][0])) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanToHitRoll)
                      {
                         returnStatus = "Fire_MainGunAtEnemyUnits() returned false";
@@ -10170,26 +10170,6 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------------
-         if (true == gi.TargetMainGun.IsVehicle())
-         {
-            string facingOfTarget = TableMgr.GetShermanFireDirection(gi, gi.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
-            if ("ERROR" == facingOfTarget)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetEnemyFireDirection() returned error");
-               return false;
-            }
-            if ("Front" == facingOfTarget)
-            {
-               gi.ShermanFiringAtFront = gi.TargetMainGun; // Sherman is firing at front of target
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront" + gi.ShermanFiringAtFront.Name);
-            }
-            else
-            {
-               gi.ShermanFiringAtFront = null;  // Sherman is firing at front of target
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront = null");
-            }
-         }
-         //---------------------------------------------------------------
          double toHitNumber = TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun);  // determine the To Hit number
          if (TableMgr.FN_ERROR == toHitNumber)
          {
@@ -10342,26 +10322,6 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnitsMissed(): lastReport=null");
             return false;
-         }
-         //---------------------------------------------------------------
-         if (true == gi.TargetMainGun.IsVehicle())
-         {
-            string facingOfTarget = TableMgr.GetShermanFireDirection(gi, gi.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
-            if ("ERROR" == facingOfTarget)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnitsMissed(): GetEnemyFireDirection() returned error");
-               return false;
-            }
-            if ("Front" == facingOfTarget)
-            {
-               gi.ShermanFiringAtFront = gi.TargetMainGun; // Sherman is firing at front of target
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.ShermanFiringAtFront=" + gi.ShermanFiringAtFront.Name);
-            }
-            else
-            {
-               gi.ShermanFiringAtFront = null;  // Sherman is firing at front of target
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnitsMissed(): SETTTING gi.ShermanFiringAtFront=FALSE");
-            }
          }
          //---------------------------------------------------------------
          string gunLoadType = gi.GetGunLoadType();
