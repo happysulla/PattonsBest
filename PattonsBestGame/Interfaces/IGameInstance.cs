@@ -155,7 +155,6 @@ namespace Pattons_Best
       int TankReplacementNumber { set; get; }
       int Fuel { set; get; }
       int VictoryPtsTotalCampaign { get; set; }
-      int PromotionPointNum { get; set; }
       int PromotionDay { get; set; }
       Dictionary<string, int> CommanderPromoPoints { set; get; }
       int NumPurpleHeart { get; set; }

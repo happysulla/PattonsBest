@@ -361,8 +361,10 @@ namespace Pattons_Best
                         gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
                         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): commander Driver=" + gi.Commander.Name + " with rating=" + gi.Commander.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
-                     gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);  // Replace_InjuredCrewmen()
-                     gi.PromotionPointNum = 0; // start promotion cycle again
+                     if (false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name))
+                        gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);  // Replace_InjuredCrewmen()
+                     else
+                        gi.CommanderPromoPoints[gi.Commander.Name] = 0;
                      gi.PromotionDay = -1;
                      Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding Commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      if (false == gi.SetCrewActionTerritory(gi.Commander))
@@ -10179,12 +10181,12 @@ namespace Pattons_Best
             if ("Front" == facingOfTarget)
             {
                gi.ShermanFiringAtFront = gi.TargetMainGun; // Sherman is firing at front of target
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront" + gi.ShermanFiringAtFront.Name);
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront" + gi.ShermanFiringAtFront.Name);
             }
             else
             {
                gi.ShermanFiringAtFront = null;  // Sherman is firing at front of target
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront = null");
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Fire_MainGunAtEnemyUnits(): SETTTING gi.ShermanFiringAtFront = null");
             }
          }
          //---------------------------------------------------------------
@@ -11757,7 +11759,6 @@ namespace Pattons_Best
             GameSaveMgr.SetVpCalculated(gi.GameGuid, gi.Day);
             Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "VictoryPoints_Calculated():\n  gameSaves=" + GameSaveMgr.ToString());
             gi.VictoryPtsTotalCampaign += lastReport.VictoryPtsTotalEngagement;
-            gi.PromotionPointNum += lastReport.VictoryPtsTotalYourTank;
             if (false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name))
                gi.CommanderPromoPoints.Add(gi.Commander.Name, lastReport.VictoryPtsTotalYourTank);
             else 
@@ -11780,7 +11781,6 @@ namespace Pattons_Best
          if( false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name) )
             gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);
          int numPromoPoint = gi.CommanderPromoPoints[gi.Commander.Name];
-         numPromoPoint = gi.PromotionPointNum;
          if (29 < diffInDates)  // cannot get promoted until 30 days past since last promotion
          {
             switch (oldRank)

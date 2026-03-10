@@ -543,7 +543,6 @@ namespace Pattons_Best
          myGameInstanceSave.TankReplacementNumber = 3;
          myGameInstanceSave.Fuel = 3;
          myGameInstanceSave.VictoryPtsTotalCampaign = 3;
-         myGameInstanceSave.PromotionPointNum = 3;
          myGameInstanceSave.PromotionDay = 3;
          myGameInstanceSave.NumPurpleHeart = 3;
          myGameInstanceSave.IsCommanderRescuePerformed = true;
@@ -1348,11 +1347,6 @@ namespace Pattons_Best
          if (left.VictoryPtsTotalCampaign != right.VictoryPtsTotalCampaign)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsTotalCampaign != right.VictoryPtsTotalCampaign");
-            return false;
-         }
-         if (left.PromotionPointNum != right.PromotionPointNum)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.PromotionPointNum != right.PromotionPointNum");
             return false;
          }
          if (left.PromotionDay != right.PromotionDay)

@@ -6,6 +6,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -3279,24 +3280,11 @@ namespace Pattons_Best
             }
             gi.VictoryPtsTotalCampaign = Convert.ToInt32(sVictoryPtsTotalCampaign);
             //----------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
+            if (false == ReadXmlPromoPoints(reader, gi.CommanderPromoPoints))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(PromotionPointNum) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlPromoPoints() returned false");
                return null;
             }
-            if (reader.Name != "PromotionPointNum")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): PromotionPointNum != (node=" + reader.Name + ")");
-               return null;
-            }
-            string? sPromotionPointNum = reader.GetAttribute("value");
-            if (null == sPromotionPointNum)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): PromotionPointNum=null");
-               return null;
-            }
-            gi.PromotionPointNum = Convert.ToInt32(sPromotionPointNum);
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -6250,6 +6238,58 @@ namespace Pattons_Best
             reader.Read(); // get past </TrainedGunners> tag
          return true;
       }
+      private bool ReadXmlPromoPoints(XmlReader reader, Dictionary<string, int> promoPoints)
+      {
+         promoPoints.Clear();
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_PromoPoints(): IsStartElement(EnemyAcquiredShots) returned false");
+            return false;
+         }
+         if (reader.Name != "CommanderPromoPoints")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_PromoPoints(): CommanderPromoPoints != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_PromoPoints(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; i++)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_PromoPoints(): reader.IsStartElement(PromoPoint) = false");
+               return false;
+            }
+            if (reader.Name != "PromoPoint")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_PromoPoints(): PromoPoint != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sName = reader.GetAttribute("name");
+            if (null == sName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_PromoPoints(): sEnemy=null");
+               return false;
+            }
+            string? sValue = reader.GetAttribute("value");
+            if (null == sValue)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_PromoPoints(): sValue=null");
+               return false;
+            }
+            promoPoints[sName] = Convert.ToInt32(sValue);
+         }
+         if (0 < count)
+            reader.Read(); // get past </CommanderPromoPoints> tag
+         return true;
+      }
       private bool ReadXmlShermanHits(XmlReader reader, List<ShermanAttack> hits)
       {
          hits.Clear();
@@ -8858,17 +8898,9 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         elem = aXmlDocument.CreateElement("PromotionPointNum");
-         if (null == elem)
+         if (false == CreateXmlCommanderPromoPoints(aXmlDocument, gi.CommanderPromoPoints))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(PromotionPointNum) returned null");
-            return null;
-         }
-         elem.SetAttribute("value", gi.PromotionPointNum.ToString());
-         node = root.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(PromotionPointNum) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): Create_XmlGameCommands() returned false");
             return null;
          }
          //------------------------------------------
@@ -11069,6 +11101,54 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): AppendChild(trainedGunnerNode) returned null");
                return false;
             }
+         }
+         return true;
+      }
+      private bool CreateXmlCommanderPromoPoints(XmlDocument aXmlDocument, Dictionary<string, int> cmdrPromoPoints)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_CommanderPromoPoints(): root is null");
+            return false;
+         }
+         XmlElement? promoPointsElem = aXmlDocument.CreateElement("CommanderPromoPoints");
+         if (null == promoPointsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_CommanderPromoPoints(): CreateElement(CommanderPromoPoints) returned null");
+            return false;
+         }
+         promoPointsElem.SetAttribute("count", cmdrPromoPoints.Count.ToString());
+         XmlNode? promoPointsNode = root.AppendChild(promoPointsElem);
+         if (null == promoPointsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_CommanderPromoPoints(): AppendChild(promoPointsNode) returned null");
+            return false;
+         }
+         //----------------------------------
+         int count = 0;
+         foreach (var kvp in cmdrPromoPoints)
+         {
+            XmlElement? promoPointElem = aXmlDocument.CreateElement("PromoPoint");
+            if (null == promoPointElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_CommanderPromoPoints(): CreateElement(promoPointElem) returned null");
+               return false;
+            }
+            promoPointElem.SetAttribute("name", kvp.Key);
+            promoPointElem.SetAttribute("value", kvp.Value.ToString());
+            XmlNode? promoPointNode = promoPointsNode.AppendChild(promoPointElem);
+            if (null == promoPointNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_CommanderPromoPoints(): AppendChild(promoPointNode) returned null");
+               return false;
+            }
+            count++;
+         }
+         if (count != cmdrPromoPoints.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_CommanderPromoPoints(): count=" + count.ToString() + " cmdrPromoPoints=" + cmdrPromoPoints.Count.ToString());
+            return false;
          }
          return true;
       }

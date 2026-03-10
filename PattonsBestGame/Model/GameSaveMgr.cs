@@ -54,7 +54,7 @@ namespace Pattons_Best
    public class GameSaveMgr
    {
       static public OrderedDictionary theGameSaves = new OrderedDictionary();
-      static public string ToString()
+      static public new string ToString()
       {
          StringBuilder sb = new StringBuilder();
          sb.Append("{");
