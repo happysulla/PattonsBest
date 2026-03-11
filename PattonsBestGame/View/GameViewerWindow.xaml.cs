@@ -1232,7 +1232,7 @@ namespace Pattons_Best
                   menuItem1.Click += MenuItemCrewActionClick;
                   myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
                }
-               if ((true == is30CalibreMGFirePossible) || (true == is50CalibreMGFirePossible))
+               if ((true == is30CalibreMGFirePossible) || (true == is50CalibreMGFirePossible) || (true == isLoaderFireAaMg) )
                {
                   menuItem1 = new MenuItem();
                   menuItem1.Name = "Commander_MGFire";

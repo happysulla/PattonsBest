@@ -1087,7 +1087,9 @@
                         <Paragraph>B-9-H</Paragraph>
                      </TableCell>
                      <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-                        <Paragraph>Battle of Bining</Paragraph>
+                        <Paragraph>
+                           <Hyperlink Name='myHyperlinkBining' NavigateUri='https://warfarehistorynetwork.com/article/the-fight-for-singling/'>Battle of Bining </Hyperlink>
+                        </Paragraph>
                      </TableCell>
                   </TableRow>
                   <TableRow FontSize='12'>
