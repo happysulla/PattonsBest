@@ -387,7 +387,7 @@ namespace Pattons_Best
                if (true == newCrewMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newCrewMgr.CtorError=true");
                else if (false == newCrewMgr.AssignNewCrewRatings(ShowCrewRatingResults))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Assign_NewCrewRatings() returned false");
                break;
             case GameAction.MorningBriefingAmmoLoad:
             case GameAction.MovementAmmoLoad:
@@ -3717,66 +3717,66 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): Reached Default for vehicle=enemyUnitType=" + enemyUnitType);
                      return "ERROR";
                }
-               //----------------------------
-               if (true == isShermanMoving)
-                  sb51.Append("+25 for moving or pivoting Sherman\n");
-               //----------------------------
-               if (true == enemyUnit.IsWoods)
+            }
+            //----------------------------
+            if (true == isShermanMoving)
+               sb51.Append("+25 for moving or pivoting Sherman\n");
+            //----------------------------
+            if (true == enemyUnit.IsWoods)
+            {
+               if ('C' == range)
+                  sb51.Append("+5 for target in woods at close range\n");
+               else if ('M' == range)
+                  sb51.Append("+10 for target in woods at medium range\n");
+               else if ('L' == range)
+                  sb51.Append("+15 for target in woods at large range\n");
+               else
                {
-                  if ('C' == range)
-                     sb51.Append("+5 for target in woods at close range\n");
-                  else if ('M' == range)
-                     sb51.Append("+10 for target in woods at medium range\n");
-                  else if ('L' == range)
-                     sb51.Append("+15 for target in woods at large range\n");
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
-                     return "ERROR";
-                  }
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
+                  return "ERROR";
                }
-               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle()))
+            }
+            if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle()))
+            {
+               if ('C' == range)
+                  sb51.Append("+10 for target in building at close range\n");
+               else if ('M' == range)
+                  sb51.Append("+15 for target in building at medium range\n");
+               else if ('L' == range)
+                  sb51.Append("+25 for target in building at large range\n");
+               else
                {
-                  if ('C' == range)
-                     sb51.Append("+10 for target in building at close range\n");
-                  else if ('M' == range)
-                     sb51.Append("+15 for target in building at medium range\n");
-                  else if ('L' == range)
-                     sb51.Append("+25 for target in building at large range\n");
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
-                     return "ERROR";
-                  }
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
+                  return "ERROR";
                }
-               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle()))
+            }
+            if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle()))
+            {
+               if ('C' == range)
+                  sb51.Append("+15 for target in fortification at close range\n");
+               else if ('M' == range)
+                  sb51.Append("+25 for target in fortification at medium range\n");
+               else if ('L' == range)
+                  sb51.Append("+35 for target in fortification at large range\n");
+               else
                {
-                  if ('C' == range)
-                     sb51.Append("+15 for target in fortification at close range\n");
-                  else if ('M' == range)
-                     sb51.Append("+25 for target in fortification at medium range\n");
-                  else if ('L' == range)
-                     sb51.Append("+35 for target in fortification at large range\n");
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
-                     return "ERROR";
-                  }
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
+                  return "ERROR";
                }
-               //----------------------------
-               if (true == gi.IsShermanDeliberateImmobilization)
+            }
+            //----------------------------
+            if (true == gi.IsShermanDeliberateImmobilization)
+            {
+               if ('C' == range)
+                  sb51.Append("+65 for deliberate immobilization\n");
+               else if ('M' == range)
+                  sb51.Append("+55 for deliberate immobilization\n");
+               else if ('L' == range)
+                  sb51.Append("+45 for deliberate immobilization\n");
+               else
                {
-                  if ('C' == range)
-                     sb51.Append("+65 for deliberate immobilization\n");
-                  else if ('M' == range)
-                     sb51.Append("+55 for deliberate immobilization\n");
-                  else if ('L' == range)
-                     sb51.Append("+45 for deliberate immobilization\n");
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
-                     return "ERROR";
-                  }
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
+                  return "ERROR";
                }
             }
          }
@@ -6555,20 +6555,6 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingBegin;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "Ambulance3": // Morning Briefing
-                           if (EnumScenario.Retrofit == lastReport.Scenario)
-                           {
-                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006a";       
-                              myGameInstance.DieRollAction = GameAction.DieRollActionNone;   
-                           }
-                           else
-                           {
-                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";                  
-                              myGameInstance.DieRollAction = GameAction.MorningBriefingCalendarRoll;
-                           }
-                           action = GameAction.UpdateEventViewerActive;
-                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                           break;
                         case "HealCrewman":
                            action = GameAction.MorningBriefingCrewmanHealing;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -7055,6 +7041,20 @@ namespace Pattons_Best
                            break;
                         case "Ambulance2":  // MoveShermanAdvanceOrRetreat() - Advance or Retreat
                            action = GameAction.MorningBriefingAssignCrewRating;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Ambulance3": // Morning Briefing
+                           if (EnumScenario.Retrofit == lastReport.Scenario)
+                           {
+                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006a";
+                              myGameInstance.DieRollAction = GameAction.DieRollActionNone;
+                           }
+                           else
+                           {
+                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";
+                              myGameInstance.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+                           }
+                           action = GameAction.UpdateEventViewerActive;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "EngagementOver":

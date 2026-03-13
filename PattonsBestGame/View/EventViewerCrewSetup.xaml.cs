@@ -76,7 +76,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer_CrewSetup(): gi=null");
             CtorError = true;
             return;
          }
@@ -84,7 +84,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == c) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): c=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer_CrewSetup(): c=null");
             CtorError = true;
             return;
          }
@@ -92,7 +92,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == sv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): sv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer_CrewSetup(): sv=null");
             CtorError = true;
             return;
          }
@@ -100,7 +100,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == rdv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): rdv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer_CrewSetup(): rdv=null");
             CtorError = true;
             return;
          }
@@ -108,7 +108,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == dr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): dr=true");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer_CrewSetup(): dr=true");
             CtorError = true;
             return;
          }
@@ -122,27 +122,27 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Assign_NewCrewRatings(): myGameInstance=null");
             return false;
          }
          if (null == myCanvas)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "Assign_NewCrewRatings(): myCanvas=null");
             return false;
          }
          if (null == myScrollViewer)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myScrollViewer=null");
+            Logger.Log(LogEnum.LE_ERROR, "Assign_NewCrewRatings(): myScrollViewer=null");
             return false;
          }
          if (null == myRulesMgr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myRulesMgr=null");
+            Logger.Log(LogEnum.LE_ERROR, "Assign_NewCrewRatings(): myRulesMgr=null");
             return false;
          }
          if (null == myDieRoller)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myDieRoller=null");
+            Logger.Log(LogEnum.LE_ERROR, "Assign_NewCrewRatings(): myDieRoller=null");
             return false;
          }
          //--------------------------------------------------
@@ -159,7 +159,7 @@ namespace Pattons_Best
          System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, Utilities.theMapItemOffset); // set the center of the MapItem as the hot point for the cursor
          myCursors.Clear();
          int i = 0;
-         Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "AssignNewCrewRatings(): NewMembers=" + myGameInstance.NewMembers.ToString());
+         Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Assign_NewCrewRatings(): NewMembers=" + myGameInstance.NewMembers.ToString());
          foreach (ICrewMember cm in myGameInstance.NewMembers) // AssignNewCrewRatings()
          {
             myAssignables.Add(cm);
@@ -172,7 +172,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): UpdateGrid() return false");
+            Logger.Log(LogEnum.LE_ERROR, "Assign_NewCrewRatings(): UpdateGrid() return false");
             return false;
          }
          myScrollViewer.Content = myGrid;
@@ -230,7 +230,7 @@ namespace Pattons_Best
                return false;
             }
             myGameInstance.NewMembers.Clear();
-            Logger.Log(LogEnum.LE_SHOW_CREW_CLEAR, "EventViewerCrewSetup.UpdateEndState(): clearing NewMebers");
+            Logger.Log(LogEnum.LE_SHOW_CREW_CLEAR, "EventViewer_CrewSetup.UpdateEndState(): clearing NewMebers");
             //----------------------------------
             if (null == myCallback)
             {

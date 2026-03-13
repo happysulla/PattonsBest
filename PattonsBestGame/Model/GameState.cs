@@ -266,13 +266,13 @@ namespace Pattons_Best
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.NewMembers.Add(gi.Driver);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        gi.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " with rating=" + gi.Driver.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
-                        gi.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " with rating=" + gi.Driver.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                        gi.NewMembers.Add(gi.Driver);  
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      }
                      if (false == gi.SetCrewActionTerritory(gi.Driver))
                      {
@@ -289,13 +289,13 @@ namespace Pattons_Best
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.NewMembers.Add(gi.Loader);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        gi.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " with rating=" + gi.Loader.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
-                        gi.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " with rating=" + gi.Loader.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                        gi.NewMembers.Add(gi.Loader);  
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      }
                      if (false == gi.SetCrewActionTerritory(gi.Loader))
                      {
@@ -312,13 +312,13 @@ namespace Pattons_Best
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.NewMembers.Add(gi.Assistant);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        gi.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " with rating=" + gi.Assistant.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
-                        gi.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " with rating=" + gi.Assistant.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                        gi.NewMembers.Add(gi.Assistant);  
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      }
                      if (false == gi.SetCrewActionTerritory(gi.Assistant))
                      {
@@ -335,13 +335,13 @@ namespace Pattons_Best
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.NewMembers.Add(gi.Gunner);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " with rating=" + gi.Gunner.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
-                        gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " with rating=" + gi.Gunner.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                        gi.NewMembers.Add(gi.Gunner); 
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      }
                      break;
                   case "Commander":
@@ -353,13 +353,13 @@ namespace Pattons_Best
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.NewMembers.Add(gi.Commander);  // Replace_InjuredCrewmen() - if replacing in evening, assign new rating in morning briefing
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
+                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): commander Driver=" + gi.Commander.Name + " with rating=" + gi.Commander.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
-                        gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                        Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): commander Driver=" + gi.Commander.Name + " with rating=" + gi.Commander.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
+                        gi.NewMembers.Add(gi.Commander);  
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
                      }
                      if (false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name))
                         gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);  // Replace_InjuredCrewmen()
@@ -3909,8 +3909,17 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     bool isInjuredCrewmanAbleToReturn = false;
+                     foreach(ICrewMember cm in gi.InjuredCrewMembers)
+                     {
+                        if( (0 < cm.WoundDaysUntilReturn) && (cm.WoundDaysUntilReturn < TableMgr.MIA) )
+                        {
+                           isInjuredCrewmanAbleToReturn = true;
+                           break;
+                        }
+                     }
                      Logger.Log(LogEnum.LE_SHOW_CREW_RETURN, "GameStateEveningDebriefing.PerformAction(MorningBriefingBegin): gi.InjuredCrewMembers.Count=" + gi.InjuredCrewMembers.Count.ToString() + " crewmen=" + gi.InjuredCrewMembers.ToString());
-                     if (0 < gi.InjuredCrewMembers.Count)
+                     if (true == isInjuredCrewmanAbleToReturn)
                      {
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e007a");  // Healing Crewmen
                      }
@@ -10679,7 +10688,7 @@ namespace Pattons_Best
                else if ("Hvap" == hit.myAmmoType)
                {
                   toKillNum = TableMgr.GetShermanToKill76HvapVehicleBaseNumber(gi, gi.TargetMainGun, hit);
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 5-vehicle=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 5-vehicle=" + gi.TargetMainGun.Name + " toKill=" + toKillNum.ToString());
                   if (TableMgr.KIA == toKillNum) // automatic KILL
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");

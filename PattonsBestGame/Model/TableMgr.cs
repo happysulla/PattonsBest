@@ -10,7 +10,7 @@ namespace Pattons_Best
    {
       public const int NO_CHANCE = 55555;
       public const int SPG_FIRE_OUTSIDE_ARC = 55556;
-      public const int KIA = 10000;
+      public const int KIA = 10002;
       public const int MIA = 10001;
       public const int FN_ERROR = -1000;
       public const int THROWN_TRACK = 1001;
@@ -5775,81 +5775,82 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
                      return FN_ERROR;
                }
-               //----------------------------
-               if (true == isShermanMoving)
+            }
+            //----------------------------
+            //----------------------------
+            if (true == isShermanMoving)
+            {
+               toHitModifierNum += 25;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Sherman moving +25 mod=" + toHitModifierNum.ToString());
+            }
+            //----------------------------
+            if (true == enemyUnit.IsWoods)
+            {
+               if ('C' == range)
+               {
+                  toHitModifierNum += 5;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +5 close range mod=" + toHitModifierNum.ToString());
+               }
+               else if ('M' == range)
+               {
+                  toHitModifierNum += 10;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +10 medium range mod=" + toHitModifierNum.ToString());
+               }
+               else if ('L' == range)
+               {
+                  toHitModifierNum += 15;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +15 long range mod=" + toHitModifierNum.ToString());
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
+                  return FN_ERROR;
+               }
+            }
+            if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle()))
+            {
+               if ('C' == range)
+               {
+                  toHitModifierNum += 10;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +10 close range mod=" + toHitModifierNum.ToString());
+               }
+               else if ('M' == range)
+               {
+                  toHitModifierNum += 15;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +15 medium range mod=" + toHitModifierNum.ToString());
+               }
+               else if ('L' == range)
                {
                   toHitModifierNum += 25;
-                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Sherman moving +25 mod=" + toHitModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +25 long range mod=" + toHitModifierNum.ToString());
                }
-               //----------------------------
-               if (true == enemyUnit.IsWoods)
+               else
                {
-                  if ('C' == range)
-                  {
-                     toHitModifierNum += 5;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +5 close range mod=" + toHitModifierNum.ToString());
-                  }
-                  else if ('M' == range)
-                  {
-                     toHitModifierNum += 10;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +10 medium range mod=" + toHitModifierNum.ToString());
-                  }
-                  else if ('L' == range)
-                  {
-                     toHitModifierNum += 15;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +15 long range mod=" + toHitModifierNum.ToString());
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
-                     return FN_ERROR;
-                  }
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
+                  return FN_ERROR;
                }
-               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle()))
+            }
+            if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle()))
+            {
+               if ('C' == range)
                {
-                  if ('C' == range)
-                  {
-                     toHitModifierNum += 10;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +10 close range mod=" + toHitModifierNum.ToString());
-                  }
-                  else if ('M' == range)
-                  {
-                     toHitModifierNum += 15;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +15 medium range mod=" + toHitModifierNum.ToString());
-                  }
-                  else if ('L' == range)
-                  {
-                     toHitModifierNum += 25;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +25 long range mod=" + toHitModifierNum.ToString());
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
-                     return FN_ERROR;
-                  }
+                  toHitModifierNum += 15;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): fort +15 close range mod=" + toHitModifierNum.ToString());
                }
-               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle()))
+               else if ('M' == range)
                {
-                  if ('C' == range)
-                  {
-                     toHitModifierNum += 15;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): fort +15 close range mod=" + toHitModifierNum.ToString());
-                  }
-                  else if ('M' == range)
-                  {
-                     toHitModifierNum += 25;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): fort +25 medium range mod=" + toHitModifierNum.ToString());
-                  }
-                  else if ('L' == range)
-                  {
-                     toHitModifierNum += 35;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): fort +35 long range mod=" + toHitModifierNum.ToString());
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
-                     return FN_ERROR;
-                  }
+                  toHitModifierNum += 25;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): fort +25 medium range mod=" + toHitModifierNum.ToString());
+               }
+               else if ('L' == range)
+               {
+                  toHitModifierNum += 35;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): fort +35 long range mod=" + toHitModifierNum.ToString());
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
+                  return FN_ERROR;
                }
             }
          }

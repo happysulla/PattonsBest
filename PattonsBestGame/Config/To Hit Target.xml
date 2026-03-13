@@ -714,7 +714,7 @@
          <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
             <Paragraph>
                <Run Text='  *Sherman moving/pivoting'></Run>
-               <Run Typography.Variants='Superscript'>5</Run>
+               <Run Typography.Variants='Superscript'>6</Run>
             </Paragraph>
          </TableCell>
          <TableCell TextAlignment='Center' Background='DarkSeaGreen'>

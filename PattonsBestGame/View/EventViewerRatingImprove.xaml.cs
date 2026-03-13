@@ -144,7 +144,7 @@ namespace Pattons_Best
          myRollResultRowNum = 0;
          myCallback = callback;
          int i = 0;
-         bool isAnyCrewmanAlive = false;
+         bool isCrewmanAbleToIncrease = false;
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (string crewmember in crewmembers)
          {
@@ -159,13 +159,18 @@ namespace Pattons_Best
             if (10 == cm.Rating)
                myGridRows[i].myDieRoll = MAX_RATING;
             if (true == cm.IsKilled)
+            {
                myGridRows[i].myDieRoll = KIA_CREWMAN;
+            }
             else
-               isAnyCrewmanAlive = true;
+            {
+               if (cm.Rating < 10)
+                  isCrewmanAbleToIncrease = true;
+            }
             ++i;
          }
          //--------------------------------------------------
-         if (true == isAnyCrewmanAlive)
+         if (true == isCrewmanAbleToIncrease)
             myState = E491Enum.ROLL_RATING;
          else
             myState = E491Enum.ROLL_RATING_SHOW;
