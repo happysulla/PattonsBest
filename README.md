@@ -11,12 +11,13 @@ Author: Bruce Campbell Shelly https://boardgamegeek.com/boardgamedesigner/1329/b
 TO INSTALL:  
 1.) If you have already installed, you may need to first uninstall the application using the Windows Control Panel.  
 2.) To download, goto following website:   https://github.com/happysulla/PattonsBest.  
-3.) Select the Latest Release button from the right side middle of the web page.  
+3.) Select the **Latest Release** button from the right side middle of the web page.  
 4.) Download the PattonsBestWindowsSetup.zip file by clicking on the file name.  
 5.) Unzip PattonsBestWindowsSetup.zip by clicking on it. Go to location where unzip occurred. Double click the setup.exe file.  
-6.) If you get Microsoft Defender blue dialog, select "More Info" and "Run Anyways" button.  
-7.) You can delete the **C:\tmp\PattonsBestWindowsSetup** directory when you are done.  
+6.) If you get Microsoft Defender blue dialog, select "More Info" link and "Run Anyways" button.  
+7.) If a security warning dialog appears, select **Install** button. 
 8.) Setup.exe installs it as a ClickOnce windows application. It can be removed using the standard Window's Control Panel.
+9.) You can remove teh PattonsBestWindowsSetup.zip file and zip location after installing.
 
 
 REPORT ERROR:  
