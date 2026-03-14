@@ -10,16 +10,27 @@ Author: Bruce Campbell Shelly https://boardgamegeek.com/boardgamedesigner/1329/b
 
 TO INSTALL:
 1.) If you have already installed, you may need to first uninstall the application using the Windows Control Panel. 
-2.) To download, goto following website:   https://github.com/happysulla/PattonsBest (this webpage)
+
+2.) To download, goto following website:   https://github.com/happysulla/PattonsBest.
+
 3.) Select the Latest Release button from the right side middle of the web page.
-4.) Download the PattonsBestWindowsSetup.zip file by clicking on the file name. This downloads it to C:\tmp directory which can be removed after installation.
-5.) Unzip and select setup.exe. Double click the setup.exe file.
+
+4.) Download the PattonsBestWindowsSetup.zip file by clicking on the file name.
+
+5.) Unzip PattonsBestWindowsSetup.zip by clicking on it. Go to location where unzip occurred. Double click the setup.exe file.
+
 6.) If you get Microsoft Defender blue dialog, select "More Info" and "Run Anyways" button.
+
 7.) You can delete the C:\tmp\PattonsBestWindowsSetup directory when you are done.
+
 8.) Setup.exe installs it as a ClickOnce windows application. It can be removed using the standard Window's Control Panel.
+
 
 REPORT ERROR
  1.) If the game hangs, attempt to recover by selecting  <Bold>Edit | Revert Last Round</Bold> menu to get to last round that was fought or <Bold>Edit | Revert Last Day</Bold> to get to start of last day.
+ 
  2.) If you discover an error, save a copy of the latest log file. The log files are automatically saved in the <Bold>C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Logs</Bold> directory with latest time tag representing the last game played. <Italic>username</Italic> is the login name. AppData is a hidden directory that must be unhidden to view.
+ 
  3.) Attempt to save the game state using the <Bold>File | Save As...</Bold> menu. Files are saved by default in <Bold>C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Games</Bold> directory.
+ 
  4.) Send description of problem, screen shot, log file, and game file in email to <Bold>happysulla@gmail.com</Bold>.
