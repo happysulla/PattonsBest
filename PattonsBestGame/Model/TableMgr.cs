@@ -950,7 +950,7 @@ namespace Pattons_Best
       }
       public static string SetEnemyActionResult(IGameInstance gi, IMapItem mi, int dieRoll)
       {
-         //dieRoll = 90; // <cgs> - TEST 
+         //dieRoll = 90; // <CGS> - TEST 
          bool isThrownTrack = mi.IsThrownTrack;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)

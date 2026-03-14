@@ -3246,10 +3246,15 @@ namespace Pattons_Best
          //}
          //gi.TrainedGunners.Add(lastReport.Gunner.Name);    // <CGS> TEST - wounded crewmen
          //--------------------------------
-         //lastReport.Commander.SetBloodSpots(10);           // <CGS> TEST - wounded crewmen
-         //lastReport.Commander.Wound = "Light Wound";       // <CGS> TEST - wounded crewmen
-         //lastReport.Commander.WoundDaysUntilReturn = 0;    // <CGS> TEST - wounded crewmen
-         //gi.SetIncapacitated(lastReport.Commander);        // <CGS> TEST - wounded crewmen
+         //gi.Assistant.Rating = 3;
+         //gi.Assistant.SetBloodSpots(35);             // <CGS> TEST - healing crewmen
+         //gi.Assistant.Wound = "Serious Wound";       // <CGS> TEST - healing crewmen
+         //gi.Assistant.WoundDaysUntilReturn = 7;      // <CGS> TEST - healing crewmen
+         //gi.SetIncapacitated(gi.Assistant);          // <CGS> TEST - wounded crewmen
+         //gi.Commander.SetBloodSpots(10);           // <CGS> TEST - wounded crewmen
+         //gi.Commander.Wound = "Light Wound";       // <CGS> TEST - wounded crewmen
+         //gi.Commander.WoundDaysUntilReturn = 0;    // <CGS> TEST - wounded crewmen
+         //gi.SetIncapacitated(gi.Commander);        // <CGS> TEST - wounded crewmen
          //--------------------------------
          //TableMgr.SetWounds(gi, lastReport.Loader, 92, 0);
          //--------------------------------
@@ -3898,7 +3903,7 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
-               case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.MorningBriefingAssignCrewRating: // GameStateMorningBriefing - handled in EventViewer by showing dialog
                   break;
                case GameAction.MorningBriefingBegin:
                   GameLoadMgr loadMgr = new GameLoadMgr();
@@ -4773,7 +4778,7 @@ namespace Pattons_Best
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.UpdateBattleBoard: // Do not log event
-               case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.MorningBriefingAssignCrewRating: // GameStateBattlePrep - handled in EventViewer by showing dialog
                case GameAction.MorningBriefingAmmoReadyRackLoad: // GameStateBattlePrep
                case GameAction.PreparationsLoaderSpotSet:
                case GameAction.PreparationsCommanderSpotSet:
@@ -5241,7 +5246,7 @@ namespace Pattons_Best
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.UpdateBattleBoard: // Do not log event
-               case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.MorningBriefingAssignCrewRating: // GameStateMovement - handled in EventViewer by showing dialog
                case GameAction.MorningBriefingAmmoReadyRackLoad:  // GameStateMovement
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
@@ -6728,7 +6733,7 @@ namespace Pattons_Best
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.MovementEnemyStrengthChoice: // GameStateBattle.PerformAction()
-               case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.MorningBriefingAssignCrewRating: // GameStateBattle - handled in EventViewer by showing dialog
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
                   break;
@@ -7176,7 +7181,7 @@ namespace Pattons_Best
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.UpdateBattleBoard: // Do not log event
-               case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.MorningBriefingAssignCrewRating: // GameStateBattleRoundSequence - handled in EventViewer by showing dialog
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show

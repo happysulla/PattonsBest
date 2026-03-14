@@ -174,7 +174,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
          //SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS);
-         SetOn(LogEnum.LE_VIEW_SHOW_GAMESAVES);
+         //SetOn(LogEnum.LE_VIEW_SHOW_GAMESAVES);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS_MIN);
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------
@@ -185,7 +185,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_CREW_BU);
          SetOn(LogEnum.LE_SHOW_CREW_ADD);
          SetOn(LogEnum.LE_SHOW_CREW_CLEAR);
-         SetOn(LogEnum.LE_SHOW_CREW_INCAPACITATED);
+         //SetOn(LogEnum.LE_SHOW_CREW_INCAPACITATED);
          SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
          SetOn(LogEnum.LE_SHOW_CREW_RETURN);
@@ -208,7 +208,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_START_BATTLE);
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          //SetOn(LogEnum.LE_SHOW_RESET_ROUND);
-         SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
+         //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
          //SetOn(LogEnum.LE_SHOW_WOUND_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
@@ -220,18 +220,18 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
-         SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD);
-         SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_ADVANCE);
+         //SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD);
+         //SetOn(LogEnum.LE_SHOW_FRIENDLY_ACTION_ADVANCE);
          //-------------------------------
-         SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
-         SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
+         //SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
+         //SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
          //SetOn(LogEnum.LE_SHOW_MAIN_GUN_BREAK);
-         SetOn(LogEnum.LE_SHOW_MG_BREAK);
+         //SetOn(LogEnum.LE_SHOW_MG_BREAK);
          //SetOn(LogEnum.LE_SHOW_MG_FIRE);
          //SetOn(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE);
-         SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
-         SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF);
-         SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
+         //SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
+         //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF);
+         //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK);
          SetOn(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS);
          //SetOn(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS);
