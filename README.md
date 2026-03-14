@@ -9,6 +9,7 @@ The combat system utilizes an area map for the larger scale movement of your tas
 Author: Bruce Campbell Shelly https://boardgamegeek.com/boardgamedesigner/1329/bruce-shelley
 
 TO INSTALL:
+
 1.) If you have already installed, you may need to first uninstall the application using the Windows Control Panel. 
 
 2.) To download, goto following website:   https://github.com/happysulla/PattonsBest.
@@ -27,6 +28,7 @@ TO INSTALL:
 
 
 REPORT ERROR
+
  1.) If the game hangs, attempt to recover by selecting  <Bold>Edit | Revert Last Round</Bold> menu to get to last round that was fought or <Bold>Edit | Revert Last Day</Bold> to get to start of last day.
  
  2.) If you discover an error, save a copy of the latest log file. The log files are automatically saved in the <Bold>C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Logs</Bold> directory with latest time tag representing the last game played. <Italic>username</Italic> is the login name. AppData is a hidden directory that must be unhidden to view.
