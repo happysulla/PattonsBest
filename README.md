@@ -3,7 +3,7 @@
 This game is a digital version of the boardgame. It replicates the original release. If any images used have license restrictions, please inform me with email (happysulla@gmail.com), and I will remove.
 
 *For those of you who like to roll percentile dice -- this game's for you!* This is a solitaire game involving tank command -- that is you control a Sherman tank (17 variations) and command a crew assigned to the 4th Armored Division as you move out of the  Cobra Breakout following the Normandy invasion.
-You and your tank move into a new territory and deal with German defenses situated in northern France and, as the campaign game  goes on, across the Rhine and into Germany. You will need to make life and death decisions in managing your crew's actions,  your tank's facing, and attempt to take out enemy forces without losing your tank (which is extremely challenging). 
+You and your tank move into a new territory and deal with German defenses situated in northern France and, across the Rhine, and into Germany. You will need to make life and death decisions in managing your crew's actions,  your tank's facing, and attempt to take out enemy forces without losing your tank (which is extremely challenging). 
 The combat system utilizes an area map for the larger scale movement of your task force but then switches to an abstracted Battle Board when contact is made with the enemy. 
 
 Author: Bruce Campbell Shelly https://boardgamegeek.com/boardgamedesigner/1329/bruce-shelley
