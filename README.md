@@ -1,10 +1,24 @@
+# Patton's Best circa 1987
+
+This game is a digital version of the boardgame. It replicates the original release. If any images used have license restrictions, please inform me with email (happysulla@gmail.com), and I will remove.
+
 <Italic>For those of you who like to roll percentile dice -- this game's for you!</Italic> This is a solitaire game involving tank command -- that is you control a Sherman tank (17 variations) and command a crew assigned to the 4th Armored Division as you move out of the  Cobra Breakout following the Normandy invasion.
 You and your tank move into a new territory and deal with German defenses situated in northern France and, as the campaign game  goes on, across the Rhine and into Germany. You will need to make life and death decisions in managing your crew&apos;s actions,  your tank&apos;s facing, and attempt to take out enemy forces without losing your tank (which is extremely challenging). 
 The combat system utilizes an area map for the larger scale movement of your task force but then switches to an abstracted Battle Board when contact is made with the enemy. 
 
-Installation Instructions:
+Author: Bruce Campbell Shelly https://boardgamegeek.com/boardgamedesigner/1329/bruce-shelley
 
-Report Error:
+TO INSTALL:
+1.) If you have already installed, you may need to first uninstall the application using the Windows Control Panel. 
+2.) To download, goto following website:   https://github.com/happysulla/PattonsBest (this webpage)
+3.) Select the Latest Release button from the right side middle of the web page.
+4.) Download the PattonsBestWindowsSetup.zip file by clicking on the file name. This downloads it to C:\tmp directory which can be removed after installation.
+5.) Unzip and select setup.exe. Double click the setup.exe file.
+6.) If you get Microsoft Defender blue dialog, select "More Info" and "Run Anyways" button.
+7.) You can delete the C:\tmp\PattonsBestWindowsSetup directory when you are done.
+8.) Setup.exe installs it as a ClickOnce windows application. It can be removed using the standard Window's Control Panel.
+
+REPORT ERROR
  1.) If the game hangs, attempt to recover by selecting  <Bold>Edit | Revert Last Round</Bold> menu to get to last round that was fought or <Bold>Edit | Revert Last Day</Bold> to get to start of last day.
  2.) If you discover an error, save a copy of the latest log file. The log files are automatically saved in the <Bold>C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Logs</Bold> directory with latest time tag representing the last game played. <Italic>username</Italic> is the login name. AppData is a hidden directory that must be unhidden to view.
  3.) Attempt to save the game state using the <Bold>File | Save As...</Bold> menu. Files are saved by default in <Bold>C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Games</Bold> directory.
