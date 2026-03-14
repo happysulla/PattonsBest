@@ -9,15 +9,18 @@
     <UseWPF>true</UseWPF>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Description>Solo game replicating 4th armor path during WW2</Description>
-    <AssemblyVersion>00.00.01</AssemblyVersion>
+    <AssemblyVersion>01.00.00</AssemblyVersion>
     <AnalysisLevel>latest</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
     <UseWindowsForms>True</UseWindowsForms>
     <StartupObject>Pattons_Best.App</StartupObject>
     <ApplicationIcon>Images\PattonsBest.ico</ApplicationIcon>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-    <Title>Pattons Best Solo Game</Title>
+    <Title>Pattons Best</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyName>Pattons Best</AssemblyName>
+    <Company>Wargaming Inc</Company>
+    <Authors>happysulla@gmail.com</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
