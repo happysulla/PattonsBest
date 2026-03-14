@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    struct MapPathCount // used in counterattack when retreating
    {

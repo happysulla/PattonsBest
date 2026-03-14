@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
     /// <summary>
     /// Interaction logic for App.xaml

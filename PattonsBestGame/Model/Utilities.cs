@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Serialization;
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class Utilities
    {

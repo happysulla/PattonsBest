@@ -20,7 +20,7 @@ using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public struct BloodSpot

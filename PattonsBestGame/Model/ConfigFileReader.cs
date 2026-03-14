@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Input;
 using System.Xml.Linq;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class ConfigFileReader
    {

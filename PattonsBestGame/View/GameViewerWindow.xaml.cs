@@ -27,7 +27,7 @@ using MenuItem = System.Windows.Controls.MenuItem;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class GameViewerWindow : System.Windows.Window, IView
    {

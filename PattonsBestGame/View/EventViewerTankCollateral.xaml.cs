@@ -11,10 +11,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewerBattleSetup;
-using static Pattons_Best.EventViewerRatingImprove;
+using static PattonsBest.EventViewerBattleSetup;
+using static PattonsBest.EventViewerRatingImprove;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class EventViewerTankCollateral : UserControl
    {

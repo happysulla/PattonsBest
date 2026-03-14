@@ -1,4 +1,4 @@
-﻿<Window x:Class="Pattons_Best.GameViewerWindow"
+﻿<Window x:Class="PattonsBest.GameViewerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         mc:Ignorable="d" 

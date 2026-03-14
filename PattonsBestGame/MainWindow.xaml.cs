@@ -7,7 +7,7 @@ using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    //---------------------------------------------------------------------
    [Serializable]
@@ -143,12 +143,12 @@ namespace Pattons_Best
             //--------------------------------------------
             try // copy user documentation to folder where user data is kept
             {
-               string docs1Src = theAssemblyDirectory + @"\Docs\Pattons_Best-Summary.pdf";
+               string docs1Src = theAssemblyDirectory + @"\Docs\PattonsBest-Summary.pdf";
                string docs2Src = theAssemblyDirectory + @"\Docs\PattonsBest-rules.pdf";
                string docsDir = appDataDir + @"\PattonsBest\Docs\";
                if (false == Directory.Exists(docsDir))
                   Directory.CreateDirectory(docsDir);
-               string docs1Dest = docsDir + @"Pattons_Best-Summary.pdf";
+               string docs1Dest = docsDir + @"PattonsBest-Summary.pdf";
                if (false == File.Exists(docs1Dest))
                   File.Copy(docs1Src, docs1Dest);
                string docs2Dest = docsDir + @"PattonsBest-rules.pdf";

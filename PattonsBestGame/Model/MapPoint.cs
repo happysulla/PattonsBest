@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public class MapPoint : IMapPoint

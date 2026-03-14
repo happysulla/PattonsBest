@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class BannerDialog : System.Windows.Window
    {

@@ -12,7 +12,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Windows.ApplicationModel.Appointments.AppointmentsProvider;
 
-namespace Pattons_Best
+namespace PattonsBest
 { 
    public class GameInstance : IGameInstance
    {

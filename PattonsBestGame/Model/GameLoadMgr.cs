@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using System.Xml;
 using static System.Windows.Forms.Design.AxImporter;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    internal class GameLoadMgr
    {

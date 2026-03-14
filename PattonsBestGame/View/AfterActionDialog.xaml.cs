@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.Windows;
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class AfterActionDialog : Window
    {

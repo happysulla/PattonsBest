@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Windows.ApplicationModel.Appointments;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class DayData
    {

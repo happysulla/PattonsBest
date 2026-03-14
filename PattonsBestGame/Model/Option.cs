@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Serialization;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public class Option

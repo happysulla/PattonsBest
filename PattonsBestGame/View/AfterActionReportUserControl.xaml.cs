@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using TextBox = System.Windows.Controls.TextBox;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class AfterActionReportUserControl : UserControl
    {

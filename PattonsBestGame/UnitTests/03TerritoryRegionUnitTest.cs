@@ -12,7 +12,7 @@ using System.Xml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class TerritoryRegionUnitTest : IUnitTest
    {

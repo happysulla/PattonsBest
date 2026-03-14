@@ -6,9 +6,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using static Pattons_Best.TableListingDialog;
+using static PattonsBest.TableListingDialog;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class RuleListingDialog : Window
    {

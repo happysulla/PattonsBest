@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public enum LogEnum
    {

@@ -12,7 +12,7 @@ using System.Windows.Controls.Primitives;
 using System.Diagnostics;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public class Territory : ITerritory

@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class PolylineCreateUnitTest : IUnitTest
    {

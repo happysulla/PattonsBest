@@ -4,7 +4,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class TerritoryCreateDialog : Window
    {

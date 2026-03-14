@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    internal class UndoTargetSelectedMainGun : IUndo
    {

@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public class MapItemMove : IMapItemMove

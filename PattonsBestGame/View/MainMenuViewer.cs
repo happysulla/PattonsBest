@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public static class CustomCommands
    {

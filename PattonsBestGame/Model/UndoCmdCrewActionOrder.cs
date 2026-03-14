@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace Pattons_Best 
+namespace PattonsBest 
 {
    internal class UndoCmdCrewActionOrder : IUndo
    {

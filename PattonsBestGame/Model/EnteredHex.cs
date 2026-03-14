@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public enum ColorActionEnum

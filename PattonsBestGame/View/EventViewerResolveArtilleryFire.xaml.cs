@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class EventViewerResolveArtilleryFire : UserControl
    {

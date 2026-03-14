@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.18362.0</TargetFramework>
-    <RootNamespace>Pattons_Best</RootNamespace>
+    <RootNamespace>PattonsBest</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
@@ -13,7 +13,7 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
     <UseWindowsForms>True</UseWindowsForms>
-    <StartupObject>Pattons_Best.App</StartupObject>
+    <StartupObject>PattonsBest.App</StartupObject>
     <ApplicationIcon>PattonsBest.ico</ApplicationIcon>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <Title>Pattons Best Solo Game</Title>
@@ -222,7 +222,7 @@
     <None Update="Docs\PattonsBest-rules.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Docs\Pattons_Best-Summary.pdf">
+    <None Update="Docs\PattonsBest-Summary.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\AfterActionReport.gif">

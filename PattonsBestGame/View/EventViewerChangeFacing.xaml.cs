@@ -16,10 +16,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Windows.ApplicationModel.Activation;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewerBattleSetup;
+using static PattonsBest.EventViewerBattleSetup;
 using static System.Windows.Forms.AxHost;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class EventViewerChangeFacing : UserControl
    {

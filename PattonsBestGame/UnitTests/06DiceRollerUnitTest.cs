@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class DiceRollerUnitTest : IUnitTest
    {

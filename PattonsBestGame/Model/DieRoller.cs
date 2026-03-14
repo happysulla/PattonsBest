@@ -12,7 +12,7 @@ using System.Xml;
 using WpfAnimatedGif;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class DieRoller : IDieRoller
    {

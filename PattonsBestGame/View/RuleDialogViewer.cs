@@ -17,7 +17,7 @@ using System.Windows.Navigation;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class RuleDialogViewer
    {

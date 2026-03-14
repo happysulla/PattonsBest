@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Xps.Serialization;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public interface IMapItem
    {

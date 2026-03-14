@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewerEnemyAction;
+using static PattonsBest.EventViewerEnemyAction;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Button = System.Windows.Controls.Button;
 using Cursors = System.Windows.Input.Cursors;
@@ -28,7 +28,7 @@ using Point = System.Windows.Point;
 using CheckBox = System.Windows.Controls.CheckBox;
 using Windows.ApplicationModel.Background;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class EventViewer : IView
    {

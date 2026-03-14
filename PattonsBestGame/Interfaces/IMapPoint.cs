@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
     public interface IMapPoint
     {

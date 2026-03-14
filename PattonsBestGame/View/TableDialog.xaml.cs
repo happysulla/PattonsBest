@@ -11,7 +11,7 @@ using System.Xml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class TableDialog : Window
    {

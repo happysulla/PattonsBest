@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class ShowFeatDisplayDialog : Window
    {

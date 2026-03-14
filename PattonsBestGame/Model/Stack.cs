@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Text;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    //-------------------------------------------------------------------
    [Serializable]

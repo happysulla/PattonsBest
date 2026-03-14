@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewerBattleSetup;
+using static PattonsBest.EventViewerBattleSetup;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class EventViewerResolveAdvanceFire : UserControl
    {

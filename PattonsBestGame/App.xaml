@@ -1,7 +1,7 @@
-﻿<Application x:Class="Pattons_Best.App"
+﻿<Application x:Class="PattonsBest.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Pattons_Best"
+             xmlns:local="clr-namespace:PattonsBest"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

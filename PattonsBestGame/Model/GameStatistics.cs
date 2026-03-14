@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public class GameStatistic

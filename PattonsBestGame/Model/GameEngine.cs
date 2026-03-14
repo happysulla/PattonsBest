@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Shapes;
 using Windows.Networking.Sockets;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class GameEngine : IGameEngine
    {

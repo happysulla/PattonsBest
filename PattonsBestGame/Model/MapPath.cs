@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    class MapPath : IMapPath

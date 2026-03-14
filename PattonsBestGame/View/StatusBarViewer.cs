@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
 using Point = System.Windows.Point;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    class StatusBarViewer : IView
    {

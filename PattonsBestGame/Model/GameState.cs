@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public abstract class GameState : IGameState
    {

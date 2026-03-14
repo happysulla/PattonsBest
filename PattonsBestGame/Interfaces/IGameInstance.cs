@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public interface IGameInstance
    {

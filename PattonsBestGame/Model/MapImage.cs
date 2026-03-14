@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public class MapImage : IMapImage

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public static class ScreenExtensions
    {

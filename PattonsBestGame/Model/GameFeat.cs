@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    [Serializable]
    public class GameFeat

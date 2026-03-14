@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class SplashDialog : Window
    {

@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using Windows.System.RemoteSystems;
 using WpfAnimatedGif;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class EventViewerSpottingMgr : UserControl
    {

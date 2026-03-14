@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using System.Xml.Linq;
 using WpfAnimatedGif;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class EventViewerAmmoSetup : UserControl
    {

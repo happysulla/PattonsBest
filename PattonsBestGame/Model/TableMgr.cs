@@ -4,7 +4,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public class TableMgr
    {

@@ -7,7 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public partial class GameViewerCreateDialog : System.Windows.Window
    {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Windows.Controls;
 
-namespace Pattons_Best
+namespace PattonsBest
 {
    public delegate void RollEndCallback(int dieRoll);
    public delegate void LoadEndCallback();
