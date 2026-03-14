@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.18362.0</TargetFramework>
     <RootNamespace>Pattons_Best</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -14,13 +14,15 @@
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
     <UseWindowsForms>True</UseWindowsForms>
     <StartupObject>Pattons_Best.App</StartupObject>
-    <ApplicationIcon>Images\PattonsBest.ico</ApplicationIcon>
+    <ApplicationIcon>PattonsBest.ico</ApplicationIcon>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-    <Title>Pattons Best</Title>
+    <Title>Pattons Best Solo Game</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyName>Pattons Best</AssemblyName>
-    <Company>Wargaming Inc</Company>
-    <Authors>happysulla@gmail.com</Authors>
+    <AssemblyName>PattonsBest</AssemblyName>
+    <Company>$(Authors)</Company>
+    <Authors>$(AssemblyName)</Authors>
+    <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
+    <RepositoryUrl>https://github.com/happysulla/PattonsBest</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -38,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="README.md">
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
@@ -1370,6 +1372,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\Win5.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PattonsBest.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">
