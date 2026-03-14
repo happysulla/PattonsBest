@@ -20,7 +20,7 @@ TO INSTALL:
 
 
 REPORT ERROR:  
- 1.) If the game hangs, attempt to recover by selecting  <Bold>Edit | Revert Last Round</Bold> menu to get to last round that was fought or **Edit | Revert Last Day** to get to start of last day.  
- 2.) If you discover an error, save a copy of the latest log file. The log files are automatically saved in the **C:\Users\<Italic>username</Italic>\AppData\Roaming\PattonsBest\Logs** directory with latest time tag representing the last game played. *username* is the login name. AppData is a hidden directory that must be unhidden to view.  
+ 1.) If the game hangs, attempt to recover by selecting **Edit | Revert Last Round** menu to get to last round that was fought or **Edit | Revert Last Day** to get to start of last day.  
+ 2.) If you discover an error, save a copy of the latest log file. The log files are automatically saved in the **C:\Users\*username*\AppData\Roaming\PattonsBest\Logs** directory with latest time tag representing the last game played. *username* is the login name. AppData is a hidden directory that must be unhidden to view.  
  3.) Attempt to save the game state using the **File | Save As...** menu. Files are saved by default in **C:\Users\*username*\AppData\Roaming\PattonsBest\Games** directory.  
  4.) Send description of problem, screen shot, log file, and game file in email to **happysulla@gmail.com**.
