@@ -300,7 +300,7 @@ namespace PattonsBest
          byte[] buffer = new byte[2048];
          using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
          {
-            stream.Read(buffer, 0, buffer.Length);
+            stream.ReadExactly(buffer);
          }
          int headerOffset = BitConverter.ToInt32(buffer, peHeaderOffset);
          int timestamp = BitConverter.ToInt32(buffer, headerOffset + linkerTimestampOffset);

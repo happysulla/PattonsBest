@@ -1,0 +1,1746 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.18362.0</TargetFramework>
+    <RootNamespace>PattonsBest</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Description>Solo game replicating 4th armor path during WW2</Description>
+    <AssemblyVersion>01.00.00</AssemblyVersion>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <UseWindowsForms>True</UseWindowsForms>
+    <StartupObject>PattonsBest.App</StartupObject>
+    <ApplicationIcon>PattonsBest.ico</ApplicationIcon>
+    <Title>Pattons Best Solo Game</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyName>PattonsBest</AssemblyName>
+    <Company>$(Authors)</Company>
+    <Authors>$(AssemblyName)</Authors>
+    <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
+    <RepositoryUrl>https://github.com/happysulla/PattonsBest</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+  <ItemGroup>
+    <Compile Remove="Interfaces\Window1.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Config\Activation.xml" />
+    <None Remove="Config\Ammo.xml" />
+    <None Remove="Config\AP To Kill %2875%29.xml" />
+    <None Remove="Config\AP To Kill %2876L%29.xml" />
+    <None Remove="Config\AP To Kill %2876LL%29.xml" />
+    <None Remove="Config\Bail Out.xml" />
+    <None Remove="Config\Bogged Down.xml" />
+    <None Remove="Config\Brew Up.xml" />
+    <None Remove="Config\Calendar.xml" />
+    <None Remove="Config\Collateral.xml" />
+    <None Remove="Config\Decorations.xml" />
+    <None Remove="Config\Deployment.xml" />
+    <None Remove="Config\DiceRolls.xml" />
+    <None Remove="Config\Enemy Advance.xml" />
+    <None Remove="Config\Enemy AP To Hit.xml" />
+    <None Remove="Config\Enemy AP To Kill.xml" />
+    <None Remove="Config\Enemy Appearance.xml" />
+    <None Remove="Config\Enemy Battle.xml" />
+    <None Remove="Config\Enemy Counterattack.xml" />
+    <None Remove="Config\Events.txt" />
+    <None Remove="Config\Exit Areas.xml" />
+    <None Remove="Config\Explosion.xml" />
+    <None Remove="Config\Friendly Action.xml" />
+    <None Remove="Config\Gun Malfunction.xml" />
+    <None Remove="Config\HE To Kill %2875%29.xml" />
+    <None Remove="Config\HE To Kill %2876%29.xml" />
+    <None Remove="Config\Hit Location Crew.xml" />
+    <None Remove="Config\Hit Location Tank.xml" />
+    <None Remove="Config\Hit Location.xml" />
+    <None Remove="Config\Minefield.xml" />
+    <None Remove="Config\Movement.xml" />
+    <None Remove="Config\Panzerfaust.xml" />
+    <None Remove="Config\Placement.xml" />
+    <None Remove="Config\Random Events.xml" />
+    <None Remove="Config\Rate of Fire.xml" />
+    <None Remove="Config\Replacement.xml" />
+    <None Remove="Config\Resistance.xml" />
+    <None Remove="Config\Roads.xml" />
+    <None Remove="Config\Rules.txt" />
+    <None Remove="Config\Sherman MG.xml" />
+    <None Remove="Config\Spotting.xml" />
+    <None Remove="Config\Surnames.txt" />
+    <None Remove="Config\Territories.xml" />
+    <None Remove="Config\Time.xml" />
+    <None Remove="Config\To Hit Target.xml" />
+    <None Remove="Config\To Kill Infantry.xml" />
+    <None Remove="Config\Weather.xml" />
+    <None Remove="Config\Wounds.xml" />
+    <None Remove="Docs\MORNING BRIEFING.docx" />
+    <None Remove="Docs\PattonsBest-rules.pdf" />
+    <None Remove="Docs\Pattons_Best-Summary.pdf" />
+    <None Remove="Docs\The General Vol 25 No 3.pdf" />
+    <None Remove="Images\AfterActionReport.gif" />
+    <None Remove="Images\AirStrike.gif" />
+    <None Remove="Images\Alert1.gif" />
+    <None Remove="Images\Alert2.gif" />
+    <None Remove="Images\Alert3.gif" />
+    <None Remove="Images\Alert4.gif" />
+    <None Remove="Images\Alert5.gif" />
+    <None Remove="Images\Ambulance.gif" />
+    <None Remove="Images\Ambush.gif" />
+    <None Remove="Images\BrokenGunsight.gif" />
+    <None Remove="Images\BrokenPeriscope.gif" />
+    <None Remove="Images\c07Commander.gif" />
+    <None Remove="Images\c08Driver.gif" />
+    <None Remove="Images\c09Loader.gif" />
+    <None Remove="Images\c100ApHit.gif" />
+    <None Remove="Images\c101HeHit.gif" />
+    <None Remove="Images\c102SmokeHit.gif" />
+    <None Remove="Images\c103Acquired1_0.gif" />
+    <None Remove="Images\c103Acquired1_1.gif" />
+    <None Remove="Images\c103Acquired1_2.gif" />
+    <None Remove="Images\c103Acquired1_3.gif" />
+    <None Remove="Images\c103Acquired1_4.gif" />
+    <None Remove="Images\c103Acquired1_5.gif" />
+    <None Remove="Images\c103Acquired1_6.gif" />
+    <None Remove="Images\c104Acquired2_0.gif" />
+    <None Remove="Images\c104Acquired2_1.gif" />
+    <None Remove="Images\c104Acquired2_2.gif" />
+    <None Remove="Images\c104Acquired2_3.gif" />
+    <None Remove="Images\c104Acquired2_4.gif" />
+    <None Remove="Images\c104Acquired2_5.gif" />
+    <None Remove="Images\c104Acquired2_6.gif" />
+    <None Remove="Images\c105BoggedDown.gif" />
+    <None Remove="Images\c106ThrownTrack.gif" />
+    <None Remove="Images\c107Panzerfaust.gif" />
+    <None Remove="Images\c108Smoke1.gif" />
+    <None Remove="Images\c109Smoke2.gif" />
+    <None Remove="Images\c10Assistant.gif" />
+    <None Remove="Images\c110Smoke3.gif" />
+    <None Remove="Images\c111Smoke1.gif" />
+    <None Remove="Images\c112Smoke2.gif" />
+    <None Remove="Images\c113Smoke3.gif" />
+    <None Remove="Images\c114Open.gif" />
+    <None Remove="Images\c115BrokenAaMg.gif" />
+    <None Remove="Images\c115MalfunctionAaMg.gif" />
+    <None Remove="Images\c116BrokenBowMg.gif" />
+    <None Remove="Images\c116MalFunctionBowMg.gif" />
+    <None Remove="Images\c117BrokenCoaxialMg.gif" />
+    <None Remove="Images\c117MalFunctionCoaxialMg.gif" />
+    <None Remove="Images\c118BrokenMainGun.gif" />
+    <None Remove="Images\c118MalFunctionMainGun.gif" />
+    <None Remove="Images\c11Gunner.gif" />
+    <None Remove="Images\c12RoundsLeft.gif" />
+    <None Remove="Images\c13Moving.gif" />
+    <None Remove="Images\c14HullDown.gif" />
+    <None Remove="Images\c14HullDownFull.gif" />
+    <None Remove="Images\c15OpenHatch.gif" />
+    <None Remove="Images\c16TurretSherman75.gif" />
+    <None Remove="Images\c16TurretSherman75t060.gif" />
+    <None Remove="Images\c16TurretSherman75t120.gif" />
+    <None Remove="Images\c16TurretSherman75t180.gif" />
+    <None Remove="Images\c16TurretSherman75t240.gif" />
+    <None Remove="Images\c16TurretSherman75t300.gif" />
+    <None Remove="Images\c16TurretSherman76.gif" />
+    <None Remove="Images\c16TurretSherman76t060.gif" />
+    <None Remove="Images\c16TurretSherman76t120.gif" />
+    <None Remove="Images\c16TurretSherman76t180.gif" />
+    <None Remove="Images\c16TurretSherman76t240.gif" />
+    <None Remove="Images\c16TurretSherman76t300.gif" />
+    <None Remove="Images\c17GunLoad.gif" />
+    <None Remove="Images\c18LoaderSpot.gif" />
+    <None Remove="Images\c199DriverSwitch.gif" />
+    <None Remove="Images\c19CommanderSpot.gif" />
+    <None Remove="Images\c200LoaderSwitch.gif" />
+    <None Remove="Images\c201GunnerSwitch.gif" />
+    <None Remove="Images\c202CommanderSwitch.gif" />
+    <None Remove="Images\c203AssistantReturn.gif" />
+    <None Remove="Images\c204Bail.gif" />
+    <None Remove="Images\c20Clear.gif" />
+    <None Remove="Images\c21Overcast.gif" />
+    <None Remove="Images\c22Fog.gif" />
+    <None Remove="Images\c23Mud.gif" />
+    <None Remove="Images\c24Rain.gif" />
+    <None Remove="Images\c25SnowDeep.gif" />
+    <None Remove="Images\c26SnowFalling.gif" />
+    <None Remove="Images\c27SnowGround.gif" />
+    <None Remove="Images\c28UsControl.gif" />
+    <None Remove="Images\c29AmmoReload.gif" />
+    <None Remove="Images\c29AmmoReloadDeny.gif" />
+    <None Remove="Images\c30ReadyRackAmmoReload.gif" />
+    <None Remove="Images\c31Hidden.gif" />
+    <None Remove="Images\c32Spotted.gif" />
+    <None Remove="Images\c33StartArea.gif" />
+    <None Remove="Images\c34ExitArea.gif" />
+    <None Remove="Images\c35TaskForce.gif" />
+    <None Remove="Images\c36GermanStrength.gif" />
+    <None Remove="Images\c36Light.gif" />
+    <None Remove="Images\c37Medium.gif" />
+    <None Remove="Images\c38Heavy.gif" />
+    <None Remove="Images\c39ArtillerySupport.gif" />
+    <None Remove="Images\c39ArtillerySupportDeny.gif" />
+    <None Remove="Images\c40AirStrike.gif" />
+    <None Remove="Images\c40AirStrikeDeny.gif" />
+    <None Remove="Images\c41FireAaMg.gif" />
+    <None Remove="Images\c42FireBowMg.gif" />
+    <None Remove="Images\c43FireCoaxialMg.gif" />
+    <None Remove="Images\c44AdvanceFire.gif" />
+    <None Remove="Images\c44AdvanceFireDeny.gif" />
+    <None Remove="Images\c45AdvanceFireAaMg.gif" />
+    <None Remove="Images\c46AdvanceFireBowMg.gif" />
+    <None Remove="Images\c46AdvanceFireSubMg.gif" />
+    <None Remove="Images\c47AdvanceFireCoaxialMg.gif" />
+    <None Remove="Images\c48CDirectMove.gif" />
+    <None Remove="Images\c49CDirectMainGunFire.gif" />
+    <None Remove="Images\c49CDirectMGFire.gif" />
+    <None Remove="Images\c50GFireMainGun.gif" />
+    <None Remove="Images\c51GFireCoaxialMg.gif" />
+    <None Remove="Images\c52GRotateTurret.gif" />
+    <None Remove="Images\c53GRotateTurretFireMainGun.gif" />
+    <None Remove="Images\c54LLoad.gif" />
+    <None Remove="Images\c54LLoadNoSpot.gif" />
+    <None Remove="Images\c55LRepairMainGun.gif" />
+    <None Remove="Images\c56LRepairCoaxialMg.gif" />
+    <None Remove="Images\c57GRepairMainGun.gif" />
+    <None Remove="Images\c58LFireMortar.gif" />
+    <None Remove="Images\c59LChangeGunLoad.gif" />
+    <None Remove="Images\c60LRestockReadyRack.gif" />
+    <None Remove="Images\c61DStop.gif" />
+    <None Remove="Images\c62DForward.gif" />
+    <None Remove="Images\c63DForwardToHullDown.gif" />
+    <None Remove="Images\c64DReverse.gif" />
+    <None Remove="Images\c65DReverseToHullDown.gif" />
+    <None Remove="Images\c66DPivotTank.gif" />
+    <None Remove="Images\c67AFireBowMg.gif" />
+    <None Remove="Images\c68ARepairBowMg.gif" />
+    <None Remove="Images\c69APassAmmo.gif" />
+    <None Remove="Images\c70ThrowSmokeGrenade.gif" />
+    <None Remove="Images\c71FireAaMg.gif" />
+    <None Remove="Images\c72RepairAaMg.gif" />
+    <None Remove="Images\c73ReplacePeriscope.gif" />
+    <None Remove="Images\c74FireSubMg.gif" />
+    <None Remove="Images\c75Hvss.gif" />
+    <None Remove="Images\c75HvssDeny.gif" />
+    <None Remove="Images\c76UnidentifiedAtg.gif" />
+    <None Remove="Images\c77UnidentifiedSpg.gif" />
+    <None Remove="Images\c78UnidentifiedTank.gif" />
+    <None Remove="Images\c79PzIV.gif" />
+    <None Remove="Images\c79PzIVTurret.gif" />
+    <None Remove="Images\c80PzV.gif" />
+    <None Remove="Images\c80PzVTurret.gif" />
+    <None Remove="Images\c81PzVIb.gif" />
+    <None Remove="Images\c81PzVIbTurret.gif" />
+    <None Remove="Images\c82PzVIe.gif" />
+    <None Remove="Images\c82PzVIeTurret.gif" />
+    <None Remove="Images\c83MarderII.gif" />
+    <None Remove="Images\c84MarderIII.gif" />
+    <None Remove="Images\c85STuGIIIg.gif" />
+    <None Remove="Images\c86JgdPzIV.gif" />
+    <None Remove="Images\c87JgdPz38t.gif" />
+    <None Remove="Images\c88Truck.gif" />
+    <None Remove="Images\c89Psw232.gif" />
+    <None Remove="Images\c90Spw251.gif" />
+    <None Remove="Images\c91Lw.gif" />
+    <None Remove="Images\c92MgTeam.gif" />
+    <None Remove="Images\c93Pak38.gif" />
+    <None Remove="Images\c94Pak40.gif" />
+    <None Remove="Images\c95Pak43.gif" />
+    <None Remove="Images\c96TerrainBuilding.gif" />
+    <None Remove="Images\c97TerrainWoods.gif" />
+    <None Remove="Images\c98TerrainFort.gif" />
+    <None Remove="Images\c99TerrainMoving.gif" />
+    <None Remove="Images\CarryingMan.gif" />
+    <None Remove="Images\CollateralDamage.gif" />
+    <None Remove="Images\Combat.gif" />
+    <None Remove="Images\CombatCalendar.gif" />
+    <None Remove="Images\CommanderDead.gif" />
+    <None Remove="Images\Continue.gif" />
+    <None Remove="Images\CrossedRifles.gif" />
+    <None Remove="Images\DailyDecision.gif" />
+    <None Remove="Images\Debrief.gif" />
+    <None Remove="Images\DecorationBronzeStar.gif" />
+    <None Remove="Images\DecorationDistinguishedCross.gif" />
+    <None Remove="Images\DecorationEasternCampaign.gif" />
+    <None Remove="Images\DecorationMedalOfHonor.gif" />
+    <None Remove="Images\DecorationPurpleHeart.gif" />
+    <None Remove="Images\DecorationSilverStar.gif" />
+    <None Remove="Images\DecorationVictoryMedal.gif" />
+    <None Remove="Images\Deny.gif" />
+    <None Remove="Images\DestroyedTank.gif" />
+    <None Remove="Images\DieRollBlue.gif" />
+    <None Remove="Images\DieRollBlue00.gif" />
+    <None Remove="Images\DieRollBlue10.gif" />
+    <None Remove="Images\DieRollBlue20.gif" />
+    <None Remove="Images\DieRollBlue30.gif" />
+    <None Remove="Images\DieRollBlue40.gif" />
+    <None Remove="Images\DieRollBlue50.gif" />
+    <None Remove="Images\DieRollBlue60.gif" />
+    <None Remove="Images\DieRollBlue70.gif" />
+    <None Remove="Images\DieRollBlue80.gif" />
+    <None Remove="Images\DieRollBlue90.gif" />
+    <None Remove="Images\DieRollWhite.gif" />
+    <None Remove="Images\DieRollWhite0.gif" />
+    <None Remove="Images\DieRollWhite1.gif" />
+    <None Remove="Images\DieRollWhite2.gif" />
+    <None Remove="Images\DieRollWhite3.gif" />
+    <None Remove="Images\DieRollWhite4.gif" />
+    <None Remove="Images\DieRollWhite5.gif" />
+    <None Remove="Images\DieRollWhite6.gif" />
+    <None Remove="Images\DieRollWhite7.gif" />
+    <None Remove="Images\DieRollWhite8.gif" />
+    <None Remove="Images\DieRollWhite9.gif" />
+    <None Remove="Images\DoorClosing.gif" />
+    <None Remove="Images\EndGameFail.gif" />
+    <None Remove="Images\EndGameSuccess.gif" />
+    <None Remove="Images\EndGameSuccess2.gif" />
+    <None Remove="Images\FarmerDead.gif" />
+    <None Remove="Images\Frown.gif" />
+    <None Remove="Images\Fuel.gif" />
+    <None Remove="Images\FuelEmpty.gif" />
+    <None Remove="Images\GameBox.gif" />
+    <None Remove="Images\Hospital.gif" />
+    <None Remove="Images\HospitalShip.gif" />
+    <None Remove="Images\IconContinueMove.gif" />
+    <None Remove="Images\IconFireInsteadOfMove.gif" />
+    <None Remove="Images\IconHidden.gif" />
+    <None Remove="Images\IconInterdiction.gif" />
+    <None Remove="Images\IconMoveInsteadFire.gif" />
+    <None Remove="Images\IconRearFacing.gif" />
+    <None Remove="Images\IconShermanKey.gif" />
+    <None Remove="Images\IconThrownTrack.gif" />
+    <None Remove="Images\IconWeather.gif" />
+    <None Remove="Images\Idiot.gif" />
+    <None Remove="Images\InfantryFiring.gif" />
+    <None Remove="Images\Loser1.gif" />
+    <None Remove="Images\Loser2.gif" />
+    <None Remove="Images\m01.gif" />
+    <None Remove="Images\m02.gif" />
+    <None Remove="Images\m03.gif" />
+    <None Remove="Images\m04.gif" />
+    <None Remove="Images\m05.gif" />
+    <None Remove="Images\m06.gif" />
+    <None Remove="Images\m07.gif" />
+    <None Remove="Images\m08.gif" />
+    <None Remove="Images\m09.gif" />
+    <None Remove="Images\m10.gif" />
+    <None Remove="Images\m11.gif" />
+    <None Remove="Images\m12.gif" />
+    <None Remove="Images\m13.gif" />
+    <None Remove="Images\m14.gif" />
+    <None Remove="Images\m15.gif" />
+    <None Remove="Images\m16.gif" />
+    <None Remove="Images\m17.gif" />
+    <None Remove="Images\m18.gif" />
+    <None Remove="Images\MainGunRound.gif" />
+    <None Remove="Images\MapBattle.gif" />
+    <None Remove="Images\MapBattleFacing.gif" />
+    <None Remove="Images\MapBattleFogFalling.gif" />
+    <None Remove="Images\MapBattleMove.gif" />
+    <None Remove="Images\MapHistorical.gif" />
+    <None Remove="Images\MapMovement.gif" />
+    <None Remove="Images\MilitaryWatch.gif" />
+    <None Remove="Images\Morning.gif" />
+    <None Remove="Images\Muscle.gif" />
+    <None Remove="Images\OApHit.gif" />
+    <None Remove="Images\OBlood1.gif" />
+    <None Remove="Images\OBogged.gif" />
+    <None Remove="Images\OBoggedStuck.gif" />
+    <None Remove="Images\OBuild.gif" />
+    <None Remove="Images\ODeny.gif" />
+    <None Remove="Images\OFort.gif" />
+    <None Remove="Images\OFuel.gif" />
+    <None Remove="Images\OHeHit.gif" />
+    <None Remove="Images\OHIDE.gif" />
+    <None Remove="Images\OINC.gif" />
+    <None Remove="Images\OKIA.gif" />
+    <None Remove="Images\OMIA.gif" />
+    <None Remove="Images\OSPOT.gif" />
+    <None Remove="Images\OTrack.gif" />
+    <None Remove="Images\OUNC.gif" />
+    <None Remove="Images\OWoods.gif" />
+    <None Remove="Images\Parchment.gif" />
+    <None Remove="Images\PattonsBest.ico" />
+    <None Remove="Images\QuicksandJump.gif" />
+    <None Remove="Images\RankCaptain.gif" />
+    <None Remove="Images\RankFirstLieutenant.gif" />
+    <None Remove="Images\RankSecondLieutenant.gif" />
+    <None Remove="Images\RankSergeant.gif" />
+    <None Remove="Images\RankStaffSergeant.gif" />
+    <None Remove="Images\ReadyRack.gif" />
+    <None Remove="Images\Sherman1.gif" />
+    <None Remove="Images\Sherman2.gif" />
+    <None Remove="Images\Sherman3.gif" />
+    <None Remove="Images\Sherman4.gif" />
+    <None Remove="Images\ShermanBrewUp.gif" />
+    <None Remove="Images\ShermanBurning.gif" />
+    <None Remove="Images\ShermanDestroyed2.gif" />
+    <None Remove="Images\ShermanExploding.gif" />
+    <None Remove="Images\ShermanKia.gif" />
+    <None Remove="Images\ShermanLead.gif" />
+    <None Remove="Images\ShermanPivot.gif" />
+    <None Remove="Images\ShermanPivoth060.gif" />
+    <None Remove="Images\ShermanPivoth120.gif" />
+    <None Remove="Images\ShermanPivoth180.gif" />
+    <None Remove="Images\ShermanPivoth240.gif" />
+    <None Remove="Images\ShermanPivoth300.gif" />
+    <None Remove="Images\ShermanStuck.gif" />
+    <None Remove="Images\ShermanThrownTrack.gif" />
+    <None Remove="Images\Skulls.gif" />
+    <None Remove="Images\Spotting.gif" />
+    <None Remove="Images\SpwOrPsw.gif" />
+    <None Remove="Images\SquadKia.gif" />
+    <None Remove="Images\Star.gif" />
+    <None Remove="Images\StarReward.gif" />
+    <None Remove="Images\Sunset.gif" />
+    <None Remove="Images\t01.gif" />
+    <None Remove="Images\t01Deny.gif" />
+    <None Remove="Images\t02.gif" />
+    <None Remove="Images\t03.gif" />
+    <None Remove="Images\t04.gif" />
+    <None Remove="Images\t05.gif" />
+    <None Remove="Images\t06.gif" />
+    <None Remove="Images\t07.gif" />
+    <None Remove="Images\t08.gif" />
+    <None Remove="Images\t09.gif" />
+    <None Remove="Images\t10.gif" />
+    <None Remove="Images\t11.gif" />
+    <None Remove="Images\t12.gif" />
+    <None Remove="Images\t13.gif" />
+    <None Remove="Images\t14.gif" />
+    <None Remove="Images\t15.gif" />
+    <None Remove="Images\t16.gif" />
+    <None Remove="Images\t17.gif" />
+    <None Remove="Images\t18.gif" />
+    <None Remove="Images\ThrownTrack.gif" />
+    <None Remove="Images\TigerFiring.gif" />
+    <None Remove="Images\TigerFiring2.gif" />
+    <None Remove="Images\TigerFiring3.gif" />
+    <None Remove="Images\TigerFiring4.gif" />
+    <None Remove="Images\TigerMoving.gif" />
+    <None Remove="Images\TigerMoving2.gif" />
+    <None Remove="Images\Tutorial0.gif" />
+    <None Remove="Images\Victory.gif" />
+    <None Remove="Images\WeatherClear.gif" />
+    <None Remove="Images\WeatherFog.gif" />
+    <None Remove="Images\WeatherGroundSnow.gif" />
+    <None Remove="Images\WeatherMud.gif" />
+    <None Remove="Images\WeatherMudOvercast.gif" />
+    <None Remove="Images\WeatherMudRain.gif" />
+    <None Remove="Images\WeatherOvercast.gif" />
+    <None Remove="Images\WeatherRain.gif" />
+    <None Remove="Images\WeatherSnowDeep.gif" />
+    <None Remove="Images\WeatherSnowFalling.gif" />
+    <None Remove="Images\WeatherSnowFallingDeep.gif" />
+    <None Remove="Images\WeatherSnowFallingGround.gif" />
+    <None Remove="Images\WeatherSnowGround.gif" />
+    <None Remove="Images\WeatherSnowIcon.gif" />
+    <None Remove="Images\Win.gif" />
+    <None Remove="Images\Win1.gif" />
+    <None Remove="Images\Win2.gif" />
+    <None Remove="Images\Win3.gif" />
+    <None Remove="Images\Win4.gif" />
+    <None Remove="Images\Win5.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Interfaces\Window1.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Config\Ammo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\AP To Kill (75).xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\AP To Kill (76L).xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\AP To Kill (76LL).xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Bail Out.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Bogged Down.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Brew Up.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Calendar.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Collateral.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Decorations.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Deployment.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\DiceRolls.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Enemy Advance.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Enemy AP To Hit.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Enemy AP To Kill.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Enemy Appearance.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Enemy Battle.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Enemy Counterattack.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Events.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Exit Areas.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Explosion.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Friendly Action.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Gun Malfunction.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\HE To Kill (75).xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\HE To Kill (76).xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Hit Location Crew.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Hit Location Tank.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Hit Location.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Minefield.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Movement.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Panzerfaust.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Placement.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Random Events.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Rate of Fire.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Replacement.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Resistance.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Roads.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Rules.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Sherman MG.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Spotting.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Surnames.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Territories.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Time.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\To Hit Target.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\To Kill Infantry.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Weather.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Wounds.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Activation.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Docs\MORNING BRIEFING.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Docs\PattonsBest-rules.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Docs\Pattons_Best-Summary.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Docs\The General Vol 25 No 3.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\AfterActionReport.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\AirStrike.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Alert1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Alert2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Alert3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Alert4.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Alert5.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Ambulance.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Ambush.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\BrokenGunsight.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\BrokenPeriscope.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c07Commander.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c08Driver.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c09Loader.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c100ApHit.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c101HeHit.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c102SmokeHit.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c103Acquired1_0.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c103Acquired1_1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c103Acquired1_2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c103Acquired1_3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c103Acquired1_4.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c103Acquired1_5.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c103Acquired1_6.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c104Acquired2_0.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c104Acquired2_1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c104Acquired2_2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c104Acquired2_3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c104Acquired2_4.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c104Acquired2_5.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c104Acquired2_6.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c105BoggedDown.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c106ThrownTrack.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c107Panzerfaust.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c108Smoke1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c109Smoke2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c10Assistant.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c110Smoke3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c111Smoke1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c112Smoke2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c113Smoke3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c114Open.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c115BrokenAaMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c115MalfunctionAaMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c116BrokenBowMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c116MalFunctionBowMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c117BrokenCoaxialMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c117MalFunctionCoaxialMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c118BrokenMainGun.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c118MalFunctionMainGun.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c11Gunner.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c12RoundsLeft.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c13Moving.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c14HullDown.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c14HullDownFull.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c15OpenHatch.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman75.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman75t060.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman75t120.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman75t180.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman75t240.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman75t300.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman76.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman76t060.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman76t120.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman76t180.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman76t240.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c16TurretSherman76t300.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c17GunLoad.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c18LoaderSpot.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c199DriverSwitch.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c19CommanderSpot.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c200LoaderSwitch.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c201GunnerSwitch.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c202CommanderSwitch.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c203AssistantReturn.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c204Bail.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c20Clear.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c21Overcast.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c22Fog.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c23Mud.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c24Rain.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c25SnowDeep.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c26SnowFalling.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c27SnowGround.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c28UsControl.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c29AmmoReload.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c29AmmoReloadDeny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c30ReadyRackAmmoReload.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c31Hidden.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c32Spotted.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c33StartArea.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c34ExitArea.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c35TaskForce.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c36GermanStrength.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c36Light.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c37Medium.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c38Heavy.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c39ArtillerySupport.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c39ArtillerySupportDeny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c40AirStrike.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c40AirStrikeDeny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c41FireAaMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c42FireBowMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c43FireCoaxialMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c44AdvanceFire.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c44AdvanceFireDeny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c45AdvanceFireAaMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c46AdvanceFireBowMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c46AdvanceFireSubMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c47AdvanceFireCoaxialMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c48CDirectMove.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c49CDirectMainGunFire.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c49CDirectMGFire.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c50GFireMainGun.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c51GFireCoaxialMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c52GRotateTurret.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c53GRotateTurretFireMainGun.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c54LLoad.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c54LLoadNoSpot.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c55LRepairMainGun.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c56LRepairCoaxialMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c57GRepairMainGun.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c58LFireMortar.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c59LChangeGunLoad.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c60LRestockReadyRack.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c61DStop.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c62DForward.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c63DForwardToHullDown.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c64DReverse.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c65DReverseToHullDown.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c66DPivotTank.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c67AFireBowMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c68ARepairBowMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c69APassAmmo.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c70ThrowSmokeGrenade.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c71FireAaMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c72RepairAaMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c73ReplacePeriscope.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c74FireSubMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c75Hvss.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c75HvssDeny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c76UnidentifiedAtg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c77UnidentifiedSpg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c78UnidentifiedTank.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c79PzIV.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c79PzIVTurret.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c80PzV.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c80PzVTurret.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c81PzVIb.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c81PzVIbTurret.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c82PzVIe.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c82PzVIeTurret.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c83MarderII.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c84MarderIII.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c85STuGIIIg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c86JgdPzIV.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c87JgdPz38t.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c88Truck.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c89Psw232.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c90Spw251.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c91Lw.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c92MgTeam.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c93Pak38.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c94Pak40.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c95Pak43.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c96TerrainBuilding.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c97TerrainWoods.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c98TerrainFort.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\c99TerrainMoving.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\CarryingMan.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\CollateralDamage.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Combat.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\CombatCalendar.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\CommanderDead.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Continue.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\CrossedRifles.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DailyDecision.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Debrief.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DecorationBronzeStar.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DecorationDistinguishedCross.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DecorationEasternCampaign.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DecorationMedalOfHonor.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DecorationPurpleHeart.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DecorationSilverStar.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DecorationVictoryMedal.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DestroyedTank.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue00.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue10.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue20.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue30.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue40.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue50.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue60.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue70.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue80.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollBlue90.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite0.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite4.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite5.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite6.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite7.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite8.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DieRollWhite9.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DoorClosing.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\EndGameFail.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\EndGameSuccess.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\EndGameSuccess2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\FarmerDead.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Frown.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Fuel.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\FuelEmpty.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\GameBox.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Hospital.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\HospitalShip.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconContinueMove.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconFireInsteadOfMove.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconHidden.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconInterdiction.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconMoveInsteadFire.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconRearFacing.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconShermanKey.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconThrownTrack.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\IconWeather.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Idiot.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\InfantryFiring.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Loser1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Loser2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m01.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m02.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m03.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m04.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m05.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m06.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m07.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m08.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m09.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m10.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m11.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m12.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m13.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m14.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m15.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m16.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m17.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\m18.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MainGunRound.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapBattle.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapBattleFacing.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapBattleFogFalling.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapBattleMove.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapHistorical.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapMovement.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MilitaryWatch.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Morning.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Muscle.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OApHit.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OBlood1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OBogged.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OBoggedStuck.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OBuild.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ODeny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OFort.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OFuel.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OHeHit.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OHIDE.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OINC.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OKIA.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OMIA.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OSPOT.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OTrack.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OUNC.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\OWoods.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Parchment.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\PattonsBest.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\QuicksandJump.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\RankCaptain.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\RankFirstLieutenant.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\RankSecondLieutenant.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\RankSergeant.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\RankStaffSergeant.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ReadyRack.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sherman1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sherman2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sherman3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sherman4.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanBrewUp.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanBurning.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanDestroyed2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanExploding.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanKia.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanLead.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanPivot.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanPivoth060.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanPivoth120.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanPivoth180.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanPivoth240.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanPivoth300.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanStuck.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ShermanThrownTrack.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Skulls.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Spotting.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\SpwOrPsw.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\SquadKia.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Star.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\StarReward.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sunset.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t01.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t01Deny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t02.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t03.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t04.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t05.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t06.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t07.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t08.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t09.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t10.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t11.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t12.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t13.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t14.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t15.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t16.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t17.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\t18.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ThrownTrack.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TigerFiring.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TigerFiring2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TigerFiring3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TigerFiring4.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TigerMoving.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TigerMoving2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tutorial0.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Victory.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherClear.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherFog.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherGroundSnow.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherMud.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherMudOvercast.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherMudRain.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherOvercast.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherRain.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherSnowDeep.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherSnowFalling.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherSnowFallingDeep.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherSnowFallingGround.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherSnowGround.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\WeatherSnowIcon.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Win.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Win1.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Win2.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Win3.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Win4.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Win5.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PattonsBest.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\EventViewerChangeFacing.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

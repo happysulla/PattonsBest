@@ -307,7 +307,7 @@ namespace PattonsBest
             }
             catch (IOException)
             {
-               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description);
+               System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description);
             }
             catch (Exception ex)
             {

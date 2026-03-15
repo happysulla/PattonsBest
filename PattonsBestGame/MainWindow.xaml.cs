@@ -80,6 +80,17 @@ namespace PattonsBest
          try
          {
             //--------------------------------------------
+            string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            Logger.theLogDirectory = appDataDir + @"\PattonsBest\Logs\";
+            if (false == Directory.Exists(Logger.theLogDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(Logger.theLogDirectory);
+            if (false == Logger.SetInitial()) // setup logger
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MainWindow(): SetInitial() returned false");
+               Application.Current.Shutdown();
+               return;
+            }
+            //--------------------------------------------
             Assembly assem = Assembly.GetExecutingAssembly();
             string codeBase = assem.Location;
             UriBuilder uri = new UriBuilder(codeBase);
@@ -92,37 +103,30 @@ namespace PattonsBest
                return;
             }
             theAssemblyDirectory = assemDir;
-            //--------------------------------------------
             MapImage.theImageDirectory = theAssemblyDirectory + @"\Images\";
-            ConfigFileReader.theConfigDirectory = theAssemblyDirectory + @"\config\";
-            string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            Logger.theLogDirectory = appDataDir + @"\PattonsBest\Logs\";
+            ConfigFileReader.theConfigDirectory = theAssemblyDirectory + @"\Config\";
+            //--------------------------------------------
             GameLoadMgr.theGamesDirectory = appDataDir + @"\PattonsBest\Games\";
-            GameFeats.theGameFeatDirectory = appDataDir + @"\PattonsBest\GameData\";
+            if (false == Directory.Exists(GameLoadMgr.theGamesDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(GameLoadMgr.theGamesDirectory);
+            //--------------------------------------------
+            GameFeats.theGameFeatDirectory = appDataDir + @"\PattonsBest\GameFeats\";
             if (false == Directory.Exists(GameFeats.theGameFeatDirectory)) // create directory if does not exists
                Directory.CreateDirectory(GameFeats.theGameFeatDirectory);
-            GameStatistics.theGameStatisticsDirectory = appDataDir + @"\PattonsBest\GameData\";
+            //--------------------------------------------
+            GameStatistics.theGameStatisticsDirectory = appDataDir + @"\PattonsBest\GameStats\";
             if (false == Directory.Exists(GameStatistics.theGameStatisticsDirectory)) // create directory if does not exists
                Directory.CreateDirectory(GameStatistics.theGameStatisticsDirectory);
             //--------------------------------------------
             Utilities.InitializeRandomNumGenerators();
             //--------------------------------------------
-            string iconFilename = MapImage.theImageDirectory + "PattonsBest.ico";
-            Uri iconUri = new Uri(iconFilename, UriKind.Absolute);
-            this.Icon = BitmapFrame.Create(iconUri);
-            //--------------------------------------------
-            if (false == Logger.SetInitial()) // tsetup logger
-            {
-               Logger.Log(LogEnum.LE_ERROR, "MainWindow(): SetInitial() returned false");
-               Application.Current.Shutdown();
-               return;
-            }
             if (false == SurnameMgr.SetInitial())
             {
                Logger.Log(LogEnum.LE_ERROR, "MainWindow(): SurnameMgr.SetInitial() returned false");
                Application.Current.Shutdown();
                return;
             }
+            //--------------------------------------------
             IGameInstance gi = new GameInstance();
             if (true == gi.CtorError)
             {
@@ -130,6 +134,8 @@ namespace PattonsBest
                Application.Current.Shutdown();
                return;
             }
+            //--------------------------------------------
+            Logger.Log(LogEnum.LE_ERROR, "MainWindow(): CheckPoint7");
             myGameEngine = new GameEngine(this);
             myGameViewerWindow = new GameViewerWindow(myGameEngine, gi); // Start the main view
             if (true == myGameViewerWindow.CtorError)
@@ -138,6 +144,12 @@ namespace PattonsBest
                Application.Current.Shutdown();
                return;
             }
+            //--------------------------------------------
+            string iconFilename = MapImage.theImageDirectory + "PattonsBest.ico";
+            Uri iconUri = new Uri(iconFilename, UriKind.Absolute);
+            this.Icon = BitmapFrame.Create(iconUri);
+            Logger.Log(LogEnum.LE_ERROR, "MainWindow(): CheckPoint5");
+            //--------------------------------------------
             myGameViewerWindow.Icon = this.Icon;
             myGameViewerWindow.Show(); // Finished initializing so show the window
             //--------------------------------------------

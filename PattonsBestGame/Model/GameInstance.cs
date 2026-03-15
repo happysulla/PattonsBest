@@ -198,7 +198,7 @@ namespace PattonsBest
                return;
             }
             if (false == gameLoadMgr.ReadXmlTerritories(reader, Territories.theTerritories))
-               Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned false for filename=" + filename);
             ITerritory? tHome = Territories.theTerritories.Find("Home");
             if (null == tHome)
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): tHome=null");
