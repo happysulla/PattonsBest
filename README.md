@@ -9,16 +9,16 @@ The combat system utilizes an area map for the larger scale movement of your tas
 Author: Bruce Campbell Shelly https://boardgamegeek.com/boardgamedesigner/1329/bruce-shelley
 
 TO INSTALL:  
-1.) For Future: If you have already installed, you may need to first uninstall the application using the Windows Control Panel.
-2.) To download, goto the following website: https://github.com/happysulla/PattonsBest.
-3.) Select the **Latest Release** button from the right-side middle of the web page.
-4.) Download the **PattonsBestWindowsSetup.zip** file by clicking on the file name.
-5.) Unzip **PattonsBestWindowsSetup.zip** by right clicking and selecting **Uncompress** menu item.
-6.) Go to the location where unzip occurred. Double click the **setup.exe** file.
-7.) If you get Microsoft Defender blue dialog, select "More Info" link and "Run Anyways" button.
-8.) If a security warning dialog appears, select **Install** button.
-9.) **Setup.exe** installs it as a ClickOnce windows application. It can be removed using the standard Window's Control Panel.
-10.) You can remove the **PattonsBestWindowsSetup.zip** file and zip location after installing.
+1.) For Future: If you have already installed, you may need to first uninstall the application using the Windows Control Panel. 
+2.) To download, goto the following website: https://github.com/happysulla/PattonsBest. 
+3.) Select the **Latest Release** button from the right-side middle of the web page. 
+4.) Download the **PattonsBestWindowsSetup.zip** file by clicking on the file name. 
+5.) Unzip **PattonsBestWindowsSetup.zip** by right clicking and selecting **Uncompress** menu item. 
+6.) Go to the location where unzip occurred. Double click the **setup.exe** file. 
+7.) If you get Microsoft Defender blue dialog, select "More Info" link and "Run Anyways" button. 
+8.) If a security warning dialog appears, select **Install** button. 
+9.) **Setup.exe** installs it as a ClickOnce windows application. It can be removed using the standard Window's Control Panel. 
+10.) You can remove the **PattonsBestWindowsSetup.zip** file and zip location after installing. 
 
 
 REPORT ERROR:  
