@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -192,7 +193,7 @@ namespace PattonsBest
          myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // Constructor - revert to save zoom
          StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvasMain);
          //---------------------------------------------------------------
-         //SetDisplayIconForUninstall(); // This is specialized code to add to Windows Registry the icon for uninstall
+         SetDisplayIconForUninstall(); // This is specialized code to add to Windows Registry the icon for uninstall
          //---------------------------------------------------------------
          Utilities.theBrushBlood.Color = Color.FromArgb(0xFF, 0xA4, 0x07, 0x07);
          Utilities.theBrushRegion.Color = Color.FromArgb(0x7F, 0x11, 0x09, 0xBB); // nearly transparent but slightly colored
@@ -1942,67 +1943,101 @@ namespace PattonsBest
          }
          return true;
       }
-//      private void SetDisplayIconForUninstall()
-//      {
-//#if !DEBUG // Only do this for release version
-//         if (true == Properties.Settings.Default.theIsFirstRun) // only do once - must set it in registry
-//         {
-//            try
-//            {
-//               string iconSourcePath = System.IO.Path.Combine(MapImage.theImageDirectory, "PattonsBest.ico");
-//               Microsoft.Win32.RegistryKey? sUnInstallKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall");
-//               if (null == sUnInstallKey)
-//               {
-//                  Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): sUnInstallKey=null");
-//                  return;
-//               }
-//               string[] sSubKeyNames = sUnInstallKey.GetSubKeyNames();
-//               for (int i = 0; i < sSubKeyNames.Length; i++)
-//               {
-//                  string? sSubKeyName = sSubKeyNames[i];
-//                  if (null == sSubKeyName)
-//                  {
-//                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): sSubKeyName=null");
-//                     return;
-//                  }
-//                  Microsoft.Win32.RegistryKey? aKey = sUnInstallKey.OpenSubKey(sSubKeyName, true);
-//                  if (null == aKey)
-//                  {
-//                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): aKey=null");
-//                     return;
-//                  }
-//                  // ClickOnce(Publish)
-//                  // Publish -> Settings -> Options 
-//                  // Publish Options -> Description -> Product Name (is your DisplayName)
-//                  Object? key = aKey.GetValue("DisplayName");
-//                  if( null == key )
-//                  {
-//                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): aKey=null");
-//                     return;
-//                  }
-//                  string? sDisplayName = (string)key;
-//                  if( null == sDisplayName )
-//                  {
-//                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): sDisplayName=null");
-//                     return;
-//                  }
-//                  if (true == sDisplayName.Contains("Patton Best"))
-//                  {
-//                     Logger.Log(LogEnum.LE_GAME_INIT, "SetDisplayIconForUninstall(): iconSourcePath=" + iconSourcePath);
-//                     aKey.SetValue("DisplayIcon", iconSourcePath);
-//                     break;
-//                  }
-//               }
-//               Properties.Settings.Default.theIsFirstRun = false;
-//               Properties.Settings.Default.Save();
-//            }
-//            catch (Exception ex)
-//            {
-//               Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): e=" + ex.ToString());
-//            }
-//         }
-//#endif
-//      }
+      private void SetDisplayIconForUninstall()
+      {
+#if !DEBUG // Only do this for release version
+         if (true == Properties.Settings.Default.theIsFirstRun) // only do once - must set it in registry
+         {
+            try
+            {
+               string iconSourcePath = System.IO.Path.Combine(MapImage.theImageDirectory, "PattonsBest.ico");
+               var myUninstallKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall");
+               string[] mySubKeyNames = myUninstallKey.GetSubKeyNames();
+               for (int i = 0; i < mySubKeyNames.Length; i++)
+               {
+                  RegistryKey aKey = myUninstallKey.OpenSubKey(mySubKeyNames[i], true);
+                  // ClickOnce(Publish)
+                  // Publish -> Settings -> Options 
+                  // Publish Options -> Description -> Product Name (is your DisplayName)
+                  string displayName = (string)aKey.GetValue("DisplayName");
+                  if (true == displayName.Contains("Pattons Best"))
+                  {
+                     Logger.Log(LogEnum.LE_GAME_INIT, "SetDisplayIconForUninstall(): iconSourcePath=" + iconSourcePath);
+                     aKey.SetValue("DisplayIcon", iconSourcePath);
+                     break;
+                  }
+               }
+               Properties.Settings.Default.theIsFirstRun = false;
+               Properties.Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): e=" + ex.ToString());
+            }
+         }
+#endif
+      }
+      //      private void SetDisplayIconForUninstall()
+      //      {
+      //#if !DEBUG // Only do this for release version
+      //         if (true == Properties.Settings.Default.theIsFirstRun) // only do once - must set it in registry
+      //         {
+      //            try
+      //            {
+      //               string iconSourcePath = System.IO.Path.Combine(MapImage.theImageDirectory, "PattonsBest.ico");
+      //               Microsoft.Win32.RegistryKey? sUnInstallKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall");
+      //               if (null == sUnInstallKey)
+      //               {
+      //                  Logger.Log(LogEnum.LE_ERROR, "SetDisplayIcon_ForUninstall(): sUnInstallKey=null");
+      //                  return;
+      //               }
+      //               string[] sSubKeyNames = sUnInstallKey.GetSubKeyNames();
+      //               for (int i = 0; i < sSubKeyNames.Length; i++)
+      //               {
+      //                  string? sSubKeyName = sSubKeyNames[i];
+      //                  if (null == sSubKeyName)
+      //                  {
+      //                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIcon_ForUninstall(): sSubKeyName=null");
+      //                     return;
+      //                  }
+      //                  Microsoft.Win32.RegistryKey? aKey = sUnInstallKey.OpenSubKey(sSubKeyName, true);
+      //                  if (null == aKey)
+      //                  {
+      //                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIcon_ForUninstall(): aKey=null");
+      //                     return;
+      //                  }
+      //                  Object? key = aKey.GetValue("DisplayName");
+      //                  if (null == key)
+      //                  {
+      //                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIcon_ForUninstall(): aKey=null");
+      //                     return;
+      //                  }
+      //                  string? sDisplayName = (string)key;
+      //                  if (null == sDisplayName)
+      //                  {
+      //                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIcon_ForUninstall(): sDisplayName=null");
+      //                     return;
+      //                  }
+      //                  // ClickOnce(Publish)
+      //                  // Publish -> Settings -> Options 
+      //                  // Publish Options -> Description -> Product Name (is your DisplayName)
+      //                  if (true == sDisplayName.Contains("Patton Best"))
+      //                  {
+      //                     Logger.Log(LogEnum.LE_GAME_INIT, "SetDisplayIcon_ForUninstall(): iconSourcePath=" + iconSourcePath);
+      //                     aKey.SetValue("DisplayIcon", iconSourcePath);
+      //                     break;
+      //                  }
+      //               }
+      //               Properties.Settings.Default.theIsFirstRun = false;
+      //               Properties.Settings.Default.Save();
+      //            }
+      //            catch (Exception ex)
+      //            {
+      //               Logger.Log(LogEnum.LE_ERROR, "SetDisplayIcon_ForUninstall(): e=" + ex.ToString());
+      //            }
+      //         }
+      //#endif
+      //      }
       //---------------------------------------
       private bool DeserializeOptions(String sXml, Options options)
       {
@@ -2012,9 +2047,8 @@ namespace PattonsBest
          options.Clear();
          if (true == String.IsNullOrEmpty(sXml))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): String.IsNullOrEmpty() returned true");
-            if (0 == options.Count)
-               options.SetOriginalGameOptions();
+            Logger.Log(LogEnum.LE_GAME_INIT, "Deserialize_Options(): String.IsNullOrEmpty(sXml) returned true - first time thru");
+            options.SetOriginalGameOptions();
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             return true;
          }

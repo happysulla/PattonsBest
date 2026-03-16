@@ -14,7 +14,6 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <UseWindowsForms>True</UseWindowsForms>
     <StartupObject>PattonsBest.App</StartupObject>
-    <ApplicationIcon>PattonsBest.ico</ApplicationIcon>
     <Title>Pattons Best Solo Game</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <AssemblyName>PattonsBest</AssemblyName>
@@ -22,6 +21,9 @@
     <Authors>$(AssemblyName)</Authors>
     <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
     <RepositoryUrl>https://github.com/happysulla/PattonsBest</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <ApplicationIcon>PattonsBest.ico</ApplicationIcon>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -447,6 +449,7 @@
     <None Remove="Images\Win3.gif" />
     <None Remove="Images\Win4.gif" />
     <None Remove="Images\Win5.gif" />
+    <None Remove="PattonsBest.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -1451,7 +1454,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\PattonsBest.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PattonsBest.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\QuicksandJump.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1708,6 +1714,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="PattonsBest.ico">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -1728,9 +1740,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="PattonsBest.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -158,8 +158,8 @@ namespace PattonsBest
             Console.WriteLine("SetInitial(): create file\n" + ex.ToString());
          }
          SetOn(LogEnum.LE_ERROR);
-         //SetOn(LogEnum.LE_GAME_INIT);
-         //SetOn(LogEnum.LE_GAME_INIT_VERSION);
+         SetOn(LogEnum.LE_GAME_INIT);
+         SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_NEXT_ACTION);
          //SetOn(LogEnum.LE_UNDO_COMMAND);
          SetOn(LogEnum.LE_GAME_END);

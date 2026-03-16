@@ -135,7 +135,6 @@ namespace PattonsBest
                return;
             }
             //--------------------------------------------
-            Logger.Log(LogEnum.LE_ERROR, "MainWindow(): CheckPoint7");
             myGameEngine = new GameEngine(this);
             myGameViewerWindow = new GameViewerWindow(myGameEngine, gi); // Start the main view
             if (true == myGameViewerWindow.CtorError)
@@ -148,24 +147,27 @@ namespace PattonsBest
             string iconFilename = MapImage.theImageDirectory + "PattonsBest.ico";
             Uri iconUri = new Uri(iconFilename, UriKind.Absolute);
             this.Icon = BitmapFrame.Create(iconUri);
-            Logger.Log(LogEnum.LE_ERROR, "MainWindow(): CheckPoint5");
             //--------------------------------------------
             myGameViewerWindow.Icon = this.Icon;
             myGameViewerWindow.Show(); // Finished initializing so show the window
             //--------------------------------------------
             try // copy user documentation to folder where user data is kept
             {
-               string docs1Src = theAssemblyDirectory + @"\Docs\PattonsBest-Summary.pdf";
+               string docs1Src = theAssemblyDirectory + @"\Docs\Pattons_Best-Summary.pdf";
                string docs2Src = theAssemblyDirectory + @"\Docs\PattonsBest-rules.pdf";
+               string docs3Src = theAssemblyDirectory + @"\Docs\The General Vol 25 No 3.pdf";
                string docsDir = appDataDir + @"\PattonsBest\Docs\";
                if (false == Directory.Exists(docsDir))
                   Directory.CreateDirectory(docsDir);
-               string docs1Dest = docsDir + @"PattonsBest-Summary.pdf";
+               string docs1Dest = docsDir + @"Pattons_Best-Summary.pdf";
                if (false == File.Exists(docs1Dest))
                   File.Copy(docs1Src, docs1Dest);
                string docs2Dest = docsDir + @"PattonsBest-rules.pdf";
                if (false == File.Exists(docs2Dest))
                   File.Copy(docs2Src, docs2Dest);
+               string docs3Dest = docsDir + @"The General Vol 25 No 3.pdf";
+               if (false == File.Exists(docs3Dest))
+                  File.Copy(docs2Src, docs3Dest);
             }
             catch (Exception e)
             {
