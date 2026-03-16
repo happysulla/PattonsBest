@@ -13,7 +13,7 @@ TO INSTALL:
 2.) To download, goto the following website: https://github.com/happysulla/PattonsBest.  
 3.) Select the **Latest Release** button from the right-side middle of the web page.  
 4.) Download the **PattonsBestWindowsSetup.zip** file by clicking on the file name.  
-5.) Unzip **PattonsBestWindowsSetup.zip** by right clicking and selecting **Uncompress** menu item.  
+5.) Unzip **PattonsBestWindowsSetup.zip** by right clicking and selecting **Extract All..** menu item.  
 6.) Go to the location where unzip occurred. Double click the **setup.exe** file.  
 7.) If you get Microsoft Defender blue dialog, select "More Info" link and "Run Anyways" button.  
 8.) If a security warning dialog appears, select **Install** button.  
