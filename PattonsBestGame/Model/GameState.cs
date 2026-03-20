@@ -1328,6 +1328,55 @@ namespace PattonsBest
       }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport lastReport, ref GameAction action)
       {
+         bool isNoControlInAny = true;
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi1 in stack.MapItems)
+            {
+               if (true == mi1.Name.Contains("UsControl")) 
+               {
+                  isNoControlInAny = false;
+                  break;
+               }
+            }
+         }
+         if (true == isNoControlInAny)
+            GameEngine.theInGameFeats.AddOne("StiffSpine");  // win with no controlled sectors
+         //----------------------------------------------------
+         bool isAllControlled = true;
+         string[] sectors = new string[6] { "B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
+         foreach (string sector in sectors)
+         {
+            ITerritory? t = Territories.theTerritories.Find(sector);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): t=null for s=" + sector);
+               return false;
+            }
+            IStack? stack1 = gi.BattleStacks.Find(t);
+            if (null == stack1)
+            {
+               isAllControlled = false;
+               break;
+            }
+            bool isThisSectorControlled = false;
+            foreach (IMapItem mi in stack1.MapItems)
+            {
+               if (true == mi.Name.Contains("UsControl"))
+               {
+                  isThisSectorControlled = true;
+                  break;
+               }
+            }
+            if( false == isThisSectorControlled)
+            {
+               isAllControlled = false;
+               break;
+            }
+         }
+         if (true == isAllControlled)
+            GameEngine.theInGameFeats.AddOne("RingAroundRoses");  // win with all controlled sectors
+         //----------------------------------------------------
          if (EnumScenario.Counterattack != lastReport.Scenario) // Resolve_EmptyBattleBoard() - Performs crew replacement
          { 
             if (null == gi.EnteredArea)
@@ -6055,6 +6104,21 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "Enter_MoveBoardArea(): gi.EnteredArea=null");
             return false;
          }
+         //--------------------------------------
+         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         if ( false == optionSingleDayGame.IsEnabled )
+         {
+            if ("D" == gi.EnteredArea.Type)                // M003, M011, M013, M032, M034
+            {
+               if ( false == gi.EnteredWoodedAreas.Contains(gi.EnteredArea.Name))
+               {
+                  gi.EnteredWoodedAreas.Add(gi.EnteredArea.Name);
+                  if (5 <= gi.EnteredWoodedAreas.Count)
+                     GameEngine.theInGameFeats.AddOne("HappyCamper");
+               }
+            }
+         }
+         //--------------------------------------
          IStack? stack = gi.MoveStacks.Find(gi.EnteredArea); // if there is a Strength Marker in this area, next roll checks if battle occurs
          if (null != stack)
          {
@@ -8267,6 +8331,8 @@ namespace PattonsBest
                                  {
                                     if (gi.DieResults[key][0] < 4)
                                        GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMG");
+                                    if( "Sub" == mgType )
+                                       GameEngine.theInGameFeats.AddOne("ImpossibleKill");
                                     if (false == gi.KillEnemy(lastReport, gi.TargetMg, true))
                                     {
                                        returnStatus = "Kill_Enemy() returned false";

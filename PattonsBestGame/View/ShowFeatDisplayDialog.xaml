@@ -87,6 +87,11 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
          </Grid.RowDefinitions>
          <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -135,6 +140,11 @@
          <CheckBox x:Name="myFeat32" Grid.Row="35" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
          <CheckBox x:Name="myFeat33" Grid.Row="36" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
          <CheckBox x:Name="myFeat34" Grid.Row="37" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat35" Grid.Row="37" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat36" Grid.Row="37" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat37" Grid.Row="37" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat38" Grid.Row="37" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+         <CheckBox x:Name="myFeat39" Grid.Row="37" Grid.Column="0" IsEnabled="false" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
       </Grid>
    </ScrollViewer>
 </Window>

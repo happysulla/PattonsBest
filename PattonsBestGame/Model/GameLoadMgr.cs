@@ -2485,7 +2485,11 @@ namespace PattonsBest
                return null;
             }
             //----------------------------------------------
-            if (false == ReadXmlShermanHits(reader, gi.ShermanHits))
+            bool isSkipRead = false;
+            if (false == ReadXmlEnteredWoodedAreas(reader, gi.EnteredWoodedAreas))
+               isSkipRead = true;
+            //----------------------------------------------
+            if (false == ReadXmlShermanHits(reader, gi.ShermanHits, isSkipRead))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXmlShermanHits() returned false");
                return null;
@@ -6238,6 +6242,52 @@ namespace PattonsBest
             reader.Read(); // get past </TrainedGunners> tag
          return true;
       }
+      private bool ReadXmlEnteredWoodedAreas(XmlReader reader, List<string> enteredWoodedAreas)
+      {
+         enteredWoodedAreas.Clear();
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): IsStartElement(EnteredWoodedAreas) returned false");
+            return false;
+         }
+         if (reader.Name != "EnteredWoodedAreas")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): EnteredWoodedAreas != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; i++)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): IsStartElement(TrainedGunner) returned false");
+               return false;
+            }
+            if (reader.Name != "EnteredArea")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): TrainedGunner != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? areaname = reader.GetAttribute("value");
+            if (null == areaname)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): GetAttribute(areaname) returned false");
+               return false;
+            }
+            enteredWoodedAreas.Add(areaname);
+         }
+         if (0 < count)
+            reader.Read(); // get past </EnteredWoodedAreas> tag
+         return true;
+      }
       private bool ReadXmlPromoPoints(XmlReader reader, Dictionary<string, int> promoPoints)
       {
          promoPoints.Clear();
@@ -6290,14 +6340,17 @@ namespace PattonsBest
             reader.Read(); // get past </CommanderPromoPoints> tag
          return true;
       }
-      private bool ReadXmlShermanHits(XmlReader reader, List<ShermanAttack> hits)
+      private bool ReadXmlShermanHits(XmlReader reader, List<ShermanAttack> hits, bool isSkipRead)
       {
          hits.Clear();
-         reader.Read();
-         if (false == reader.IsStartElement())
+         if( false == isSkipRead  )
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): IsStartElement(ShermanHits) returned false");
-            return false;
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): IsStartElement(ShermanHits) returned false");
+               return false;
+            }
          }
          if (reader.Name != "ShermanHits")
          {
@@ -8311,6 +8364,12 @@ namespace PattonsBest
          if (false == CreateXmlTrainedGunners(aXmlDocument, gi.TrainedGunners))
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlFirstShots(TrainedGunners) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlEnteredWoodedAreas(aXmlDocument, gi.EnteredWoodedAreas))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlFirstShots(EnteredWoodedAreas) returned false");
             return null;
          }
          //------------------------------------------
@@ -11099,6 +11158,45 @@ namespace PattonsBest
             if (null == trainedGunnerNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): AppendChild(trainedGunnerNode) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlEnteredWoodedAreas(XmlDocument aXmlDocument, List<string> enteredWoodedAreas)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredWoodedAreas(): root is null");
+            return false;
+         }
+         XmlElement? enteredWoodedAreasElem = aXmlDocument.CreateElement("EnteredWoodedAreas");
+         if (null == enteredWoodedAreasElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredWoodedAreas(): CreateElement(TrainedGunners) returned null");
+            return false;
+         }
+         enteredWoodedAreasElem.SetAttribute("count", enteredWoodedAreas.Count.ToString());
+         XmlNode? enteredWoodedAreasNode = root.AppendChild(enteredWoodedAreasElem);
+         if (null == enteredWoodedAreasNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): AppendChild(enteredWoodedAreasNode) returned null");
+            return false;
+         }
+         for (int i = 0; i < enteredWoodedAreas.Count; ++i)
+         {
+            XmlElement? enteredAreaElem = aXmlDocument.CreateElement("EnteredArea");
+            if (null == enteredAreaElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredWoodedAreas(): CreateElement(EnteredArea) returned null");
+               return false;
+            }
+            enteredAreaElem.SetAttribute("value", enteredWoodedAreas[i]);
+            XmlNode? enteredAreaNode = enteredWoodedAreasNode.AppendChild(enteredAreaElem);
+            if (null == enteredAreaNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml_EnteredWoodedAreas(): AppendChild(enteredAreaNode) returned null");
                return false;
             }
          }

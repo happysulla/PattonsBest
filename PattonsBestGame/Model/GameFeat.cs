@@ -114,7 +114,13 @@ namespace PattonsBest
          "NumShermanBurns",
          "NumShermanPenetration",
          "NumPanzerfaustDeath",
-         "NumMineImmobilization"
+         "NumMineImmobilization",
+         //------------
+         "RingAroundRoses",
+         "PerfectCrew",
+         "ImpossibleKill",
+         "HappyCamper",
+         "StiffBack"
       };
       private readonly ArrayList myList;
       public static string GetFeatMessage(GameFeat feat, bool isThreshold = false)
@@ -230,7 +236,7 @@ namespace PattonsBest
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIIFriendlyFire":
-               sb.Append("Killed MarderIII SPG with friendly fire " );
+               sb.Append("Killed MarderIII SPG with friendly fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -461,7 +467,7 @@ namespace PattonsBest
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak43YourFire":
-               sb.Append("Killed Pak43 ATG with your fire " );
+               sb.Append("Killed Pak43 ATG with your fire ");
                sb.Append(feat.Value.ToString());
                if (true == isThreshold)
                {
@@ -469,8 +475,8 @@ namespace PattonsBest
                   sb.Append(feat.Threshold.ToString());
                }
                sb.Append(" times");
-               return sb.ToString();            
-               //------------
+               return sb.ToString();
+            //------------
             case "NumPurpleHearts":
                sb.Append("Receive Purple Heart medal ");
                sb.Append(feat.Value.ToString());
@@ -595,6 +601,31 @@ namespace PattonsBest
                return sb.ToString();
             case "NumPanzerfaustDeath": return "Tank destroyed from Panzerfaust attack";
             case "NumMineImmobilization": return "Mine attack causes Sherman immobilization";
+            case "RingAroundRoses":
+               if (0 < feat.Value)
+                  return "Ring Around Roses: Secure all sectors surrounding Sherman";
+               else
+                  return "Ring Around The Roses";
+            case "PerfectCrew":
+               if (0 < feat.Value)
+                  return "Perfect Crew: Reach 50 crew points";
+               else
+                  return "Perfect Crew";
+            case "ImpossibleKill":
+               if (0 < feat.Value)
+                  return "Impossible Kill: Kill an enemy unit with Submachine Gun";
+               else
+                  return "Impossible Kill";
+            case "HappyCamper":
+               if (0 < feat.Value)
+                  return "Happy Camper: Occupy all wooded areas at some time in campaign";
+               else
+                  return "Happy Camper";
+            case "StiffBack":
+               if (0 < feat.Value)
+                  return "Stiff Spine: Win a Combat with no controlled US sectors";
+               else
+                  return "Stiff Spine";
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetFeatMessage(): Unknown key=" + feat.Key);
                return "UNKNOWN: " + feat.Key;
@@ -689,9 +720,9 @@ namespace PattonsBest
             }
             if (left.Value != right.Value)
             {
-               if (0 == left.Threshold) 
+               if (0 == left.Threshold)
                {
-                  if( 1 == left.Value) // only want to show this GameFeat one time when value is 1
+                  if (1 == left.Value) // only want to show this GameFeat one time when value is 1
                   {
                      Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): No Threshold Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
                      changedFeat = left;
@@ -724,7 +755,7 @@ namespace PattonsBest
       }
       public void SetGameFeatThreshold()
       {
-         foreach( GameFeat feat in this)
+         foreach (GameFeat feat in this)
          {
             int threshold = 0;
             switch (feat.Key)

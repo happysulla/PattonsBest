@@ -104,6 +104,7 @@ namespace PattonsBest
       bool IsBrokenGunSight { set; get; }
       List<string> FirstShots { set; get; }
       List<string> TrainedGunners { get; } // trained in use of HVSS 
+      List<string> EnteredWoodedAreas { set; get; }
       List<ShermanAttack> ShermanHits { set; get; }
       ShermanDeath? Death { set; get; }
       ShermanSetup BattlePrep { set; get; } // only used if option AutoPreparation is enabled

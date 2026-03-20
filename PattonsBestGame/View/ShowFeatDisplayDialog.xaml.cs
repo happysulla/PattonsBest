@@ -64,7 +64,7 @@ namespace PattonsBest
          for(int i=0; i < GameEngine.theInGameFeats.Count ; ++i)
          {
             int rowNum = i + 2 + numRect; // 2=header stuff to bypass
-            if ((8 == rowNum) || (26 == rowNum) || (44 == rowNum) || (50 == rowNum) || (58 == rowNum))
+            if ((8 == rowNum) || (26 == rowNum) || (44 == rowNum) || (50 == rowNum) || (58 == rowNum) || (64 == rowNum))
             {
                Rectangle r = new Rectangle() { Width = 500, Height = 1, Fill = Brushes.Black, Stroke = Brushes.Black, HorizontalAlignment=HorizontalAlignment.Left, Margin = tickness };
                myGrid.Children.Add(r);

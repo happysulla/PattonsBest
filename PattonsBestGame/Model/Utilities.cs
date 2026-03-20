@@ -41,7 +41,7 @@ namespace PattonsBest
       public static SolidColorBrush theBrushScrollViewerActive = new SolidColorBrush();
       public static SolidColorBrush theBrushScrollViewerInActive = new SolidColorBrush();
       //--------------------------------------------
-      public static int MapItemNum { set; get; } = 0;
+      public static int MapItemNum { set; get; } = 1000;
       //--------------------------------------------
       public static double ZoomCanvas { get; set; } = 1.5;
       public static double theMapItemOffset = 20;

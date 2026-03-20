@@ -2224,7 +2224,27 @@ namespace PattonsBest
                reader.Close();
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             if (0 == feats.Count)
+            {
                feats.SetOriginalGameFeats();
+            }
+            else
+            {
+               foreach(string sKey in GameFeats.theDefaults) // ensure that if any new options are added, they show up in list
+               {
+                  bool isMatchFound = false;
+                  foreach(GameFeat feat in feats)
+                  {
+                     if( sKey == feat.Key )
+                     {
+                        isMatchFound = true;
+                        break;
+                     }
+                  }
+                  if (false == isMatchFound)
+                     feats.Add(new GameFeat(sKey));
+               }
+
+            }
             feats.SetGameFeatThreshold(); // always set game feat thresholds to a known value on startup
          }
          return true;

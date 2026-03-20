@@ -213,6 +213,20 @@ namespace PattonsBest
       {
          if (E491Enum.END == myState)
          {
+            if (null == myGameInstance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
+               return false;
+            }
+            if( (10 == myGameInstance.Commander.Rating ) &&
+                (10 == myGameInstance.Gunner.Rating)  &&
+                (10 == myGameInstance.Loader.Rating) &&
+                (10 == myGameInstance.Driver.Rating) &&
+                (10 == myGameInstance.Assistant.Rating) )
+            {
+               GameEngine.theInGameFeats.AddOne("PerfectCrew");
+            }
+            //-------------------------------------------------
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
