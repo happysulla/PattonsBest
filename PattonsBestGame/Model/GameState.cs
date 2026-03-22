@@ -794,7 +794,7 @@ namespace PattonsBest
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
+            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, t1.Type, gi.Day, diceRoll);
             IMapItem? mi = null;
             string nameEnemy = enemyUnit + Utilities.MapItemNum;
             Utilities.MapItemNum++;
@@ -3152,7 +3152,7 @@ namespace PattonsBest
             //diceRoll = 11; // <CGS> TEST - AdvanceRetreat - MG appearing
             //diceRoll = 45; // <CGS> TEST - KillYourTank - TANKS APPEARING in battle scenario
             //diceRoll = 51; // <CGS> TEST - ATG appearing
-            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
+            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, t.Type, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
             Utilities.MapItemNum++;

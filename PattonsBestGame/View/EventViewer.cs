@@ -4101,7 +4101,7 @@ namespace PattonsBest
          {
             myNumSmokeAttacksThisRound++;
             StringBuilder sb1 = new StringBuilder();
-            sb1.Append("The hit with the WP round already caused one Smoke Marker to appear in the target&apos; zone.\n\n");
+            sb1.Append("The hit with the WP round already caused one Smoke Marker to appear in the targets zone.\n\n");
             sb1.Append("Smoke Attack #");
             sb1.Append(myNumSmokeAttacksThisRound.ToString());
             sb1.Append(" out of ");
@@ -4109,7 +4109,7 @@ namespace PattonsBest
             myTextBlock.Inlines.Add(new Run(sb1.ToString()));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("The hit with the WP round already caused one Smoke Marker to appear in the target&apos; zone."));
+            myTextBlock.Inlines.Add(new Run("The hit with the WP round already caused one Smoke Marker to appear in the targets zone."));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("                                            "));

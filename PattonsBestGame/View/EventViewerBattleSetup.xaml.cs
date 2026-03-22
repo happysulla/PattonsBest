@@ -1275,6 +1275,12 @@ namespace PattonsBest
             return;
          }
          //------------------------------------------------------
+         string enteredAreaType = "B";
+         if (null == myGameInstance.EnteredArea)
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerBattleSetup.ShowDieResults(): myGameInstance.EnteredArea=null");
+         else
+            enteredAreaType = myGameInstance.EnteredArea.Type;
+         //------------------------------------------------------
          Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
          //------------------------------------------------------
          switch (myState)
@@ -1286,7 +1292,7 @@ namespace PattonsBest
                //dieRoll = 45; // <CGS> TEST - KillYourTank - TANKS APPEARING in battle scenario
                //dieRoll = 91; // <CGS> TEST - PSW/SPW APPEARING in Advance scenario
                myGridRows[i].myDieRollActivation = dieRoll;
-               myGridRows[i].myActivatedEnemyUnit = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
+               myGridRows[i].myActivatedEnemyUnit = TableMgr.SetEnemyUnit(myScenario, enteredAreaType, myDay, dieRoll);
                if (false == CreateMapItem(i))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");
