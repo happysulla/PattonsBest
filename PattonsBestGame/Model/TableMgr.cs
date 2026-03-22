@@ -404,12 +404,8 @@ namespace PattonsBest
                return "ERROR";
          }
       }
-      public static string SetEnemyUnit(EnumScenario situation, string territoryType, int day, int dieRoll)
+      public static string SetEnemyUnit(EnumScenario situation, int day, int dieRoll)
       {
-         if ("D" == territoryType)
-            dieRoll -= 2;
-         else if ("C" == territoryType)
-            dieRoll -= 3;
          const int Feb1945 = 136;
          const int Mar1945 = 146;
          string month = GetMonth(day);

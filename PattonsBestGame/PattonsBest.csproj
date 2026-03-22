@@ -9,7 +9,6 @@
     <UseWPF>true</UseWPF>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Description>Solo game replicating 4th armor path during WW2</Description>
-    <AssemblyVersion>01.00.00</AssemblyVersion>
     <AnalysisLevel>latest</AnalysisLevel>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <UseWindowsForms>True</UseWindowsForms>
@@ -24,11 +23,17 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <ApplicationIcon>PattonsBest.ico</ApplicationIcon>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <AssemblyVersion>1.0.2.40</AssemblyVersion>
+    <FileVersion></FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Optimize>True</Optimize>
   </PropertyGroup>
+
+   <PropertyGroup>
+      <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>
+   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
   <ItemGroup>

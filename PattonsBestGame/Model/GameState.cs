@@ -794,7 +794,7 @@ namespace PattonsBest
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, t1.Type, gi.Day, diceRoll);
+            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string nameEnemy = enemyUnit + Utilities.MapItemNum;
             Utilities.MapItemNum++;
@@ -3152,7 +3152,7 @@ namespace PattonsBest
             //diceRoll = 11; // <CGS> TEST - AdvanceRetreat - MG appearing
             //diceRoll = 45; // <CGS> TEST - KillYourTank - TANKS APPEARING in battle scenario
             //diceRoll = 51; // <CGS> TEST - ATG appearing
-            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, t.Type, gi.Day, diceRoll);
+            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
             Utilities.MapItemNum++;
@@ -4674,6 +4674,8 @@ namespace PattonsBest
             lastReport.MainGunWP = Utilities.RandomGenerator.Next(5, 15); // assign WP load randomly
             unassignedCount -= lastReport.MainGunWP;
             lastReport.MainGunHBCI += Utilities.RandomGenerator.Next(1, 11);
+            if (10 < lastReport.MainGunHBCI) // limit HBCI load to 10
+               lastReport.MainGunHBCI = 10;
             unassignedCount -= lastReport.MainGunHBCI;
          }
          //--------------------------------------------------

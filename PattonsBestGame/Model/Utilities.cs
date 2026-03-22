@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -63,11 +64,43 @@ namespace PattonsBest
             return theRandoms[theRandomIndex];
          }
       }
-      static public string GetNickName()
+      public static void InitializeRandomNumGenerators()
       {
-         int random = RandomGenerator.Next(NUM_NICK_NAMES);
-         return theNickNames[random];
+         theRandoms[0] = new Random(); // default seed is System time 
+         for (int i = 1; i < NUM_RANDOM_GEN; i++)
+         {
+            int seed = 265535;
+            for (int j = 0; j < i; j++)
+            {
+               seed += theRandoms[j].Next(seed);
+               if (5 < j)
+                  break;
+            }
+            theRandoms[i] = new Random(seed);
+         }
       }
+      //--------------------------------------------
+      public static DateTime GetBuildDate(Assembly assembly)
+      {
+         const string BuildVersionMetadataPrefix = "+build";
+
+         var attribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+         if (attribute?.InformationalVersion != null)
+         {
+            var value = attribute.InformationalVersion;
+            var index = value.IndexOf(BuildVersionMetadataPrefix);
+            if (index > 0)
+            {
+               value = value.Substring(index + BuildVersionMetadataPrefix.Length);
+               if (DateTime.TryParseExact(value, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
+               {
+                  return result;
+               }
+            }
+         }
+         return default;
+      }
+      //--------------------------------------------
       static public string GetTime(int hour, int min)
       {
          StringBuilder sb = new StringBuilder();
@@ -80,6 +113,7 @@ namespace PattonsBest
          sb.Append(min.ToString());
          return sb.ToString();
       }
+      //--------------------------------------------
       static public int DiffInDates(string day1, string day2)
       {
          if( 10 != day1.Length )
@@ -113,44 +147,7 @@ namespace PattonsBest
             return -1000;
          }
       }
-      static public string PrintMgState(IGameInstance gi)
-      {
-         StringBuilder sbmg = new StringBuilder();
-         sbmg.Append("--> FIRING: a=");
-         sbmg.Append(gi.IsShermanFiringAaMg.ToString());
-         sbmg.Append(" c=");
-         sbmg.Append(gi.IsShermanFiringCoaxialMg.ToString());
-         sbmg.Append(" b=");
-         sbmg.Append(gi.IsShermanFiringBowMg.ToString());
-         sbmg.Append(" s=");
-         sbmg.Append(gi.IsShermanFiringSubMg.ToString());
-         sbmg.Append(" --> FIRED: a=");
-         sbmg.Append(gi.IsShermanFiredAaMg.ToString());
-         sbmg.Append(" c=");
-         sbmg.Append(gi.IsShermanFiredCoaxialMg.ToString());
-         sbmg.Append(" b=");
-         sbmg.Append(gi.IsShermanFiredBowMg.ToString());
-         sbmg.Append(" s=");
-         sbmg.Append(gi.IsShermanFiredSubMg.ToString());
-         return sbmg.ToString();
-      }
       //--------------------------------------------
-      // Utilities Functions
-      public static void InitializeRandomNumGenerators()
-      {
-         theRandoms[0] = new Random(); // default seed is System time 
-         for (int i = 1; i < NUM_RANDOM_GEN; i++)
-         {
-            int seed = 265535;
-            for (int j = 0; j < i; j++)
-            {
-               seed += theRandoms[j].Next(seed);
-               if (5 < j)
-                  break;
-            }
-            theRandoms[i] = new Random(seed);
-         }
-      }
       public static string RemoveSpaces(string aLine)
       {
          string[] aStringArray1 = aLine.Split(new char[] { '"' });
@@ -288,6 +285,34 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + " T=" + type.ToString() + "\nex=" + ex.ToString());
             return default;
          }
+      }
+      //--------------------------------------------
+      static public string GetNickName()
+      {
+         int random = RandomGenerator.Next(NUM_NICK_NAMES);
+         return theNickNames[random];
+      }
+      //--------------------------------------------
+      static public string PrintMgState(IGameInstance gi)
+      {
+         StringBuilder sbmg = new StringBuilder();
+         sbmg.Append("--> FIRING: a=");
+         sbmg.Append(gi.IsShermanFiringAaMg.ToString());
+         sbmg.Append(" c=");
+         sbmg.Append(gi.IsShermanFiringCoaxialMg.ToString());
+         sbmg.Append(" b=");
+         sbmg.Append(gi.IsShermanFiringBowMg.ToString());
+         sbmg.Append(" s=");
+         sbmg.Append(gi.IsShermanFiringSubMg.ToString());
+         sbmg.Append(" --> FIRED: a=");
+         sbmg.Append(gi.IsShermanFiredAaMg.ToString());
+         sbmg.Append(" c=");
+         sbmg.Append(gi.IsShermanFiredCoaxialMg.ToString());
+         sbmg.Append(" b=");
+         sbmg.Append(gi.IsShermanFiredBowMg.ToString());
+         sbmg.Append(" s=");
+         sbmg.Append(gi.IsShermanFiredSubMg.ToString());
+         return sbmg.ToString();
       }
    }
    public static class AssemblyInfo
