@@ -8,6 +8,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 
 namespace PattonsBest
@@ -71,10 +72,16 @@ namespace PattonsBest
       {
          StringBuilder sb = new StringBuilder();
          sb.Append("\n\tGameVersion=");
-         Assembly assem = Assembly.GetExecutingAssembly();
-         Version? version = assem.GetName().Version;
+         Version? version = Assembly.GetExecutingAssembly().GetName().Version;
          if (null != version)
+         {
             sb.Append(version.ToString());
+            sb.Append("_");
+            DateTime linkerTime = Utilities.GetBuildDate(Assembly.GetExecutingAssembly());
+            sb.Append(linkerTime.ToString());
+         }
+         //--------------------------------------------
+         Assembly assem = Assembly.GetExecutingAssembly();
          var attributes = assem.CustomAttributes;
          foreach (var attribute in attributes)
          {
