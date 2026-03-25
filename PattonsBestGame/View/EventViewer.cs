@@ -6211,6 +6211,11 @@ namespace PattonsBest
          {
             outAction = GameAction.BattleShermanKilled; // Show_CollateralDamageResults()
          }
+         else if (0 < myGameInstance.NumCollateralDamage)
+         { 
+            outAction = GameAction.BattleCollateralDamageCheck; // Show_CollateralDamageResults() - repeat step if more collateral damage to do
+            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Show_FriendlyActionResults(): NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
+         }
          else if (BattlePhase.Ambush == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (A_mbush==BattlePhase)  ==> BattleRandomEvent
          {
             outAction = GameAction.BattleRandomEvent; // Show_CollateralDamageResults() - (A_mbush==BattlePhase)  ==> BattleRandomEvent
@@ -6425,21 +6430,23 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "Show_FriendlyActionResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.Error;
+         GameAction outAction = GameAction.BattleRoundSequenceRandomEvent;
          //------------------------------------------
-         if (0 < myGameInstance.NumCollateralDamage) // Show_FriendlyActionResults()
-         {
-            outAction = GameAction.BattleCollateralDamageCheck; // Show_FriendlyActionResults()
-            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Show_FriendlyActionResults(): NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
-         }
-         else if (null != myGameInstance.Death)
-         {
-            outAction = GameAction.BattleShermanKilled; // Show_FriendlyActionResults()
-         }
-         else
-         {
-            outAction = GameAction.BattleRoundSequenceRandomEvent;
-         }
+         // NOT SURE WHY THIS CODE IS HERE - SEEMS LIKE NEVER GO TO COLLATERAL DAMAGE AFTER FRIENDLY ACTION
+         // COLLATERAL DAMAGE CAN HAPPEN IN 1.) Random Event - Enemy Artillery 2.) Random Event - Harrassing Fire or 3.) Enemy Action 
+         //if (0 < myGameInstance.NumCollateralDamage) // Show_FriendlyActionResults()
+         //{
+         //   outAction = GameAction.BattleCollateralDamageCheck; // Show_FriendlyActionResults()
+         //   Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Show_FriendlyActionResults(): NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
+         //}
+         //else if (null != myGameInstance.Death)
+         //{
+         //   outAction = GameAction.BattleShermanKilled; // Show_FriendlyActionResults()
+         //}
+         //else
+         //{
+         //   outAction = GameAction.BattleRoundSequenceRandomEvent;
+         //}
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######Show_FriendlyActionResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());

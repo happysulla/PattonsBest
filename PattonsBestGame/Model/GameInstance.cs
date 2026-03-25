@@ -619,6 +619,7 @@ namespace PattonsBest
                return false;
 
          }
+         switchingMember.IsButtonedUp = true;
          //--------------------------------------------
          this.CrewActions.Remove(switchingMember.Name);
          this.SwitchedCrewMemberRole = switchingMember.Role;

@@ -7053,7 +7053,7 @@ namespace PattonsBest
                            break;
                         case "Harrassing Fire":
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e045");
-                           gi.NumCollateralDamage++;  //GameStateBattle.PerformAction(BattleRandomEventRoll):
+                           gi.NumCollateralDamage++;  //GameStateBattle.PerformAction(BattleRandomEventRoll): "Harrassing Fire"
                            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "GameStateBattle.PerformAction(BattleRandomEventRoll): +++ NumCollateralDamage=" + gi.NumCollateralDamage.ToString());
                            if (false == HarrassingFireCheck(gi))
                            {
@@ -8900,7 +8900,7 @@ namespace PattonsBest
                            break;
                         case "Harrassing Fire":
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e045");
-                           gi.NumCollateralDamage++; // "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll)
+                           gi.NumCollateralDamage++; // GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): "Harrassing Fire"
                            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): +++ NumCollateralDamage=" + gi.NumCollateralDamage.ToString());
                            if ( false == HarrassingFireCheck(gi))
                            {
@@ -9225,7 +9225,7 @@ namespace PattonsBest
          if (true == isCrewExposed)
          {
             outAction = GameAction.BattleCollateralDamageCheck;
-            gi.NumCollateralDamage++; // Check_CrewMemberExposed(): check for collateral damage after resolving artillery roll
+            gi.NumCollateralDamage++; // Check_CrewMemberExposed(): check for collateral damage after resolving enemy artillery roll 
             Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Check_CrewMemberExposed(): +++ NumCollateralDamage=" + gi.NumCollateralDamage.ToString());
          }
          else if (false == SpottingPhaseBegin(gi, ref outAction, "Check_CrewMemberExposed()")) // Check_CrewMemberExposed() - no exposed crew after BattleRoundSequenceEnemyArtilleryRoll occurs

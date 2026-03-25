@@ -2083,7 +2083,7 @@ When daylight runs out, the day is over. Go to the Evening DeBriefing. If a batt
 <InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.43	"<Bold>r20.43 CounterAttack - Battle</Bold>
 <LineBreak/><LineBreak/>
-When performing the Battle portion of a Counterattack sceanrio, delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
+When performing the Battle portion of a Counterattack scenario, delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
 <InlineUIContainer><Button Content='r4.64' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>When rolling for Ambush per 
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 

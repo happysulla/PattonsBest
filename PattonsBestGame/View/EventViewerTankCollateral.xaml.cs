@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -172,6 +173,8 @@ namespace PattonsBest
                Logger.Log(LogEnum.LE_ERROR, "ImproveCrewRatings(): cm=null for name=" + crewmember);
                return false;
             }
+            if( true == cm.IsIncapacitated )
+               cm.IsButtonedUp = true;
             myGridRows[i] = new GridRow(cm);
             if (true == cm.IsButtonedUp)
                myGridRows[i].myDieRollWound = BUTTONED_UP;
