@@ -153,6 +153,7 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "ResolveCollateralDamage(): improper state NumCollateralDamage=0");
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "ResolveCollateralDamage(): NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
          //--------------------------------------------------
          myGridRows = new GridRow[MAX_GRID_LEN];
          myState = E0481Enum.COLLATERAL_DAMAGE_ROLL;
@@ -527,6 +528,7 @@ namespace PattonsBest
          {
             case E0481Enum.COLLATERAL_DAMAGE_ROLL:
                myGameInstance.NumCollateralDamage--;
+               Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "ShowDieResults(): ----- NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
                //dieRoll = 91; // <CGS> TEST - Commander Collateral Damage
                myDieRollCollateral = dieRoll;
                myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll);

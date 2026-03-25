@@ -6159,9 +6159,10 @@ namespace PattonsBest
          }
          GameAction outAction = GameAction.Error;
          //------------------------------------------
-         if ( 0 < myGameInstance.NumCollateralDamage )
+         if ( 0 < myGameInstance.NumCollateralDamage) // Show_AmbushResults()
          {
-            outAction = GameAction.BattleCollateralDamageCheck;
+            outAction = GameAction.BattleCollateralDamageCheck; // Show_AmbushResults()
+            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Show_AmbushResults(): NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
          }
          else if (null != myGameInstance.Death)
          {
@@ -6375,9 +6376,10 @@ namespace PattonsBest
          {
             outAction = GameAction.BattleShermanKilled;  // Show_EnemyActionResults()
          }
-         else if (0 < myGameInstance.NumCollateralDamage)
+         else if (0 < myGameInstance.NumCollateralDamage) // Show_EnemyActionResults()
          {
-            outAction = GameAction.BattleCollateralDamageCheck;
+            outAction = GameAction.BattleCollateralDamageCheck; // Show_EnemyActionResults()
+            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Show_EnemyActionResults(): NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
          }
          else
          {
@@ -6425,9 +6427,10 @@ namespace PattonsBest
          }
          GameAction outAction = GameAction.Error;
          //------------------------------------------
-         if (0 < myGameInstance.NumCollateralDamage)
+         if (0 < myGameInstance.NumCollateralDamage) // Show_FriendlyActionResults()
          {
-            outAction = GameAction.BattleCollateralDamageCheck;
+            outAction = GameAction.BattleCollateralDamageCheck; // Show_FriendlyActionResults()
+            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Show_FriendlyActionResults(): NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
          }
          else if (null != myGameInstance.Death)
          {

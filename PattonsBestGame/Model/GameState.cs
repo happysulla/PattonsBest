@@ -1603,7 +1603,7 @@ namespace PattonsBest
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
          gi.Panzerfaust = null;
-         gi.NumCollateralDamage = 0;
+         gi.NumCollateralDamage = 0;  // PrepareFor_Battle()
          //---------------------------------
          if ( (0 < lastReport.AmmoPeriscope) && (true == gi.IsBrokenPeriscopeGunner) )
          {
@@ -3582,7 +3582,7 @@ namespace PattonsBest
          //-------------------------------------------------------
          gi.Death = null; // Setup_NewGame()
          gi.Panzerfaust = null;
-         gi.NumCollateralDamage = 0;
+         gi.NumCollateralDamage = 0;  // Setup_NewGame()
          gi.TargetMainGun = null;
          //-------------------------------------------------------
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Setup_NewGame(): gi.MapItemMoves.Clear()");
@@ -7053,7 +7053,8 @@ namespace PattonsBest
                            break;
                         case "Harrassing Fire":
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e045");
-                           gi.NumCollateralDamage++;
+                           gi.NumCollateralDamage++;  //GameStateBattle.PerformAction(BattleRandomEventRoll):
+                           Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "GameStateBattle.PerformAction(BattleRandomEventRoll): +++ NumCollateralDamage=" + gi.NumCollateralDamage.ToString());
                            if (false == HarrassingFireCheck(gi))
                            {
                               returnStatus = "Harrassing_FireCheck() returned false";
@@ -8467,7 +8468,7 @@ namespace PattonsBest
                            else
                               diceRollAuto = die1 + 10 * die2;
                            gi.DieResults["e054b"][0] = diceRollAuto;
-                           if (gi.DieResults["e054b"][0] < 31) // Assume that sub MG do not use ammo
+                           if (gi.DieResults["e054b"][0] < 31) 
                               lastReport.Ammo30CalibreMG--;
                            else if (97 < gi.DieResults["e054b"][0])
                               gi.IsMalfunctionedMgBow = true;               // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_MgPlaceAdvanceFire)
@@ -8504,7 +8505,8 @@ namespace PattonsBest
                   }
                   Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequence_MgAdvanceFireRoll): " + Utilities.PrintMgState(gi));
                   break;
-               case GameAction.BattleRoundSequenceMgAdvanceFireRollEnd:
+               case GameAction.BattleRoundSequenceMgAdvanceFireRollEnd: // this roll is to determine affect on gun - not affect on enemy
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = false;
                   gi.IsShermanFiringCoaxialMg = false;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_MgAdvanceFireRollEnd)
@@ -8806,7 +8808,7 @@ namespace PattonsBest
                   gi.BattlePhase = BattlePhase.EnemyAction;
                   break;
                case GameAction.BattleRoundSequenceFriendlyAction:
-                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFriendlyAction): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.FriendlyAction");
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_FriendlyAction): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.FriendlyAction");
                   gi.BattlePhase = BattlePhase.FriendlyAction;
                   break;
                case GameAction.BattleRoundSequenceCollateralDamageCheck: // Handled with EventViewerTankCollateral class
@@ -8898,8 +8900,9 @@ namespace PattonsBest
                            break;
                         case "Harrassing Fire":
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e045");
-                           gi.NumCollateralDamage++;
-                           if( false == HarrassingFireCheck(gi))
+                           gi.NumCollateralDamage++; // "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll)
+                           Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): +++ NumCollateralDamage=" + gi.NumCollateralDamage.ToString());
+                           if ( false == HarrassingFireCheck(gi))
                            {
                               returnStatus = "Harrassing_FireCheck() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): " + returnStatus);
@@ -9222,7 +9225,8 @@ namespace PattonsBest
          if (true == isCrewExposed)
          {
             outAction = GameAction.BattleCollateralDamageCheck;
-            gi.NumCollateralDamage++; // check for collateral damage after resolving artillery roll
+            gi.NumCollateralDamage++; // Check_CrewMemberExposed(): check for collateral damage after resolving artillery roll
+            Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "Check_CrewMemberExposed(): +++ NumCollateralDamage=" + gi.NumCollateralDamage.ToString());
          }
          else if (false == SpottingPhaseBegin(gi, ref outAction, "Check_CrewMemberExposed()")) // Check_CrewMemberExposed() - no exposed crew after BattleRoundSequenceEnemyArtilleryRoll occurs
          {
@@ -11501,7 +11505,7 @@ namespace PattonsBest
          gi.IsEnemyAdvanceComplete = false;
          //-------------------------------------------------------
          gi.Panzerfaust = null;
-         gi.NumCollateralDamage = 0;
+         gi.NumCollateralDamage = 0;  // Reset_Round()
          if (null != gi.TargetMainGun)
          {
             if (true == gi.TargetMainGun.IsKilled)
@@ -12050,7 +12054,6 @@ namespace PattonsBest
             gi.IsFlankingFire = false;
             gi.IsEnemyAdvanceComplete = false;
             gi.Panzerfaust = null;
-            gi.NumCollateralDamage = 0;
             //-------------------------------------------------------
             gi.TargetMainGun = null;                      // EveningDebriefing_ResetDay()
             if ((true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun))
@@ -12111,7 +12114,7 @@ namespace PattonsBest
             gi.BattleResistance = EnumResistance.None;                      // EveningDebriefing_ResetDay()
             gi.Death = null; // EveningDebriefing_ResetDay()
             gi.Panzerfaust = null;
-            gi.NumCollateralDamage = 0;
+            gi.NumCollateralDamage = 0;  // EveningDebriefing_ResetDay()
             gi.Fuel = 35;
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "EveningDebriefing_ResetDay(): gi.MapItemMoves.Clear()");

@@ -618,7 +618,7 @@ namespace PattonsBest
             {
                gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustSectorRoll;
             }
-            else if (("e045" == gi.EventActive) && (0==gi.NumCollateralDamage) ) // Collateral Damage already taken - move to next action
+            else if (("e045" == gi.EventActive) && (0==gi.NumCollateralDamage)) // UpdateView_ForNewGame(): Collateral Damage already taken - move to next action
             {
                //-----------------------------------------
                if (null != myGameInstance.Death)

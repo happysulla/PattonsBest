@@ -1649,6 +1649,7 @@ namespace PattonsBest
                if (true == enemyAction.Contains("Collateral"))
                {
                   myGameInstance.NumCollateralDamage++;
+                  Logger.Log(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE, "ShowDieResults(Collateral): ++  NumCollateralDamage=" + myGameInstance.NumCollateralDamage.ToString());
                   mi.IsFired = true;
                }
                //----------------------------------------

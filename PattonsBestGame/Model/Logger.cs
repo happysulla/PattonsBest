@@ -57,6 +57,7 @@ namespace PattonsBest
       LE_SHOW_BATTLE_PHASE,
       LE_SHOW_START_BATTLE,
       LE_SHOW_HIT_YOU_MOD,
+      LE_SHOW_COLLATERAL_DAMGAGE,
       LE_SHOW_WOUND_MOD,
       LE_SHOW_SPOT_MOD,
       LE_SHOW_SPOT_RESULT,
@@ -209,6 +210,7 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          //SetOn(LogEnum.LE_SHOW_RESET_ROUND);
          //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
+         SetOn(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE);
          //SetOn(LogEnum.LE_SHOW_WOUND_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
