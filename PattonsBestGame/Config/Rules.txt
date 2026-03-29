@@ -1617,7 +1617,8 @@ Each model and variant of the Sherman tank has a limit on its normal load and am
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r16.0a' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Details<LineBreak/>
 <InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Ammo Types<LineBreak/>
-<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Loading Ammo"
+<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Loading Ammo<LineBreak/>
+<InlineUIContainer><Button Content='r16.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Machine Gun (MG) Ammo (Only Optional if not Using Digital Game)"
 r16.0a	"<Bold>r16.0a Ammo Details</Bold> 
 <LineBreak/><LineBreak/>
 -- Both the 75 and 76L fired AP and HE rounds. <LineBreak/><LineBreak/>
@@ -1667,7 +1668,7 @@ On the Tank Card, mark the number and types of rounds loaded into your ready rac
 additional attacks. Each Sherman variant has a ready rack that cannot be exceeded.
 <LineBreak/><LineBreak/>
              <InlineUIContainer><Image Name='ReadyRack'  Height='270' Width='350'></Image></InlineUIContainer>"
-r16.3	"<Bold>r16.3 Machine Gun (MG) Ammo (Only Optional if not using digital game)</Bold> 
+r16.3	"<Bold>r16.3 Machine Gun (MG) Ammo (Only Optional if not Using Digital Game)</Bold> 
 <LineBreak/><LineBreak/>
 All rules dealing with MG ammunition should be considered optional and be followed only by choice. For most players, the additional problems posed by the consideration of MG ammo are not worth the record keeping involved. Continue to check for MG malfunctions, but otherwise assume there is sufficient MG ammo on hand for all firing."
 r17.0	"<Bold>r17.0 Spotting</Bold> 
@@ -2444,7 +2445,7 @@ r28.9	"<Bold>r28.10 Hints - Crew Actions</Bold>
 <InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Tank MG Fire - Have the assistant driver fire Advancing Fire into the close zone to the tank's front if he has no target. Rarely fire the AA or Sub MGs.
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Smoke Mortars and Smoke Grenades - Those are most useful when you are bogged down or the main gun has malfunctioned. They also can be used to provide smoke when you are moving."
-r29.0	"<Bold>r29.0 Fuel (Only Optional if not using digital game)</Bold>
+r29.0	"<Bold>r29.0 Fuel (Only Optional if not Using Digital Game)</Bold>
 <LineBreak/><LineBreak/>
 All Sherman tank models carry a maxium of 35 units of fuel, where each unit equals 5 gallons (175 gallons total). During the Time Check step 
 <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the sequence of play, when you determine the amount of time and ammo already expended for the day, 
