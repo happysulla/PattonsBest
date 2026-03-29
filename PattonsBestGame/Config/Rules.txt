@@ -1674,7 +1674,7 @@ Only optional if not using digital game.
 <LineBreak/><LineBreak/>
 All rules dealing with MG ammunition should be considered optional and be followed only by choice. For most players, the additional problems posed by the consideration of MG ammo are not worth the record keeping involved. Continue to check for MG malfunctions, but otherwise assume there is sufficient MG ammo on hand for all firing.
 <LineBreak/><LineBreak/>
-See <InlineUIContainer><Button Content='r22.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for machine gun ammo use."
+See <InlineUIContainer><Button Content='r22.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for machine gun ammo use."
 r17.0	"<Bold>r17.0 Spotting</Bold> 
 <LineBreak/><LineBreak/>
 Spotting is the attempt by your members to see and identify enemy units on the Battle Board. The placement of activated enemy units on the board does not mean that you see them. You know they are there perhaps because you have heard them or by radio reports. Until a crewman spots the unit, you do not see them and cannot shoot at it.
