@@ -20,7 +20,7 @@ using TextBox = System.Windows.Controls.TextBox;
 
 namespace PattonsBest
 {
-   public partial class AfterActionReportUserControl : UserControl
+   public partial class AfterActionReportUserControl : System.Windows.Controls.UserControl
    {
       public static int HEADER_INFO_LEN = 47;
       public static int CREW_NAME_LEN = 18;
@@ -629,8 +629,12 @@ namespace PattonsBest
                      }
                      else
                      {
-                        textbox.Text = myGameInstance.Commander.Name;
+                        if( true == String.IsNullOrEmpty(myGameInstance.Commander.Name))
+                           lastReport.Commander = SurnameMgr.GetSurname();
+                        else
+                           lastReport.Commander = myGameInstance.Commander.Name;
                      }
+                     textbox.Text = lastReport.Commander;
                   }
                }
             }
@@ -657,7 +661,13 @@ namespace PattonsBest
                      if (false == String.IsNullOrEmpty(trimString))
                         lastReport.Gunner = AppendGenerationalSuffix("Gunner", trimString);
                      else
-                        textbox.Text = myGameInstance.Gunner.Name;
+                     {
+                        if (true == String.IsNullOrEmpty(myGameInstance.Gunner.Name))
+                           lastReport.Gunner = SurnameMgr.GetSurname();
+                        else
+                           lastReport.Gunner = myGameInstance.Gunner.Name;
+                     }
+                     textbox.Text = lastReport.Gunner;
                   }
                }
             }
@@ -684,7 +694,13 @@ namespace PattonsBest
                      if (false == String.IsNullOrEmpty(trimString))
                         lastReport.Loader = AppendGenerationalSuffix("Loader", trimString);
                      else
-                        textbox.Text = myGameInstance.Loader.Name;
+                     {
+                        if (true == String.IsNullOrEmpty(myGameInstance.Loader.Name))
+                           lastReport.Loader = SurnameMgr.GetSurname();
+                        else
+                           lastReport.Loader = myGameInstance.Loader.Name;
+                     }
+                     textbox.Text = lastReport.Loader;
                   }
                }
             }
@@ -711,7 +727,13 @@ namespace PattonsBest
                      if (false == String.IsNullOrEmpty(trimString))
                         lastReport.Driver = AppendGenerationalSuffix("Driver", trimString);
                      else
-                        textbox.Text = myGameInstance.Driver.Name;
+                     {
+                        if (true == String.IsNullOrEmpty(myGameInstance.Driver.Name))
+                           lastReport.Driver = SurnameMgr.GetSurname();
+                        else
+                           lastReport.Driver = myGameInstance.Driver.Name;
+                     }
+                     textbox.Text = lastReport.Driver;
                      Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "ResetTextBoxes(): cmdr=" + myGameInstance.Commander.Name + " driver=" + myGameInstance.Driver.Name);
                   }
                }
@@ -739,7 +761,13 @@ namespace PattonsBest
                      if (false == String.IsNullOrEmpty(trimString))
                         lastReport.Assistant = AppendGenerationalSuffix("Assistant", trimString);
                      else
-                        textbox.Text = myGameInstance.Assistant.Name;
+                     {
+                        if (true == String.IsNullOrEmpty(myGameInstance.Assistant.Name))
+                           lastReport.Assistant = SurnameMgr.GetSurname();
+                        else
+                           lastReport.Assistant = myGameInstance.Assistant.Name;
+                     }
+                     textbox.Text = lastReport.Assistant;
                   }
                }
             }
