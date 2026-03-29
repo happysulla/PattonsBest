@@ -1640,11 +1640,40 @@ namespace PattonsBest
                   myTextBlock.Inlines.Add(new Run(sbe027.ToString()));
                }
                break;
+            case "e029a":
+               string ammoType = gi.GetGunLoadType();
+               if ("He" != ammoType) 
+               {
+                  myTextBlock.Inlines.Add(new Run("Advancing fire is only allowed if there is an HE Gun Load per "));
+                  Button be029a = new Button() { FontFamily = myFontFam1, FontSize = 12 };
+                  be029a.Content = "r9.61";
+                  be029a.Click += Button_Click;
+                  myTextBlock.Inlines.Add(new InlineUIContainer(be029a));
+                  myTextBlock.Inlines.Add(new Run("."));
+               }
+               else if (0 == report.Ammo30CalibreMG)
+               {
+                  myTextBlock.Inlines.Add(new Run("Advancing fire is only allowed if there is .30 calibre MG fire available"));
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached invalid state ammoType=" + ammoType + " and MG=" + report.Ammo30CalibreMG.ToString());
+                  return false;
+               }
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               Image imge029a = new Image { Width = 100, Height = 100, Name = "c44AdvanceFireDeny", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFireDeny") };
+               myTextBlock.Inlines.Add(new Run("                                            "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge029a));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
             case "e030": // This event is only shown if battle check resulted in combat
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   int heRoundsUsed = (int)Math.Floor((double)gi.DieResults[key][0] / 2.0);
-                  int mgRoundsUsed = gi.DieResults[key][0];
+                  int mgRoundsUsed = (int)Math.Floor((double)gi.DieResults[key][0] / 2.0);
                   StringBuilder sb = new StringBuilder();
                   sb.Append("HE Rounds Used = ");
                   sb.Append(heRoundsUsed.ToString());

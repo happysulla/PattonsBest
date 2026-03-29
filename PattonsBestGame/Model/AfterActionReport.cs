@@ -30,6 +30,7 @@ namespace PattonsBest
       public int SunsetMin { get; set; } = 15;
       //----------------------------------------
       public int Ammo30CalibreMG { get; set; } = 30;
+      //public int Ammo30CalibreMG { get; set; } = 0;   // <CGS> TESTING - Set MG rounds to zero
       public int Ammo50CalibreMG { get; set; } = 6;
       public int AmmoSmokeBomb { get; set; } = 14;
       public int AmmoSmokeGrenade { get; set; } = 6;

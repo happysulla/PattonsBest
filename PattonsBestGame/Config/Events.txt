@@ -120,7 +120,7 @@ e007b	"<Bold>e007b Crew Replacement</Bold>
 <InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
 When you tank is knocked out, wounded crewmen are replaced automatically on the next After Action Report 
-<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.  
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> with ratings automatically rolled.  Click image to continue.  
 <LineBreak/><LineBreak/>
                           <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"
 e007c	"<Bold>e007c Returning Crewmen</Bold> 
@@ -366,10 +366,7 @@ Choose one of the following images for Advancing Fire option per
 e029a	"<Bold>e029a Advancing Fire Not Allowed</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-Advancing fire is only allowed if there is an HE Gun Load per <InlineUIContainer><Button Content='r9.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Choose image below to continue.
-<LineBreak/><LineBreak/>
-                                            <InlineUIContainer><Image Name='c44AdvanceFireDeny' Height='120' Width='120'></Image></InlineUIContainer> "
+<LineBreak/><LineBreak/>"
 e030	"<Bold>e030 Advancing Fire Ammo Use</Bold> 
 <InlineUIContainer><Button Content='r22.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

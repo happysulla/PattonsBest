@@ -913,6 +913,7 @@ namespace PattonsBest
          report.Ammo30CalibreMG = 30;
          if (-1 < myExtraAmmo)
             report.Ammo30CalibreMG += 10;
+         //report.Ammo30CalibreMG = 0; // <CGS> TESTING - Set MG rounds to zero
          return true;
       }
       private bool UpdateReadyRack()

@@ -2715,6 +2715,7 @@ namespace PattonsBest
          lastReport.MainGunHE = (int)Math.Ceiling(unassignedCount * 0.6);
          unassignedCount -= lastReport.MainGunHE;
          lastReport.MainGunAP = unassignedCount;
+         //lastReport.Ammo30CalibreMG = 0; // <CGS> TESTING - Set MG rounds to zero
          //lastReport.MainGunHE = 5;    // <CGS> Limit initial gun loads
          //lastReport.MainGunAP = 3;    // <CGS> Limit initial gun loads
          //lastReport.MainGunWP = 0;    // <CGS> Limit initial gun loads
@@ -2804,6 +2805,8 @@ namespace PattonsBest
          lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
          lastReport.MainGunHE -= dieRoll * 2;
          lastReport.Ammo30CalibreMG -= dieRoll;
+         if (lastReport.Ammo30CalibreMG < 0)
+            lastReport.Ammo30CalibreMG = 0;
          //-------------------------------------------------
          gi.Sherman.TerritoryCurrent = gi.Home;
          int delta = (int)(gi.Sherman.Zoom * Utilities.theMapItemOffset);
@@ -4312,6 +4315,8 @@ namespace PattonsBest
                   lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
                   lastReport.MainGunHE -= dieRoll * 2;
                   lastReport.Ammo30CalibreMG -= dieRoll;
+                  if (lastReport.Ammo30CalibreMG < 0)
+                     lastReport.Ammo30CalibreMG = 0;
                   gi.Fuel -= dieRoll;
                   if( gi.Fuel < 0 )
                      gi.Fuel = 0; 
@@ -4697,6 +4702,7 @@ namespace PattonsBest
             unassignedCount += 20;
             lastReport.Ammo30CalibreMG += 10;
          }
+         //lastReport.Ammo30CalibreMG = 0; // <CGS> TESTING - Set MG rounds to zero
          lastReport.MainGunHE = (int)Math.Ceiling(unassignedCount * 0.6);
          unassignedCount -= lastReport.MainGunHE;
          lastReport.MainGunAP = unassignedCount;
@@ -5824,9 +5830,11 @@ namespace PattonsBest
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   int heRoundsUsed = (int)Math.Floor(gi.DieResults[key][0] / 2.0);
-                  int mgRoundsUsed = gi.DieResults[key][0];
+                  int mgRoundsUsed = (int)Math.Floor(gi.DieResults[key][0] / 2.0);
                   lastReport.MainGunHE -= Math.Min(heRoundsUsed, lastReport.MainGunHE);
                   lastReport.Ammo30CalibreMG -= Math.Min(mgRoundsUsed, lastReport.Ammo30CalibreMG);
+                  if (lastReport.Ammo30CalibreMG < 0)
+                     lastReport.Ammo30CalibreMG = 0;
                   break;
                case GameAction.MovementAdvanceFire:
                   if (false == EnterMoveBoardArea(gi, action))  // GameStateMovement.PerformAction(Movement_AdvanceFire)
@@ -8293,6 +8301,10 @@ namespace PattonsBest
                               returnStatus = "unknown MG";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_FireMachineGunRoll): " + returnStatus);
                            }
+                           if (lastReport.Ammo30CalibreMG < 0)
+                              lastReport.Ammo30CalibreMG = 0;
+                           if (lastReport.Ammo50CalibreMG < 0)
+                              lastReport.Ammo50CalibreMG = 0;
                         }
                         //------------------------------------------------------------------
                         bool isError = false;
@@ -8479,6 +8491,8 @@ namespace PattonsBest
                               lastReport.Ammo30CalibreMG--;
                            else if (97 < gi.DieResults["e054b"][0])
                               gi.IsMalfunctionedMgBow = true;               // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_MgPlaceAdvanceFire)
+                           if (lastReport.Ammo30CalibreMG < 0)
+                              lastReport.Ammo30CalibreMG = 0;
                         }
                      }
                      Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequence_MgPlaceAdvanceFire): " + Utilities.PrintMgState(gi));
@@ -8494,6 +8508,8 @@ namespace PattonsBest
                         lastReport.Ammo50CalibreMG--;
                      else if ((true == gi.IsShermanFiringBowMg) || (true == gi.IsShermanFiringCoaxialMg))
                         lastReport.Ammo30CalibreMG--;
+                     if (lastReport.Ammo30CalibreMG < 0)
+                        lastReport.Ammo30CalibreMG = 0;
                   }
                   else if (97 < gi.DieResults[key][0])
                   {
