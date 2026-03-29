@@ -268,7 +268,7 @@ namespace PattonsBest
                      gi.Driver = new CrewMember("Driver", "Pvt", "c08Driver");
                      if (false == SurnameMgr.AppendGenerationalSuffix(gi, gi.Driver))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Driver) returned false");
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Driver) returned false");
                         return false;
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
@@ -291,7 +291,7 @@ namespace PattonsBest
                      gi.Loader = new CrewMember("Loader", "Cpl", "c09Loader");
                      if (false == SurnameMgr.AppendGenerationalSuffix(gi, gi.Loader))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Loader) returned false");
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Loader) returned false");
                         return false;
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
@@ -314,7 +314,7 @@ namespace PattonsBest
                      gi.Assistant = new CrewMember("Assistant", "Pvt", "c10Assistant");
                      if( false == SurnameMgr.AppendGenerationalSuffix(gi, gi.Assistant))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Assistant) returned false");
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Assistant) returned false");
                         return false;
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
@@ -337,7 +337,7 @@ namespace PattonsBest
                      gi.Gunner = new CrewMember("Gunner", "Cpl", "c11Gunner");
                      if (false == SurnameMgr.AppendGenerationalSuffix(gi, gi.Gunner))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Gunner) returned false");
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Gunner) returned false");
                         return false;
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
@@ -355,7 +355,7 @@ namespace PattonsBest
                      gi.Commander = new CrewMember("Commander", "Sgt", "c07Commander");
                      if (false == SurnameMgr.AppendGenerationalSuffix(gi, gi.Commander))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Commander) returned false");
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Commander) returned false");
                         return false;
                      }
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
@@ -3629,7 +3629,7 @@ namespace PattonsBest
                string originalName = cm.Name;
                if (false == SurnameMgr.AppendGenerationalSuffix(gi, cm))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): AppendGenerationalSuffix() returned error role=" + role1);
+                  Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): Append_GenerationalSuffix() returned error role=" + role1);
                   return false;
                }
                if( originalName != cm.Name )

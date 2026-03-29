@@ -60,7 +60,7 @@ namespace PattonsBest
             ICrewMember? cmCompare = gi.GetCrewMemberByRole(role1);
             if (null == cmCompare)
             {
-               Logger.Log(LogEnum.LE_ERROR, "AppendGenerationalSuffix(): returned error with cm=null for role=" + role1);
+               Logger.Log(LogEnum.LE_ERROR, "Append_GenerationalSuffix(): returned error with cm=null for role=" + role1);
                return false;
             }
             if (role1 == cmOriginal.Role)

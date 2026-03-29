@@ -452,6 +452,7 @@ namespace PattonsBest
          mySpanGunnerName.Inlines.Add(new InlineUIContainer(textbox));
          textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
          textbox.Loaded += OverwriteTextBox_Loaded;
+         textbox.LostFocus += TextBox_LostFocus;
          e.Handled = true;
       }
       private void SpanLoaderName_MouseDown(object sender, MouseButtonEventArgs e)
@@ -472,6 +473,7 @@ namespace PattonsBest
          mySpanLoaderName.Inlines.Add(new InlineUIContainer(textbox));
          textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
          textbox.Loaded += OverwriteTextBox_Loaded;
+         textbox.LostFocus += TextBox_LostFocus;
          e.Handled = true;
       }
       private void SpanDriverName_MouseDown(object sender, MouseButtonEventArgs e)
@@ -492,6 +494,7 @@ namespace PattonsBest
          mySpanDriverName.Inlines.Add(new InlineUIContainer(textbox));
          textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
          textbox.Loaded += OverwriteTextBox_Loaded;
+         textbox.LostFocus += TextBox_LostFocus;
          e.Handled = true;
       }
       private void SpanAssistantName_MouseDown(object sender, MouseButtonEventArgs e)
@@ -512,6 +515,7 @@ namespace PattonsBest
          mySpanAssistantName.Inlines.Add(new InlineUIContainer(textbox));
          textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
          textbox.Loaded += OverwriteTextBox_Loaded;
+         textbox.LostFocus += TextBox_LostFocus;
          e.Handled = true;
       }
       private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -614,12 +618,14 @@ namespace PattonsBest
                      string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
                      {
-                        string currentCommanderName = myGameInstance.Commander.Name;
-                        lastReport.Commander = trimString;
+                        lastReport.Commander = AppendGenerationalSuffix("Commander", trimString);
+                        //-----------------
                         int promoPoint = 0;
+                        string currentCommanderName = myGameInstance.Commander.Name;
                         if( true == myGameInstance.CommanderPromoPoints.ContainsKey(currentCommanderName))
                            promoPoint = myGameInstance.CommanderPromoPoints[currentCommanderName];
-                        myGameInstance.CommanderPromoPoints.Add(lastReport.Commander, promoPoint); // add new entry for commander due to name change
+                        else
+                           myGameInstance.CommanderPromoPoints.Add(lastReport.Commander, promoPoint); // add new entry for commander due to name change
                      }
                      else
                      {
@@ -649,7 +655,7 @@ namespace PattonsBest
                      string trimStart = textbox.Text.TrimStart(trimChars);
                      string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Gunner = trimString;
+                        lastReport.Gunner = AppendGenerationalSuffix("Gunner", trimString);
                      else
                         textbox.Text = myGameInstance.Gunner.Name;
                   }
@@ -676,7 +682,7 @@ namespace PattonsBest
                      string trimStart = textbox.Text.TrimStart(trimChars);
                      string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Loader = trimString;
+                        lastReport.Loader = AppendGenerationalSuffix("Loader", trimString);
                      else
                         textbox.Text = myGameInstance.Loader.Name;
                   }
@@ -703,7 +709,7 @@ namespace PattonsBest
                      string trimStart = textbox.Text.TrimStart(trimChars);
                      string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Driver = trimString;
+                        lastReport.Driver = AppendGenerationalSuffix("Driver", trimString);
                      else
                         textbox.Text = myGameInstance.Driver.Name;
                      Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "ResetTextBoxes(): cmdr=" + myGameInstance.Commander.Name + " driver=" + myGameInstance.Driver.Name);
@@ -731,7 +737,7 @@ namespace PattonsBest
                      string trimStart = textbox.Text.TrimStart(trimChars);
                      string trimString = trimStart.TrimEnd(trimChars);
                      if (false == String.IsNullOrEmpty(trimString))
-                        lastReport.Assistant = trimString;
+                        lastReport.Assistant = AppendGenerationalSuffix("Assistant", trimString);
                      else
                         textbox.Text = myGameInstance.Assistant.Name;
                   }
@@ -745,6 +751,138 @@ namespace PattonsBest
             mySpanAssistantName.Inlines.Add(new Run(s));
          }
          Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "ResetTextBoxes(): END cmdr=" + myGameInstance.Commander.Name + " driver=" + myGameInstance.Driver.Name);
+      }
+      private string AppendGenerationalSuffix(string role, string trimString)
+      {
+         // "Commander", "Gunner", "Loader", "Driver", "Assistant"
+         string newName = trimString;
+         bool isNameChange = true;
+         while (true == isNameChange)
+         {
+            isNameChange = false;
+            if ("Commander" != role)
+            {
+               if (myGameInstance.Commander.Name == newName)
+               {
+                  if (true == newName.Contains(" Jr"))
+                  {
+                     char[] charsToTrim = { 'J', 'r' };
+                     newName = newName.TrimEnd(charsToTrim);
+                     newName += "II";
+                     isNameChange = true;
+                  }
+                  else if (true == newName.Contains(" I"))
+                  {
+                     newName += "I";
+                     isNameChange = true;
+                  }
+                  else
+                  {
+                     newName += " Jr";
+                     isNameChange = true;
+                  }
+               }
+            }
+            //---------------------------------------------
+            if ("Gunner" != role)
+            {
+               if (myGameInstance.Gunner.Name == newName)
+               {
+                  if (true == newName.Contains(" Jr"))
+                  {
+                     char[] charsToTrim = { 'J', 'r' };
+                     newName = newName.TrimEnd(charsToTrim);
+                     newName += "II";
+                     isNameChange = true;
+                  }
+                  else if (true == newName.Contains(" I"))
+                  {
+                     newName += "I";
+                     isNameChange = true;
+                  }
+                  else
+                  {
+                     newName += " Jr";
+                     isNameChange = true;
+                  }
+               }
+            }
+            //---------------------------------------------
+            if ("Loader" != role)
+            {
+               if (myGameInstance.Loader.Name == newName)
+               {
+                  if (true == newName.Contains(" Jr"))
+                  {
+                     char[] charsToTrim = { 'J', 'r' };
+                     newName = newName.TrimEnd(charsToTrim);
+                     newName += "II";
+                     isNameChange = true;
+                  }
+                  else if (true == newName.Contains(" I"))
+                  {
+                     newName += "I";
+                     isNameChange = true;
+                  }
+                  else
+                  {
+                     newName += " Jr";
+                     isNameChange = true;
+                  }
+               }
+            }
+            //---------------------------------------------
+            if ("Driver" != role)
+            {
+               if (myGameInstance.Driver.Name == newName)
+               {
+                  if (true == newName.Contains(" Jr"))
+                  {
+                     char[] charsToTrim = { 'J', 'r' };
+                     newName = newName.TrimEnd(charsToTrim);
+                     newName += "II";
+                     isNameChange = true;
+                  }
+                  else if (true == newName.Contains(" I"))
+                  {
+                     newName += "I";
+                     isNameChange = true;
+                  }
+                  else
+                  {
+                     newName += " Jr";
+                     isNameChange = true;
+                  }
+               }
+            }
+            //---------------------------------------------
+            if ("Assistant" != role)
+            {
+               if (myGameInstance.Assistant.Name == newName)
+               {
+                  if (true == newName.Contains(" Jr"))
+                  {
+                     char[] charsToTrim = { 'J', 'r' };
+                     newName = newName.TrimEnd(charsToTrim);
+                     newName += "II";
+                     isNameChange = true;
+                  }
+                  else if (true == newName.Contains(" I"))
+                  {
+                     newName += "I";
+                     isNameChange = true;
+                  }
+                  else
+                  {
+                     newName += " Jr";
+                     isNameChange = true;
+                  }
+               }
+            }
+         }
+
+         //---------------------------------------------
+         return newName;
       }
    }
 }
