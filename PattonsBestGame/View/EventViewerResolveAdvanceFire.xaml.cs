@@ -288,7 +288,7 @@ namespace PattonsBest
                   {
                      removals.Add(mapItem);
                      if( (true == mapItem.IsEnemyUnit()) && (GamePhase.Battle != myGameInstance.GamePhase) ) // do not score FF VP when initial Advancing Fire in Battle Phase
-                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem); // EventViewerResolveAdvanceFire.UpdateEndState()
+                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem); // EventViewerResolveAdvanceFire.UpdateEndState() - this shoudl never happen as Advancing Fire only happens in Battle Phase - probably need to remove
                   }
                }
             }

@@ -4833,10 +4833,23 @@ namespace PattonsBest
          //----------------------------------------------------
          if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
          {
-            if (false == gi.KillEnemy(lastReport, mi, false))  // Set_FriendlyActionResult()
+            Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "Set_FriendlyActionResult(): auto killed eu=" + mi.Name + " dr=" + dieRoll.ToString() + " AdvanceFire=" + isAdvancingFire.ToString());
+            if (true == isAdvancingFire) // Advance fire does not count for VP - do everyting but increase VP.
             {
-               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Kill_Enemy() returned error");
-               return "ERROR";
+               mi.SetBloodSpots();
+               mi.IsMoving = false;
+               mi.IsHeHit = false;
+               mi.IsApHit = false;
+               mi.EnemyAcquiredShots.Remove("Sherman");
+               gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+            }
+            else
+            {
+               if (false == gi.KillEnemy(lastReport, mi, false))  // Set_FriendlyActionResult()
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Kill_Enemy() returned error");
+                  return "ERROR";
+               }
             }
             return "KO";  // <<<<<<<<<<<<<<<<<<<<<<<<<<< return
          }
@@ -4972,11 +4985,23 @@ namespace PattonsBest
          }
          if (true == mi.IsKilled) // Set_FriendlyActionResult()
          {
-            Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "Set_FriendlyActionResult(): killed eu=" + mi.Name + " dr=" + dieRoll.ToString());
-            if (false == gi.KillEnemy(lastReport, mi, false)) // Set_FriendlyActionResult()
+            Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "Set_FriendlyActionResult(): killed eu=" + mi.Name + " dr=" + dieRoll.ToString() + " AdvanceFire=" + isAdvancingFire.ToString());
+            if (true == isAdvancingFire) // Advance fire does not count for VP - do everyting but increase VP.
             {
-               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Kill_Enemy() returned error");
-               return "ERROR";
+               mi.SetBloodSpots();
+               mi.IsMoving = false;
+               mi.IsHeHit = false;
+               mi.IsApHit = false;
+               mi.EnemyAcquiredShots.Remove("Sherman");
+               gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+            }
+            else
+            {
+               if (false == gi.KillEnemy(lastReport, mi, false)) // Set_FriendlyActionResult()
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Kill_Enemy() returned error");
+                  return "ERROR";
+               }
             }
             return "KO"; // <<<<<<<<<<<<<<<<<<<<<<<<<<< return
          }
