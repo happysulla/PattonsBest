@@ -1469,9 +1469,9 @@ namespace PattonsBest
                if (dieRoll < 4) // crticial hit automatically hits - gun malfunction already checked before enemy unit arrives
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
-                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true))
+                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true)) // Enemy killed by Advancing Fire MG
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): KillEnemy() returned error");
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Kill_Enemy() returned error");
                      return;
                   }
                }
@@ -1482,9 +1482,9 @@ namespace PattonsBest
                else
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
-                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true))
+                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true)) // Enemy killed by Advancing Fire MG
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): KillEnemy() returned error");
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Kill_Enemy() returned error");
                      return;
                   }
                }

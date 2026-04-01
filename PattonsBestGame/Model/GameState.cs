@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -103,6 +104,8 @@ namespace PattonsBest
          sb.Append(RuntimeInformation.ProcessArchitecture.ToString());
          sb.Append("\n\tnetVersion=");
          sb.Append(Environment.Version.ToString());
+         sb.Append("\n\tCultureInfo=");
+         sb.Append(CultureInfo.CurrentCulture.ToString());
          //--------------------------------------------
          Screen? screen = Screen.PrimaryScreen;
          if (null != screen)
@@ -1357,7 +1360,7 @@ namespace PattonsBest
             ITerritory? t = Territories.theTerritories.Find(sector);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): t=null for s=" + sector);
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): t=null for s=" + sector);
                return false;
             }
             IStack? stack1 = gi.BattleStacks.Find(t);
@@ -8355,7 +8358,7 @@ namespace PattonsBest
                                        GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMG");
                                     if( "Sub" == mgType )
                                        GameEngine.theInGameFeats.AddOne("ImpossibleKill");
-                                    if (false == gi.KillEnemy(lastReport, gi.TargetMg, true))
+                                    if (false == gi.KillEnemy(lastReport, gi.TargetMg, true))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_FireMachineGunRoll)
                                     {
                                        returnStatus = "Kill_Enemy() returned false";
                                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence()PerformAction(BattleRoundSequence_FireMachineGunRoll): " + returnStatus);
@@ -10636,7 +10639,7 @@ namespace PattonsBest
                Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): vs Infantry target -- AUTO KILL - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                if (true == hit.myIsCriticalHit)
                   GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
-               if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+               if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))  // Resolve_ToKillEnemyUnitKill()
                {
                   Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                   return false;
@@ -10687,7 +10690,7 @@ namespace PattonsBest
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
                      if (true == hit.myIsCriticalHit)
                         GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
-                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))   // Resolve_ToKillEnemyUnitKill()
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                         return false;
@@ -10757,7 +10760,7 @@ namespace PattonsBest
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
                      if (true == hit.myIsCriticalHit)
                         GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
-                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true)) // Resolve_ToKillEnemyUnitKill()
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                         return false;
@@ -10794,7 +10797,7 @@ namespace PattonsBest
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
                      if (true == hit.myIsCriticalHit)
                         GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
-                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true)) // Resolve_ToKillEnemyUnitKill()
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                         return false;
@@ -10883,7 +10886,7 @@ namespace PattonsBest
             case "Hvap":
                if (true == hit.myIsCriticalHit)
                   GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
-               if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+               if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))  // Resolve_ToKillEnemyUnitKill()
                {
                   Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                   return false;

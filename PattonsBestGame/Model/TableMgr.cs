@@ -4833,9 +4833,9 @@ namespace PattonsBest
          //----------------------------------------------------
          if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
          {
-            if (false == gi.KillEnemy(lastReport, mi, false))
+            if (false == gi.KillEnemy(lastReport, mi, false))  // Set_FriendlyActionResult()
             {
-               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): KillEnemy() returned error");
+               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Kill_Enemy() returned error");
                return "ERROR";
             }
             return "KO";  // <<<<<<<<<<<<<<<<<<<<<<<<<<< return
@@ -4973,9 +4973,9 @@ namespace PattonsBest
          if (true == mi.IsKilled) // Set_FriendlyActionResult()
          {
             Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "Set_FriendlyActionResult(): killed eu=" + mi.Name + " dr=" + dieRoll.ToString());
-            if (false == gi.KillEnemy(lastReport, mi, false))
+            if (false == gi.KillEnemy(lastReport, mi, false)) // Set_FriendlyActionResult()
             {
-               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): KillEnemy() returned error");
+               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Kill_Enemy() returned error");
                return "ERROR";
             }
             return "KO"; // <<<<<<<<<<<<<<<<<<<<<<<<<<< return

@@ -2182,7 +2182,7 @@ For each, roll on the
 <InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table against each unit in the zone. 
 <LineBreak/><LineBreak/>
-Enemy units kocked out are considered to be withdrawing and are not destroyed. No victory points are awarded. 
+Enemy units knocked out are considered to be withdrawing and are not destroyed. No victory points are awarded. 
 <LineBreak/><LineBreak/>
 Remove the Advancing Fire markers from the Battle Board after resolving."
 r22.2	"<Bold>r22.2 Advancing Fire - Entering a New Area</Bold>

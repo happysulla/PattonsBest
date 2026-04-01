@@ -1283,7 +1283,7 @@ namespace PattonsBest
             case "JdgPzIV": sb.Append("JgdPzIV"); break;
             case "JdgPz38t": sb.Append("JgdPz38t"); break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "KillEnemy(): reached default with enemyUnit=" + mi.GetEnemyUnit());
+               Logger.Log(LogEnum.LE_ERROR, "Kill_Enemy(): reached default with enemyUnit=" + mi.GetEnemyUnit());
                return false;
          }
          //-------------------------------------

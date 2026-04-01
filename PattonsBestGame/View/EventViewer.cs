@@ -414,7 +414,7 @@ namespace PattonsBest
                if (true == battleResolveAdvFire.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Battle_ResolveAdvFire.CtorError=true");
                else if (false == battleResolveAdvFire.ResolveAdvanceFire(ShowSupportingFireResults) )
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAdvanceFire() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Resolve_AdvanceFire() returned false");
                break;
             case GameAction.BattleResolveArtilleryFire:
                EventViewerResolveArtilleryFire battleResolveArtFire = new EventViewerResolveArtilleryFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);

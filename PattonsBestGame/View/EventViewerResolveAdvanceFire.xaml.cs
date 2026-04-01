@@ -122,27 +122,27 @@ namespace PattonsBest
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): myGameInstance=null");
             return false;
          }
          if (null == myCanvas)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): myCanvas=null");
             return false;
          }
          if (null == myScrollViewer)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myScrollViewer=null");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): myScrollViewer=null");
             return false;
          }
          if (null == myRulesMgr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myRulesMgr=null");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): myRulesMgr=null");
             return false;
          }
          if (null == myDieRoller)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myDieRoller=null");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): myDieRoller=null");
             return false;
          }
          //--------------------------------------------------
@@ -155,7 +155,7 @@ namespace PattonsBest
             ITerritory? t = Territories.theTerritories.Find(sector);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): t=null for s=" + sector);
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): t=null for s=" + sector);
                return false;
             }
             IStack? stack1 = myGameInstance.BattleStacks.Find(t);
@@ -170,7 +170,7 @@ namespace PattonsBest
                }
             }
          }
-         Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ResolveAdvanceFire(): myNumUseControlled=" + myNumUseControlled.ToString());
+         Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "Resolve_AdvanceFire(): myNumUseControlled=" + myNumUseControlled.ToString());
          //--------------------------------------------------
          int i = 0;
          string[] advanceFireTerritories = new string[8] { "B4L", "B4M", "B4C", "B6M", "B6C", "B9L", "B9M", "B9C" };
@@ -179,7 +179,7 @@ namespace PattonsBest
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): t=null for s=" + s);
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): t=null for s=" + s);
                return false;
             }
             IStack? stack = myGameInstance.BattleStacks.Find(t);
@@ -200,17 +200,17 @@ namespace PattonsBest
                   myGameInstance.BattleStacks.Remove(advanceFire);
                continue;
             }
-            Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ResolveAdvanceFire(): AdvFire=true for s=" + stack.ToString());
+            Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "Resolve_AdvanceFire(): AdvFire=true for s=" + stack.ToString());
             foreach(IMapItem enemyUnit in enemyUnits )
             {
                foreach (IMapItem advanceFire in advanceFires)
                {
-                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ResolveAdvanceFire(): IsEnemyUnit()=true for mi.Name=" + enemyUnit.Name);
+                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "Resolve_AdvanceFire(): IsEnemyUnit()=true for mi.Name=" + enemyUnit.Name);
                   myGridRows[i] = new GridRow(enemyUnit, advanceFire);
                   int count = enemyUnit.TerritoryCurrent.Name.Length;
                   if (count < 3)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire():  count<3 for mi.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+                     Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire():  count<3 for mi.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
                      return false;
                   }
                   myGridRows[i].myRange = enemyUnit.TerritoryCurrent.Name[--count];
@@ -225,13 +225,13 @@ namespace PattonsBest
          {
             myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, true, false, false);
             if (TableMgr.FN_ERROR == myGridRows[k].myModifier)
-               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): Get_FriendlyActionModifier() return false");
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): Get_FriendlyActionModifier() return false");
          }
 
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): UpdateGrid() return false");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_AdvanceFire(): UpdateGrid() return false");
             return false;
          }
          myScrollViewer.Content = myGrid;
