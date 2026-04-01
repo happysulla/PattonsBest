@@ -244,7 +244,7 @@ namespace PattonsBest
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_TIME_ADVANCE);
          //SetOn(LogEnum.LE_SHOW_TIME_GAME);
-         //SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
+         SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
          SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
          SetOn(LogEnum.LE_SHOW_VP_TOTAL);
          //-------------------------------
