@@ -2629,7 +2629,7 @@ namespace PattonsBest
             lastReport.Scenario = EnumScenario.Battle;
          else
             lastReport.Scenario = EnumScenario.Counterattack; // PerformAutoSetupSkipCrewAssignments() - Test 
-         // lastReport.Scenario = EnumScenario.Battle; // <CGS> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
+         //lastReport.Scenario = EnumScenario.Battle; // <CGS> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
          //-------------------------------
          gi.NewMembers.Clear();             // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(gi.Commander);   // GameStateSetup.PerformAutoSetupSkipCrewAssignments()
@@ -3081,7 +3081,7 @@ namespace PattonsBest
          }
          //--------------------------------------------------------
          int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(1, 3);
-         //numEnemyUnitsAppearing = 2; // <CGS> TEST - number of enemy units appearing
+         //numEnemyUnitsAppearing = 6; // <CGS> TEST - number of enemy units appearing
          for (int k = 0; k < numEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);

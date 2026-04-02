@@ -3665,12 +3665,12 @@ namespace PattonsBest
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(RotationTurret) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(Rotation_Turret) = false");
                return false;
             }
             if (reader.Name != "RotationTurret")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): RotationTurret != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): Rotation_Turret != (node=" + reader.Name + ")");
                return false;
             }
             string? sRotationTurret = reader.GetAttribute("value");
@@ -9355,14 +9355,14 @@ namespace PattonsBest
             elem = aXmlDocument.CreateElement("RotationTurret");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(RotationTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(Rotation_Turret) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.RotationTurret.ToString("F3"));
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(RotationTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(Rotation_Turret) returned null");
                return false;
             }
             //--------------------------------

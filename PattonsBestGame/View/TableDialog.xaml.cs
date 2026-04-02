@@ -100,8 +100,10 @@ namespace PattonsBest
                break;
             case "Calendar":
                this.Title = "Combat Calendar";
-               this.Width = this.MinWidth = this.MaxWidth = 1350;
-               this.MinHeight = this.MaxHeight = 950;
+               this.MaxHeight = 950;
+               this.MaxWidth = 1350;
+               this.MinWidth = Math.Min(this.MaxWidth, System.Windows.SystemParameters.PrimaryScreenWidth);
+               this.MinHeight = Math.Min(this.MaxHeight, System.Windows.SystemParameters.PrimaryScreenHeight);
                break;
             case "Collateral":
                this.Title = "Collateral Damage Table";

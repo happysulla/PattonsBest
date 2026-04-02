@@ -437,6 +437,7 @@ namespace PattonsBest
                   Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString() + "strengthCounter=" + strengthCounter.Name);
                   return false;
                }
+               //myMaxRowCount += 4; // <CGS> TESTING - KillYourTank - ensure lots of enemies
                Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "Setup_Battle(): strengthCounter=" + strengthCounter.Name + " strengthCounter.Count=" + strengthCounter.Count.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString());
             }
          }

@@ -50,7 +50,7 @@ namespace PattonsBest
       LE_SHOW_ENEMY_ON_MOVE_BOARD,
       LE_SHOW_RESISTANCE,
       LE_SHOW_RANDOM_PT,
-      LE_SHOW_ROTATION,
+      LE_SHOW_ENEMY_ROTATION,
       LE_SHOW_FACING,
       LE_SHOW_MAPITEM_TANK,
       LE_SHOW_MAPITEM_CREWACTION,
@@ -201,7 +201,7 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD);
          //SetOn(LogEnum.LE_SHOW_RESISTANCE);
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
-         //SetOn(LogEnum.LE_SHOW_ROTATION);
+         SetOn(LogEnum.LE_SHOW_ENEMY_ROTATION);
          SetOn(LogEnum.LE_SHOW_FACING);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);

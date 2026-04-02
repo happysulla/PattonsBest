@@ -763,6 +763,7 @@ namespace PattonsBest
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsEnemyActionSelect() returned false");
                   return false;
                }
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
             case E0475Enum.ENEMY_ACTION_MOVE:
             case E0475Enum.ENEMY_ACTION_MOVE_SHOW:
@@ -1492,6 +1493,11 @@ namespace PattonsBest
       public void ShowDieResults(int dieRoll)
       {
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "EventViewerEnemyAction.ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameEngine=null");
+            return;
+         }
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
@@ -1533,6 +1539,7 @@ namespace PattonsBest
                //dieRoll = 15; // <CGS> TEST - Move-F for Infantry in Battle Scenario
                //if ( (true == mi.TerritoryCurrent.Name.Contains("1")) || (true == mi.TerritoryCurrent.Name.Contains("2")) || (true == mi.TerritoryCurrent.Name.Contains("3")) )
                //  dieRoll = 51; // <CGS> TEST - Move-B for Infantry in Battle Scenario - no ambush
+               //dieRoll = 71; // <CGS> TEST - KillYourTank - Fire At Your Tank when stationary in Advance Scenario - assumes +10 for Ambush
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
@@ -1821,6 +1828,7 @@ namespace PattonsBest
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
                //dieRoll = 1; // <CGS> TEST - KillYourTank - to hit your tank
+               //dieRoll = 100; // <CGS> TEST - KillYourTank - to hit your tank
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
                int modifiedDieRoll = dieRoll + myGridRows[i].myModifierToHitYourTank;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " dr=" + modifiedDieRoll.ToString());

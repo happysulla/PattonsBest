@@ -355,7 +355,7 @@ namespace PattonsBest
          if ((true == this.Name.Contains("TANK")) || (true == this.Name.Contains("PzVIe")) || (true == this.Name.Contains("PzVIb")))
             return true;
          else if ( (true == this.Name.Contains("PzIV")) && (false == this.Name.Contains("JdgPzIV")) )
-               return true;
+            return true;
          else if (true == this.Name.Contains("PzV"))
             return true;
          return false;
@@ -492,7 +492,7 @@ namespace PattonsBest
             return false;
          }
          this.RotationOffsetHull = rotation - this.RotationHull;
-         Logger.Log(LogEnum.LE_SHOW_ROTATION, "Set_MapItemRotation(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
+         Logger.Log(LogEnum.LE_SHOW_ENEMY_ROTATION, "Set_MapItemRotation(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
          return true;
       }
       public bool SetMapItemRotationTurret(IMapItem target)
@@ -514,14 +514,14 @@ namespace PattonsBest
          }
          double xDiff = (this.Location.X + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.X;
          double yDiff = (this.Location.Y + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.Y;
-         double rotationOriginal = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         double rotationDelta = rotationOriginal - this.RotationHull - this.RotationOffsetHull; // subtract hull rotation to get turret rotation
-         double rotation = rotationDelta;
+         double rotationAbsolute = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         double rotationRelative = rotationAbsolute - (this.RotationHull + this.RotationOffsetHull); // subtract hull rotation to get turret rotation
+         double rotation = rotationRelative; 
          while (rotation < 0)
             rotation += 360.0;
          if ((330.0 < rotation && rotation <= 360.0) || (0.0 <= rotation && rotation <= 30.0))
          {
-            this.RotationTurret = 0.0;
+            this.RotationTurret = 0.0;  // this.RotationTurret is a relative offset from Hull
          }
          else if (30.0 < rotation && rotation <= 90.0) //------------
          {
@@ -545,11 +545,11 @@ namespace PattonsBest
          }
          else  //------------
          {
-            Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " (rotation=" + rotation.ToString("F2") + ")->(rotdelta=" + rotationDelta.ToString("F2") + ")=(rotOrig=" + rotationOriginal.ToString("F2") + ")-(rh=" + this.RotationHull.ToString("F2") + ")-(ro=" + this.RotationOffsetHull.ToString("F2") + ") for mi=" + this.Name + " in " + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
+            Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " (rotation=" + rotation.ToString("F2") + ")->(rotdelta=" + rotationAbsolute.ToString("F2") + ")=(rotOrig=" + rotationRelative.ToString("F2") + ")-(rh=" + this.RotationHull.ToString("F2") + ")-(ro=" + this.RotationOffsetHull.ToString("F2") + ") for mi=" + this.Name + " in " + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
             return false;
          }
          this.RotationOffsetTurret = rotation - this.RotationTurret; // Set_MapItemRotationTurret()
-         Logger.Log(LogEnum.LE_SHOW_ROTATION, "Set_MapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
+         Logger.Log(LogEnum.LE_SHOW_ENEMY_ROTATION, "Set_MapItemRotationTurret(): (tr=" + this.RotationTurret.ToString("F2") + ")=(rotation=" + rotation.ToString("F2") + ")-(rh=" + this.RotationTurret.ToString() + ") where (rotation=" + rotation.ToString("F2") + ")->(rotabs=" + rotationAbsolute.ToString("F2") + ")=(rotOrig=" + rotationRelative.ToString("F2") + ")-(rh=" + this.RotationHull.ToString("F2") + ")-(ro=" + this.RotationOffsetHull.ToString("F2") + ") for mi=" + this.Name + " in " + this.TerritoryCurrent.Name);
          return true;
       }
       public bool UpdateMapRotation(string facing)
@@ -653,7 +653,7 @@ namespace PattonsBest
                {
                   RotateTransform rotateTransform = new RotateTransform();
                   imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.RotationTurret + mi.RotationOffsetTurret; // SetButtonContent()
+                  rotateTransform.Angle = (mi.RotationTurret + mi.RotationOffsetTurret); // SetButtonContent() - relative offset from hull
                   imgTurret.RenderTransform = rotateTransform;
                   g.Children.Add(imgTurret);
                   Canvas.SetLeft(imgTurret, 0);

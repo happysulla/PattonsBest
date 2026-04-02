@@ -4149,7 +4149,6 @@ namespace PattonsBest
                   b.RenderTransformOrigin = new Point(0.5, 0.5);
                   rotateTransform.Angle = mi.RotationHull + mi.RotationOffsetHull;
                   b.RenderTransform = rotateTransform;
-
                }
                else
                {
