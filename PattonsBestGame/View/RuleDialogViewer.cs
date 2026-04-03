@@ -21,8 +21,6 @@ namespace PattonsBest
 {
    public class RuleDialogViewer
    {
-
-      private const double theExtraWidth = 0;
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myRules = new Dictionary<string, string>();
       public Dictionary<string, string> Rules { get => myRules; }
@@ -190,7 +188,6 @@ namespace PattonsBest
             {
                if (false == dialog.IsVisible)
                   dialog.Show();
-               dialog.WindowState = WindowState.Normal;
                dialog.Activate(); // bring to top
                dialog.Focus();
                return true;
@@ -233,12 +230,10 @@ namespace PattonsBest
                iamge.Source = bitImage;
             }
             List<Hyperlink> hyperlinks = FindHyperlinksInTables(dialog.myFlowDocumentScrollViewer.Document);
-            foreach(Hyperlink hyperlink in hyperlinks)
+            foreach (Hyperlink hyperlink in hyperlinks)
                hyperlink.RequestNavigate += Hyperlink_RequestNavigate;
             myTableDialogs[key] = dialog;
             dialog.Show();
-            dialog.MaxWidth = dialog.MinWidth + theExtraWidth;
-            dialog.MaxHeight = dialog.MinHeight + theExtraWidth;
             return true;
          }
          catch (Exception e2)
