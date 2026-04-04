@@ -53,6 +53,7 @@ namespace PattonsBest
       {
          double heightOfConcern = 0.0;
          double widthOfConcern = 0.0;
+         this.myFlowDocumentScrollViewer.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
          switch (Key)
          {
             case "Activation":
@@ -88,8 +89,6 @@ namespace PattonsBest
             case "Bail Out":
                this.Title = "Bail Out Table";
                this.Background = theBrushOrange;
-               this.Width = this.MinWidth = this.MaxWidth = 310;
-               this.MinHeight = this.MaxHeight = 230;
                heightOfConcern = 200.0;
                widthOfConcern = 300.0;
                break;
@@ -113,8 +112,6 @@ namespace PattonsBest
             case "Collateral":
                this.Title = "Collateral Damage Table";
                this.Background = theBrushOrange;
-               this.Width = this.MinWidth = this.MaxWidth = 470;
-               this.MinHeight = this.MaxHeight = 380;
                heightOfConcern = 350.0;
                widthOfConcern = 460.0;
                break;
@@ -318,8 +315,8 @@ namespace PattonsBest
          myFlowDocumentScrollViewer.MinWidth = myFlowDocumentScrollViewer.Width = widthOfConcern;
          myScrollViewer.Height = heightOfConcern;
          myScrollViewer.Width = widthOfConcern;
-         this.Height = Math.Min(heightOfConcern + HEADER_PLUS_SCROLL_HEIGHT, System.Windows.SystemParameters.PrimaryScreenWidth);
-         this.Width = Math.Min(widthOfConcern + SCROLL_WIDTH, System.Windows.SystemParameters.PrimaryScreenWidth);
+         this.Height = Math.Min((heightOfConcern + HEADER_PLUS_SCROLL_HEIGHT) * Utilities.ZoomCanvas, System.Windows.SystemParameters.PrimaryScreenWidth);
+         this.Width = Math.Min((widthOfConcern + SCROLL_WIDTH) * Utilities.ZoomCanvas, System.Windows.SystemParameters.PrimaryScreenWidth);
          this.MinHeight = heightOfConcern * 0.5;
          this.MinWidth = widthOfConcern * 0.5;
          this.MaxHeight = Math.Min(3 * heightOfConcern, System.Windows.SystemParameters.PrimaryScreenWidth);
@@ -330,8 +327,8 @@ namespace PattonsBest
       }
       private void TableDialog_SizeChanged(object sender, SizeChangedEventArgs e)
       {
-         myScrollViewer.Height = this.ActualHeight- HEADER_PLUS_SCROLL_HEIGHT;
-         myScrollViewer.Width = this.ActualWidth- SCROLL_WIDTH;
+         myScrollViewer.Height = this.ActualHeight - HEADER_PLUS_SCROLL_HEIGHT;
+         myScrollViewer.Width = this.ActualWidth - SCROLL_WIDTH;
       }
    }
 }
