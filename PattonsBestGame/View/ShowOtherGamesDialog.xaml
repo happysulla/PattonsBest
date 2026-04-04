@@ -19,10 +19,10 @@
             <ColumnDefinition Width="250"></ColumnDefinition>
             <ColumnDefinition Width="500"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock  x:Name="myTextBlockIntro" Grid.Row="0" Grid.ColumnSpan="2" Width="Auto" Margin="10,10,10,10">
+        <TextBlock  x:Name="myTextBlockIntro" Grid.Row="0" Grid.ColumnSpan="2" Width="Auto" Margin="10,10,10,10" TextWrapping="Wrap">
          <Bold>Listing of developed games as of March 2026. Check out these games if you are interested. </Bold><LineBreak/>
          TO INSTALL: <LineBreak/>
-         1.) If you have already installed, you may need to first uninstall the application using the Windows Control Panel. <LineBreak/>
+         1.) If you have already installed previous version, you need to first uninstall the application using the Windows Control Panel. Go to <Bold>Installed Apps</Bold> and uninstall this game. If you need help, let me know at happysulla@gmail.com.<LineBreak/>
          2.) To download, go to Git project website link as shown in table below.<LineBreak/>
          3.) Select the Latest Release from the right side middle of this web page. <LineBreak/>
          4.) Download the XXXWindowsSetup.zip file by clicking on the file name. <LineBreak/>
@@ -31,7 +31,7 @@
          7.) You can delete the XXXWindowsSetup directory when you are done.
         </TextBlock>
         <TextBlock Name="myTextBoxPrinceRelease" Grid.Row="1"  Grid.Column ="0" Width="Auto" Margin="10,10,10,10" TextWrapping="Wrap" >
-            <Run>Latest Release Date: July 20, 2025</Run>
+            <Run>Release Date: July 20, 2025</Run>
             <LineBreak/>
             <Hyperlink NavigateUri="https://github.com/happysulla/BarbarianPrince" RequestNavigate="Hyperlink_RequestNavigate">Barbarian Prince</Hyperlink>
         </TextBlock>
@@ -40,7 +40,7 @@
              which is different each time you play the game. For each encounter, you as the Barbarian Prince Cal Arath must make the decisions which will make your quest successful - or may cost you your life.
         </TextBlock>
         <TextBlock Name="myTextBoxPatton"  Grid.Row="2"  Grid.Column ="0" Width="Auto"  Margin="10,10,10,10">
-                <Run>Lastest Released Date: March 1, 2026</Run>
+                <Run>Released Date: March 1, 2026</Run>
                 <LineBreak/>
                 <Hyperlink NavigateUri="https://github.com/happysulla/PattonsBest" RequestNavigate="Hyperlink_RequestNavigate">Patton's Best</Hyperlink>
         </TextBlock>
