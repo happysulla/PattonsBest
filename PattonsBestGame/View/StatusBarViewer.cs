@@ -332,15 +332,21 @@ namespace PattonsBest
       }
       private void ButtonZoomOut_Click(object sender, RoutedEventArgs e)
       {
-         Utilities.ZoomCanvas += 0.25;
-         myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
-         UpdateView(ref myGameInstance, GameAction.UpdateStatusBar);
+         if(Utilities.ZoomCanvas < 3.0)
+         {
+            Utilities.ZoomCanvas += 0.25;
+            myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+            UpdateView(ref myGameInstance, GameAction.UpdateStatusBar);
+         }
       }
       private void ButtonZoomIn_Click(object sender, RoutedEventArgs e)
       {
-         Utilities.ZoomCanvas -= 0.25;
-         myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
-         UpdateView(ref myGameInstance, GameAction.UpdateStatusBar);
+         if ( 0.25 < Utilities.ZoomCanvas )
+         {
+            Utilities.ZoomCanvas -= 0.25;
+            myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+            UpdateView(ref myGameInstance, GameAction.UpdateStatusBar);
+         }
       }
    }
 }
