@@ -490,7 +490,7 @@ namespace PattonsBest
             sb.Append(mi.TerritoryCurrent.Name);
             sb.Append("  ");
          }
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): ++++++++++++++++++++++++++++++++++++ sb=" + sb.ToString() + " switchingMemberRole=" + switchingMemberRole);
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): ++++++++++++++++++++++++++++++++++++ crewactions=[" + sb.ToString() + "] switchingMemberRole=" + switchingMemberRole);
          //--------------------------------------------
          foreach (IMapItem mi in this.CrewActions) // Remove switch counter
          {

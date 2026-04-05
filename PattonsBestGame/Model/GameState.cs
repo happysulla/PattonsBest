@@ -275,15 +275,15 @@ namespace PattonsBest
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Driver) returned false");
                         return false;
                      }
+                     gi.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " with rating=" + gi.Driver.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
                         gi.NewMembers.Add(gi.Driver);  
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding driver=" + gi.Driver.Name + " to NewMembers=" + gi.NewMembers.ToString() + " Phase=" + gi.GamePhase.ToString());
                      }
                      if (false == gi.SetCrewActionTerritory(gi.Driver))
                      {
@@ -298,15 +298,15 @@ namespace PattonsBest
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Loader) returned false");
                         return false;
                      }
+                     gi.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " with rating=" + gi.Loader.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
                         gi.NewMembers.Add(gi.Loader);  
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding loader=" + gi.Loader.Name + " to NewMembers=" + gi.NewMembers.ToString() + " Phase=" + gi.GamePhase.ToString());
                      }
                      if (false == gi.SetCrewActionTerritory(gi.Loader))
                      {
@@ -321,15 +321,15 @@ namespace PattonsBest
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Assistant) returned false");
                         return false;
                      }
+                     gi.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " with rating=" + gi.Assistant.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
                         gi.NewMembers.Add(gi.Assistant);  
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding assistant=" + gi.Assistant.Name + " to NewMembers=" + gi.NewMembers.ToString() + " Phase=" + gi.GamePhase.ToString());
                      }
                      if (false == gi.SetCrewActionTerritory(gi.Assistant))
                      {
@@ -344,15 +344,15 @@ namespace PattonsBest
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Gunner) returned false");
                         return false;
                      }
+                     gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " with rating=" + gi.Gunner.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
                         gi.NewMembers.Add(gi.Gunner); 
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding gunner=" + gi.Gunner.Name + " to NewMembers=" + gi.NewMembers.ToString() + " Phase=" + gi.GamePhase.ToString());
                      }
                      break;
                   case "Commander":
@@ -362,15 +362,15 @@ namespace PattonsBest
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Append_GenerationalSuffix(Commander) returned false");
                         return false;
                      }
+                     gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                      if (GamePhase.EveningDebriefing == gi.GamePhase)
                      {
-                        gi.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0); // Replace_InjuredCrewmen() - if replacing outside of evening, assign new rating with automatic roll
                         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): commander Driver=" + gi.Commander.Name + " with rating=" + gi.Commander.Rating.ToString() + " in phase=" + gi.GamePhase.ToString());
                      }
                      else
                      {
                         gi.NewMembers.Add(gi.Commander);  
-                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_CREW_ADD, "Replace_InjuredCrewmen(): adding commander=" + gi.Commander.Name + " to NewMembers=" + gi.NewMembers.ToString() + " Phase=" + gi.GamePhase.ToString());
                      }
                      if (false == gi.CommanderPromoPoints.ContainsKey(gi.Commander.Name))
                         gi.CommanderPromoPoints.Add(gi.Commander.Name, 0);  // Replace_InjuredCrewmen()

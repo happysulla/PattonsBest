@@ -3678,12 +3678,10 @@ namespace PattonsBest
             }
             else
             {
+               if ("Commander" == cm.Role)
+                  gi.IsCommanderWounded = true;
                if ("None" == cm.Wound)
-               {
                   cm.Wound = "Light Wound";
-                  if ("Commander" == cm.Role)
-                     gi.IsCommanderWounded = true;
-               }
                return "Light Wound";
             }
          }
@@ -3691,12 +3689,10 @@ namespace PattonsBest
          else if (dieRoll < 73)
          {
             cm.SetBloodSpots(10);
+            if ("Commander" == cm.Role)
+               gi.IsCommanderWounded = true;
             if ("None" == cm.Wound)
-            {
                cm.Wound = "Light Wound";
-               if ("Commander" == cm.Role)
-                  gi.IsCommanderWounded = true;
-            }
             return "Light Wound";
          }
          //------------------------------------------------------
@@ -3705,12 +3701,10 @@ namespace PattonsBest
             if (false == gi.SetIncapacitated(cm))  // Set_Wounds() - rolled 74-87
                Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): Set_Incapacitated() returned null for cm=" + cm.Role);
             cm.SetBloodSpots(20);
+            if ("Commander" == cm.Role)
+               gi.IsCommanderWounded = true;
             if ("None" == cm.Wound)
-            {
                cm.Wound = "Light Wound";
-               if ("Commander" == cm.Role)
-                  gi.IsCommanderWounded = true;
-            }
             return "Light Wound";
          }
          //------------------------------------------------------
