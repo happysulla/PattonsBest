@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
+using System.Windows.Media.Imaging;
 
 namespace PattonsBest
 {
@@ -2980,7 +2981,7 @@ namespace PattonsBest
                case 240.0: return "H BL";
                case 300.0: return "H FL";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (er=" + rotation.ToString("F1") + ") - (shr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (str=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
                   return "ERROR";
             }
          }
@@ -2991,7 +2992,7 @@ namespace PattonsBest
                totalRotation += 360.0;
             while (359.9 < totalRotation)
                totalRotation -= 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_EnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_EnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (er=" + rotation.ToString("F1") + ") - (shr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (str=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
             switch (totalRotation)
             {
                case 0.0: return "T F";
@@ -3358,16 +3359,17 @@ namespace PattonsBest
             return FN_ERROR;
          }
          int facingNum = 2; // Rear
-         if (true == fireDirection.Contains("F")) // Front
-            facingNum = 0;
-         else if ( (true == fireDirection.Contains("L")) || (true == fireDirection.Contains("R")) ) // Side
+         if ((true == fireDirection.Contains("L")) || (true == fireDirection.Contains("R"))) // Side
             facingNum = 1;
-         int locationNum = 0;  // Hull
+         else if (true == fireDirection.Contains("F")) // Front - must follow L or R since there is a FL and FR
+            facingNum = 0;
+         int locationNum = 1;  // Hull
          if (true == fireDirection.Contains("T")) // Turret
-            locationNum = 1;
+            locationNum = 0;
          //----------------------------------------------------
          int[,,,] table = theApToKills[gun];
          toKillNum = table[armorclass, facingNum, rangeNum, locationNum];
+         Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_EnemyToKillNumberYourTank(): ac=" + armorclass.ToString() + " facing=" + facingNum.ToString() + " range=" + rangeNum.ToString() + " location=" + locationNum.ToString() + " tk=" + toKillNum.ToString());
          return toKillNum;
       }
       public static int GetExplosionModifier(IGameInstance gi, IMapItem mi, string hitLocation)
@@ -5509,7 +5511,7 @@ namespace PattonsBest
                   totalRotation += 360.0;
                if (359.9 < totalRotation)
                   totalRotation = totalRotation - 360.0;
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Get_ShermanFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
                switch (totalRotation)
                {
                   case 0.0: returnValue = "Rear"; break;
@@ -5522,7 +5524,7 @@ namespace PattonsBest
                      Logger.Log(LogEnum.LE_ERROR, "Get_ShermanFireDirection(): 2-reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
                      return returnValue;
                }
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): eu=" + enemyUnit.Name + " enemySector=" + enemySector.ToString() + " hitLocation=" + hitLocation + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Get_ShermanFireDirection(): eu=" + enemyUnit.Name + " enemySector=" + enemySector.ToString() + " hitLocation=" + hitLocation + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
             }
             else if ("Turret" == hitLocation)
             {
@@ -5543,7 +5545,7 @@ namespace PattonsBest
                      Logger.Log(LogEnum.LE_ERROR, "Get_ShermanFireDirection(): reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
                      return returnValue;
                }
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN, "Get_ShermanFireDirection(): eu=" + enemyUnit.Name + " enemySector=" + enemySector.ToString() + " hitLocation=" + hitLocation + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Get_ShermanFireDirection(): eu=" + enemyUnit.Name + " enemySector=" + enemySector.ToString() + " hitLocation=" + hitLocation + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
             }
          }
          return returnValue;
