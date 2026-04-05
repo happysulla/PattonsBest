@@ -120,7 +120,7 @@ namespace PattonsBest
          "PerfectCrew",
          "ImpossibleKill",
          "HappyCamper",
-         "StiffBack"
+         "StiffSpine"
       };
       private readonly ArrayList myList;
       public static string GetFeatMessage(GameFeat feat, bool isThreshold = false)
@@ -621,7 +621,7 @@ namespace PattonsBest
                   return "Happy Camper: Occupy all wooded areas at some time in campaign";
                else
                   return "Happy Camper";
-            case "StiffBack":
+            case "StiffSpine":
                if (0 < feat.Value)
                   return "Stiff Spine: Win a Combat with no controlled US sectors";
                else
