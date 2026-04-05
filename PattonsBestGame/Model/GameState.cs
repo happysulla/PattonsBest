@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -11713,16 +11714,20 @@ namespace PattonsBest
                case GameAction.EventDebriefDecorationHeart:
                   if( false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day) )// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
                   {
-                     GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart):\n  gameSaves=" + GameSaveMgr.ToString());
                      GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
                      gi.Statistics.AddOne("NumPurpleHearts");
+                     GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "GameStateEveningDebriefing.PerformAction(EventDebrief_DecorationHeart):  SetHeartGiven() gameSaves=" + GameSaveMgr.ToString());
+                     gi.NumPurpleHeart++;
+                     StringBuilder sb2 = new StringBuilder(lastReport.Commander);
+                     sb2.Append(" received the Purple Heart.");
+                     lastReport.Notes.Add(sb2.ToString());  // GameStateEveningDebriefing.PerformAction(EventDebrief_DecorationHeart) - commnader received purple heart
                   }
                   //-------------------------------------------------
                   if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
                   {
                      returnStatus = "EveningDebriefing_ResetDay() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EventDebrief_DecorationHeart): " + returnStatus);
                   }
                   break;
                case GameAction.EndGameClose:
@@ -11928,7 +11933,7 @@ namespace PattonsBest
             sb1.Append(commander.Name);
             switch (outAction)
             {
-               case GameAction.EventDebriefDecorationContinue:  // UpdateDecoration()
+               case GameAction.EventDebriefDecorationContinue:  // Update_Decoration()
                   break;
                case GameAction.EventDebriefDecorationBronzeStar:
                   GameEngine.theInGameFeats.AddOne("NumBronzeStars");
@@ -11962,6 +11967,8 @@ namespace PattonsBest
          //---------------------------------------------
          if (("None" != commander.Wound) && (false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day)) )
          {
+            GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
+            gi.Statistics.AddOne("NumPurpleHearts");
             GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
             Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "Update_Decoration.PerformAction():\n  SetHeartGiven() gameSaves=" + GameSaveMgr.ToString());
             SetCommand(gi, outAction, GameAction.DieRollActionNone, "e104");

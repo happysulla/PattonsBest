@@ -1543,7 +1543,7 @@ namespace PattonsBest
                //if ( (true == mi.TerritoryCurrent.Name.Contains("1")) || (true == mi.TerritoryCurrent.Name.Contains("2")) || (true == mi.TerritoryCurrent.Name.Contains("3")) )
                //  dieRoll = 51; // <CGS> TEST - Move-B for Infantry in Battle Scenario - no ambush
                //dieRoll = 71; // <CGS> TEST - KillYourTank - Fire At Your Tank when stationary in Advance Scenario - assumes +10 for Ambush
-               // if (true == mi.IsTurret()) dieRoll = 98;  else dieRoll = 70;// <cgs> TEST - KillYourTank - Fire At Your Tank when stationary in Counterattack Scenario
+               // if (true == mi.IsTurret()) dieRoll = 98;  else dieRoll = 70;// <CGS> TEST - KillYourTank - Fire At Your Tank when stationary in Counterattack Scenario
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)

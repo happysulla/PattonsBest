@@ -175,7 +175,7 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
          //SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS);
-         //SetOn(LogEnum.LE_VIEW_SHOW_GAMESAVES);
+         SetOn(LogEnum.LE_VIEW_SHOW_GAMESAVES);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS_MIN);
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------

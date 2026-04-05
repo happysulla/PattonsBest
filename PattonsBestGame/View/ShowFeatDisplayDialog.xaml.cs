@@ -106,10 +106,19 @@ namespace PattonsBest
             else
             {
                TextBlock tb = new TextBlock() { FontFamily = myFontFam1, FontSize = 14, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(5) };
-               tb.Inlines.Add(new Run(GameFeats.GetFeatMessage(feat, true)));
-               myGrid.Children.Add(tb);
-               Grid.SetColumn(tb, 1);
-               Grid.SetRow(tb, rowNum);
+               string featMsg = GameFeats.GetFeatMessage(feat, true);
+               if( "ERROR" == featMsg )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowFeatDisplayDialog(): Get_FeatMessage() returned ERROR for key=" + feat.Key);
+                  GameEngine.theInGameFeats.Remove(feat);
+               }
+               else
+               {
+                  tb.Inlines.Add(new Run(featMsg));
+                  myGrid.Children.Add(tb);
+                  Grid.SetColumn(tb, 1);
+                  Grid.SetRow(tb, rowNum);
+               }
             }
          }
          return true;

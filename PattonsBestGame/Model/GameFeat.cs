@@ -137,466 +137,252 @@ namespace PattonsBest
             //------------
             case "NumKillLwFriendlyFire":
                sb.Append("Killed LW unit with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMgFriendlyFire":
                sb.Append("Killed MG Team with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillTruckFriendlyFire":
                sb.Append("Killed truck with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPswFriendlyFire":
                sb.Append("Killed PSW232 AFV with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSpwFriendlyFire":
                sb.Append("Killed SPW251 AFV with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzIVFriendlyFire":
                sb.Append("Killed PzIV Tank with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVFriendlyFire":
                sb.Append("Killed PzV Tank with friendly fire ");
                sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIeFriendlyFire":
                sb.Append("Killed PzVIe Tank with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIbFriendlyFire":
                sb.Append("Killed PzVIb Tank with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIFriendlyFire":
                sb.Append("Killed MarderII SPG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIIFriendlyFire":
                sb.Append("Killed MarderIII SPG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSTuGIIIgFriendlyFire":
                sb.Append("Killed STuGIIIg SPG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPzIVFriendlyFire":
                sb.Append("Killed JgdPzIV SPG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPz38tFriendlyFire":
                sb.Append("Killed JgdPz38t SPG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak38FriendlyFire":
                sb.Append("Killed Pak38 ATG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak40FriendlyFire":
                sb.Append("Killed Pak40 ATG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak43FriendlyFire":
                sb.Append("Killed Pak43 ATG with friendly fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             //------------
             case "NumKillLwYourFire":
                sb.Append("Killed LW unit with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMgYourFire":
                sb.Append("Killed MG Team with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillTruckYourFire":
                sb.Append("Killed truck with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPswYourFire":
                sb.Append("Killed PSW232 AFV with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSpwYourFire":
                sb.Append("Killed SPW251 AFV with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzIVYourFire":
                sb.Append("Killed PzIV Tank with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVYourFire":
                sb.Append("Killed PzV Tank with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIeYourFire":
                sb.Append("Killed PzVIe Tank with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPzVIbYourFire":
                sb.Append("Killed PzVIb Tank with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIYourFire":
                sb.Append("Killed MarderII SPG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillMarderIIIYourFire":
                sb.Append("Killed MarderIII SPG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillSTuGIIIgYourFire":
                sb.Append("Killed STuGIIIg SPG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPzIVYourFire":
                sb.Append("Killed JgdPzIV SPG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillJgdPz38tYourFire":
                sb.Append("Killed JgdPz38t SPG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak38YourFire":
                sb.Append("Killed Pak38 ATG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak40YourFire":
                sb.Append("Killed Pak40 ATG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumKillPak43YourFire":
                sb.Append("Killed Pak43 ATG with your fire ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             //------------
             case "NumPurpleHearts":
                sb.Append("Receive Purple Heart medal ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumBronzeStars":
                sb.Append("Receive Bronze Star medal ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumSilverStars":
                sb.Append("Receive Silver Star medal ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumDistinguishedCrosses":
                sb.Append("Receive Distinguished Cross medal ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumMedalOfHonors":
                sb.Append("!!!!!!!!!!!!Receive Medal of Honor ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times!!!!!!!!!!!!");
                return sb.ToString();
             //------------
             case "HvssTrained":
                sb.Append("Trained on HVSS that allows firing when moving ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "RepairMain":
                sb.Append("Repair the main gun in battle ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "RepairMg":
                sb.Append("Repair the disabled MG in battle ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "FireMortar":
                sb.Append("Sherman fires a mortar ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "ThrowSmoke":
                sb.Append("Throw smoke out of tank hatch ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumCriticalHitWithMG":
                sb.Append("Critical Hit Kill with MG ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumCriticalHitWithMainGun":
                sb.Append("Critical Hit Kill with Main Gun ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             //------------
             case "NumShermanExplodes":
                sb.Append("Sherman exploded ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumShermanBurns":
                sb.Append("Sherman brewup ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumShermanPenetration":
                sb.Append("Sherman killed by penetration ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
+               GetFeatMessageThreshold(feat, ref sb);
                sb.Append(" times");
                return sb.ToString();
             case "NumPanzerfaustDeath": return "Tank destroyed from Panzerfaust attack";
@@ -627,8 +413,27 @@ namespace PattonsBest
                else
                   return "Stiff Spine";
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetFeatMessage(): Unknown key=" + feat.Key);
-               return "UNKNOWN: " + feat.Key;
+               Logger.Log(LogEnum.LE_ERROR, "Get_FeatMessage(): Unknown key=" + feat.Key);
+               return "ERROR";
+         }
+      }
+      public static void GetFeatMessageThreshold(GameFeat feat, ref StringBuilder sb)
+      {
+         int threshold = feat.Threshold;
+         if (0 == threshold)
+            threshold++;
+         if (threshold < feat.Value)
+         {
+            int overValue = feat.Value - threshold;
+            sb.Append(overValue.ToString());
+            sb.Append(" more than ");
+            sb.Append(threshold.ToString());
+         }
+         else
+         {
+            sb.Append(feat.Value.ToString());
+            sb.Append(" out of ");
+            sb.Append(threshold.ToString());
          }
       }
       //---------------------------------------------------
@@ -660,6 +465,20 @@ namespace PattonsBest
          GameFeat? feat = myList[index] as GameFeat;
          myList.RemoveAt(index);
          return feat;
+      }
+      public void Remove(GameFeat featToRemove)
+      {
+         foreach (object o in myList)
+         {
+            GameFeat? feat = (GameFeat)o;
+            if (null == feat) continue;
+            if (featToRemove.Key == feat.Key)
+            {
+               myList.Remove(feat);
+               return;
+            }
+         }
+         return;
       }
       public GameFeat? this[int index]
       {
