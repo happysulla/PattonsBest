@@ -549,7 +549,7 @@ namespace PattonsBest
             return false;
          }
          this.RotationOffsetTurret = rotation - this.RotationTurret; // Set_MapItemRotationTurret()
-         Logger.Log(LogEnum.LE_SHOW_ENEMY_ROTATION, "Set_MapItemRotationTurret(): (tr=" + this.RotationTurret.ToString("F2") + ")=(rotation=" + rotation.ToString("F2") + ")-(rh=" + this.RotationTurret.ToString() + ") where (rotation=" + rotation.ToString("F2") + ")->(rotabs=" + rotationAbsolute.ToString("F2") + ")=(rotOrig=" + rotationRelative.ToString("F2") + ")-(rh=" + this.RotationHull.ToString("F2") + ")-(ro=" + this.RotationOffsetHull.ToString("F2") + ") for mi=" + this.Name + " in " + this.TerritoryCurrent.Name);
+         Logger.Log(LogEnum.LE_SHOW_ENEMY_ROTATION, "Set_MapItemRotationTurret(): (to=" + this.RotationOffsetTurret.ToString("F2") + ")=(rotation=" + rotation.ToString("F2") + ")-(rt=" + this.RotationTurret.ToString() + ") where (rotation=" + rotation.ToString("F2") + ")->(rotabs=" + rotationAbsolute.ToString("F2") + ")=(rotOrig=" + rotationRelative.ToString("F2") + ")-(rh=" + this.RotationHull.ToString("F2") + ")-(ro=" + this.RotationOffsetHull.ToString("F2") + ") for mi=" + this.Name + " in " + this.TerritoryCurrent.Name);
          return true;
       }
       public bool UpdateMapRotation(string facing)

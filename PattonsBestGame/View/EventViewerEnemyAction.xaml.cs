@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
@@ -365,6 +366,8 @@ namespace PattonsBest
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
+                  if( true == mapItem.IsTurret())
+                     Logger.Log(LogEnum.LE_SHOW_ENEMY_ROTATION, "EventViewerEnemyAction.Update_EndState(): mi=" + mapItem.Name + " to=" + mapItem.RotationOffsetTurret.ToString("F2") + " rt=" + mapItem.RotationTurret.ToString());
                   if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) ) // remove enemy KIA units
                   {
                      removals.Add(mapItem);
@@ -1540,6 +1543,7 @@ namespace PattonsBest
                //if ( (true == mi.TerritoryCurrent.Name.Contains("1")) || (true == mi.TerritoryCurrent.Name.Contains("2")) || (true == mi.TerritoryCurrent.Name.Contains("3")) )
                //  dieRoll = 51; // <CGS> TEST - Move-B for Infantry in Battle Scenario - no ambush
                //dieRoll = 71; // <CGS> TEST - KillYourTank - Fire At Your Tank when stationary in Advance Scenario - assumes +10 for Ambush
+               // if (true == mi.IsTurret()) dieRoll = 98;  else dieRoll = 70;// <cgs> TEST - KillYourTank - Fire At Your Tank when stationary in Counterattack Scenario
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
@@ -1606,6 +1610,7 @@ namespace PattonsBest
                               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_MapItemRotationTurret() returned false for mi=" + mi.Name + " i=" + i.ToString());
                               return;
                            }
+                           Logger.Log(LogEnum.LE_SHOW_ENEMY_ROTATION, "ShowDieResults(): Set_MapItemRotationTurret() set mi=" + mi.Name + " to=" + mi.RotationOffsetTurret.ToString("F2") + " rt=" + mi.RotationTurret.ToString());
                         }
                      }
                   }
@@ -2071,11 +2076,14 @@ namespace PattonsBest
                         {
                            for (int j = 0; j < myMaxRowCount; ++j)
                            {
-                              if (false == CreateMapItemMove(j))
+                              if (true == myGridRows[j].myEnemyAction.Contains("Move"))
                               {
-                                 Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): CreateMapItemMove(i) returned false");
-                                 return;
-                              }                                
+                                 if (false == CreateMapItemMove(j))
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): CreateMapItemMove(i) returned false");
+                                    return;
+                                 }
+                              }
                            }
                            E0475Enum state = myState;
                            myState = E0475Enum.ENEMY_ACTION_MOVE_SHOW;

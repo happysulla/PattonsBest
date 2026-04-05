@@ -504,8 +504,11 @@ namespace PattonsBest
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
-               if (false == UpdateCanvasShermanSelectTargetMg(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTargetMg() returned error ");
+               if( (true == gi.IsShermanFiringAaMg) || (true == gi.IsShermanFiringBowMg) || (true == gi.IsShermanFiringCoaxialMg) || (true == gi.IsShermanFiringSubMg) )
+               {
+                  if (false == UpdateCanvasShermanSelectTargetMg(gi)) // only show targets if a MG has been selected to fire
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTargetMg() returned error ");
+               }
                break;
             case GameAction.BattleRoundSequenceEnemyAction:
             case GameAction.BattleRoundSequenceShermanToHitRoll:

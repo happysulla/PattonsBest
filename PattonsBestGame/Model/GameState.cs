@@ -9468,7 +9468,7 @@ namespace PattonsBest
                SetCommand(gi, outAction, GameAction.DieRollActionNone, "e052a");
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || ( (true== isGunnerTrainedInHvss) && (null != gi.ShermanHvss)) ))
+            else if ((true == isTankFiringMainGun) && ( (false == gi.Sherman.IsMoved) || ( (true== isGunnerTrainedInHvss) && (null != gi.ShermanHvss)) ))
             {
                if (false == GetShermanTargets(gi, ref outAction))
                {
@@ -9514,7 +9514,7 @@ namespace PattonsBest
             if (true == isMgFire)
             {
                Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "Conduct_CrewAction(): " + Utilities.PrintMgState(gi));
-               outAction = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
+               outAction = GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
                SetCommand(gi, outAction, GameAction.DieRollActionNone, "e054");
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 6-phase=" + gi.CrewActionPhase.ToString());

@@ -9341,14 +9341,14 @@ namespace PattonsBest
             elem = aXmlDocument.CreateElement("RotationOffsetTurret");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(RotationOffsetTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(Rotation_OffsetTurret) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.RotationOffsetTurret.ToString("F3"));
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(RotationOffsetTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(Rotation_OffsetTurret) returned null");
                return false;
             }
             //--------------------------------

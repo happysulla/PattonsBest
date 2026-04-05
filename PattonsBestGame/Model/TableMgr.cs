@@ -72,6 +72,8 @@ namespace PattonsBest
                return "10/12-11/08 1944";
             sb.Append("10/");
             int dayOfMonth = day - 56;
+            if (dayOfMonth < 10)
+               sb.Append("0");
             sb.Append(dayOfMonth.ToString());
             sb.Append("/1944");
          }
