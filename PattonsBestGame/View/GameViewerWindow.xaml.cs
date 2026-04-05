@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -2349,9 +2350,9 @@ namespace PattonsBest
          CultureInfo currentCulture = CultureInfo.CurrentCulture;
          System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          XmlTextReader? reader = null;
+         string qualifiedFilename = GameFeats.theGameFeatDirectory + filename + ".xml";
          try
          {
-            string qualifiedFilename = GameStatistics.theGameStatisticsDirectory + filename + ".xml";
             reader = new XmlTextReader(qualifiedFilename) { WhitespaceHandling = WhitespaceHandling.None };
             if (null == reader)
             {
@@ -2537,6 +2538,7 @@ namespace PattonsBest
          }
          catch (FileNotFoundException)
          {
+            Logger.Log(LogEnum.LE_VIEW_SHOW_GAMESAVES, "Deserialize_GameSave(): filename=" + qualifiedFilename);
             // expected on first run
          }
          catch (IOException ioException)

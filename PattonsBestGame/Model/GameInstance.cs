@@ -175,6 +175,7 @@ namespace PattonsBest
       public bool IsCommanderRescuePerformed { set; get; } = false;
       public bool IsCommnderFightiingFromOpenHatch { set; get; } = false;
       public bool IsCommanderKilled { set; get; } = false;
+      public bool IsCommanderWounded { set; get; } = false;
       public bool IsPromoted { set; get; } = false;
       //---------------------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();

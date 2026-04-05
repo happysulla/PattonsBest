@@ -3388,9 +3388,26 @@ namespace PattonsBest
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsPromoted) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsCommanderWounded) = false");
                return null;
             }
+            if (reader.Name == "IsCommanderWounded") // Added late - need to skip to keep backward compatibility
+            {
+               string? sIsCommanderWounded = reader.GetAttribute("value");
+               if (null == sIsCommanderKilled)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): sIsCommanderWounded=null");
+                  return null;
+               }
+               gi.IsCommanderWounded = Convert.ToBoolean(sIsCommanderWounded);
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): reader.IsStartElement(IsPromoted) = false");
+                  return null;
+               }
+            }
+            //----------------------------------------------
             if (reader.Name != "IsPromoted")
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): IsPromoted != (node=" + reader.Name + ")");
@@ -9030,6 +9047,20 @@ namespace PattonsBest
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsCommanderKilled) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCommanderWounded");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateElement(IsCommanderWounded) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCommanderWounded.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): AppendChild(IsCommanderWounded) returned null");
             return null;
          }
          //------------------------------------------

@@ -11712,8 +11712,10 @@ namespace PattonsBest
                   }
                   break;
                case GameAction.EventDebriefDecorationHeart:
-                  if( false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day) )// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
+                  if ( false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day) )// only add purple heart one time this day for this game. This prevents reloading from causing it to be added more than once.
                   {
+                     Logger.Log(LogEnum.LE_SHOW_PURPLE_HEART, "GameStateEveningDebriefing.PerformAction(EventDebrief_DecorationHeart) gi.IsCommanderWounded=" + gi.IsCommanderWounded.ToString());
+                     gi.IsCommanderWounded = false;
                      GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
                      gi.Statistics.AddOne("NumPurpleHearts");
                      GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
@@ -11965,8 +11967,10 @@ namespace PattonsBest
             }
          }
          //---------------------------------------------
-         if (("None" != commander.Wound) && (false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day)) )
+         Logger.Log(LogEnum.LE_SHOW_PURPLE_HEART, "Update_Decoration(): gi.IsCommanderWounded=" + gi.IsCommanderWounded.ToString());
+         if ( (true == gi.IsCommanderWounded) && (false == GameSaveMgr.GetHeartGiven(gi.GameGuid, gi.Day)) )
          {
+            gi.IsCommanderWounded = false;
             GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
             gi.Statistics.AddOne("NumPurpleHearts");
             GameSaveMgr.SetHeartGiven(gi.GameGuid, gi.Day);
@@ -12039,6 +12043,7 @@ namespace PattonsBest
             if (true == gi.IsCommanderKilled)
                gi.NumPurpleHeart = 0;
             gi.IsCommanderKilled = false;
+            gi.IsCommanderWounded = false;
             //-------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
             gi.RoundsOfCombat = 0;

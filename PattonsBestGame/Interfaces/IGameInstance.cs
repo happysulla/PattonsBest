@@ -162,6 +162,7 @@ namespace PattonsBest
       bool IsCommanderRescuePerformed { set; get; }
       bool IsCommnderFightiingFromOpenHatch { set; get; }
       bool IsCommanderKilled { set; get; }
+      bool IsCommanderWounded { set; get; }
       bool IsPromoted { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }

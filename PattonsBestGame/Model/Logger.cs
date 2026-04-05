@@ -94,6 +94,7 @@ namespace PattonsBest
       LE_SHOW_VP_FRIENDLY_FORCES,
       LE_SHOW_VP_CAPTURED_AREA,
       LE_SHOW_VP_TOTAL,
+      LE_SHOW_PURPLE_HEART,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -201,8 +202,8 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD);
          //SetOn(LogEnum.LE_SHOW_RESISTANCE);
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
-         SetOn(LogEnum.LE_SHOW_ENEMY_ROTATION);
-         SetOn(LogEnum.LE_SHOW_FACING);
+         //SetOn(LogEnum.LE_SHOW_ENEMY_ROTATION);
+         //SetOn(LogEnum.LE_SHOW_FACING);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);
          //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
@@ -210,7 +211,7 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          //SetOn(LogEnum.LE_SHOW_RESET_ROUND);
          //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
-         SetOn(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE);
+         //SetOn(LogEnum.LE_SHOW_COLLATERAL_DAMGAGE);
          //SetOn(LogEnum.LE_SHOW_WOUND_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
@@ -239,7 +240,7 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS);
          SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_SHERMAN);
          SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY);
-         SetOn(LogEnum.LE_SHOW_IMMOBILIZATION);
+         //SetOn(LogEnum.LE_SHOW_IMMOBILIZATION);
          SetOn(LogEnum.LE_SHOW_KILLED_ENEMY);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_TIME_ADVANCE);
@@ -247,6 +248,7 @@ namespace PattonsBest
          SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
          SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
          SetOn(LogEnum.LE_SHOW_VP_TOTAL);
+         SetOn(LogEnum.LE_SHOW_PURPLE_HEART);
          //-------------------------------
          //SetOn(LogEnum.LE_RESET_ROLL_STATE);
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);

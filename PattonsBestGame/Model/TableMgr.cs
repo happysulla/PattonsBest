@@ -3659,9 +3659,13 @@ namespace PattonsBest
             }
             return "Killed";
          }
+         //------------------------------------------------------
          dieRoll += modifier;
          if (dieRoll < 42)
+         {
             return "Near Miss";
+         }
+         //------------------------------------------------------
          else if (dieRoll < 48)
          {
             cm.SetBloodSpots(5);
@@ -3675,44 +3679,69 @@ namespace PattonsBest
             else
             {
                if ("None" == cm.Wound)
+               {
                   cm.Wound = "Light Wound";
+                  if ("Commander" == cm.Role)
+                     gi.IsCommanderWounded = true;
+               }
                return "Light Wound";
             }
          }
+         //------------------------------------------------------
          else if (dieRoll < 73)
          {
             cm.SetBloodSpots(10);
             if ("None" == cm.Wound)
+            {
                cm.Wound = "Light Wound";
+               if ("Commander" == cm.Role)
+                  gi.IsCommanderWounded = true;
+            }
             return "Light Wound";
          }
+         //------------------------------------------------------
          else if (dieRoll < 88)
          {
             if (false == gi.SetIncapacitated(cm))  // Set_Wounds() - rolled 74-87
                Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): Set_Incapacitated() returned null for cm=" + cm.Role);
             cm.SetBloodSpots(20);
             if ("None" == cm.Wound)
+            {
                cm.Wound = "Light Wound";
+               if ("Commander" == cm.Role)
+                  gi.IsCommanderWounded = true;
+            }
             return "Light Wound";
          }
+         //------------------------------------------------------
          else if (dieRoll < 93)
          {
             if (false == gi.SetIncapacitated(cm)) // Set_Wounds() - rolled 88-92
                Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): Set_Incapacitated() returned null for cm=" + cm.Role);
             cm.SetBloodSpots(30);
             if ("Killed" != cm.Wound)
+            {
                cm.Wound = "Serious Wound";
+               if ("Commander" == cm.Role)
+                  gi.IsCommanderWounded = true;
+            }
             return "Serious Wound";
          }
+         //------------------------------------------------------
          else if (dieRoll < 98)
          {
             if (false == gi.SetIncapacitated(cm)) // Set_Wounds() - rolled 93-97
                Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): Set_Incapacitated() returned null for cm=" + cm.Role);
             cm.SetBloodSpots(35);
             if ("Killed" != cm.Wound)
+            {
                cm.Wound = "Serious Wound";
+               if ("Commander" == cm.Role)
+                  gi.IsCommanderWounded = true;
+            }
             return "Serious Wound";
          }
+         //------------------------------------------------------
          else
          {
             if (false == gi.SetIncapacitated(cm))// Set_Wounds() - rolled 98+
