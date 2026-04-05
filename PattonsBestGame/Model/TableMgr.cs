@@ -4838,6 +4838,7 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_SHOW_KILLED_ENEMY, "Set_FriendlyActionResult(): auto killed eu=" + mi.Name + " dr=" + dieRoll.ToString() + " AdvanceFire=" + isAdvancingFire.ToString());
             if (true == isAdvancingFire) // Advance fire does not count for VP - do everyting but increase VP.
             {
+               mi.IsKilled = true;
                mi.SetBloodSpots();
                mi.IsMoving = false;
                mi.IsHeHit = false;
