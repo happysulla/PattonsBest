@@ -2900,7 +2900,7 @@ namespace PattonsBest
          int count = enemyUnit.TerritoryCurrent.Name.Count();
          if (3 != count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacing(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacingFromRotationAndSector(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
             return "ERROR";
          }
          char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
@@ -2914,7 +2914,7 @@ namespace PattonsBest
             case '3': rotation = 240.0; break;
             case '4': rotation = 300.0; break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacing(): reached default enemySector=" + enemySector);
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacingFromRotationAndSector(): reached default enemySector=" + enemySector);
                return "ERROR";
          }
          double totalRotation = rotation - enemyUnit.RotationHull;
@@ -2933,10 +2933,10 @@ namespace PattonsBest
             case 240.0: returnValue = "Side"; break;
             case 300.0: returnValue = "Side"; break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacing(): 2-reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyFacingFromRotationAndSector(): 2-reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
                return "ERROR";
          }
-         Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Get_EnemyFacing(): facing=" + returnValue + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+         Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION_TO_ENEMY, "Get_EnemyFacingFromRotationAndSector(): facing=" + returnValue + " (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
          return returnValue;
       }
       public static string GetEnemyFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
@@ -3055,8 +3055,8 @@ namespace PattonsBest
             turretTotalAngle = 360 - turretTotalAngle;
          int turretNumRotations = (int)Math.Abs(turretTotalAngle / 60.0);
          //-----------------------------------------------
-         string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi);
-         if(  (true == mi.IsAntiTankGun()) || (true == mi.IsSelfPropelledGun())  )
+         string facing = TableMgr.GetEnemyFacingFromRotationAndSector(mi); // GetEnemy_ToHitNumberYourTank()
+         if (  (true == mi.IsAntiTankGun()) || (true == mi.IsSelfPropelledGun())  )
          {
             if (false == mi.SetMapItemRotation(gi.Sherman))
             {
@@ -3274,7 +3274,7 @@ namespace PattonsBest
                return "Turret";
             else if (dieRoll < 11)
                return "Miss";
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyHitLocationYourTank(): 1-dieRoll=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyHitLocationYourTank(): 1-dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
          else
@@ -3285,7 +3285,7 @@ namespace PattonsBest
                return "Hull";
             else if (dieRoll == 10)
                return "Track";
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyHitLocationYourTank(): 2-dieRoll=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyHitLocationYourTank(): 2-dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
       }
@@ -3345,25 +3345,26 @@ namespace PattonsBest
          else if ("III" == card.myArmorClass)
             armorclass = 2;
          //----------------------------------------------------
-         int facingNum = 0;
-         if ("Side" == facing)
-            facingNum = 1;
-         else if ("Rear" == facing)
-            facingNum = 2;
-         //----------------------------------------------------
          int rangeNum = 0;
          if ('M' == range)
             rangeNum = 1;
          else if ('L' == range)
             rangeNum = 2;
          //----------------------------------------------------
-         int locationNum = 0;
-         if ("Turret" == hitLocation)
+         string fireDirection = GetEnemyFireDirection(gi, mi, hitLocation);
+         if( "ERROR" ==  fireDirection )
          {
-            locationNum = 1;
-            if (0.0 != mi.RotationOffsetTurret) // if tank turret is facing any other direction than 0, it is assumed to be pointing at your Sherman with a front facing
-               facingNum = 0;
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberYourTank(): Get(EnemyFireDirection() returned ERROR");
+            return FN_ERROR;
          }
+         int facingNum = 2; // Rear
+         if (true == fireDirection.Contains("F")) // Front
+            facingNum = 0;
+         else if ( (true == fireDirection.Contains("L")) || (true == fireDirection.Contains("R")) ) // Side
+            facingNum = 1;
+         int locationNum = 0;  // Hull
+         if (true == fireDirection.Contains("T")) // Turret
+            locationNum = 1;
          //----------------------------------------------------
          int[,,,] table = theApToKills[gun];
          toKillNum = table[armorclass, facingNum, rangeNum, locationNum];
