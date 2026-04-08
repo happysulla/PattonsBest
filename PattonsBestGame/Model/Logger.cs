@@ -100,6 +100,7 @@ namespace PattonsBest
       LE_VIEW_ART_FIRE_RESOLVE,
       LE_VIEW_AIR_FIRE_RESOLVE,
       LE_VIEW_ROTATION,
+      LE_VIEW_SETUP_AUTO,
       //-------------
       LE_RESET_ROLL_STATE,
       LE_VIEW_DICE_MOVING,
@@ -255,6 +256,7 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ROTATION);
+         SetOn(LogEnum.LE_VIEW_SETUP_AUTO);
          //-------------------------------
          SetOn(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER);
          //SetOn(LogEnum.LE_VIEW_MIM);

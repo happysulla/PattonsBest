@@ -2965,7 +2965,7 @@ namespace PattonsBest
          //--------------------------------------------------------------
          double totalRotation = rotation - gi.Sherman.RotationHull;
          double or = totalRotation;
-         if ("Hull" == hitLocation)
+         if (("Hull" == hitLocation) || ("Track" == hitLocation) )
          {
             while (totalRotation < 0.0)
                totalRotation += 360.0;

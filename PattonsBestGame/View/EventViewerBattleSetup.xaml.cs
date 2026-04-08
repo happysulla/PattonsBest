@@ -207,8 +207,8 @@ namespace PattonsBest
             return false;
          }
          //------------------------------------------------------
-         Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
-         //--------------------------------------------------
+         Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");  // SetupBattle()
+         //-------------------------------------------------- 
          myState = E046Enum.ACTIVATION;
          myMaxRowCount = 0;
          myMaxRowCountAdvanceFire = 0;
@@ -217,7 +217,7 @@ namespace PattonsBest
          myScenario = lastReport.Scenario;
          myDay = myGameInstance.Day;
          myCallback = callback;
-         int startingRow = 0;
+         int row = 0;
          //--------------------------------------------------
          if (null == myGameInstance.EnteredArea)
          {
@@ -309,21 +309,21 @@ namespace PattonsBest
                }
                //----------------------------------------------
                IMapItem? strengthCounter = null;
-               foreach (IMapItem mi1 in moveAreaStack.MapItems)  // determine how many to activiate based on enemy strength in area
+               foreach (IMapItem mi1 in moveAreaStack.MapItems)  // determine how many to activiate based on enemy strength in area - looking for strength counter in the move area
                {
-                  if (true == mi1.IsEnemyUnit())
+                  if (true == mi1.IsEnemyUnit()) // Also, move enemy units from Move Board to the Battle Board
                   {
                      Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "SetupBattle(): Enemy Unit on Move Board with stack=" + moveAreaStack.MapItems.ToString() + " eu=" + mi1.Name);
                      moveAreaRemovals.Add(mi1);
                      string enemyType = mi1.GetEnemyUnit();
                      mi1.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
                      Utilities.MapItemNum++;
-                     myGridRows[startingRow] = new GridRow(mi1);
+                     myGridRows[row] = new GridRow(mi1);
                      if (false == mi1.IsVehicle())
                      {
-                        myGridRows[startingRow].myDieRollFacing = NO_FACING;
-                        myGridRows[startingRow].myFacing = "NA";
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "Setup_Battle(): myGridRows[" + startingRow.ToString() + "].myFacing=" + myGridRows[startingRow].myFacing + " due to not vehicle");
+                        myGridRows[row].myDieRollFacing = NO_FACING;
+                        myGridRows[row].myFacing = "NA";
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "Setup_Battle(): myGridRows[" + row.ToString() + "].myFacing=" + myGridRows[row].myFacing + " due to not vehicle");
                      }
                      else
                      {
@@ -349,37 +349,40 @@ namespace PattonsBest
                            return false;
                      }
                      //--------------------------------------------
+                     //--------------------------------------------
+                     //--------------------------------------------
                      if (true == optionAutoActivation.IsEnabled ) // auto update rows for sector, range, vehicle facing, terrain
                      {
+                        Logger.Log(LogEnum.LE_VIEW_SETUP_AUTO, "SetupBattle(): Moving Enemy Units from Move Board to Battle Board at row=" + row.ToString());
                         int dieRoll = Utilities.RandomGenerator.Next(1, 11);
-                        myGridRows[startingRow].myDieRollSector = dieRoll;
-                        if (false == ShowDieResultUpdateSector(startingRow))
+                        myGridRows[row].myDieRollSector = dieRoll;
+                        if (false == ShowDieResultUpdateSector(row)) // Setup_Battle() - autoset for the first row
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateSector() returned false");
+                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResult_UpdateSector() returned false");
                            return false;
                         }
                         dieRoll = Utilities.RandomGenerator.Next(1, 11);
-                        myGridRows[startingRow].myDieRollRange = dieRoll;
-                        myGridRows[startingRow].myRange = TableMgr.GetEnemyRange(myAreaType, activation, dieRoll);
-                        if ("ERROR" == myGridRows[startingRow].myRange)
+                        myGridRows[row].myDieRollRange = dieRoll;
+                        myGridRows[row].myRange = TableMgr.GetEnemyRange(myAreaType, activation, dieRoll);
+                        if ("ERROR" == myGridRows[row].myRange)
                         {
                            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.GetEnemyRange() returned ERROR");
                            return false;
                         }
-                        if (false == ShowDieResultUpdateRange(startingRow))
+                        if (false == ShowDieResultUpdateRange(row))
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateRange() returned false");
+                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResult_UpdateRange() returned false");
                            return false;
                         }
                         dieRoll = Utilities.RandomGenerator.Next(1, 11);
-                        myGridRows[startingRow].myDieRollTerrain = dieRoll;
-                        myGridRows[startingRow].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, activation, dieRoll);
-                        if ("ERROR" == myGridRows[startingRow].myTerrain)
+                        myGridRows[row].myDieRollTerrain = dieRoll;
+                        myGridRows[row].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, activation, dieRoll);
+                        if ("ERROR" == myGridRows[row].myTerrain)
                         {
                            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.GetEnemyTerrain() returned ERROR");
                            return false;
                         }
-                        if (false == ShowDieResultUpdateTerrain(startingRow))
+                        if (false == ShowDieResultUpdateTerrain(row))
                         {
                            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateTerrain() returned ERROR");
                            return false;
@@ -387,14 +390,14 @@ namespace PattonsBest
                         if ( (true == mi1.IsVehicle()) || (true == mi1.IsAntiTankGun())) // Setup_Battle()
                         {
                            dieRoll = Utilities.RandomGenerator.Next(1, 11);
-                           myGridRows[startingRow].myDieRollFacing = dieRoll;
-                           myGridRows[startingRow].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi1, dieRoll);
-                           if ("ERROR" == myGridRows[startingRow].myFacing)
+                           myGridRows[row].myDieRollFacing = dieRoll;
+                           myGridRows[row].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, mi1, dieRoll);
+                           if ("ERROR" == myGridRows[row].myFacing)
                            {
                               Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.Get_EnemyNewFacing() returned ERROR");
                               return false;
                            }
-                           if (false == mi1.UpdateMapRotation(myGridRows[startingRow].myFacing))
+                           if (false == mi1.UpdateMapRotation(myGridRows[row].myFacing))
                            {
                               Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): Update_MapRotation() returned false");
                               return false;
@@ -402,11 +405,11 @@ namespace PattonsBest
                         }
                      }
                      //--------------------------------------------
-                     startingRow++;
+                     row++;
                      myMaxRowCount++;
                      myGameInstance.MaxEnemiesInOneBattle++;
                   }
-                  if (true == mi1.Name.Contains("Strength"))
+                  if (true == mi1.Name.Contains("Strength")) // get the strength marker for this area
                      strengthCounter = mi1;
                }
                foreach (IMapItem removal in moveAreaRemovals) // remove from movement board
@@ -469,7 +472,7 @@ namespace PattonsBest
             //myMaxRowCount = 6;  // <CGS> TEST - generate extra units
          }
          //--------------------------------------------------
-         for (int i1 = startingRow; i1 < myMaxRowCount; ++i1)
+         for (int i1 = row; i1 < myMaxRowCount; ++i1)
             myGridRows[i1] = new GridRow();
          if (false == UpdateGrid())
          {
@@ -700,7 +703,7 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "Update_CheckBoxPanel(): myGameInstance=null");
             return false;
          }
-         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation");
+         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation"); // UpdateCheckBoxPanel()
          //-----------------------------------
          myStackPanelCheckMarks.Children.Clear();
          CheckBox cb = new CheckBox() { FontSize = 12, Margin = new Thickness(5, 0, 0, 0), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center };
@@ -1276,7 +1279,7 @@ namespace PattonsBest
             return;
          }
          //------------------------------------------------------
-         Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
+         Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation"); // ShowDieResults()
          //------------------------------------------------------
          switch (myState)
          {
@@ -1301,11 +1304,12 @@ namespace PattonsBest
                   myIsRollInProgress = false;
                   return;
                }
-               if( true == optionAutoActivation.IsEnabled) // Skip die rolls for 
+               Logger.Log(LogEnum.LE_VIEW_SETUP_AUTO, "ShowDieResults(): i=" + i.ToString() + " dr=" + dieRoll.ToString() + " myRollResultRowNum=" + myRollResultRowNum.ToString());
+               if ( true == optionAutoActivation.IsEnabled) 
                {
-                  if( false == ShowDieResultsAutoRolls(i))
+                  if ( false == ShowDieResultsAutoRolls(i)) // ShowDieResults(): ACTIVATION
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultsAutoRolls() return false for i=" + i.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResults_AutoRolls() return false for i=" + i.ToString());
                      return;
                   }
                }
@@ -1315,8 +1319,20 @@ namespace PattonsBest
                   if (Utilities.NO_RESULT == myGridRows[j].myDieRollActivation)
                      myState = E046Enum.ACTIVATION;
                }
+               Logger.Log(LogEnum.LE_VIEW_SETUP_AUTO, "ShowDieResults(): i=" + i.ToString() + " dr[0]=" + myGridRows[0].myDieRollActivation.ToString());
                if ( (E046Enum.PLACE_SECTOR == myState) && (true == optionAutoActivation.IsEnabled) )
                {
+                  for (int j = 0; j < myMaxRowCount; ++j) // catch a race condition where user checks box after rolling die resulting in first row not populating
+                  {
+                     if ("Unknown" == myGridRows[j].mySector ) // if any rows are not populated, populate now
+                     {
+                        if (false == ShowDieResultsAutoRolls(j)) 
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResults_AutoRolls() return false for i=" + i.ToString());
+                           return;
+                        }
+                     }
+                  }
                   myState = E046Enum.SHOW_RESULTS;
                   for (int j = 0; j < myMaxRowCount; ++j)
                   {
@@ -1338,7 +1354,7 @@ namespace PattonsBest
                }
                if (true == optionAutoActivation.IsEnabled)
                {
-                  if (false == ShowDieResultsAutoRolls(i))
+                  if (false == ShowDieResultsAutoRolls(i)) // ShowDieResults(): SPW_OR_PSW_ROLL
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResults_AutoRolls() return false for i=" + i.ToString());
                      return;
@@ -1363,9 +1379,9 @@ namespace PattonsBest
             //-------------------------------------------------------------------
             case E046Enum.PLACE_SECTOR:
                myGridRows[i].myDieRollSector = dieRoll;
-               if (false == ShowDieResultUpdateSector(i))
+               if (false == ShowDieResultUpdateSector(i)) //  ShowDieResults(): PLACE_SECTOR
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateSector() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResult_UpdateSector() returned false");
                   return;
                }
                myState = E046Enum.PLACE_RANGE;
@@ -1385,9 +1401,9 @@ namespace PattonsBest
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyRange() returned ERROR");
                   return;
                }
-               if (false == ShowDieResultUpdateRange(i))
+               if (false == ShowDieResultUpdateRange(i)) // ShowDieResults(): PLACE_RANGE
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateRange() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResult_UpdateRange() returned false");
                   return;
                }
                if (true == myIsVehicleActivated)
@@ -1521,17 +1537,18 @@ namespace PattonsBest
       }
       private bool ShowDieResultsAutoRolls(Index i)
       {
-         if( null == myGameInstance)
+         if ( null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): myGameInstance=null"); 
             return false;
          }
          myGridRows[i].myDieRollSector = Utilities.RandomGenerator.Next(1, 11);
-         if (false == ShowDieResultUpdateSector(i))
+         if (false == ShowDieResultUpdateSector(i)) // ShowDieResults_AutoRolls()
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): ShowDieResultUpdateSector() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): ShowDieResult_UpdateSector() returned false");
             return false;
          }
+         Logger.Log(LogEnum.LE_VIEW_SETUP_AUTO, "ShowDieResults_AutoRolls(): i=" + i.ToString() + " dr=" + myGridRows[i].myDieRollSector.ToString() + " mySector=" + myGridRows[i].mySector);
          //------------------------------------------------------------
          int dieRoll = Utilities.RandomGenerator.Next(1, 11);
          //dieRoll = 13; // <CGS> TEST - AdvanceRetreat - long range
@@ -1542,11 +1559,12 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyRange() returned ERROR");
             return false;
          }
-         if (false == ShowDieResultUpdateRange(i))
+         if (false == ShowDieResultUpdateRange(i)) // ShowDieResults_AutoRolls():
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): ShowDieResultUpdateRange() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): ShowDieResult_UpdateRange() returned false");
             return false;
          }
+         Logger.Log(LogEnum.LE_VIEW_SETUP_AUTO, "ShowDieResults_AutoRolls(): i=" + i.ToString() + " dr=" + dieRoll.ToString() + " myRange=" + myGridRows[i].myRange);
          //------------------------------------------------------------
          IMapItem? miEnemyUnit = myGridRows[i].myMapItem;
          if (null == miEnemyUnit)
@@ -1558,6 +1576,7 @@ namespace PattonsBest
          {
             myGridRows[i].myDieRollFacing = Utilities.RandomGenerator.Next(1, 11);
             myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGameInstance, miEnemyUnit, myGridRows[i].myDieRollFacing);
+            Logger.Log(LogEnum.LE_VIEW_SETUP_AUTO, "ShowDieResults_AutoRolls(): i=" + i.ToString() + " dr=" + myGridRows[i].myDieRollFacing.ToString() + " Facing=" + myGridRows[i].myFacing);
             if ("ERROR" == myGridRows[i].myFacing)
             {
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.Get_EnemyNewFacing() returned ERROR");
@@ -1598,7 +1617,7 @@ namespace PattonsBest
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateSector(): myGameInstance=null");
             return false;
          }
          string? tName = null;
@@ -1699,12 +1718,12 @@ namespace PattonsBest
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): reached default dr=" + myGridRows[i].myDieRollSector.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateSector(): reached default dr=" + myGridRows[i].myDieRollSector.ToString());
                return false;
          }
          if (null == tName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): tName=null for dr=" + myGridRows[i].myDieRollSector.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateSector(): tName=null for dr=" + myGridRows[i].myDieRollSector.ToString());
             return false;
          }
          if ("X" != myGridRows[i].mySector)
@@ -1712,13 +1731,13 @@ namespace PattonsBest
             ITerritory? t = Territories.theTerritories.Find(tName);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): t=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateSector(): t=null for " + tName);
                return false;
             }
             IMapItem? mi = myGridRows[i].myMapItem;
             if (null == mi)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): mi=null for i=" + i.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateSector(): mi=null for i=" + i.ToString());
                return false;
             }
             IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
@@ -1728,7 +1747,7 @@ namespace PattonsBest
             myGameInstance.BattleStacks.Add(mi);
             if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): Set_MapItemRotation() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateSector(): Set_MapItemRotation() returned false");
                return false;
             }
          }
@@ -1738,27 +1757,27 @@ namespace PattonsBest
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateRange(): myGameInstance=null");
             return false;
          }
-         if ("M" == myGridRows[i].myRange)
+         if ("M" == myGridRows[i].myRange) // Enemy starts at M range in random spot. If not in M range, need to find a new random spot at L or C below.
             return true;
          //----------------------------
          IMapItem? mi = myGridRows[i].myMapItem;
          if (null == mi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): mi=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateRange(): mi=null for i=" + i.ToString());
             return false;
          }
          string tName = mi.TerritoryCurrent.Name; 
-         if (true == tName.Contains("Off"))  // EventViewerBattleSetup.ShowDieResultUpdateRange() - do not update range if off board
+         if (true == tName.Contains("Off"))  // EventViewerBattleSetup.ShowDieResult_UpdateRange() - do not update range if off board
             return true;
          //----------------------------
          string modified = tName.Remove(tName.Length - 1) + myGridRows[i].myRange; // change last character
          ITerritory? t = Territories.theTerritories.Find(modified);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): t=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateRange(): t=null for i=" + i.ToString());
             return false;
          }
          mi.TerritoryCurrent = mi.TerritoryStarting = t;
@@ -1768,7 +1787,7 @@ namespace PattonsBest
          mi.Location = mp;
          if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): Set_MapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult_UpdateRange(): Set_MapItemRotation() returned false");
             return false;
          }
          return true;
@@ -1814,6 +1833,38 @@ namespace PattonsBest
          return true;
       }
       //---------------------Controller Function--------------------------------------------
+      private void CheckBox_Checked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): myGameInstance=null");
+            return;
+         }
+         //---------------------------
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = true;
+         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation"); // CheckBox_Checked()
+         option.IsEnabled = true;
+         //---------------------------
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): UpdateGrid() return false");
+      }
+      private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): myGameInstance=null");
+            return;
+         }
+         //---------------------------
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = false;
+         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation"); // CheckBox_Unchecked()
+         option.IsEnabled = false;
+         //---------------------------
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): UpdateGrid() return false");
+      }
       private void ButtonRule_Click(object sender, RoutedEventArgs e)
       {
          if (null == myRulesMgr)
@@ -1993,8 +2044,8 @@ namespace PattonsBest
                {
                   if (false == myIsRollInProgress)
                   {
-                     myRollResultRowNum = Grid.GetRow(img1);
                      myIsRollInProgress = true;
+                     myRollResultRowNum = Grid.GetRow(img1);
                      RollEndCallback callback = ShowDieResults;
                      if ("DieRoll" == img1.Name)
                         myDieRoller.RollMovingDie(myCanvas, callback);
@@ -2007,37 +2058,6 @@ namespace PattonsBest
             }
          }
       }
-      private void CheckBox_Checked(object sender, RoutedEventArgs e)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): myGameInstance=null");
-            return;
-         }
-         //---------------------------
-         CheckBox cb = (CheckBox)sender;
-         cb.IsChecked = true;
-         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation");
-         option.IsEnabled = true;
-         //---------------------------
-         if (false == UpdateGrid())
-            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): UpdateGrid() return false");
-      }
-      private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): myGameInstance=null");
-            return;
-         }
-         //---------------------------
-         CheckBox cb = (CheckBox)sender;
-         cb.IsChecked = false;
-         Option option = myGameInstance.Options.Find("AutoRollEnemyActivation");
-         option.IsEnabled = false;
-         //---------------------------
-         if (false == UpdateGrid())
-            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): UpdateGrid() return false");
-      }
+
    }
 }

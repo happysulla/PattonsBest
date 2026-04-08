@@ -1864,7 +1864,7 @@ namespace PattonsBest
                {
                   Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Hit Location for myState=" + myState.ToString() + " dr=" + dieRoll);
                   myGridRows[i].myDieRollHitLocationYourTank = dieRoll;
-                  myGridRows[i].myHitLocationYourTank = TableMgr.GetEnemyHitLocationYourTank(myGameInstance, dieRoll); // !!!!!!!!Turret or Hull!!!!!!!!!!!!!!
+                  myGridRows[i].myHitLocationYourTank = TableMgr.GetEnemyHitLocationYourTank(myGameInstance, dieRoll); // !!!!!!!!Turret or Hull or Track!!!!!!!!!!!!!!
                   if ("ERROR" == myGridRows[i].myHitLocationYourTank)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.myHitLocationYourTank() returned ERROR");
