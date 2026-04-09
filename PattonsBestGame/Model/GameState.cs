@@ -264,6 +264,12 @@ namespace PattonsBest
                      continue;
                   }
                }
+               if( true == cm.IsUnconscious )
+               {
+                  cm.IsIncapacitated = false;
+                  cm.IsUnconscious = false; // Replace_InjuredCrewmen() 
+                  continue;
+               }
                isCrewmanReplaced = true;  // inform calling routine that crewman replaced
                int dieRoll = Utilities.RandomGenerator.Next(1, 11);
                switch (cm.Role)
