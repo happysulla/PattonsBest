@@ -9839,24 +9839,26 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Move_Sherman(): gi.MapItemMoves.Clear()");
             gi.DieRollAction = GameAction.DieRollActionNone;
             gi.MapItemMoves.Clear();
-            gi.ShermanAdvanceOrRetreatEnemies.Clear(); // any previous round units moved off board are not saved
+            gi.ShermanAdvanceOrRetreatEnemies.Clear(); // Move_Sherman() - any previous round units moved off board are not saved
             gi.IsShermanAdvancingOnMoveBoard = false;
             bool isAnyEnemyLeft = false;
             foreach (IStack stack in gi.BattleStacks)
             {
                foreach (IMapItem mi in stack.MapItems)
                {
-                  if (true == mi.TerritoryCurrent.Name.Contains("OffTop")) // BattleRoundSequenceMovementRoll -  Sherman Movement cause enemy to move
+                  if (true == mi.TerritoryCurrent.Name.Contains("OffTop")) // Move_Sherman() - Sherman Movement cause enemy to move
                   {
                      mi.EnemyAcquiredShots.Remove("Sherman");
                      gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
-                     gi.ShermanAdvanceOrRetreatEnemies.Add(mi);
+                     gi.ShermanAdvanceOrRetreatEnemies.Add(mi); // Move_Sherman() - Sherman retreat causes enemies to move off top of board
+                     Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "Move_Sherman(): Retreating Sherman - gi.Sherman_AdvanceOrRetreatEnemies=" + gi.ShermanAdvanceOrRetreatEnemies.ToString());
                   }
-                  else if ((true == mi.TerritoryCurrent.Name.Contains("OffBottom")) && (EnumScenario.Counterattack != lastReport.Scenario)) // BattleRoundSequenceMovementRoll -  Sherman Movement cause enemy to move off
+                  else if ((true == mi.TerritoryCurrent.Name.Contains("OffBottom")) && (EnumScenario.Counterattack != lastReport.Scenario)) // // Move_Sherman() - Sherman Movement cause enemy to move off
                   {
                      mi.EnemyAcquiredShots.Remove("Sherman");
                      gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
-                     gi.ShermanAdvanceOrRetreatEnemies.Add(mi);
+                     gi.ShermanAdvanceOrRetreatEnemies.Add(mi); // Move_Sherman() - Sherman advance causes enemies to move off bottom of board
+                     Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "Move_Sherman(): Advancing Sherman - gi.Sherman_AdvanceOrRetreatEnemies=" + gi.ShermanAdvanceOrRetreatEnemies.ToString());
                   }
                   else if (true == mi.IsEnemyUnit())
                   {
@@ -10070,7 +10072,7 @@ namespace PattonsBest
             }
          }
          //--------------------------------------------------------
-         foreach (IMapItem enemyUnit in gi.ShermanAdvanceOrRetreatEnemies)// all enemies that left board show up on the  Movement Board in current territory
+         foreach (IMapItem enemyUnit in gi.ShermanAdvanceOrRetreatEnemies)// MoveSherman_AdvanceOrRetreat():  all enemies that left board show up on the  Movement Board in current territory
          {
             string enemyType = enemyUnit.GetEnemyUnit();
             enemyUnit.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board

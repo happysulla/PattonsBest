@@ -1647,7 +1647,7 @@ namespace PattonsBest
             //----------------------------------------------
             if (false == ReadXmlMapItems(reader, gi.ShermanAdvanceOrRetreatEnemies, "ShermanAdvanceOrRetreatEnemies"))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXml_MapItems(ShermanAdvanceOrRetreatEnemies) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml_GameInstance(): ReadXml_MapItems(Sherman_AdvanceOrRetreatEnemies) returned null");
                return null;
             }
             //----------------------------------------------
@@ -5848,7 +5848,7 @@ namespace PattonsBest
          string? sAttribute = reader.GetAttribute("value");
          if (sAttribute != attribute)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXml_MapItems(): (sAttribute=" + sAttribute + ") != (attribute=" + attribute + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_MapItems(): (readin sAttribute=" + sAttribute + ") != (passedin attribute=" + attribute + ")");
             return false;
          }
          string? sCount = reader.GetAttribute("count");
@@ -5928,7 +5928,7 @@ namespace PattonsBest
          }
          if (reader.Name != "CrewMembers")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): MapItems != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): CrewMembers != (node=" + reader.Name + ")");
             return false;
          }
          string? sAttribute = reader.GetAttribute("value");
@@ -7812,7 +7812,7 @@ namespace PattonsBest
          //------------------------------------------
          if (false == CreateXmlMapItems(aXmlDocument, root, gi.ShermanAdvanceOrRetreatEnemies, "ShermanAdvanceOrRetreatEnemies"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlMapItems(ShermanAdvanceOrRetreatEnemies) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlMapItems(Sherman_AdvanceOrRetreatEnemies) returned false");
             return null;
          }
          //------------------------------------------
