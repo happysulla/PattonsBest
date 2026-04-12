@@ -90,7 +90,7 @@ During the periods on the Combat <InlineUIContainer><Button Content='Calendar' F
 <LineBreak/><LineBreak/>
 During a refit period, you have the option of replacing your current tank per 
 <InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-If the refit period is over 7 days, the crew goes through additional training resulting in possilbe crew rating improvements.
+If the refit period is over 7 days, the crew goes through additional training resulting in possible crew rating improvements.
 <LineBreak/><LineBreak/>"
 e006b	"<Bold>e006b Retrofit Period - Crew Training</Bold> 
 <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -119,7 +119,7 @@ The following crewmen are convalesing in a medical hosptial and may rejoin your 
 e007b	"<Bold>e007b Crew Replacement</Bold> 
 <InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-When you tank is knocked out, wounded crewmen are replaced automatically on the next After Action Report 
+When your tank is knocked out, wounded crewmen are replaced automatically on the next After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> with ratings automatically rolled.  Click image to continue.  
 <LineBreak/><LineBreak/>
                           <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"

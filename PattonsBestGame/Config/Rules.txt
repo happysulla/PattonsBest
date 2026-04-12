@@ -2387,7 +2387,7 @@ r28.0	"<Bold>r28.0 Hints of Play</Bold>
 <LineBreak/><LineBreak/>
 The Sherman tank was not designed to engage enemy tanks, but was to instead support infantry attacks and conduct sweeping movements behind breakthroughs in emeny lines. It fulfilled this role well.
 <LineBreak/><LineBreak/>
-However, once ashore in France, Allied tnakers often found their Shermans engaging much superior German tanks. The Serman tank could be easily knocked out byt German guns, while Sherman guns often had little effect against German vehicles. 
+However, once ashore in France, Allied tankers often found their Shermans engaging much superior German tanks. The Sherman tank could be easily knocked out by German guns, while Sherman guns often had little effect against German vehicles. 
 <LineBreak/><LineBreak/>
 As the war continued, Allied tankers worked to develop new tactics and improve the Sherman tank to overcome German advantages. To survive, you will need luck and good tactics. 
 <LineBreak/><LineBreak/>
