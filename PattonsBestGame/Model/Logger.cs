@@ -40,6 +40,7 @@ namespace PattonsBest
       LE_SHOW_CREW_RETURN,
       LE_SHOW_CREW_RESCUE,
       //-------------
+      LE_SHOW_TANK_REPLACEMENT,
       LE_SHOW_ROUND_COMBAT,
       LE_SHOW_START_AREA,
       LE_SHOW_ACTION_REPORT_NEW,
@@ -175,9 +176,9 @@ namespace PattonsBest
          //SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
-         //SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
+         SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS);
-         SetOn(LogEnum.LE_VIEW_SHOW_GAMESAVES);
+         //SetOn(LogEnum.LE_VIEW_SHOW_GAMESAVES);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS_MIN);
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------
@@ -194,9 +195,10 @@ namespace PattonsBest
          SetOn(LogEnum.LE_SHOW_CREW_RETURN);
          SetOn(LogEnum.LE_SHOW_CREW_RESCUE);
          //-------------------------------
+         //SetOn(LogEnum.LE_SHOW_TANK_REPLACEMENT);
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          //SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);
-         SetOn(LogEnum.LE_SHOW_START_AREA);
+         //SetOn(LogEnum.LE_SHOW_START_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
          SetOn(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA);

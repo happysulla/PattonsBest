@@ -4070,23 +4070,8 @@ namespace PattonsBest
                case GameAction.MorningBriefingTankReplaceChoice:
                   gi.DieResults["e007d"][0] = Utilities.NO_RESULT;
                   //-----------------------------------------
-                  int totalRating = 0;
-                  string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Driver" };
-                  foreach (string crewmember in crewmembers)
-                  {
-                     ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
-                     if (null == cm)
-                     {
-                        returnStatus = "GetCrewMemberByRole(): returned null for role=" + crewmember;
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice): " + returnStatus);
-                     }
-                     else
-                     {
-                        totalRating += cm.Rating;
-                        cm.IsButtonedUp = true; // all crewmembers become buttoned up.
-                        Logger.Log(LogEnum.LE_SHOW_CREW_BU, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice): role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
-                     }
-                  }
+                  Logger.Log(LogEnum.LE_SHOW_CREW_BU, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice): all isBU= button up");
+                  gi.Commander.IsButtonedUp = gi.Gunner.IsButtonedUp = gi.Loader.IsButtonedUp = gi.Driver.IsButtonedUp = gi.Assistant.IsButtonedUp = true;
                   gi.ShermanHvss = null;
                   gi.ClearCrewActions("GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice)");
                   gi.Hatches.Clear();
@@ -4094,7 +4079,9 @@ namespace PattonsBest
                   gi.ReadyRacks.Clear();
                   gi.BattlePrep.Clear();
                   //-----------------------------------------
+                  int totalRating = gi.Commander.Rating + gi.Gunner.Rating + gi.Loader.Rating + gi.Driver.Rating + gi.Assistant.Rating;
                   //totalRating = 40; // <CGS> TEST - Force Tank Choice
+                  Logger.Log(LogEnum.LE_SHOW_TANK_REPLACEMENT, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice): total rating=" + totalRating.ToString() );
                   if (34 < totalRating)
                   {
                      gi.TankReplacementNumber = 0;
@@ -4123,24 +4110,10 @@ namespace PattonsBest
                   if ( Utilities.NO_RESULT == gi.DieResults[key][0] )
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     //-----------------------------------------
-                     string[] crewmembers1 = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Driver" };
-                     foreach (string crewmember in crewmembers1)
-                     {
-                        ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
-                        if (null == cm)
-                        {
-                           returnStatus = "GetCrewMemberByRole(): returned null for role=" + crewmember;
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll): " + returnStatus);
-                        }
-                        else
-                        {
-                           cm.IsButtonedUp = true; // all crewmembers become buttoned up.
-                           Logger.Log(LogEnum.LE_SHOW_CREW_BU, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll): role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
-                        }
-                     }
+                     Logger.Log(LogEnum.LE_SHOW_CREW_BU, "GameStateEveningDebriefing.PerformAction(MorningBriefing_TankReplacementRoll): all isBU= button up");
+                     gi.Commander.IsButtonedUp = gi.Gunner.IsButtonedUp = gi.Loader.IsButtonedUp = gi.Driver.IsButtonedUp = gi.Assistant.IsButtonedUp = true;
                      gi.ShermanHvss = null;
-                     gi.ClearCrewActions("GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll)");
+                     gi.ClearCrewActions("GameStateMorningBriefing.PerformAction(MorningBriefing_TankReplacementRoll)");
                      gi.Hatches.Clear();
                      gi.GunLoads.Clear();
                      gi.ReadyRacks.Clear();
@@ -4149,7 +4122,7 @@ namespace PattonsBest
                      if( false == TableMgr.GetNewSherman(gi, dieRoll))
                      {
                         returnStatus = "GetNewSherman() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll): " + returnStatus);
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefing_TankReplacementRoll): " + returnStatus);
                      }
                      //----------------------------------
                      gi.BattleStacks.Remove(gi.Sherman);
@@ -4163,8 +4136,8 @@ namespace PattonsBest
                        shermanName = "Sherman76";
                      shermanName += Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
-                     gi.Sherman = new MapItem(shermanName, 2.0, tankImageName, gi.Home); //GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll)
-                     gi.BattleStacks.Add(gi.Sherman); //GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll)
+                     gi.Sherman = new MapItem(shermanName, 2.0, tankImageName, gi.Home); //GameStateEveningDebriefing.PerformAction(MorningBriefing_TankReplacementRoll)
+                     gi.BattleStacks.Add(gi.Sherman); //GameStateEveningDebriefing.PerformAction(MorningBriefing_TankReplacementRoll)
                      lastReport.Name = Utilities.GetNickName();
                   }
                   else
@@ -4177,7 +4150,7 @@ namespace PattonsBest
                      }
                      else
                      {
-                        if (false == TankReplacementEnd(gi, action)) // GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll)
+                        if (false == TankReplacementEnd(gi, action)) // GameStateMorningBriefing.PerformAction(MorningBriefing_TankReplacementRoll)
                         {
                            returnStatus = "TankReplacement_End() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
@@ -4258,7 +4231,7 @@ namespace PattonsBest
                   }
                   else
                   {
-                     if (false == TankReplacementEnd(gi, action)) // GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll)
+                     if (false == TankReplacementEnd(gi, action)) // GameStateMorningBriefing.PerformAction(MorningBriefing_TankReplacementRoll)
                      {
                         returnStatus = "TankReplacement_End() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
@@ -4496,8 +4469,18 @@ namespace PattonsBest
          //------------------------------------------------------------------------
          if ( true == gi.Sherman.IsKilled )
          {
-            SetCommand(gi, action, GameAction.MorningBriefingTankReplacementRoll, "e007d"); // Tank Replacement
-            //action = GameAction.UpdateEventViewerActive;
+            gi.Sherman.IsKilled = false;
+            int totalRating = gi.Commander.Rating + gi.Gunner.Rating + gi.Loader.Rating + gi.Driver.Rating + gi.Assistant.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TANK_REPLACEMENT, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice): total rating=" + totalRating.ToString());
+            if (34 < totalRating)
+            {
+               gi.TankReplacementNumber = 0;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e007f"); // Tank Replacement
+            }
+            else
+            {
+               SetCommand(gi, action, GameAction.MorningBriefingTankReplacementRoll, "e007d"); // Tank Replacement
+            }
             return true;
          }
          else
@@ -6138,9 +6121,14 @@ namespace PattonsBest
             if ("D" == gi.EnteredArea.Type)                // M003, M011, M013, M032, M034
             {
                if ( false == gi.EnteredWoodedAreas.Contains(gi.EnteredArea.Name))
-               {
                   gi.EnteredWoodedAreas.Add(gi.EnteredArea.Name);
-                  if (5 <= gi.EnteredWoodedAreas.Count)
+            }
+            if (5 <= gi.EnteredWoodedAreas.Count)
+            {
+               GameFeat? feat = GameEngine.theInGameFeats.Find("HappyCamper");
+               if( null != feat )
+               {
+                  if( 0 == feat.Value )
                      GameEngine.theInGameFeats.AddOne("HappyCamper");
                }
             }

@@ -132,7 +132,7 @@ namespace PattonsBest
                   {
                      IMapItem? sherman = gi.BattleStacks.FindMapItem("Sherman");
                      if( null == sherman )
-                        gi.BattleStacks.Add(gi.Sherman); //GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll)
+                        gi.BattleStacks.Add(gi.Sherman); //GameStateEveningDebriefing.PerformAction(MorningBriefing_TankReplacementRoll)
                   }
                }
                //-----------------------------------------

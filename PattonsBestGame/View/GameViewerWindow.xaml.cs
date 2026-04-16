@@ -151,7 +151,7 @@ namespace PattonsBest
          }
          GameEngine.theStartingFeats = GameEngine.theInGameFeats.Clone(); // need to know difference between starting feats and feats that happen in this game
          GameEngine.theStartingFeats.SetGameFeatThreshold();
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  feats=" + GameEngine.theInGameFeats.ToString() + "\n Sfeats=" + GameEngine.theStartingFeats.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  feats=" + GameEngine.theInGameFeats.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
          {
@@ -159,21 +159,21 @@ namespace PattonsBest
             CtorError = true;
             return;
          }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  single day stats=" + GameEngine.theSingleDayStatistics.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow():\n  single day stats=" + GameEngine.theSingleDayStatistics.ToString());
          if (false == DeserializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): Deserialize_GameStatistics(theCampaignStatistics) returned false");
             CtorError = true;
             return;
          }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  campaign stats=" + GameEngine.theCampaignStatistics.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow():\n  campaign stats=" + GameEngine.theCampaignStatistics.ToString());
          if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
          {
             Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theTotalStatistics) returned false");
             CtorError = true;
             return;
          }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  total stats=" + GameEngine.theTotalStatistics.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow():\n  total stats=" + GameEngine.theTotalStatistics.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeGameSave(GameSaveMgr.theGameSaves, "gamesave"))
          {
@@ -1588,7 +1588,7 @@ namespace PattonsBest
          //-------------------------------------------
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Save_DefaultsToSettings():\n  SAVING feats=" + GameEngine.theInGameFeats.ToString() );
          if (false == SerializeGameFeats(GameEngine.theInGameFeats))
-            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameFeats() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): Serialize_GameFeats() returned false");
          //-------------------------------------------
          if (false == SerializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
             Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics() returned false");
@@ -2685,7 +2685,7 @@ namespace PattonsBest
          double centerY = myCanvasMain.ActualHeight * 0.5;
          //------------------------------------
          GameFeat featChange;
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): Feats=" + GameEngine.theInGameFeats.ToString() + " \nSFeats=" + GameEngine.theStartingFeats.ToString());
          if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // Update_CanvasShowFeats()
          {
             Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): Get_FeatChange() returned false");
@@ -5455,7 +5455,7 @@ namespace PattonsBest
                      GameAction action = GameAction.Error;
                      GameFeat featChange;
                      Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-                     if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing
+                     if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing - Click star
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
                         return;
@@ -5530,7 +5530,7 @@ namespace PattonsBest
                      GameAction action = GameAction.Error;
                      GameFeat featChange;
                      Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-                     if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing
+                     if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing - Click label
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
                         return;

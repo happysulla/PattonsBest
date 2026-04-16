@@ -6265,12 +6265,12 @@ namespace PattonsBest
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): IsStartElement(EnteredWoodedAreas) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): IsStartElement(Entered_WoodedAreas) returned false");
             return false;
          }
          if (reader.Name != "EnteredWoodedAreas")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): EnteredWoodedAreas != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml_EnteredWoodedAreas(): Entered_WoodedAreas != (node=" + reader.Name + ")");
             return false;
          }
          string? sCount = reader.GetAttribute("count");
@@ -8386,7 +8386,7 @@ namespace PattonsBest
          //------------------------------------------
          if (false == CreateXmlEnteredWoodedAreas(aXmlDocument, gi.EnteredWoodedAreas))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlFirstShots(EnteredWoodedAreas) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml_GameInstance(): CreateXmlFirstShots(Entered_WoodedAreas) returned false");
             return null;
          }
          //------------------------------------------
