@@ -4125,12 +4125,12 @@ namespace PattonsBest
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(IsFuelNeeded) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(Is_FuelNeeded) = false");
                return false;
             }
             if (reader.Name != "IsFuelNeeded")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): IsFuelNeeded != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): Is_FuelNeeded != (node=" + reader.Name + ")");
                return false;
             }
             string? sIsFuelNeeded = reader.GetAttribute("value");
@@ -9693,14 +9693,14 @@ namespace PattonsBest
             elem = aXmlDocument.CreateElement("IsFuelNeeded");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(IsFuelNeeded) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): CreateElement(Is_FuelNeeded) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsFuelNeeded.ToString()); 
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(IsFuelNeeded) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlListingOfMapItems(): AppendChild(Is_FuelNeeded) returned null");
                return false;
             }
             //--------------------------------

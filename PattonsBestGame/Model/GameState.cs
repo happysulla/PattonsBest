@@ -8148,6 +8148,7 @@ namespace PattonsBest
                   break;
                case GameAction.BattleRoundSequenceShermanToHitRollNothing: // - nothing to hit
                   gi.UndoCmd = null;
+                  gi.TargetMainGun = null;
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      //dieRoll = 98; // <CGS> TEST - Sherman To Hit Roll
