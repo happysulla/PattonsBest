@@ -919,10 +919,15 @@ namespace PattonsBest
          if (null != this.TargetMainGun)
          {
             if (true == this.TargetMainGun.EnemyAcquiredShots.ContainsKey("Sherman")) // Fire_AndReloadGun() - Increase when firing at a target
-               this.TargetMainGun.EnemyAcquiredShots["Sherman"]++;
+            {
+               this.TargetMainGun.EnemyAcquiredShots["Sherman"]++;  // Fire_AndReloadGun() - Sherman firing on enemy unit more than once
+               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++++> numOfShots=" + this.TargetMainGun.EnemyAcquiredShots["Sherman"].ToString());
+            }
             else
-               this.TargetMainGun.EnemyAcquiredShots["Sherman"] = 1;
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++++> numOfShots=" + this.TargetMainGun.EnemyAcquiredShots["Sherman"].ToString());
+            {
+               this.TargetMainGun.EnemyAcquiredShots["Sherman"] = 0; // Fire_AndReloadGun() - Sherman firing on enemy unit first time
+               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): first time +++++> numOfShots=" + this.TargetMainGun.EnemyAcquiredShots["Sherman"].ToString());
+            }
             if (true == this.TargetMainGun.IsVehicle())
             {
                string facingOfTarget = TableMgr.GetShermanFireDirection(this, this.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront

@@ -1597,10 +1597,16 @@ namespace PattonsBest
                         }
                         //-------------------------------------
                         if (true == myGameInstance.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))
-                           myGameInstance.Sherman.EnemyAcquiredShots[mi.Name]++;
+                        {
+                           myGameInstance.Sherman.EnemyAcquiredShots[mi.Name]++; // Enemy firing on your Sherman the first time
+                           Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): 1-Firing at Your Tank first time myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
+
+                        }
                         else
-                           myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0;
-                        Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
+                        {
+                           myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0; // Enemy firing on your Sherman the mroe than once
+                           Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): 2-Firing at Your Tank again myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
+                        }
                         //-------------------------------------
                         myGridRows[i].myDieRollFire = NO_FIRE_OTHER; // not firing at other tanks... only firing at your tank
                         //-------------------------------------

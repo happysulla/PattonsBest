@@ -42,8 +42,8 @@ namespace PattonsBest
          {
             gi.TargetMainGun = myTargetMainGun;
             myTargetMainGun.EnemyAcquiredShots.Clear();
-            foreach (KeyValuePair<string, int> kvp in this.myEnemyAcquiredShots)
-               myTargetMainGun.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
+            foreach (KeyValuePair<string, int> kvp in this.myEnemyAcquiredShots) 
+               myTargetMainGun.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);   // Undo()
          }
          //----------------------------
          gi.GameCommands.RemoveLast(); // Remove last command

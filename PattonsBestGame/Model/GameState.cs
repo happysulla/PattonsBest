@@ -9403,7 +9403,7 @@ namespace PattonsBest
                //--------------------------------------------------
                if ( ((false == isGunnerTrainedInHvss) || (null == gi.ShermanHvss)) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
-                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear()"); // Tank moved without HVSS losing acq
+                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.Enemy_AcquiredShots.Clear()"); // Tank moved without HVSS losing acq
                   gi.TargetMainGun.EnemyAcquiredShots.Clear(); 
                }
                //--------------------------------------------------
@@ -9457,7 +9457,7 @@ namespace PattonsBest
                gi.IsShermanTurretRotatedThisRound = true; // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
                if ((false == isTankFiringMainGun) && (null != gi.TargetMainGun) )
                {
-                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear() when turret rotated");
+                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.Enemy_AcquiredShots.Clear() when turret rotated");
                   gi.TargetMainGun.EnemyAcquiredShots.Clear(); // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
                }
                gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
