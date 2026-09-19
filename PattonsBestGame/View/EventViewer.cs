@@ -3590,15 +3590,19 @@ namespace PattonsBest
          StringBuilder sb51 = new StringBuilder();
          //------------------------------------
          int numShots = 0;
+         bool isFirstShot = true;
          if (true == enemyUnit.EnemyAcquiredShots.ContainsKey("Sherman")) // Fire_AndReloadGun() - Increase when firing at a target
+         {
+            isFirstShot = false;
             numShots = enemyUnit.EnemyAcquiredShots["Sherman"];
-         if (0 == numShots)
+         }
+         if (true == isFirstShot)
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): acq=" + numShots.ToString() + " isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + " commander.IsButtonedUp=" + commander.IsButtonedUp.ToString() + " for enemyUnit=" + enemyUnit.Name);
             if ( (false == isCommanderDirectingFire) || (true == commander.IsButtonedUp) )
                sb51.Append("+10 for first shot w/out cmdr directing fire\n");
          }
-         else if (1 == numShots)
+         else if (0 == numShots)
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): SHOW +1 acq=" + numShots.ToString() + " for enemyUnit=" + enemyUnit.Name);
             if ('C' == range)
@@ -3613,7 +3617,7 @@ namespace PattonsBest
                return "ERROR";
             }
          }
-         else if (1 < numShots)
+         else if (0 < numShots)
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): SHOW +2 acq=" + numShots.ToString() + " for enemyUnit=" + enemyUnit.Name);
             if ('C' == range)

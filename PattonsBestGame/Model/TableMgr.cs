@@ -5610,9 +5610,13 @@ namespace PattonsBest
             return FN_ERROR;
          }
          int numShots = 0;
+         bool isFirstShot = true;
          if (true == gi.TargetMainGun.EnemyAcquiredShots.ContainsKey("Sherman")) // Has Sherman previously fired on this target?
+         {
             numShots = gi.TargetMainGun.EnemyAcquiredShots["Sherman"];
-         if (0 == numShots)
+            isFirstShot = false;
+         }
+         if (true == isFirstShot)
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): numShots=" + numShots.ToString());
             if ((false == isCommanderDirectingFire) || (true == commander.IsButtonedUp))
@@ -5622,7 +5626,7 @@ namespace PattonsBest
                Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
             }
          }
-         else if (1 == numShots)
+         else if (0 == numShots) // Acq-1
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): +1 acq numShots=" + numShots.ToString());
             if ('C' == range)
@@ -5646,7 +5650,7 @@ namespace PattonsBest
                return FN_ERROR;
             }
          }
-         else if (1 < numShots)
+         else if (0 < numShots) // Acq-2
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): +2 acq numShots=" + numShots.ToString());
             if ('C' == range)
