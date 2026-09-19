@@ -13,6 +13,7 @@ namespace PattonsBest
       public const int SPG_FIRE_OUTSIDE_ARC = 55556;
       public const int KIA = 10002;
       public const int MIA = 10001;
+      public const int MISS = 10003;
       public const int FN_ERROR = -1000;
       public const int THROWN_TRACK = 1001;
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
@@ -3292,6 +3293,8 @@ namespace PattonsBest
       }
       public static double GetEnemyToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
       {
+         if ("Miss" == hitLocation)
+            return MISS;
          double toKillNum = 0.0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
