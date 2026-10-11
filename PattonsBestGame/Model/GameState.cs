@@ -6897,7 +6897,7 @@ namespace PattonsBest
                   SetCommand(gi, action, GameAction.BattleAmbushRoll, "e035"); // GameStateBattle.PerformAction(BattleAmbushStart)
                   break;
                case GameAction.BattleAmbushRoll:
-                  if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
+                  if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")) // GameStateBattle.PerformAction(BattleAmbushRoll) - ambush roll -1
                      dieRoll--;
                   //dieRoll = 1; // <CGS> TEST - KillYourTank -  AMBUSH!!!!!
                   //dieRoll = 10; // <CGS> TEST - NO AMBUSH!!!!!

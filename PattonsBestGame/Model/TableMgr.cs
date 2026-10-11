@@ -2629,7 +2629,7 @@ namespace PattonsBest
             toKillNum *= multiplier;
          }
          //------------------------------------
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) // Fog or falling snow are treated as firing through smoke
             toKillNum *= 0.5;
          //------------------------------------
          return toKillNum;
@@ -2767,7 +2767,7 @@ namespace PattonsBest
             return FN_ERROR;
          }
          //------------------------------------
-         string tname = "B" + sector.ToString() + range.ToString(); // half the to hit number by the number of smoke counters in this hex
+         string tname = "B" + sector.ToString() + range.ToString(); // Get_EnemyToKillNumberTank() - half the to hit number by the number of smoke counters in this hex
          IStack? stack = gi.BattleStacks.Find(tname);
          if (null == stack)
          {
@@ -2786,7 +2786,7 @@ namespace PattonsBest
             toKillNum *= multiplier;
          }
          //------------------------------------
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) // Get_EnemyToKillNumberTank() - with fog or falling snow, treat all direct fire as firing through smoke
             toKillNum *= 0.5;
          //------------------------------------
          return toKillNum;
@@ -3184,14 +3184,14 @@ namespace PattonsBest
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): lastReport=null");
             return FN_ERROR;
          }
          //----------------------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): unknown enemyUnit=" + mi.Name);
             return FN_ERROR;
          }
          switch (enemyUnit)
@@ -3205,7 +3205,7 @@ namespace PattonsBest
                   toHitNum = 34;
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown range=" + range.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): unknown range=" + range.ToString());
                   return FN_ERROR;
                }
                break;
@@ -3227,7 +3227,7 @@ namespace PattonsBest
                   toHitNum = 67;
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown range=" + range.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): unknown range=" + range.ToString());
                   return FN_ERROR;
                }
                break;
@@ -3243,19 +3243,19 @@ namespace PattonsBest
                   toHitNum = 79;
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown range=" + range.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): unknown range=" + range.ToString());
                   return FN_ERROR;
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): Reached Default enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberTank(): GetSmokeCount() returned error");
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
@@ -3264,7 +3264,7 @@ namespace PattonsBest
             toHitNum *= multiplier;
          }
          //------------------------------------
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) // Get_EnemyToKillNumberTank() - all direct fire is treated as firing through smoke for fog or falling snow
             toHitNum *= 0.5;
          return toHitNum;
       }
@@ -4072,7 +4072,7 @@ namespace PattonsBest
             spottingModifer += 1;
             Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): hull+1 mod=" + spottingModifer.ToString());
          }
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) // "Get_SpottingModifier() - add one for fog or falling snow to spotting
          {
             spottingModifer += 1;
             Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): fog+1 mod=" + spottingModifer.ToString());
@@ -4158,7 +4158,7 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingResult(): lastReport=null");
             return "ERROR";
          }
-         if (((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) && ('C' != range))
+         if (((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) && ('C' != range)) // Get_SpottingResult() - must be at close range to spot in fog or falling snow
          {
             Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Unspotted - Fog/Falling & range=" + range.ToString());
             return "Unspotted";
@@ -4856,7 +4856,7 @@ namespace PattonsBest
             Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): lastReport=null");
             return "ERROR";
          }
-         if ( (false == isOnBoardArtilleryFire)  &&  ((true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))) )
+         if ( (false == isOnBoardArtilleryFire)  &&  ((true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))) // Set_FriendlyActionResult() - no Friendly action allowed in these regions unless artillery
          {
             if ("B6M" == mi.TerritoryCurrent.Name || "B6L" == mi.TerritoryCurrent.Name) // no Friendly action allowed in these regions unless artillery
                return "None";
@@ -6139,7 +6139,7 @@ namespace PattonsBest
             toHitNum *= multiplier;
          }
          //------------------------------------
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+         if ( ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) ) // Get_ShermanToHitBaseNumber() - treat as smoke if falling snow or fog
             toHitNum *= 0.5;
          //------------------------------------
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitBaseNumber(): After Smoke/Fog base#=" + toHitNum.ToString());
